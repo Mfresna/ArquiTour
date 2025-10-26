@@ -82,4 +82,8 @@ arquitour/
     └── .env.example               # Ejemplo de variables para desarrollo
 ```
 
-## Informacion Especifica
+## 📘 Informacion Especifica
+
+- [Frontend](./docs/FRONTEND.md)
+- [Backend](./docs/BACKEND.md)
+- [Despliegue](./docs/DESPLIEGUE.md)
