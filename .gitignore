@@ -21,8 +21,6 @@ frontend/Thumbs.db
 
 #BACKEND (Springboot)
 backend/target/
-backend/.mvn/wrapper/maven-wrapper.jar
-backend/.mvn/wrapper/maven-wrapper.properties
 backend/.idea/
 backend/.vscode/
 backend/*.iml

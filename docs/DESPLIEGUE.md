@@ -6,7 +6,7 @@
    cd backend
 4. **Ejecutá el servidor sin Test:**
    ```bash
-   mvnw spring-boot:run -DskipTests
+   mvnw spring-boot:run -Dmaven.test.skip=true
     ```
 5. **Entrá al directorio del frontend:**
    ```bash
