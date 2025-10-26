@@ -53,3 +53,6 @@ backend/.env.*
 # VS Code
 .vscode/
 
+# EJECUCION DE DESARROLLO
+.bat
+.sh
