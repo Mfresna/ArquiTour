@@ -17,6 +17,7 @@ Se encarga de gestionar la autenticación, usuarios, obras, estudios de arquitec
 - **API de OSM (Open Street Map)**
 - **Java 24**
 
+---
 
 ## 🧱 Estructura del proyecto
 
@@ -42,12 +43,15 @@ backend/
 ├── .env                  # Variables locales (no se sube al repo)
 └── .env.example          # Ejemplo de variables para desarrollo
 ```
+---
 
 ## Servicios
 
 🔹 Swagger UI - `http://localhost:8080/swagger-ui.html`
 
 🔹 API base - `http://localhost:8080/`
+
+---
 
 ## Despliegue
 1. **Abrí la terminal** en la carpeta raíz del proyecto.
@@ -58,6 +62,8 @@ backend/
    ```bash
    mvnw spring-boot:run -DskipTests
     ```
+
+---
 
 ## Pasar a Produccion
 1. **integrar el Frontend con el Backend:** Copiar el contendido de `\dist/app` a `backend/src/main/resources/static/`
