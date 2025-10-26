@@ -11,7 +11,7 @@ Se realizó siguiendo una arquitectura modular, escalable y orientada a componen
 
 El sistema se conecta con la **[API REST](./docs/BACKEND.md) de ArquiTour (Spring Boot)** para realizar todas las operaciones, incluyendo autenticación, gestión de usuarios, obras, estudios y favoritos.
 
-
+---
 
 ## Estructura del proyecto
 
@@ -32,7 +32,7 @@ frontend/
 ├── angular.json               # Configuración de Angular CLI
 ├── package.json               # Dependencias y scripts npm
 ```
-
+---
 
 ## Requisitos previos
 
@@ -42,6 +42,7 @@ Antes de ejecutar el proyecto, asegurate de tener instalado:
 
 - **[Angular CLI](https://angular.io/cli)** - ```En la terminar ejecutar npm install -g @angular\cli```
 
+---
 
 ## Primer Despligue
 
@@ -56,6 +57,7 @@ Antes de ejecutar el proyecto, asegurate de tener instalado:
    ```bash
    npm start
     ```
+---
 
 ## Pasar a Produccion
 
