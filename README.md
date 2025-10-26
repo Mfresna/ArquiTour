@@ -57,5 +57,29 @@ Ademas se desafia a crear una aplicacion colaborativa en donde no solo los encar
 
 ---
 
-## ⚙️ Estructura del Repositorio
+## 📂 Estructura del Proyecto
 
+```plaintext
+arquitour/
+├── README.md                      # Documentación general del proyecto
+├── .gitignore                     # Archivos y carpetas ignorados por Git
+│
+├── frontend/                      # Aplicación Angular (interfaz de usuario)
+│   ├── src/                       # Código fuente del frontend
+│   ├── angular.json               # Configuración principal de Angular
+│   ├── package.json               # Dependencias y scripts de npm
+│   └── proxy.conf.json            # Redirección de /api → backend (para evitar CORS)
+│
+└── backend/                       # API REST (Spring Boot)
+    ├── src/
+    │   └── main/
+    │       ├── java/              # Controladores, servicios y entidades
+    │       └── resources/
+    │           └── application.yml # Configuración de Spring Boot
+    │
+    ├── pom.xml                    # Archivo de configuración Maven
+    ├── .env                       # Variables de entorno locales (no se sube)
+    └── .env.example               # Ejemplo de variables para desarrollo
+```
+
+## Informacion Especifica
