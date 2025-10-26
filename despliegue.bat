@@ -31,7 +31,7 @@ if exist target (
     echo Build existente detectado.
 ) else (
     echo Compilando proyecto backend...
-    call mvnw clean package -DskipTests
+    call mvnw spring-boot:run -Dmaven.test.skip=true
 )
 
 echo Iniciando servidor Spring Boot...
