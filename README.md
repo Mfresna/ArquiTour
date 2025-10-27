@@ -1,4 +1,4 @@
-# 5ArquiTour — Redefiniendo la forma de encontrar arquitectura  
+# ArquiTour — Redefiniendo la forma de encontrar arquitectura  
 
 ![Status](https://img.shields.io/badge/status-en%20desarrollo-yellow)
 ![Backend](https://img.shields.io/badge/backend-Spring%20Boot-6DB33F)
