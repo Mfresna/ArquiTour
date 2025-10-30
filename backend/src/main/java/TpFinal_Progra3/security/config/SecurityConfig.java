@@ -50,6 +50,7 @@ public class SecurityConfig {
                         .requestMatchers("/v3/api-docs/**", "/swagger-ui.html", "/swagger-ui/**").permitAll()
                         //autenticacion sin restriccion
                         .requestMatchers("/auth/**").permitAll()
+                        .requestMatchers("/imagen/**").permitAll()
                         .requestMatchers(HttpMethod.POST,"/usuarios").permitAll()
                         // Otros EndPoints deben estar autenticados
                         .anyRequest().authenticated())

@@ -7,6 +7,7 @@ import TpFinal_Progra3.model.mappers.ImagenMapper;
 import TpFinal_Progra3.repositories.ImagenRepository;
 import TpFinal_Progra3.services.almacenamiento.CloudinaryService;
 import TpFinal_Progra3.services.interfaces.ImagenServiceInterface;
+import TpFinal_Progra3.services.interfaces.ImagenStorageInterface;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -19,7 +20,7 @@ public class ImagenService implements ImagenServiceInterface {
 
     private final ImagenRepository imagenRepository;
     private final ImagenMapper imagenMapper;
-    private final CloudinaryService cloudinaryService;
+    private final ImagenStorageInterface almacImagenSerive;
 
     public Imagen crearImagen(ImagenDTO dto) {
         return imagenRepository.save(imagenMapper.mapImagen(dto));
@@ -46,7 +47,7 @@ public class ImagenService implements ImagenServiceInterface {
 
     public List<String> subirImagenes(List<MultipartFile> archivos){
         //Sube las imagenes y las guarda en la base de datos
-        List<String> urls = cloudinaryService.subirImagenes(archivos);
+        List<String> urls = almacImagenSerive.subirImagenes(archivos);
 
         urls.forEach(url->crearImagen(ImagenDTO.builder()
                         .url(url)
