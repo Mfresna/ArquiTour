@@ -1,21 +1,21 @@
-package TpFinal_Progra3.services;
+package TpFinal_Progra3.services.almacenamiento;
 
 import TpFinal_Progra3.exceptions.CargarImagenException;
+import TpFinal_Progra3.services.interfaces.ImagenStorageInterface;
 import com.cloudinary.Cloudinary;
-import com.cloudinary.api.exceptions.ApiException;
 import com.cloudinary.utils.ObjectUtils;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
-public class CloudinaryService {
+@Profile("cloud")
+public class CloudinaryService implements ImagenStorageInterface {
 
     private final Cloudinary cloudinary = new Cloudinary(ObjectUtils.asMap(
             "cloud_name", System.getProperty("cloud.name"),
@@ -30,6 +30,7 @@ public class CloudinaryService {
                     .upload(archivo.getBytes(), ObjectUtils.emptyMap());
 
             return resultado.get("secure_url").toString();
+
         } catch (IOException e) {
             throw new CargarImagenException("Error de lectura del archivo de imagen.");
         } catch (Exception e) {
@@ -49,6 +50,10 @@ public class CloudinaryService {
                 throw new CargarImagenException("Error inesperado al subir la imagen: " + archivo.getOriginalFilename());
             }
         }).collect(Collectors.toList());
+    }
+
+    public boolean delete(String filename){
+        return false;
     }
 
 
