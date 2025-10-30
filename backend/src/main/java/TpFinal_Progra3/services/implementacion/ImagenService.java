@@ -5,7 +5,7 @@ import TpFinal_Progra3.model.DTO.ImagenDTO;
 import TpFinal_Progra3.model.entities.Imagen;
 import TpFinal_Progra3.model.mappers.ImagenMapper;
 import TpFinal_Progra3.repositories.ImagenRepository;
-import TpFinal_Progra3.services.CloudinaryService;
+import TpFinal_Progra3.services.almacenamiento.CloudinaryService;
 import TpFinal_Progra3.services.interfaces.ImagenServiceInterface;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
