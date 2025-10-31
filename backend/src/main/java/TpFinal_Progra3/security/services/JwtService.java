@@ -29,7 +29,10 @@ public class JwtService {
     private String jwtSecretKey;
 
     @Value("${jwt.expiration}")
-    private Long jwtVencimiento;
+    private Long jwtVencimientoAccess;
+
+    @Value("${jwt.expiration.refresh}")
+    private Long jwtVencimientoRefresh;
 
     @Value("${jwt.expiration.email}")
     private Long jwtVencimientoTokenEmail;
@@ -43,7 +46,8 @@ public class JwtService {
     public String generarToken(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
         claims.put("roles", userDetails.getAuthorities());
-        return buildToken(claims, userDetails, jwtVencimiento);
+        claims.put("typ", "ACCESS");    //Indica si es de Acceso o de Refresh o ChangePass
+        return buildToken(claims, userDetails, jwtVencimientoAccess);
     }
 
     //Genera un Token solo con el ID del usuario para que cambie la contraseña por mail
@@ -53,6 +57,7 @@ public class JwtService {
         }
         Map<String, Object> claims = new HashMap<>();
         claims.put("isActive", usuario.getIsActivo());  //Si llega acá siempre
+        claims.put("typ", "CHANGEPASS");    //Indica si es de Acceso o de Refresh o ChangePass
         return buildToken(claims, usuario.getEmail() , jwtVencimientoTokenEmail);
     }
 
@@ -62,7 +67,8 @@ public class JwtService {
         return (username.equals(userDetails.getUsername()))
                 && !isTokenExpired(token)
                 && userDetails.isAccountNonLocked()
-                && userDetails.isEnabled();
+                && userDetails.isEnabled()
+                && getTipo(token).equals("ACCESS");
     }
 
     //Valida que el Token Restaurar Contraseña sea Valido
@@ -73,11 +79,43 @@ public class JwtService {
         //True => isActivo y no está vencido
         return email != null &&
                isActive != null && isActive &&
-               !isTokenExpired(token);
+               !isTokenExpired(token) &&
+                getTipo(token).equals("CHANGEPASS");
     }
 
+    //---------------REFRESH TOKEN----------------
 
-    //---------------METODOS PRIVADOS----------------
+    //Generar un Refresh Token
+    public String generarRefreshToken(UserDetails userDetails) {
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("typ", "REFRESH");    //Indica si es de Acceso o de Refresh o ChangePass
+        return buildToken(claims, userDetails, jwtVencimientoRefresh);
+    }
+
+    //Valida que sea de tipo refresh y no este vencido
+    public boolean isRefreshValido(String token) {
+        return getTipo(token).equals("REFRESH") && !isTokenExpired(token);
+    }
+
+    public String getTipo(String token) {
+        return extractAllClaims(token).get("typ", String.class);
+    }
+
+    //---------------METODOS DURACIONES DE TOKEN----------------//
+
+    public long getJwtVencimientoAccess(){
+        return jwtVencimientoAccess;
+    }
+
+    public long jwtVencimientoRefresh(){
+        return jwtVencimientoRefresh;
+    }
+
+    public long jwtVencimientoTokenEmail(){
+        return jwtVencimientoTokenEmail;
+    }
+
+    //---------------METODOS PRIVADOS----------------//
 
     //Extrae una claim especifica
     private <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
