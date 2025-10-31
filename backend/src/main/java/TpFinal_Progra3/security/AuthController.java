@@ -20,9 +20,11 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "Autenticación", description = "Manejo de login, recuperación y cambio de contraseña")
@@ -35,6 +37,13 @@ public class AuthController {
     private final JwtService jwtService;
     private final UsuarioService usuarioService;
     private final EmailService emailService;
+    private final PasswordEncoder passwordEncoder;
+
+    @Value("${default.admin.email}")
+    private String adminMasterEmail;
+
+    @Value("${default.admin.password}")
+    private String adminMasterPass;
 
     //Recibe por PostMan un AuthRequest con USR y PASS
     @Operation(summary = "Autenticar usuario", description = "Devuelve un token JWT si las credenciales son válidas.")
@@ -49,7 +58,10 @@ public class AuthController {
             @RequestBody @Valid @Parameter(description = "Credenciales de usuario") AuthRequest authRequest){
         UserDetails usuario = authService.authenticate(authRequest);
         String token = jwtService.generarToken(usuario);
-        return ResponseEntity.ok(new AuthResponse(token));
+
+        boolean cambiarPass = usuario.getUsername().equals(adminMasterEmail) && passwordEncoder.matches(adminMasterPass, usuario.getPassword());
+
+        return ResponseEntity.ok(new AuthResponse(token,cambiarPass));
     }
 
     @Operation(summary = "Solicitar restablecimiento de contraseña",
