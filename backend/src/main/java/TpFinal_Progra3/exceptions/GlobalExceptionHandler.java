@@ -137,6 +137,11 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> handlerBorradoException(BorradoException e) {
         return ResponseEntity.status(e.getStatusCode()).body(e.getMessage());
     }
+    @ExceptionHandler(ValidacionPinException.class)
+    public ResponseEntity<String> handlerValidacionPinException(ValidacionPinException e) {
+        return ResponseEntity.status(e.getStatusCode()).body(e.getMessage());
+    }
+
 
 }
 

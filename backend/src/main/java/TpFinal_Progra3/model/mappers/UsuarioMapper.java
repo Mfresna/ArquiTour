@@ -15,7 +15,7 @@ public class UsuarioMapper {
     // Convertir de DTO a entidad
     public Usuario mapUsuario(UsuarioDTO usuarioDTO) {
         return Usuario.builder()
-                .email(usuarioDTO.getEmail())
+                .email(usuarioDTO.getEmail().toLowerCase())
                 .nombre(usuarioDTO.getNombre())
                 .apellido(usuarioDTO.getApellido())
                 .fechaNacimiento(usuarioDTO.getFechaNacimiento())
