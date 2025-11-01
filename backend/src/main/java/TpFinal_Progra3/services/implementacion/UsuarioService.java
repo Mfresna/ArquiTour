@@ -21,6 +21,7 @@ import TpFinal_Progra3.security.model.entities.Rol;
 import TpFinal_Progra3.security.model.enums.RolUsuario;
 import TpFinal_Progra3.security.repositories.RolRepository;
 import TpFinal_Progra3.security.services.JwtService;
+import TpFinal_Progra3.security.services.ValidacionEmailService;
 import TpFinal_Progra3.services.interfaces.UsuarioServiceInterface;
 import TpFinal_Progra3.specifications.UsuarioSpecification;
 import jakarta.servlet.http.HttpServletRequest;
@@ -45,6 +46,7 @@ public class UsuarioService implements UsuarioServiceInterface {
     private final ImagenService imagenService;
     private final JwtService jwtService;
     private final PasswordEncoder passwordEncoder;
+    private final ValidacionEmailService validacionEmailService;
 
     @Value("${default.admin.email}")
     private String defaultAdminEmail;
@@ -54,6 +56,9 @@ public class UsuarioService implements UsuarioServiceInterface {
         //Validar la existencia de un email
         if(usuarioRepository.existsByEmailIgnoreCase(dto.getEmail())){
             throw new ProcesoInvalidoException(HttpStatus.BAD_REQUEST, "El email ya existe en la base de datos.");
+        }
+        if(!validacionEmailService.isEmailValidado(dto.getEmail())){
+            throw new ProcesoInvalidoException(HttpStatus.BAD_REQUEST, "El email no ha sido verificado.");
         }
 
         Usuario usuarioNuevo = usuarioMapper.mapUsuario(dto);
@@ -73,7 +78,11 @@ public class UsuarioService implements UsuarioServiceInterface {
             usuarioNuevo.setImagen(imagenService.obtenerImagen(dto.getImagenUrl()));
         }
 
-        return usuarioMapper.mapResponseDTO(usuarioRepository.save(usuarioNuevo));
+        UsuarioResponseDTO usrNuevo = usuarioMapper.mapResponseDTO(usuarioRepository.save(usuarioNuevo));
+
+        validacionEmailService.eliminar(dto.getEmail());
+
+        return usrNuevo;
     }
 
     public Usuario buscarUsuario(Long id) {
@@ -253,6 +262,9 @@ public class UsuarioService implements UsuarioServiceInterface {
         usuarioRepository.save(usuario);
     }
 
+    public boolean existeUsuario(String email){
+        return usuarioRepository.existsByEmailIgnoreCase(email);
+    }
 
 }
 

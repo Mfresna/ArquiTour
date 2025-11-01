@@ -57,8 +57,40 @@ public class EmailService {
                 "<p style='color: #999;'>Este enlace expirará en 24 horas.</p>" +
                 "</body>" +
                 "</html>";
+    }
 
+    //--------------------- PIN VALIDACION ------------------------//
 
+    public void mailPinValidacion(String emailUsuario, String pin) {
+        try {
+            MimeMessage mensaje = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(mensaje, true);
+
+            helper.setTo(emailUsuario);
+            helper.setSubject("Tu PIN de verificación - ArquiTour");
+            helper.setText(generarCuerpoPin(pin), true);
+            helper.setFrom(System.getProperty("spring.mail.username"));
+
+            mailSender.send(mensaje);
+        } catch (MailException me) {
+            if(me.getCause() instanceof jakarta.mail.AuthenticationFailedException){
+                throw new EmailNoEnviadoException(HttpStatus.INTERNAL_SERVER_ERROR,
+                        "Error en la configuracion SMTP del servidor.\n" + me.getMessage());
+            }
+            throw new EmailNoEnviadoException("Error en el envio del PIN.\n" + me.getMessage());
+        } catch (Exception e) {
+            throw new EmailNoEnviadoException("Error en el envio del PIN.\n" + e.getMessage());
+        }
+    }
+
+    private String generarCuerpoPin(String pin){
+        return "<html><body style='font-family: Arial; text-align:center; padding:20px;'>"
+                + "<h2 style='color:#2E86C1;'>Verificación de Email</h2>"
+                + "<p>Usá este PIN. Caduca en 10 minutos.</p>"
+                + "<div style='font-size:28px;font-weight:bold;letter-spacing:6px;margin:16px 0;'>"
+                + pin + "</div>"
+                + "<p style='color:#888'>Si no fuiste vos, ignorá el mensaje.</p>"
+                + "</body></html>";
     }
 
 }
