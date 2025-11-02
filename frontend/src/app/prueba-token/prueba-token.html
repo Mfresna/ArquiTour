@@ -1,0 +1,18 @@
+<div style="padding: 1rem; font-family: sans-serif; max-width: 700px; margin:auto;">
+  <h2>🔐 Prueba del Interceptor JWT</h2>
+
+  <textarea
+    [(ngModel)]="token"
+    placeholder="Pegá tu access token del Swagger aquí"
+    rows="6"
+    style="width:100%; margin-bottom:1rem;"
+  ></textarea>
+
+  <div style="display:flex; gap: 0.5rem;">
+    <button (click)="guardarToken()">Guardar token</button>
+    <button (click)="probarApi()">Probar API protegida</button>
+  </div>
+
+  <p style="margin-top:1rem; font-weight:bold;">Resultado:</p>
+  <pre>{{ resultado }}</pre>
+</div>
