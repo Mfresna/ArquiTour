@@ -16,6 +16,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
@@ -50,9 +52,8 @@ public class SecurityConfig {
                         .requestMatchers("/v3/api-docs/**", "/swagger-ui.html", "/swagger-ui/**").permitAll()
                         //autenticacion sin restriccion
                         .requestMatchers("/auth/**").permitAll()
-                        .requestMatchers("/imagen/**").permitAll()
                         .requestMatchers("/validacion/**").permitAll()
-                        .requestMatchers("/obras/**").permitAll()
+
                         .requestMatchers("/**").permitAll()
                         .requestMatchers(HttpMethod.POST,"/usuarios").permitAll()
                         // Otros EndPoints deben estar autenticados
@@ -62,7 +63,7 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin))
                 .sessionManagement(manager -> manager.sessionCreationPolicy(STATELESS))
-                //Esto Ejecuta mei filtro personalizado para login y pass que va a retornar si es valido
+                //Esto Ejecuta mi filtro personalizado para login y pass que va a retornar si es valido
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 //Establece la clase encargada de manejar las excepciones que sean lanzadas.
                 .exceptionHandling(e -> e.authenticationEntryPoint(restAuthenticationEntryPoint));
@@ -70,4 +71,41 @@ public class SecurityConfig {
         // Devuelve la cadena de filtros de seguridad
         return http.build();
     }
+
+    //-------------- CORS ------------------//
+
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        var source = new UrlBasedCorsConfigurationSource();
+
+        // === CORS para API protegida (/api/** y todo lo que requiera credenciales) ===
+        var api = new CorsConfiguration();
+        api.setAllowedOriginPatterns(List.of("http://localhost:4200", "http://127.0.0.1:4200"));
+        api.setAllowedMethods(List.of("GET","POST","PUT","PATCH","DELETE","OPTIONS"));
+        api.setAllowedHeaders(List.of("Authorization","Content-Type","X-Requested-With","Accept"));
+        api.setExposedHeaders(List.of("Authorization","Content-Disposition"));
+        api.setAllowCredentials(true);            // cookies + Authorization
+        api.setMaxAge(3600L);
+        // Ajustá el patrón a tus rutas reales (por ejemplo /api/**)
+        source.registerCorsConfiguration("/api/**", api);
+        source.registerCorsConfiguration("/auth/**", api);
+        source.registerCorsConfiguration("/validacion/**", api);
+        source.registerCorsConfiguration("/usuarios", api);
+
+        // === CORS para imágenes públicas (sin cookies) ===
+        var img = new CorsConfiguration();
+        img.setAllowedOrigins(List.of("*"));      // público
+        img.setAllowedMethods(List.of("GET","HEAD","OPTIONS"));
+        img.setAllowedHeaders(List.of("*"));
+        img.setExposedHeaders(List.of("Content-Disposition","Content-Type","Accept-Ranges"));
+        img.setAllowCredentials(false);
+        img.setMaxAge(86400L);
+        source.registerCorsConfiguration("/imagen/**", img);
+
+        return source;
+    }
+
+
+
+
 }
