@@ -1,0 +1,61 @@
+/* TITULO */
+#titulo {
+  margin: 25px;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+#titulo h1 {
+  color: var(--colorTerciario);
+  font-size: 2.2rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;  /*lo pone siempre en mayuscula*/
+}
+
+/* TARJETAS */
+#tarjetas{
+    margin-top: 40px;
+    margin-bottom: 60px;
+}
+
+#tarjetas ul {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); /* grilla adaptable */
+  gap: 25px;                     /* espacio entre tarjetas */
+  list-style: none;              /* sin viñetas */
+  padding: 0;
+  margin: 0 auto;                /* centra la grilla */
+  width: 100%;
+  max-width: 1200px;             /* límite de ancho */
+  justify-content: center;       /* centra el contenido dentro del grid */
+}
+
+#tarjetas li {
+  background-color: var(--colorFondoTarjeta);
+  border: 1px solid #e0e0e0;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px var(--sombra);
+  padding: 15px;
+  display: flex;
+  flex-direction: column;        /* permite crecer verticalmente */
+  align-items: flex-start;       /* contenido alineado arriba */
+  justify-content: flex-start;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  cursor: pointer;
+}
+
+#tarjetas li:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 10px var(--sombra);
+}
+
+#tarjetas li p {
+  margin: 6px 0;
+  font-size: 1rem;
+  color: var(--colorTerciario);
+}
+
+#tarjetas li p strong {
+  font-size: 1.1rem;
+  color: var(--colorBoton);
+}
