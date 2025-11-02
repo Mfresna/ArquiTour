@@ -10,21 +10,35 @@ import { Estudio } from '../models/estudio.model'; // Importa el modelo
   providedIn: 'root'
 })
 export class EstudiosService {
-  // URL base de tu API
-  private apiUrl = 'http://localhost:8080/estudios/filtrar';
 
-  // Inyección del HttpClient (usando `inject()` o en el constructor)
-  private http = inject(HttpClient);
+  readonly API_URL = "http://localhost:8080/estudios/filtrar"
+    readonly API_URLBASE = "http://localhost:8080/estudios"
 
-  constructor() { }
+  productos : Estudio[]
 
-  /**
-   * Obtiene la lista de estudios desde el endpoint.
-   * La respuesta es un array de objetos Estudio.
-   * @returns Un Observable que emite un array de Estudio.
-   */
-  getEstudios(): Observable<Estudio[]> {
-    // Usamos HttpClient.get<Estudio[]>() para tipar la respuesta.
-    return this.http.get<Estudio[]>(this.apiUrl);
+  constructor(private http: HttpClient){
+    this.productos = []
+  }
+
+  getProductos(){
+    return this.http.get<Estudio[]>(this.API_URL);
+  }
+
+  getProducto(id : string){
+    return this.http.get<Estudio>(`${this.API_URLBASE}/${id}`);
+  }
+
+  postProducto(p : Estudio){
+    return this.http.post<Estudio>(this.API_URL, p);
+  }
+
+  deleteProducto(id : string){
+    return this.http.delete<void>(`${this.API_URL}/${id}`);
+  }
+
+  updateProducto(p: Estudio) {
+    return this.http.put<Estudio>(`${this.API_URL}/${p.id}`, p);
   }
 }
+
+

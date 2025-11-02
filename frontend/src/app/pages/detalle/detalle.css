@@ -1,0 +1,67 @@
+article{
+  background-color: var(--colorFondoTarjeta);
+  border-radius: 1rem;
+  box-shadow: 0 4px 10px var(--sombra);
+  padding: 1.5rem;
+  margin: 1rem auto;
+  max-width: 350px;
+  font-family: var(--fuenteBase);
+  color: var(--colorTerciario);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+header h2 {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: var(--colorTerciario);
+  margin-bottom: 0.5rem;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+/* Detalles */
+#detalles p {
+  margin: 0.25rem 0;
+  font-size: 0.95rem;
+}
+
+#detalles strong {
+  color: var(--colorBoton);
+}
+
+/* BOTONERA */
+#botonera {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1rem;
+}
+
+button {
+  color: var(--colorPrincipal);
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+/*BOTON EDITAR*/
+#editar {
+  background-color: var(--colorBoton);
+  transform: scale(1.03);
+}
+
+#editar:hover {
+  background-color: #0096c7;
+  transform: scale(1.03);
+}
+
+/*BOTON ELIMINAR*/
+#eliminar {
+  background-color: #d62828;
+}
+
+#eliminar:hover {
+  background-color: #e63946;
+}
