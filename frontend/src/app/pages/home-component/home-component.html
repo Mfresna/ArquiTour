@@ -1,0 +1,24 @@
+<h2>📚 Listado de Estudios de Arquitectura</h2>
+
+<div *ngIf="loading">
+  <p>Cargando datos...</p>
+</div>
+
+<div *ngIf="error">
+  <p style="color: red;">Error: {{ error }}</p>
+</div>
+
+<div *ngIf="!loading && !error">
+  <ul *ngIf="estudios.length > 0; else noEstudios">
+    <li *ngFor="let estudio of estudios">
+      <strong>ID:</strong> {{ estudio.id }} <br>
+      <strong>Nombre:</strong> {{ estudio.nombre }} <br>
+      <strong>Obras IDs:</strong> {{ estudio.obrasIds.join(', ') }} <br>
+      <hr>
+    </li>
+  </ul>
+
+  <ng-template #noEstudios>
+    <p>No se encontraron estudios.</p>
+  </ng-template>
+</div>

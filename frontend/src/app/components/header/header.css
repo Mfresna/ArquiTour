@@ -1,0 +1,31 @@
+header {
+  width: 100%;
+  background-color: var(--colorTerciario);
+  padding: 15px 0;
+  box-shadow: 0 2px 4px var(--sombra);
+}
+
+ul {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  list-style: none;
+  gap: 2rem;
+  margin: 0;
+  padding: 0;
+  user-select: none; /*no permite seleccionar el texto*/
+}
+
+li a {
+  color: var(--colorSecundario);
+  text-decoration: none;
+  font-weight: bold;
+  letter-spacing: 0.5px;
+  transition: color 0.3s ease, transform 0.2s ease;
+  cursor: pointer;
+}
+
+li a:hover {
+  color: var(--colorBoton);
+  transform: scale(1.05);
+}
