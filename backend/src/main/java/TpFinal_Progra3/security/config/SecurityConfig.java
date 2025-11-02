@@ -16,6 +16,11 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.List;
 
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
@@ -50,8 +55,10 @@ public class SecurityConfig {
                         .requestMatchers("/v3/api-docs/**", "/swagger-ui.html", "/swagger-ui/**").permitAll()
                         //autenticacion sin restriccion
                         .requestMatchers("/auth/**").permitAll()
-                        .requestMatchers("/imagen/**").permitAll()
                         .requestMatchers("/validacion/**").permitAll()
+
+                        .requestMatchers("/**").permitAll()
+
                         .requestMatchers(HttpMethod.POST,"/usuarios").permitAll()
                         // Otros EndPoints deben estar autenticados
                         .anyRequest().authenticated())
@@ -60,7 +67,7 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin))
                 .sessionManagement(manager -> manager.sessionCreationPolicy(STATELESS))
-                //Esto Ejecuta mei filtro personalizado para login y pass que va a retornar si es valido
+                //Esto Ejecuta mi filtro personalizado para login y pass que va a retornar si es valido
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 //Establece la clase encargada de manejar las excepciones que sean lanzadas.
                 .exceptionHandling(e -> e.authenticationEntryPoint(restAuthenticationEntryPoint));
@@ -68,4 +75,37 @@ public class SecurityConfig {
         // Devuelve la cadena de filtros de seguridad
         return http.build();
     }
+
+    //-------------- CORS ------------------//
+
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        var source = new UrlBasedCorsConfigurationSource();
+
+        // === CORS con credenciales para rutas que usan cookies/JWT (obras, auth, etc.) ===
+        var cred = new CorsConfiguration();
+            cred.setAllowedOriginPatterns(List.of("http://localhost:4200", "http://127.0.0.1:4200"));
+            cred.setAllowedMethods(List.of("GET","POST","PUT","PATCH","DELETE","OPTIONS"));
+            cred.setAllowedHeaders(List.of("Authorization","Content-Type","X-Requested-With","Accept"));
+            cred.setExposedHeaders(List.of("Authorization")); // agrega Content-Disposition si vas a leer el nombre de archivo desde XHR
+            cred.setAllowCredentials(true);
+            cred.setMaxAge(3600L);
+
+        // Aplica a lo que viaja con cookies/headers
+        source.registerCorsConfiguration("/**", cred);
+
+        var img = new CorsConfiguration();
+            img.setAllowedOrigins(List.of("*"));
+            img.setAllowedMethods(List.of("GET","HEAD","OPTIONS"));
+            img.setAllowedHeaders(List.of("*"));
+            img.setAllowCredentials(false);
+
+        source.registerCorsConfiguration("/imagenes/**", img);
+
+        return source;
+    }
+
+
+
+
 }
