@@ -30,7 +30,7 @@ export class PruebaToken {
 
   probarApi() {
     this.resultado = '⏳ Haciendo request...';
-    this.http.get('http://localhost:8080/obras').subscribe({
+    this.http.get('http://localhost:8080/estudios/filtrar').subscribe({
       next: (res) => {
         this.resultado = '✅ Respuesta de la API:\n' + JSON.stringify(res, null, 2);
       },
