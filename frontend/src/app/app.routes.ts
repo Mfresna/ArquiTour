@@ -5,6 +5,6 @@ import { PruebaToken } from './prueba-token/prueba-token';
 
 export const routes: Routes = [
   { path: '', component: Home },
-  { path: 'estudios/:id', component: Detalle }
+  { path: 'estudios/:id', component: Detalle },
   { path: 'prueba-token', component: PruebaToken }
 ];
