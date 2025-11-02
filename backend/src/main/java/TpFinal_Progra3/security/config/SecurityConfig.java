@@ -16,8 +16,11 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.List;
 
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
@@ -55,6 +58,7 @@ public class SecurityConfig {
                         .requestMatchers("/validacion/**").permitAll()
 
                         .requestMatchers("/**").permitAll()
+
                         .requestMatchers(HttpMethod.POST,"/usuarios").permitAll()
                         // Otros EndPoints deben estar autenticados
                         .anyRequest().authenticated())
@@ -78,29 +82,25 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         var source = new UrlBasedCorsConfigurationSource();
 
-        // === CORS para API protegida (/api/** y todo lo que requiera credenciales) ===
-        var api = new CorsConfiguration();
-        api.setAllowedOriginPatterns(List.of("http://localhost:4200", "http://127.0.0.1:4200"));
-        api.setAllowedMethods(List.of("GET","POST","PUT","PATCH","DELETE","OPTIONS"));
-        api.setAllowedHeaders(List.of("Authorization","Content-Type","X-Requested-With","Accept"));
-        api.setExposedHeaders(List.of("Authorization","Content-Disposition"));
-        api.setAllowCredentials(true);            // cookies + Authorization
-        api.setMaxAge(3600L);
-        // Ajustá el patrón a tus rutas reales (por ejemplo /api/**)
-        source.registerCorsConfiguration("/api/**", api);
-        source.registerCorsConfiguration("/auth/**", api);
-        source.registerCorsConfiguration("/validacion/**", api);
-        source.registerCorsConfiguration("/usuarios", api);
+        // === CORS con credenciales para rutas que usan cookies/JWT (obras, auth, etc.) ===
+        var cred = new CorsConfiguration();
+            cred.setAllowedOriginPatterns(List.of("http://localhost:4200", "http://127.0.0.1:4200"));
+            cred.setAllowedMethods(List.of("GET","POST","PUT","PATCH","DELETE","OPTIONS"));
+            cred.setAllowedHeaders(List.of("Authorization","Content-Type","X-Requested-With","Accept"));
+            cred.setExposedHeaders(List.of("Authorization")); // agrega Content-Disposition si vas a leer el nombre de archivo desde XHR
+            cred.setAllowCredentials(true);
+            cred.setMaxAge(3600L);
 
-        // === CORS para imágenes públicas (sin cookies) ===
+        // Aplica a lo que viaja con cookies/headers
+        source.registerCorsConfiguration("/**", cred);
+
         var img = new CorsConfiguration();
-        img.setAllowedOrigins(List.of("*"));      // público
-        img.setAllowedMethods(List.of("GET","HEAD","OPTIONS"));
-        img.setAllowedHeaders(List.of("*"));
-        img.setExposedHeaders(List.of("Content-Disposition","Content-Type","Accept-Ranges"));
-        img.setAllowCredentials(false);
-        img.setMaxAge(86400L);
-        source.registerCorsConfiguration("/imagen/**", img);
+            img.setAllowedOrigins(List.of("*"));
+            img.setAllowedMethods(List.of("GET","HEAD","OPTIONS"));
+            img.setAllowedHeaders(List.of("*"));
+            img.setAllowCredentials(false);
+
+        source.registerCorsConfiguration("/imagenes/**", img);
 
         return source;
     }
