@@ -3,7 +3,7 @@
 ## Descripción general
 
 El **frontend de ArquiTour** está desarrollado con:
- - **Angular 17**
+ - **Angular 20**
  -  **TypeScript**
  -  **CSS**
 
