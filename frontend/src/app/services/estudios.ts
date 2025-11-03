@@ -2,8 +2,7 @@
 
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { Estudio } from '../models/estudio.model'; // Importa el modelo
+import { Estudio } from '../models/estudio.model';
 
 @Injectable({
   // providedIn: 'root' hace que el servicio sea un singleton en toda la aplicación (a partir de Angular 6+)

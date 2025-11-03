@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { DatosToken } from '../../models/datosToken';
+import { DatosToken } from '../../models/datosTokenModel';
 
 @Injectable({ providedIn: 'root' })
 export class TokenService {
@@ -32,6 +32,14 @@ export class TokenService {
   
   // Decodifica la parte Base64URL a texto UTF-8.
 
+  obtenerRoles(): string[] {
+    return (this.obtenerDatosDelToken()?.roles ?? []).map(r => r.authority);
+  }
+
+  tieneRol(rol : string) : boolean{
+    return this.obtenerRoles().includes(rol)
+  }
+
   private decodificarBase64Url(cadena: string): string {
     let base64 = cadena.replace(/-/g, '+').replace(/_/g, '/');
     const resto = base64.length % 4;
@@ -44,7 +52,7 @@ export class TokenService {
   }
 
   // Lee datos del usuario del JWT y lo devuelve como objeto.
-  obtenerDatosDelToken(): DatosToken| null {
+  private obtenerDatosDelToken(): DatosToken| null {
     if (!this.accessToken) return null;
 
     try {
@@ -59,18 +67,4 @@ export class TokenService {
     }
   }
 
-  obtenerExpiracion(): number | null {
-    const datos = this.obtenerDatosDelToken();
-    return datos?.exp ?? null;
-  }
-
-  estaExpirado(margenSegundos: number = 5): boolean {
-    const exp = this.obtenerExpiracion();
-    if (!exp) {
-      return true; 
-    }
-
-    const ahora = Math.floor(Date.now() / 1000);
-    return exp <= (ahora + margenSegundos);
-  }
 }

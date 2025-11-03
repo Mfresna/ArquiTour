@@ -31,7 +31,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/estudios")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "http://localhost:4200")
 public class EstudioArqController {
 
     private final EstudioArqService estudioArqService;
