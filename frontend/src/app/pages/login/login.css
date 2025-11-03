@@ -1,0 +1,119 @@
+:root {
+  --colorFondoTarjeta: #ffffff;
+  --colorBoton: #0077b6;
+  --colorPrincipal: #ffffff;
+  --colorSecundario: #f1f1f1;
+  --colorTerciario: #333333;
+  --sombra: rgba(0, 0, 0, 0.2);
+  --fuenteBase: "Poppins", sans-serif;
+}
+
+/* Fondo de la página */
+.login-page {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, #cce3f3, #f4faff);
+  padding: 2rem;
+}
+
+/* --- Tus estilos base --- */
+form {
+  max-width: 450px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background-color: var(--colorFondoTarjeta);
+  box-shadow: 0 4px 12px var(--sombra);
+  border-radius: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  font-family: var(--fuenteBase);
+  color: var(--colorTerciario);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+form:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+}
+
+/* Título */
+h2 {
+  text-align: center;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  color: var(--colorBoton);
+}
+
+/* Fieldsets e inputs */
+fieldset {
+  border: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+label {
+  font-weight: 500;
+}
+
+input {
+  padding: 0.6rem 0.8rem;
+  border-radius: 0.5rem;
+  border: 1px solid #ccc;
+  font-family: var(--fuenteBase);
+  font-size: 1rem;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+input:focus {
+  outline: none;
+  border-color: var(--colorBoton);
+  box-shadow: 0 0 6px rgba(0, 119, 182, 0.3);
+}
+
+input.invalido {
+  border: 2px solid #ff5c5c;
+  background: #ffecec;
+}
+
+/* Botones */
+button {
+  padding: 0.7rem 1.2rem;
+  border: none;
+  border-radius: 0.7rem;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+  margin-top: 0.5rem;
+}
+
+/* Botón de enviar */
+#enviar {
+  background-color: var(--colorBoton);
+  color: var(--colorPrincipal);
+}
+
+#enviar:hover {
+  background-color: #0096c7;
+  transform: scale(1.03);
+}
+
+#enviar:disabled {
+  background-color: #a0c4d9;
+  cursor: not-allowed;
+}
+
+/* Botón de volver */
+#volver {
+  background-color: var(--colorSecundario);
+  color: var(--colorTerciario);
+}
+
+#volver:hover {
+  background-color: #e0e0e0;
+  transform: scale(1.02);
+}
