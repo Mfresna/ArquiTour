@@ -1,7 +1,7 @@
 import { HttpErrorResponse, HttpHandlerFn, HttpRequest } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { catchError, throwError } from 'rxjs';
-import { TokenService } from '../services/tokenService/token-service';
+import { TokenService } from '../auth/services/tokenService/token-service';
 
 
 export function jwtInterceptor(req: HttpRequest<any>, next: HttpHandlerFn) {

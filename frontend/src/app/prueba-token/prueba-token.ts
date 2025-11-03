@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
-import { TokenService } from '../services/tokenService/token-service';
+import { TokenService } from '../auth/services/tokenService/token-service';
 
 
 @Component({
@@ -39,5 +39,9 @@ export class PruebaToken {
         console.error(err);
       },
     });
+  }
+
+  roles(){
+    alert(this.tokenService.obtenerRoles()[0]);
   }
 }
