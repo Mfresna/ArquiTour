@@ -25,4 +25,14 @@ export class Home implements OnInit {
     });
   }
 
+  a(){
+      navigator.geolocation.getCurrentPosition(
+    (pos) => {
+      console.log(pos);
+    },
+    (err) => console.error(err)
+  );
+}
+
+
 }

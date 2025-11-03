@@ -86,7 +86,11 @@ public class SecurityConfig {
         var cred = new CorsConfiguration();
             cred.setAllowedOriginPatterns(List.of("http://localhost:4200", "http://127.0.0.1:4200"));
             cred.setAllowedMethods(List.of("GET","POST","PUT","PATCH","DELETE","OPTIONS"));
-            cred.setAllowedHeaders(List.of("Authorization","Content-Type","X-Requested-With","Accept"));
+            cred.setAllowedHeaders(List.of("Authorization","Content-Type",
+                    "X-Requested-With",
+                    "Accept",
+                    "X-Client-IP",
+                    "X-Forwarded-For"));
             cred.setExposedHeaders(List.of("Authorization")); // agrega Content-Disposition si vas a leer el nombre de archivo desde XHR
             cred.setAllowCredentials(true);
             cred.setMaxAge(3600L);
