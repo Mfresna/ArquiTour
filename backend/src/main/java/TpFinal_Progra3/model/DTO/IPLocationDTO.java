@@ -11,7 +11,7 @@ import lombok.Data;
 @Data
 @Builder
 @Schema(description = "DTO que representa la ubicación geográfica asociada a una dirección IP.")
-public class IPLocationDTO {
+public class  IPLocationDTO {
     //Recibe los Datos del JSON del service IPLocationService
     @Schema(
             description = "Dirección IP válida.",

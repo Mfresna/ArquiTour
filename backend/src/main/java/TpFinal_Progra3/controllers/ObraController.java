@@ -1,5 +1,6 @@
 package TpFinal_Progra3.controllers;
 
+import TpFinal_Progra3.model.DTO.CoordenadasDTO;
 import TpFinal_Progra3.model.DTO.obras.ObraDTO;
 import TpFinal_Progra3.model.DTO.obras.ObraResponseDTO;
 import TpFinal_Progra3.model.DTO.filtros.ObraFiltroDTO;
@@ -112,12 +113,16 @@ public class ObraController {
     }
 
     //Key: X-Forwarded-For - Value: mi ip publica
+
+    //GET http://localhost:8080/api/obras/cercanas?distanciaKm=25  &lat=-34.6037&lon=-58.3816  (Opcionales)
     @Operation(summary = "Listar obras cercanas al usuario")
-    @GetMapping("/cercanas")
+    @PostMapping("/cercanas")
     public ResponseEntity<List<ObraResponseDTO>> obrasPorDistancia(
             HttpServletRequest request,
-            @Parameter(description = "Distancia máxima en km") @RequestParam(defaultValue = "25") @Positive Double distanciaKm){
-        return ResponseEntity.ok(obraService.obrasPorDistancia(request, distanciaKm));
+            @Parameter(description = "Distancia máxima en km") @RequestParam(defaultValue = "25") @Positive Double distanciaKm,
+            @RequestBody(required = false) @Valid CoordenadasDTO coordenadasNavegador){
+
+        return ResponseEntity.ok(obraService.obrasPorDistancia(request, distanciaKm, coordenadasNavegador));
     }
 
     @Operation(summary = "Filtrar obras por categoría, estado y estudio")
