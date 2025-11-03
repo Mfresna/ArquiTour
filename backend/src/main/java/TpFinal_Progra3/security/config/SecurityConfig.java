@@ -81,7 +81,7 @@ public class SecurityConfig {
         var source = new UrlBasedCorsConfigurationSource();
 
         // === CORS con credenciales para rutas que usan cookies/JWT (obras, auth, etc.) ===
-        var cred = new CorsConfiguration();
+        CorsConfiguration cred = new CorsConfiguration();
             cred.setAllowedOriginPatterns(List.of("http://localhost:4200", "http://127.0.0.1:4200"));
             cred.setAllowedMethods(List.of("GET","POST","PUT","PATCH","DELETE","OPTIONS"));
             cred.setAllowedHeaders(List.of("Authorization","Content-Type",
@@ -96,8 +96,10 @@ public class SecurityConfig {
         // Aplica a lo que viaja con cookies/headers
         source.registerCorsConfiguration("/**", cred);
 
-        var img = new CorsConfiguration();
-            img.setAllowedOrigins(List.of("*"));
+
+        //Permite hacer peticiones a imagenes desde el front con cualquier cabecera sin Credenciales
+        CorsConfiguration img = new CorsConfiguration();
+            img.setAllowedOrigins(List.of("http://localhost:4200", "http://127.0.0.1:4200"));
             img.setAllowedMethods(List.of("GET","HEAD","OPTIONS"));
             img.setAllowedHeaders(List.of("*"));
             img.setAllowCredentials(false);

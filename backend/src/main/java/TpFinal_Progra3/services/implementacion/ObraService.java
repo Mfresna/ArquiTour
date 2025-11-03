@@ -3,6 +3,7 @@ package TpFinal_Progra3.services.implementacion;
 import TpFinal_Progra3.exceptions.IPLocationException;
 import TpFinal_Progra3.exceptions.NotFoundException;
 import TpFinal_Progra3.exceptions.ProcesoInvalidoException;
+import TpFinal_Progra3.model.DTO.CoordenadasDTO;
 import TpFinal_Progra3.model.DTO.IPLocationDTO;
 import TpFinal_Progra3.model.DTO.obras.ObraDTO;
 import TpFinal_Progra3.model.DTO.obras.ObraResponseDTO;
@@ -95,11 +96,21 @@ public class ObraService implements ObraServiceInterface{
                 .toList();
     }
 
-    public List<ObraResponseDTO> obrasPorDistancia(HttpServletRequest request, Double distancia){
+    public List<ObraResponseDTO> obrasPorDistancia(HttpServletRequest request, Double distancia, CoordenadasDTO coordNavegador){
 
-        IPLocationDTO ipLocationUsuario =
-                ipLocationService.obtenerUbicacion(ipLocationService.obtenerIpCliente(request))
-                        .orElseThrow(() -> new IPLocationException(HttpStatus.CONFLICT,"No se puede obtener la Localizacion por IP"));
+        IPLocationDTO ipLocationUsuario;
+
+        if(coordNavegador != null && CoordenadasUtils.validarCoordenadas(coordNavegador.getLatitud(),coordNavegador.getLongitud()) == 0){
+            //coordNavegador no es null y las coordenadas son validas
+            ipLocationUsuario = IPLocationDTO.builder().ip("0")
+                    .latitud(coordNavegador.getLatitud())
+                    .longitud(coordNavegador.getLongitud())
+                    .build();
+        }else {
+            ipLocationUsuario =
+                    ipLocationService.obtenerUbicacion(ipLocationService.obtenerIpCliente(request))
+                            .orElseThrow(() -> new IPLocationException(HttpStatus.CONFLICT,"No se puede obtener la Localizacion por IP"));
+        }
 
         Map<String,Double> coordenadas = CoordenadasUtils.areaDeBusqueda(ipLocationUsuario, distancia);
 
