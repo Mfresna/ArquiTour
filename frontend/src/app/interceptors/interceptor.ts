@@ -1,37 +1,26 @@
-import { HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from "@angular/common/http";
-import { Injectable } from "@angular/core";
-import { Observable, catchError, throwError } from "rxjs";
-import { TokenService } from "../services/tokenService/token-service";
+import { HttpErrorResponse, HttpHandlerFn, HttpRequest } from '@angular/common/http';
+import { inject } from '@angular/core';
+import { catchError, throwError } from 'rxjs';
+import { TokenService } from '../services/tokenService/token-service';
 
 
-@Injectable()
-export class Interceptor implements HttpInterceptor {
+export function jwtInterceptor(req: HttpRequest<any>, next: HttpHandlerFn) {
+  const tokenService = inject(TokenService);
+  const token = tokenService.obtenerToken();
 
-  constructor(private tokenService: TokenService) {}
-
-  //Este método se ejecuta AUTOMÁTICAMENTE en cada request HTTP
-  intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    const token = this.tokenService.obtenerToken();
-
-    let requestModificada = req;
-    //Tengo un token: agrego auth y dejo que las cookies viajen
-    if (token) {
-      requestModificada = req.clone({
+  const reqModificada = token
+    ? req.clone({
         setHeaders: { Authorization: `Bearer ${token}` },
-        withCredentials: true
-      });
-    } else {
-      // No se agrega al header pero igual se clona porque permite que la cookie de refresh que guarda el backend sí se envíe
-      requestModificada = req.clone({ withCredentials: true });
-    }
-
-    return next.handle(requestModificada).pipe(
-      catchError((error: HttpErrorResponse) => {
-        if (error.status === 401) {
-          console.warn('Token expirado o inválido');
-        }
-        return throwError(() => error);
+        withCredentials: true,
       })
-    );
-  }
+    : req.clone({ withCredentials: true });
+
+  return next(reqModificada).pipe(
+    catchError((error: HttpErrorResponse) => {
+      if (error.status === 401) {
+        console.warn('Token expirado o inválido');
+      }
+      return throwError(() => error);
+    })
+  );
 }
