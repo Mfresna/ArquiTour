@@ -24,7 +24,7 @@ export class TokenService {
     this.accessToken = null;
   }
 
-  // Alias cortos (si te gustan)
+
   set(token: string | null): void { this.guardarToken(token); }
   get(): string | null { return this.obtenerToken(); }
   clear(): void { this.borrarToken(); }
