@@ -5,7 +5,6 @@ import { DatosToken } from '../../models/datosTokenModel';
 export class TokenService {
   
    // Guardamos el access token únicamente en memoria (RAM de la SPA).
-   // No usamos localStorage porque el refresh viene por cookie HttpOnly.
 
   private accessToken: string | null = null;
 
@@ -25,8 +24,12 @@ export class TokenService {
   }
 
 
-  set(token: string | null): void { this.guardarToken(token); }
-  get(): string | null { return this.obtenerToken(); }
+  set(token: string | null): void { 
+    this.guardarToken(token); 
+  }
+  get(): string | null {
+    return this.obtenerToken(); 
+  }
   clear(): void { this.borrarToken(); }
 
   
