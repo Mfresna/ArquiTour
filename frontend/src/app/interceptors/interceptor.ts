@@ -6,12 +6,12 @@ import { TokenService } from '../auth/services/tokenService/token-service';
 
 export function jwtInterceptor(req: HttpRequest<any>, next: HttpHandlerFn) {
   const tokenService = inject(TokenService);
-  const token = tokenService.obtenerToken();
+  const accesToken = tokenService.obtenerToken();
 
-  const reqModificada = token
+  const reqModificada = accesToken
     ? req.clone({
-        setHeaders: { Authorization: `Bearer ${token}` },
-        withCredentials: true,
+        setHeaders: { Authorization: `Bearer ${accesToken}` },
+        withCredentials: true
       })
     : req.clone({ withCredentials: true });
 
