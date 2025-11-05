@@ -1,0 +1,102 @@
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+/* --- Filtro --- */
+.fila {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: flex-end;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+}
+
+fieldset {
+  border: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+input {
+  padding: 0.4rem 0.6rem;
+  border-radius: 0.4rem;
+  border: 1px solid #ccc;
+  min-width: 250px;
+}
+
+input.invalido {
+  border-color: #e74c3c;
+}
+
+small {
+  color: #e74c3c;
+}
+
+button {
+  padding: 0.45rem 0.8rem;
+  border: none;
+  background: #007bff;
+  color: white;
+  border-radius: 0.35rem;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+button:hover {
+  background: #0056b3;
+}
+
+/* --- Grid de tarjetas --- */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1rem;
+}
+
+.card {
+  background: #fff;
+  border-radius: 0.8rem;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  text-align: center;
+}
+
+.card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+.card img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  background: #f5f5f5;
+}
+
+.card-body {
+  padding: 0.8rem;
+}
+
+.card-body h2 {
+  font-size: 1.1rem;
+  color: #333;
+  margin: 0;
+}
+
+.vacio {
+  grid-column: 1 / -1;
+  text-align: center;
+  color: #777;
+  margin-top: 1rem;
+}
