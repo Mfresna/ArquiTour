@@ -1,7 +1,7 @@
 import { Routes } from '@angular/router';
 import { PruebaToken } from './prueba-token/prueba-token';
-import { Login } from './pages/login/login';
-import { Auth } from './pages/auth/auth';
+import { Login } from './pages/Autenticacion/login/login';
+import { Auth } from './pages/Autenticacion/auth/auth';
 
 export const routes: Routes = [
   
