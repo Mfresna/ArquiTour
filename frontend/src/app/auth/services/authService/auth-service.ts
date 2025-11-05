@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../../../environments/environment';
 import { TokenService } from '../tokenService/token-service';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpResponse } from '@angular/common/http';
 import { AuthRequest } from '../../models/authrequest';
+import { AuthResponse } from '../../models/authResponse';
+import { tap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -16,33 +18,32 @@ export class AuthService {
     private tokenService: TokenService) {}
 
   login(credenciales: AuthRequest){
-    return this.http.post<AuthResponse>(`${this.baseUrl}/login`, body, {
-      withCredentials: true, // para que el navegador guarde/envié la cookie 'refreshToken'
-    })
-    .pipe(
+    return this.http.post<AuthResponse>(`${this.AUTH_URL}/login`, credenciales, {
+      withCredentials: true,
+    }).pipe(
       tap(res => {
         this.tokenService.set(res.accessToken);
       })
     );
   }
 
-  /** Ejemplo de refresh si tuvieras /auth/refresh que devuelve { accessToken } */
-  refresh(): Observable<{ accessToken: string }> {
-    return this.http.post<{ accessToken: string }>(`${this.baseUrl}/refresh`, {}, {
-      withCredentials: true,
-    })
-    .pipe(
-      tap(res => this.tokenService.set(res.accessToken))
-    );
-  }
+  // /** Ejemplo de refresh si tuvieras /auth/refresh que devuelve { accessToken } */
+  // refresh(): Observable<{ accessToken: string }> {
+  //   return this.http.post<{ accessToken: string }>(`${this.baseUrl}/refresh`, {}, {
+  //     withCredentials: true,
+  //   })
+  //   .pipe(
+  //     tap(res => this.tokenService.set(res.accessToken))
+  //   );
+  // }
 
-  logout(): void {
-    this.tokenService.clear();
+  // logout(): void {
+  //   this.tokenService.clear();
 
-    this.http.post<{ accessToken: string }>(`${this.AUTH_URL}/logout`, {}, {
-      withCredentials: true,
-    })
-  }
+  //   this.http.post<{ accessToken: string }>(`${this.AUTH_URL}/logout`, {}, {
+  //     withCredentials: true,
+  //   })
+  // }
 }
 
 
