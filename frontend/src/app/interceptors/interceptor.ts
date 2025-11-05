@@ -5,6 +5,7 @@ import { TokenService } from '../auth/services/tokenService/token-service';
 
 
 export function jwtInterceptor(req: HttpRequest<any>, next: HttpHandlerFn) {
+
   const tokenService = inject(TokenService);
   const accesToken = tokenService.obtenerToken();
 
@@ -23,4 +24,5 @@ export function jwtInterceptor(req: HttpRequest<any>, next: HttpHandlerFn) {
       return throwError(() => error);
     })
   );
+  
 }

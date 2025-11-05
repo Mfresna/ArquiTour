@@ -1,12 +1,10 @@
-import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '../../services/authService/auth-service';
-
 @Component({
   selector: 'app-login',
-  imports: [ReactiveFormsModule,CommonModule],
+  imports: [ReactiveFormsModule],
   templateUrl: './login.html',
   styleUrl: './login.css',
 })
@@ -29,8 +27,7 @@ export class Login implements OnInit {
     });
   }
 
-  enviarFormulario(): void {
-    
+  loguearse(): void {
     if (this.login.invalid) {
       this.login.markAllAsTouched();
     }else{
@@ -50,6 +47,35 @@ export class Login implements OnInit {
         //complete: () => this.cargando = false
       });
     }
+  }
+
+  recuperarPass():void{
+    const emailValidacion = this.login.get('email');  //Control de Validacion de email
+
+    if (emailValidacion != null && emailValidacion.invalid) {
+      alert("Ingrese un correo valido a recuperar");
+      emailValidacion.markAsTouched();
+    }else{
+      let email = this.login.get('email')?.value.trim().toLowerCase();
+
+      this.authService.recuperarPass(email).subscribe({
+        next: (res) => {
+          alert("MAIL ENVIADO");
+        },
+        error: (e) => {
+          if (e.status === 404) {
+            alert('Usuario no encontrado.');
+          } else if (e.status === 400) {
+            alert('Email inválido.');
+          }else if (e.status === 401) {
+            alert('Email FALTA TOKN.');
+          } else {
+            alert('Ocurrió un error. Intentá más tarde.')
+          }
+        }
+      });
+    }
+
   }
 
   mostrarPassword = false;

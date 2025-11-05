@@ -98,7 +98,7 @@ public class AuthController {
         String token = jwtService.generarToken(usuarioService.buscarUsuario(emailDTO.getEmail()));
         emailService.mailResetPass(emailDTO.getEmail(),token);
 
-        return ResponseEntity.ok("Ingrese a su correo electronico y siga los pasos: " + emailDTO.getEmail());
+        return ResponseEntity.ok().build();
     }
 
     @Operation(summary = "Restaurar contraseña", description = "Permite establecer una nueva contraseña utilizando un token de recuperación.")
@@ -108,16 +108,17 @@ public class AuthController {
             @ApiResponse(responseCode = "400", description = "Datos inválidos", content = @Content)
     })
     @PatchMapping("/password/{token}")
-    public ResponseEntity<String> restaurarPassword(
+    public ResponseEntity<Void> restaurarPassword(
             @Parameter(description = "Token de recuperación enviado por correo") @PathVariable String token,
             @RequestBody @Valid @Parameter(description = "Nueva contraseña") PasswordDTO passDTO){
         if (!jwtService.isTokenValid(token)){
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
         Usuario usr = usuarioService.buscarUsuario(jwtService.extractUsername(token));
+        usuarioService.cambiarPassword(usr,passDTO);
 
-        return ResponseEntity.ok(usuarioService.cambiarPassword(usr,passDTO));
+        return ResponseEntity.ok().build();
     }
 
     //---------------REFRESH TOKEN ENDPOINT-----------//
