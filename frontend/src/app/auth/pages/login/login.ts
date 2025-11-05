@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AuthService } from '../../../auth/services/authService/auth-service';
+import { AuthService } from '../../services/authService/auth-service';
 
 @Component({
   selector: 'app-login',
@@ -24,28 +24,32 @@ export class Login implements OnInit {
 
    ngOnInit(): void {
     this.login = this.fb.group({
-      username: ['', [Validators.required, Validators.email]],
+      email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required]]
     });
   }
 
   enviarFormulario(): void {
-
-    this.authService.login(this.login.value).subscribe({
-      next: (res) => {
-        if (res.cambiarPass) {
-          alert("Ingreso debe cambiar la pass")
-          //this.router.navigate(['/cambiar-password']);
-        } else {
-          alert("ingreso no debe cambiar la pass")
-          //this.router.navigate(['/']);
+    
+    if (this.login.invalid) {
+      this.login.markAllAsTouched();
+    }else{
+      this.authService.login(this.login.value).subscribe({
+        next: (res) => {
+          if (res.cambiarPass) {
+            alert("Ingreso debe cambiar la pass")
+            //this.router.navigate(['/cambiar-password']);
+          } else {
+            alert("ingreso no debe cambiar la pass")
+            //this.router.navigate(['/']);
+          }
+        },
+        error: (e) => {
+          alert('Credenciales inválidas');
         }
-      },
-      error: (e) => {
-        alert('Credenciales inválidas');
-      }
-      //complete: () => this.cargando = false
-    });
+        //complete: () => this.cargando = false
+      });
+    }
   }
 
   mostrarPassword = false;
