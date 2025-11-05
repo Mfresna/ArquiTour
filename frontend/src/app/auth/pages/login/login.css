@@ -90,6 +90,21 @@ fieldset small {
   color: #ff3333;
 }
 
+.forgot-container {
+  margin-top: 1rem;
+  text-align: center;
+}
+
+.forgot-link {
+  font-size: 0.9rem;
+  color: #007bff;
+  text-decoration: none;
+}
+
+.forgot-link:hover {
+  text-decoration: underline;
+}
+
 
 
 

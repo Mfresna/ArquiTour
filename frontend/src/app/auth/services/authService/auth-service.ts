@@ -8,7 +8,6 @@ import { tap } from 'rxjs';
 import { LoginForm } from '../../models/login/loginFormModel';
 
 
-
 @Injectable({
   providedIn: 'root',
 })
@@ -36,6 +35,13 @@ export class AuthService {
       })
     );
   }
+
+  recuperarPass(email: string){   
+    return this.http.post(`${this.AUTH_URL}/password`,{email},{
+      withCredentials: true,
+    });
+  }
+
 
   // /** Ejemplo de refresh si tuvieras /auth/refresh que devuelve { accessToken } */
   // refresh(): Observable<{ accessToken: string }> {

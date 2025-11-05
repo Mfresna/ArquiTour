@@ -89,11 +89,11 @@ public class ObraController {
     @Operation(summary = "Eliminar una obra")
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMINISTRADOR') or hasRole('ARQUITECTO')")
-    public ResponseEntity<String> eliminarObra(
+    public ResponseEntity<Void> eliminarObra(
             HttpServletRequest request,
             @Parameter(description = "ID de la obra a eliminar") @PathVariable @Positive Long id) {
         obraService.eliminarObra(request, id);
-        return ResponseEntity.ok("Obra eliminada correctamente.");
+        return ResponseEntity.ok().build();
     }
 
     @Operation(summary = "Obtener URL de visualización de obra en mapa")
@@ -162,12 +162,12 @@ public class ObraController {
     @Operation(summary = "Eliminar imágenes de una obra")
     @DeleteMapping("/{id}/imagenes")
     @PreAuthorize("hasRole('ADMINISTRADOR') or hasRole('ARQUITECTO')")
-    public ResponseEntity<String> eliminarImagenes(
+    public ResponseEntity<Void> eliminarImagenes(
             HttpServletRequest request,
             @Parameter(description = "ID de la obra") @PathVariable @Positive Long id,
             @RequestBody List<@Pattern(regexp = "^(https?://).+\\.(jpg|jpeg|png|gif|bmp|webp)$") String> urlBorrar) {
         obraService.eliminarImagenes(request, id,urlBorrar);
-        return ResponseEntity.ok("Imagenes Eliminadas Existosamente");
+        return ResponseEntity.ok().build();
     }
 
     @Operation(summary = "Agregar imágenes a una obra")

@@ -1,4 +1,4 @@
-<form [formGroup]="login" (submit)="enviarFormulario()">
+<form [formGroup]="login" (submit)="loguearse()">
 
   <fieldset>
     <label for="email">Email: </label>
@@ -32,6 +32,11 @@
     }
   </fieldset>
 
+  <div class="forgot-container">
+    <a (click)="recuperarPass()" class="forgot-link">
+      ¿Olvidaste la contraseña?
+    </a>
+  </div>
 
   <button id="login" type="submit" [disabled]="login.invalid">INGRESAR</button>
 </form>

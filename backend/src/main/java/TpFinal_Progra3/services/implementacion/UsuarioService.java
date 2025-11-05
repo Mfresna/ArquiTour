@@ -158,7 +158,7 @@ public class UsuarioService implements UsuarioServiceInterface {
         return usuarioMapper.mapResponseDTO(usuarioRepository.save(usuario));
     }
 
-    public String inhabilitarCuenta(Long id,HttpServletRequest request) {
+    public UsuarioResponseDTO inhabilitarCuenta(Long id,HttpServletRequest request) {
         if(obtenerMiPerfil(request).getId().equals(id)){
             throw new ProcesoInvalidoException("El usuario " + id + " no puede inhabilitar su propia cuenta.");
         }
@@ -173,10 +173,10 @@ public class UsuarioService implements UsuarioServiceInterface {
         usr.setIsActivo(false);
         usuarioRepository.save(usr);
 
-        return ("El usuario " + id + ", email "+ usr.getEmail() + " se ha inhabilitado correctamente.");
+        return (usuarioMapper.mapResponseDTO(usr));
     }
 
-    public String habilitarCuenta(Long id,HttpServletRequest request) {
+    public UsuarioResponseDTO habilitarCuenta(Long id,HttpServletRequest request) {
         if(obtenerMiPerfil(request).getId().equals(id)){
             throw new ProcesoInvalidoException("El usuario " + id + " no puede habilitar su propia cuenta.");
         }
@@ -188,7 +188,7 @@ public class UsuarioService implements UsuarioServiceInterface {
         usr.setIsActivo(true);
         usuarioRepository.save(usr);
 
-        return ("El usuario " + id + ", email "+ usr.getEmail() + " se ha habilitado correctamente.");
+        return (usuarioMapper.mapResponseDTO(usr));
     }
 
     public UsuarioResponseDTO obtenerMiPerfil(HttpServletRequest request){

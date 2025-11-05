@@ -140,9 +140,10 @@ public class FavoritoController {
     @Operation(summary = "Eliminar una lista de favoritos")
     @ApiResponse(responseCode = "200", description = "Lista eliminada exitosamente")
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> eliminarFavorito(HttpServletRequest request,
+    public ResponseEntity<Void> eliminarFavorito(HttpServletRequest request,
                                                    @Parameter(description = "ID de la lista de favoritos a eliminar") @PathVariable @Positive Long id){
-        return ResponseEntity.ok( favoritoService.eliminarFavoritoPorId(request, id));
+        favoritoService.eliminarFavoritoPorId(request, id);
+        return ResponseEntity.ok().build();
     }
 }
 

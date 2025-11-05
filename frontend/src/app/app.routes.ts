@@ -7,4 +7,5 @@ export const routes: Routes = [
   
   { path: '', component: Auth },
   { path: 'prueba-token', component: PruebaToken }
+
 ];

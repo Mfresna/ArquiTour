@@ -139,7 +139,7 @@ public class UsuarioController {
     })
     @PatchMapping("/{id}")
     @PreAuthorize("hasRole('ADMINISTRADOR')")
-    public ResponseEntity<String> cambiarEstadoDeCuenta(
+    public ResponseEntity<UsuarioResponseDTO> cambiarEstadoDeCuenta(
             HttpServletRequest request,
             @Parameter(description = "ID del usuario") @PathVariable @Positive Long id,
             @Parameter(description = "True para habilitar, False para inhabilitar") @RequestParam Boolean habilitacion) {
@@ -214,10 +214,10 @@ public class UsuarioController {
     })
     @PatchMapping("/password")
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<String> cambiarPassword(HttpServletRequest request,
+    public ResponseEntity<Void> cambiarPassword(HttpServletRequest request,
                                                   @RequestBody @Valid PasswordDTO passDTO) {
         Usuario usr = usuarioService.buscarUsuario(usuarioService.obtenerMiPerfil(request).getId());
-        return ResponseEntity.ok(usuarioService.cambiarPassword(usr, passDTO));
+        return ResponseEntity.ok().build();
     }
 
 }

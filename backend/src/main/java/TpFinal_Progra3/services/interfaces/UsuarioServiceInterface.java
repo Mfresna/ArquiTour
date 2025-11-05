@@ -19,8 +19,8 @@ public interface UsuarioServiceInterface {
     List<UsuarioResponseDTO> filtrarUsuarios(UsuarioFiltroDTO filtro);
     UsuarioResponseDTO modificarUsuario(HttpServletRequest request, Long id, UsuarioBasicoDTO usrDto);
     UsuarioResponseDTO actualizarImagenPerfil(HttpServletRequest request, String url);
-    String inhabilitarCuenta(Long id, HttpServletRequest request);
-    String habilitarCuenta(Long id, HttpServletRequest request);
+    UsuarioResponseDTO inhabilitarCuenta(Long id, HttpServletRequest request);
+    UsuarioResponseDTO habilitarCuenta(Long id, HttpServletRequest request);
     UsuarioResponseDTO obtenerMiPerfil(HttpServletRequest request);
     UsuarioResponseDTO agregarRoles(HttpServletRequest request, Long id, RolesDTO rolesDTO);
     UsuarioResponseDTO quitarRoles(HttpServletRequest request, Long id, RolesDTO rolesDTO);
