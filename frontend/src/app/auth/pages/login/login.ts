@@ -60,15 +60,11 @@ export class Login implements OnInit {
 
       this.authService.recuperarPass(email).subscribe({
         next: (res) => {
-          alert("MAIL ENVIADO");
+          alert("MAIL ENVIADO - Siga los Pasos");
         },
         error: (e) => {
-          if (e.status === 404) {
-            alert('Usuario no encontrado.');
-          } else if (e.status === 400) {
+          if (e.status === 400) {
             alert('Email inválido.');
-          }else if (e.status === 401) {
-            alert('Email FALTA TOKN.');
           } else {
             alert('Ocurrió un error. Intentá más tarde.')
           }
