@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { DatosToken } from '../../models/datosTokenModel';
+import { DatosToken } from '../../models/token/datosTokenModel';
 
 @Injectable({ providedIn: 'root' })
 export class TokenService {
