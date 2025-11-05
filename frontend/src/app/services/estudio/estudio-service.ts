@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { environment } from '../../../../environments/environment';
-import { EstudioModel } from '../../../models/estudioModel';
 import { HttpClient } from '@angular/common/http';
+import { environment } from '../../../environments/environment';
+import { EstudioModel } from '../../models/estudioModel';
 
 @Injectable({
   providedIn: 'root',
