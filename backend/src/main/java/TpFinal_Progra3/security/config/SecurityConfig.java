@@ -56,6 +56,7 @@ public class SecurityConfig {
                         //autenticacion sin restriccion
                         .requestMatchers("/auth/**").permitAll()
                         .requestMatchers("/validacion/**").permitAll()
+                        .requestMatchers("/imagen/**").permitAll()
 
                         .requestMatchers(HttpMethod.POST,"/usuarios").permitAll()
                         // Otros EndPoints deben estar autenticados
