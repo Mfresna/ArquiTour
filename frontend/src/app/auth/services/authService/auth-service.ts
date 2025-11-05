@@ -2,9 +2,12 @@ import { Injectable } from '@angular/core';
 import { environment } from '../../../../environments/environment';
 import { TokenService } from '../tokenService/token-service';
 import { HttpClient, HttpResponse } from '@angular/common/http';
-import { AuthRequest } from '../../models/authrequest';
-import { AuthResponse } from '../../models/authResponse';
+import { AuthResponse } from '../../models/login/authResponseModel';
+import { AuthRequest } from '../../models/login/authRequestModel';
 import { tap } from 'rxjs';
+import { LoginForm } from '../../models/login/loginFormModel';
+
+
 
 @Injectable({
   providedIn: 'root',
@@ -17,7 +20,14 @@ export class AuthService {
     private http: HttpClient, 
     private tokenService: TokenService) {}
 
-  login(credenciales: AuthRequest){
+  login(formulario: LoginForm){
+
+    //Mapeo de atributos
+    let credenciales: AuthRequest = {
+      username: formulario.email,
+      password: formulario.password
+    };
+
     return this.http.post<AuthResponse>(`${this.AUTH_URL}/login`, credenciales, {
       withCredentials: true,
     }).pipe(
