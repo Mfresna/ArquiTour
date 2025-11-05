@@ -83,28 +83,14 @@ public class SecurityConfig {
         // === CORS con credenciales para rutas que usan cookies/JWT (obras, auth, etc.) ===
         CorsConfiguration cred = new CorsConfiguration();
             cred.setAllowedOriginPatterns(List.of("http://localhost:4200", "http://127.0.0.1:4200"));
-            cred.setAllowedMethods(List.of("GET","POST","PUT","PATCH","DELETE","OPTIONS"));
-            cred.setAllowedHeaders(List.of("Authorization","Content-Type",
-                    "X-Requested-With",
-                    "Accept",
-                    "X-Client-IP",
-                    "X-Forwarded-For"));
-            cred.setExposedHeaders(List.of("Authorization")); // agrega Content-Disposition si vas a leer el nombre de archivo desde XHR
+            cred.setAllowedMethods(List.of("GET","POST","PUT","PATCH","DELETE","OPTIONS","HEAD"));
+            cred.setAllowedHeaders(List.of("*"));
+            cred.setExposedHeaders(List.of("Authorization", "Set-Cookie")); // agrega Content-Disposition si vas a leer el nombre de archivo desde XHR
             cred.setAllowCredentials(true);
             cred.setMaxAge(3600L);
 
         // Aplica a lo que viaja con cookies/headers
         source.registerCorsConfiguration("/**", cred);
-
-
-        //Permite hacer peticiones a imagenes desde el front con cualquier cabecera sin Credenciales
-        CorsConfiguration img = new CorsConfiguration();
-            img.setAllowedOrigins(List.of("http://localhost:4200", "http://127.0.0.1:4200"));
-            img.setAllowedMethods(List.of("GET","HEAD","OPTIONS"));
-            img.setAllowedHeaders(List.of("*"));
-            img.setAllowCredentials(false);
-
-        source.registerCorsConfiguration("/imagenes/**", img);
 
         return source;
     }

@@ -89,3 +89,44 @@ button {
 fieldset small {
   color: #ff3333;
 }
+
+
+
+
+
+
+
+
+
+
+.password-field {
+  position: relative;
+}
+
+.input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+input[type="password"],
+input[type="text"] {
+  flex: 1;
+  padding-right: 2.5rem; /* espacio para el ícono */
+}
+
+.toggle-btn {
+  position: absolute;
+  right: 0.5rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #666;
+  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+}
+
+.toggle-btn:hover {
+  color: #000;
+}
