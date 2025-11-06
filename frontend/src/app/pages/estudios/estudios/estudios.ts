@@ -2,13 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { EstudioModel } from '../../../models/estudioModel';
 import { EstudioService } from '../../../services/estudioService/estudio-service';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { TokenService } from '../../../auth/services/tokenService/token-service';
 import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-estudios',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, RouterLink],
   templateUrl: './estudios.html',
   styleUrl: './estudios.css',
 })
@@ -51,7 +51,7 @@ export class Estudios implements OnInit {
     const nombre = (this.filtro.value.nombre ?? '').trim() || undefined;
     this.estudioSrvice.getFiltrarEstudios(nombre).subscribe({
       next: lista => this.estudios = lista,
-      error: _ => alert('No se pudo cargar la lista de estudios')
+      error: (e) => alert('No se pudo cargar la lista de estudios')
     });
   }
 

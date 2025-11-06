@@ -1,1 +1,58 @@
-<p>estudio-detalle works!</p>
+<section class="detalle">
+
+  @if (cargando) {
+    <p>Cargando...</p>
+  } @else if (estudio) {
+
+    <!-- CABECERA -->
+    <div class="cabecera">
+      <h1>{{ estudio.nombre }}</h1>
+
+      @if (puedeGestionar()) {
+        <div class="acciones">
+          <button type="button" (click)="editar()">Editar</button>
+          <button type="button" class="danger" (click)="eliminar()">Eliminar</button>
+        </div>
+      }
+    </div>
+
+    <!-- IMAGEN -->
+    <div class="media">
+      <img
+        [src]="imgSrc(estudio.imagenUrl)"
+        (error)="onImgError($event)"
+        alt="Imagen del estudio" />
+    </div>
+
+    <!-- DATOS -->
+    <div class="meta">
+
+      <p><strong>Obras vinculadas ({{ estudio.obrasIds?.length || 0 }}):</strong></p>
+      @if (estudio.obrasIds?.length) {
+        <ul class="chips">
+          @for (oid of estudio.obrasIds; track $index) {
+            <li>#{{ oid }}</li>
+          }
+        </ul>
+      } @else {
+        <p class="muted">Sin obras asociadas.</p>
+      }
+
+      <p><strong>Arquitectos vinculados ({{ estudio.arquitectosIds?.length || 0 }}):</strong></p>
+      @if (estudio.arquitectosIds?.length) {
+        <ul class="chips">
+          @for (aid of estudio.arquitectosIds; track $index) {
+            <li>#{{ aid }}</li>
+          }
+        </ul>
+      } @else {
+        <p class="muted">Sin arquitectos asociados.</p>
+      }
+
+    </div>
+
+  } @else {
+    <p>No se encontró el estudio.</p>
+  }
+
+</section>
