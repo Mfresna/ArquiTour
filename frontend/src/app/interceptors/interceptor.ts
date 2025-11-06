@@ -1,31 +1,3 @@
-// import { HttpErrorResponse, HttpHandlerFn, HttpRequest } from '@angular/common/http';
-// import { inject } from '@angular/core';
-// import { catchError, throwError } from 'rxjs';
-// import { TokenService } from '../auth/services/tokenService/token-service';
-
-// export function jwtInterceptor(req: HttpRequest<any>, next: HttpHandlerFn) {
-
-//   const tokenService = inject(TokenService);
-//   const accesToken = tokenService.obtenerToken();
-
-//   const reqModificada = accesToken
-//     ? req.clone({
-//         setHeaders: { Authorization: `Bearer ${accesToken}` },
-//         withCredentials: true
-//       })
-//     : req.clone({withCredentials: true });
-
-//   return next(reqModificada).pipe(
-//     catchError((error: HttpErrorResponse) => {
-//       if (error.status === 401) {
-//         console.warn('Token expirado o inválido');
-//       }
-//       return throwError(() => error);
-//     })
-//   );
-  
-// }
-
 import { HttpInterceptorFn, HttpErrorResponse, HttpRequest, HttpHandlerFn } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { catchError, switchMap, filter, take, throwError } from 'rxjs';
@@ -33,20 +5,30 @@ import { AuthService } from '../auth/services/authService/auth-service';
 import { TokenService } from '../auth/services/tokenService/token-service';
 
 export const jwtInterceptor: HttpInterceptorFn = (req, next) => {
+
   const tokenService = inject(TokenService);
   const authService = inject(AuthService);
 
   // Rutas públicas que no necesitan token
-  const skipUrls = ['/auth/login', '/auth/register', '/auth/password', '/auth/refresh'];
-  const shouldSkip = skipUrls.some(url => req.url.includes(url));
+  const urlsPublicas = [
+    '/auth/login',
+    '/auth/register',
+    '/auth/password',
+    '/auth/refresh'
+  ];
 
-  if (shouldSkip) {
+  if (urlsPublicas.some(url => req.url.includes(url))) {
+    //Si es una URL publica solo le envio las Cookies
     return next(req.clone({ withCredentials: true }));
   }
 
-  // Agregar token a la petición
+  //Si Existe le agrega el token a la peticion
   const accessToken = tokenService.obtenerToken();
-  const reqConToken = accessToken
+
+  //Le agrega el accesstoken si existe y las cookies
+  const reqConToken = 
+  
+  accessToken 
     ? req.clone({
         setHeaders: { Authorization: `Bearer ${accessToken}` },
         withCredentials: true
@@ -55,57 +37,60 @@ export const jwtInterceptor: HttpInterceptorFn = (req, next) => {
 
   // Manejar respuestas
   return next(reqConToken).pipe(
-    catchError((error: HttpErrorResponse) => {
-      if (error.status === 401 && !req.url.includes('/refresh')) {
-        console.warn('⚠️ Token expirado (401), intentando refresh...');
-        return handleRefreshToken(req, next, authService, tokenService);
+    //Si devuelve error 401 es falta de Token (Ejecuta el Refresh)
+    catchError((e: HttpErrorResponse) => {
+      if (e.status === 401 && !req.url.includes('/refresh')) {
+        //Solo a peticion que devuelven 401 y no sean de refresh (evita bucle infinito)
+        console.warn('El accessToken expiró... Intentando hacer refresh del token');
+        return handleRefreshToken(req, next, authService);
       }
-      return throwError(() => error);
+      return throwError(() => e);
     })
   );
+
 };
 
-// ============================================
-// FUNCIÓN AUXILIAR PARA EL REFRESH
-// ============================================
 function handleRefreshToken(
   req: HttpRequest<any>,
   next: HttpHandlerFn,
-  authService: AuthService,
-  tokenService: TokenService
-) {
-  // Si ya hay un refresh en progreso, esperar
-  if (authService.isRefreshTokenInProgress()) {
-    console.log('⏳ Esperando refresh en progreso...');
+  authService: AuthService) {
+
+  /*Se fija que no haya un refresh en proceso, evita que el usuario haga multiples peticiones simultaneas de refresh. 
+  Para eso cuando se inicia un refresh se cambia un flag en AuthService y solo mando otra peticion al servicio cuando
+  el flag es false, es decir no hay refresh activo */
+
+  if (authService.isRefreshActivo()) {
+    console.log("Hay un refresh en progreso...Aguarde para hacer otra peticion");
     return authService.getRefreshTokenSubject().pipe(
       filter(token => token !== null),
       take(1),
       switchMap(newToken => {
-        console.log('✅ Reintentando con nuevo token');
-        return next(cloneRequestWithToken(req, newToken!));
+        console.log("Ya Pidieron el nuevo token, ahora probamos con ese");
+        return next(requestConNuevoToken(req, newToken!));
       })
     );
   }
 
-  // Iniciar refresh
-  authService.setRefreshTokenInProgress(true);
+  // No hay refresh activo asique lo
+  authService.setEstadoRefresh(true);
   authService.getRefreshTokenSubject().next(null);
+
 
   return authService.refreshToken().pipe(
     switchMap(response => {
-      console.log('✅ Reintentando petición original');
-      return next(cloneRequestWithToken(req, response.accessToken));
+      console.log("Reintentando petición original con Nuevo Token");
+      return next(requestConNuevoToken(req, response.accessToken));
     }),
     catchError(error => {
-      console.error('❌ Refresh falló, cerrando sesión');
+      console.error("El Refresh Fallo, se cierra sesion y se debe loguear de vuelta");
       return throwError(() => error);
     })
   );
 }
 
-function cloneRequestWithToken(req: HttpRequest<any>, token: string): HttpRequest<any> {
+function requestConNuevoToken(req: HttpRequest<any>, nuevoToken: string): HttpRequest<any> {
   return req.clone({
-    setHeaders: { Authorization: `Bearer ${token}` },
+    setHeaders: { Authorization: `Bearer ${nuevoToken}` },
     withCredentials: true
   });
 }

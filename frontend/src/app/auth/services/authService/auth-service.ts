@@ -17,7 +17,7 @@ export class AuthService {
   private readonly AUTH_URL = `${environment.apiUrl}/auth`;
 
   //Maneja la existencia de un refresh activo
-  private refreshTokenInProgress = false;
+  private estadoRefresh = false;
   private refreshTokenSubject = new BehaviorSubject<string | null>(null);
  
   constructor(
@@ -55,11 +55,11 @@ export class AuthService {
           console.log('✅ Token refrescado exitosamente');
           this.tokenService.set(res.accessToken);
           this.refreshTokenSubject.next(res.accessToken);
-          this.refreshTokenInProgress = false;
+          this.estadoRefresh = false;
         }),
         catchError(error => {
           console.error('❌ Error al refrescar token, cerrando sesión');
-          this.refreshTokenInProgress = false;
+          this.estadoRefresh = false;
           this.logout();
           return throwError(() => error);
         })
@@ -94,12 +94,12 @@ export class AuthService {
 
   //----------------------
 
-    isRefreshTokenInProgress(): boolean {
-    return this.refreshTokenInProgress;
+  isRefreshActivo(): boolean {
+    return this.estadoRefresh;
   }
 
-  setRefreshTokenInProgress(value: boolean): void {
-    this.refreshTokenInProgress = value;
+  setEstadoRefresh(value: boolean): void {
+    this.estadoRefresh = value;
   }
 
   getRefreshTokenSubject(): BehaviorSubject<string | null> {
