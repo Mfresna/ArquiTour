@@ -2,7 +2,7 @@
   <h1>Estudios</h1>
 
   <!-- BUSCADOR -->
-  <form [formGroup]="filtro" (ngSubmit)="cargarEstudios()" class="fila">
+  <form [formGroup]="filtro" (submit)="cargarEstudios()" class="fila">
     <fieldset>
       <label for="filtroNombre">Buscar por nombre:</label>
       <input
@@ -11,7 +11,8 @@
         formControlName="nombre"
         placeholder="Ej: Estudio Sur Arquitectos"
         [class.invalido]="filtro.get('nombre')?.invalid && filtro.get('nombre')?.touched"
-        autocomplete="off" />
+        autocomplete="off">
+
       @if (filtro.get('nombre')?.errors?.['minlength'] && filtro.get('nombre')?.touched) {
         <small>Mínimo 2 caracteres.</small>
       }
@@ -23,22 +24,22 @@
     </div>
   </form>
 
-<div class="grid">
-  @for (e of estudios; track e?.id ?? $index) {
-    <div class="card">
-      <img
-        [src]="imagenUrl(e.imagenUrl)"
-        (error)="onImgError($event)"
-        alt="Imagen del estudio"
-        loading="lazy" />
+  <!-- GRID DE TARJETAS -->
+  <div class="grid">
+    @for (e of estudios; track e?.id ?? $index) {
+      <a class="card" [routerLink]="['/estudios', e.id]">
+        <img
+          [src]="imagenUrl(e.imagenUrl)"
+          (error)="onImgError($event)"
+          alt="Imagen del estudio" />
 
-      <div class="card-body">
-        <h2>{{ e.nombre}}</h2>
-      </div>
-    </div>
-  } @empty {
-    <p class="vacio">No hay estudios para mostrar.</p>
-  }
-</div>
-
+        <div class="card-body">
+          <h2>{{ e.nombre }}</h2>
+        </div>
+      </a>
+    }
+    @empty {
+      <p class="vacio">No hay estudios para mostrar.</p>
+    }
+  </div>
 </section>
