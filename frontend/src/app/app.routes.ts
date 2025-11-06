@@ -12,11 +12,7 @@ export const routes: Routes = [
   { path: '', component: Auth },
   { path: 'prueba-token', component: PruebaToken},
   { path: 'estudios', component: Estudios},
-  { path: 'estudios/:id', component: EstudioDetalle}
-];
-
-
-  { path: 'estudios', component: Estudios},
+  { path: 'estudios/:id', component: EstudioDetalle},
   { path: 'auth/password/:token', component: RecuperarPass}
 
 ];  
