@@ -3,6 +3,7 @@ package TpFinal_Progra3.services;
 import TpFinal_Progra3.exceptions.EmailNoEnviadoException;
 import jakarta.mail.internet.MimeMessage;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -14,6 +15,9 @@ public class EmailService {
 
     @Autowired
     private JavaMailSender mailSender;
+
+    @Value("${url.front}")
+    private String urlFront;
 
     public void mailResetPass(String emailUsuario, String token) throws EmailNoEnviadoException {
         try {
@@ -43,7 +47,8 @@ public class EmailService {
 
     private String generarCuerpo (String token){
         System.out.println(token);
-        String urlReset = "http://localhost:8080/auth/password/" + token;
+
+        String urlReset = urlFront + "/auth/password/" + token;
 
         return "<html>" +
                 "<body style='font-family: Arial, sans-serif; text-align: center; background-color: #f9f9f9; padding: 20px;'>" +

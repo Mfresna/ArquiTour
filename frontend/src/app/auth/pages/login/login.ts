@@ -11,8 +11,6 @@ import { AuthService } from '../../services/authService/auth-service';
 export class Login implements OnInit {
 
   login!: FormGroup;
-  id!: string;
-  editar!: boolean;
 
   constructor(
     private fb: FormBuilder,
@@ -58,7 +56,7 @@ export class Login implements OnInit {
     }else{
       let email = this.login.get('email')?.value.trim().toLowerCase();
 
-      this.authService.recuperarPass(email).subscribe({
+      this.authService.enviarRecuperarPass(email).subscribe({
         next: (res) => {
           alert("MAIL ENVIADO - Siga los Pasos");
         },
