@@ -10,6 +10,7 @@ import { RecuperarPass } from './auth/pages/recuperar-pass/recuperar-pass';
 export const routes: Routes = [
   
   { path: '', component: Auth },
+  { path: 'login', component: Auth},
   { path: 'prueba-token', component: PruebaToken},
   { path: 'estudios', component: Estudios},
   { path: 'estudios/:id', component: EstudioDetalle},

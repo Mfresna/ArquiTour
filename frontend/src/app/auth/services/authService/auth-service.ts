@@ -43,31 +43,32 @@ export class AuthService {
     );
   }
 
-    refreshToken(){
-      console.log('🔄 Intentando refrescar el token...');
+  refreshToken(){
+    console.log('Se Solicito un Refresh...');
       
-      return this.http.post<AuthResponse>(
-        `${this.AUTH_URL}/refresh`,
-        {},  // Body vacío
-        { withCredentials: true }  // Envía la cookie automáticamente
-      ).pipe(
-        tap(res => {
-          console.log('✅ Token refrescado exitosamente');
-          this.tokenService.set(res.accessToken);
-          this.refreshTokenSubject.next(res.accessToken);
-          this.estadoRefresh = false;
-        }),
-        catchError(error => {
-          console.error('❌ Error al refrescar token, cerrando sesión');
-          this.estadoRefresh = false;
-          this.logout();
-          return throwError(() => error);
-        })
-      );
+    return this.http.post<AuthResponse>(
+      `${this.AUTH_URL}/refresh`,{},
+      { withCredentials: true }  // Envía la cookie que contiene el RefreshToken
+    ).pipe(
+      tap(res => {
+        console.log('Se recibe un nuevo AccessToken');
+        this.tokenService.set(res.accessToken);
+
+        //.next sirve para anunciar a las peticiones que hay un nuevo token, ese nuevo token es el 'res.accessToken'
+        this.refreshTokenSubject.next(res.accessToken);
+        this.estadoRefresh = false;
+      }),
+      catchError(error => {
+        console.error("No se pudo Refrescar, se cierra sesion.");
+        this.estadoRefresh = false;
+        this.logout();
+        return throwError(() => error);
+      })
+    );
   }
 
-  logout(): void {
-    console.log('👋 Cerrando sesión');
+  logout() {
+    console.log("Sesion Cerrada");
     this.tokenService.clear();
     this.refreshTokenSubject.next(null);
 
@@ -110,22 +111,4 @@ export class AuthService {
     return this.tokenService.obtenerToken() !== null;
   }
 
-
-  // /** Ejemplo de refresh si tuvieras /auth/refresh que devuelve { accessToken } */
-  // refresh(): Observable<{ accessToken: string }> {
-  //   return this.http.post<{ accessToken: string }>(`${this.baseUrl}/refresh`, {}, {
-  //     withCredentials: true,
-  //   })
-  //   .pipe(
-  //     tap(res => this.tokenService.set(res.accessToken))
-  //   );
-  // }
-
-  // logout(): void {
-  //   this.tokenService.clear();
-
-  //   this.http.post<{ accessToken: string }>(`${this.AUTH_URL}/logout`, {}, {
-  //     withCredentials: true,
-  //   })
-  // }
 }
