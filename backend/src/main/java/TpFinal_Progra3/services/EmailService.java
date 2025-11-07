@@ -60,6 +60,7 @@ public class EmailService {
                 "background-color: #2E86C1; color: white; font-weight: bold; border-radius: 5px;'>Restaurar Contraseña</a>" +
                 "</div>" +
                 "<p style='color: #999;'>Este enlace expirará en 24 horas.</p>" +
+                "<p>" + urlReset + "</p>" +
                 "</body>" +
                 "</html>";
     }
