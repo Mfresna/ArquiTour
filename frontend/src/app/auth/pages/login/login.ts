@@ -51,14 +51,13 @@ export class Login implements OnInit {
             
             this.router.navigate(['/cambiar-password']);
           } else {
-            //this.router.navigate(['/']);
+            this.router.navigate(['/home']);
           }
         },
         error: (e) => {
           this.credInvalidas = true;
           alert('Credenciales inválidas');
         }
-        //complete: () => this.cargando = false
       });
     }
   }
