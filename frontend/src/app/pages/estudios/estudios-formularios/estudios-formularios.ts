@@ -1,10 +1,11 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ImagenService } from '../../../services/imagenService/imagen-service';
 import { EstudioModel } from '../../../models/estudioModel';
 import { EstudioService } from '../../../services/estudioService/estudio-service';
 import { finalize, switchMap, take } from 'rxjs';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-estudios-formularios',
@@ -14,8 +15,10 @@ import { finalize, switchMap, take } from 'rxjs';
 })
 export class EstudiosFormularios {
   formulario!: FormGroup;
-  idEstudio?: number;
-  modoEdicion = false;
+  id?: number;
+  imagenActualUrl?: string;
+  editar = false;
+  
 
   // Estado relacionado a la imagen
   imagenSeleccionada: File | null = null;   // archivo temporal seleccionado por el usuario
@@ -28,6 +31,7 @@ export class EstudiosFormularios {
   constructor(
     private fb: FormBuilder,
     private router: Router,
+    private route: ActivatedRoute,
     private imagenService: ImagenService,
     private estudioService: EstudioService
   ) {}
@@ -36,6 +40,34 @@ export class EstudiosFormularios {
     // La imagen es opcional; solo validamos el nombre
     this.formulario = this.fb.group({
       nombre: ['', [Validators.required, Validators.minLength(2)]],
+
+      obrasIds: this.fb.control<number[]>([]),
+      arquitectosIds: this.fb.control<number[]>([]),
+      
+    });
+
+    const idParam = this.route.snapshot.params['id'];
+      if (idParam) {
+      this.editar = true;
+      this.id = Number(idParam);
+      this.cargarEstudio(this.id);
+      }
+  }
+
+  private cargarEstudio(id: number): void {
+    this.estudioService.getEstudio(id).pipe(take(1)).subscribe({
+      next: (data) => {
+        this.formulario.patchValue({ 
+          nombre: data.nombre, 
+          obrasIds: data.obrasIds ?? [],
+          arquitectosIds: data.arquitectosIds ?? []
+          });
+        if (data.imagenUrl) {
+          const path = data.imagenUrl.startsWith('/') ? data.imagenUrl : `/${data.imagenUrl}`;
+          this.imagenActualUrl = `${environment.apiUrl}${path}`;
+        }
+      },
+      error: () => alert('No se pudo cargar el estudio.'),
     });
   }
 
@@ -86,44 +118,128 @@ export class EstudiosFormularios {
     }
     if (this.inputArchivo) this.inputArchivo.nativeElement.value = '';
   }
+  // Fallback de imagen para el (error) del <img>
+onImgError(ev: Event): void {
+  const img = ev.target as HTMLImageElement;
+  if (!img) return;
+  if (img.src.includes('assets/img/descarga.png')) return; // evita loop
+  img.src = 'assets/img/descarga.png';
+}
+
+// Eliminar un arquitecto del estudio (solo en edición)
+quitarArquitecto(arqId: number): void {
+  if (!this.editar || !this.id) return;
+  if (!confirm('¿Quitar este arquitecto del estudio?')) return;
+
+  this.estudioService.eliminarArquitecto(this.id, arqId).pipe(take(1)).subscribe({
+    next: (estudioActualizado) => {
+      // Si tu endpoint devuelve el EstudioModel actualizado:
+      if (estudioActualizado && Array.isArray(estudioActualizado.arquitectosIds)) {
+        this.formulario.get('arquitectosIds')?.setValue(estudioActualizado.arquitectosIds);
+      } else {
+        // Si NO devuelve actualizado, actualizamos localmente:
+        const actuales = (this.formulario.get('arquitectosIds')?.value ?? []) as number[];
+        this.formulario.get('arquitectosIds')?.setValue(actuales.filter(x => x !== arqId));
+      }
+    },
+    error: () => alert('No se pudo quitar el arquitecto'),
+  });
+}
+
 
   
    //Guardar:
    // - Si hay imagen seleccionada: primero se sube, luego se crea el estudio con imagenUrl.
    // - Si no hay imagen: se crea el estudio sin imagenUrl (la vista usará la imagen por defecto).
-  
   guardar(): void {
-    const nombre: string = (this.formulario.get('nombre')?.value ?? '').trim();
-    if (!nombre) {
-      alert('Debe ingresar un nombre válido.');
+  const nombre: string = (this.formulario.get('nombre')?.value ?? '').trim();
+  if (!nombre) {
+    alert('Debe ingresar un nombre válido.');
+    return;
+  }
+
+  this.subiendo = true;
+
+ 
+  // MODO EDICIÓN 
+
+  if (this.editar && this.id != null) {
+    const obrasIds: number[] = this.formulario.get('obrasIds')?.value ?? [];
+    const arquitectosIds: number[] = this.formulario.get('arquitectosIds')?.value ?? [];
+
+    // payload base + sólo agrego arrays si traen contenido (no piso con [])
+    const updatePayload: EstudioModel = {
+      id: this.id,
+      nombre,
+      ...(obrasIds.length ? { obrasIds } : {}),
+      ...(arquitectosIds.length ? { arquitectosIds } : {}),
+    };
+
+    // a) SIN nueva imagen → sólo PUT
+    if (!this.imagenSeleccionada) {
+      this.estudioService.updateEstudio(updatePayload)
+        .pipe(finalize(() => (this.subiendo = false)))
+        .subscribe({
+          next: () => { alert('¡Actualizado!'); this.router.navigate(['/estudios', this.id]); },
+          error: () => alert('No se pudo actualizar.')
+        });
       return;
     }
 
-    this.subiendo = true;
+    // b) CON nueva imagen → subir → PATCH imagen → PUT
+    const id = this.id;                     
+    const archivo = this.imagenSeleccionada as File; 
 
-    // Caso A: sin imagen → crear estudio sin imagenUrl
-    if (!this.imagenSeleccionada) {
-      const payload: EstudioModel = { nombre };
+    this.imagenService.subirUna(archivo).pipe(
+      take(1),
+      //Toma la 1er url y sino salta al error del suscribe
+      switchMap((rutas: string[]) => {
+        const imagenUrl = rutas?.[0];
+        if (!imagenUrl) throw new Error('No se recibió URL de imagen.');
+        return this.estudioService.updateImagenPerfil(id, imagenUrl);
+      }),
+      switchMap(() => this.estudioService.updateEstudio(updatePayload)),
+      finalize(() => (this.subiendo = false))
+    ).subscribe({
+      next: () => { alert('¡Actualizado!'); 
+      this.router.navigate(['/estudios/', id]); },
+      error: () => alert('No se pudo actualizar.')
+    });
+
+    return;
+  }
+
+  // MODO CREACIÓN 
+ 
+  // Caso A: sin imagen → crear estudio sin imagenUrl
+  if (!this.imagenSeleccionada) {
+    const payload: EstudioModel = { nombre };
+    this.estudioService.postEstudio(payload).subscribe({
+      next: () => this.finalizarGuardado(true),
+      error: (err) => this.finalizarGuardado(false, 'No se pudo crear el estudio.', err),
+    });
+    return;
+  }
+
+  // Caso B: con imagen → subir y luego crear estudio con imagenUrl
+  const archivo = this.imagenSeleccionada as File; // estabiliza tipo File
+  this.imagenService.subirUna(archivo).subscribe({
+    next: (rutas: string[]) => {
+      const imagenUrl = rutas?.[0];
+      if (!imagenUrl) {
+        this.finalizarGuardado(false, 'No se recibió URL de imagen.');
+        return;
+      }
+      const payload: EstudioModel = { nombre, imagenUrl };
       this.estudioService.postEstudio(payload).subscribe({
         next: () => this.finalizarGuardado(true),
         error: (err) => this.finalizarGuardado(false, 'No se pudo crear el estudio.', err),
       });
-      return;
-    }
+    },
+    error: (err) => this.finalizarGuardado(false, 'No se pudo subir la imagen.', err),
+  });
+}
 
-    // Caso B: con imagen → subir y luego crear estudio con imagenUrl
-    this.imagenService.subirUna(this.imagenSeleccionada).subscribe({
-      next: (rutas: string[]) => {
-        const imagenUrl = rutas?.[0];
-        const payload: EstudioModel = { nombre, imagenUrl };
-        this.estudioService.postEstudio(payload).subscribe({
-          next: () => this.finalizarGuardado(true),
-          error: (err) => this.finalizarGuardado(false, 'No se pudo crear el estudio.', err),
-        });
-      },
-      error: (err) => this.finalizarGuardado(false, 'No se pudo subir la imagen.', err),
-    });
-  }
 
   
   //Manejo común para completar el flujo de guardado.
