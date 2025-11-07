@@ -48,7 +48,9 @@ export class EstudioService {
   updateImagenPerfil(idEstudio: number, url: string) {
     return this.http.patch<EstudioModel>(
       `${this.ESTUDIOS_URL}/${idEstudio}/imagenPerfil`,
-      { url }
+      { url },{
+        withCredentials: true,
+      }
     );
   }
 
