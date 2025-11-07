@@ -16,6 +16,7 @@ export const routes: Routes = [
   { path: 'estudios', component: Estudios},
   { path: 'formulario', component: EstudiosFormularios},
   { path: 'estudios/:id', component: EstudioDetalle},
+  { path: 'estudios/:id/editar', component: EstudiosFormularios},
   { path: 'auth/password/:token', component: RecuperarPass}
 
 
