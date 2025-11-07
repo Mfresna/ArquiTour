@@ -56,8 +56,11 @@ export class EstudioDetalle {
      return this.tokenSrv.isAdmin() || this.tokenSrv.isArquitecto(); 
   }
 
-  // Acciones (conectar a tu backend cuando quieras)
-  editar(): void { alert('Editar (pendiente)'); }
+  editar(): void {
+  if (!this.estudio?.id) return;
+  this.router.navigate(['/estudios', this.estudio.id, 'editar']);
+  }
+
   eliminar(): void {
     if (!this.estudio?.id) return;
     if (!confirm('¿Eliminar este estudio?')) return;

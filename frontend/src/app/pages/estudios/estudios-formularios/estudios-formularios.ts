@@ -13,7 +13,9 @@ import { finalize, switchMap, take } from 'rxjs';
   styleUrl: './estudios-formularios.css',
 })
 export class EstudiosFormularios {
-   formulario!: FormGroup;
+  formulario!: FormGroup;
+  idEstudio?: number;
+  modoEdicion = false;
 
   // Estado relacionado a la imagen
   imagenSeleccionada: File | null = null;   // archivo temporal seleccionado por el usuario
