@@ -64,9 +64,6 @@ export class Estudios implements OnInit {
     this.router.navigate(['/estudios', id]);
   }
 
-  isAdmin(): boolean { return this.tokenService.tieneRol('ADMINISTRADOR'); }
-  isArquitecto(): boolean { return this.tokenService.tieneRol('ARQUITECTO'); }
-
 }
 
  
