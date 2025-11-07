@@ -16,7 +16,12 @@ export class Login implements OnInit {
 
   login!: FormGroup;
   enviandoPin!: boolean;
+  credInvalidas: boolean = false;
+
   modalVisible!: boolean;
+  modalTitulo!: string;
+  modalMensaje!: string;
+
 
   constructor(
     private fb: FormBuilder,
@@ -29,8 +34,6 @@ export class Login implements OnInit {
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required]]
     });
-
-    this.modalVisible = true;
   }
 
   loguearse(): void {
@@ -40,14 +43,24 @@ export class Login implements OnInit {
       this.authService.login(this.login.value).subscribe({
         next: (res) => {
           if (res.cambiarPass) {
-            alert("Ingreso debe cambiar la pass")
+
+            //Parametros del Modal
+            this.modalVisible=true;
+            this.modalTitulo="CONTRASEÑA POR DEFECTO"
+            this.modalMensaje="Usted posee la contraseña por defecto, debe cambiarla por seguridad"
+            
+
+
             //this.router.navigate(['/cambiar-password']);
           } else {
-            alert("ingreso no debe cambiar la pass")
+            this.modalVisible=true;
+            this.modalTitulo="Debe Cambiar la Contraseña"
+            this.modalMensaje="Usted posee la contraseña por defecto, debe cambiarla por seguridad"
             //this.router.navigate(['/']);
           }
         },
         error: (e) => {
+          this.credInvalidas = true;
           alert('Credenciales inválidas');
         }
         //complete: () => this.cargando = false
@@ -90,5 +103,8 @@ export class Login implements OnInit {
     this.mostrarPassword = !this.mostrarPassword;
   }
 
+  onAceptar(): void {
+    alert('hola');
+  }
 
 }
