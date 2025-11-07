@@ -146,7 +146,7 @@ public class AuthController {
 
         String username = jwtService.extractUsername(refreshToken);
         UserDetails user = userDetailsService.loadUserByUsername(username);
-        
+
         return ResponseEntity.ok(new AuthResponse(jwtService.generarToken(user), false));
     }
 
