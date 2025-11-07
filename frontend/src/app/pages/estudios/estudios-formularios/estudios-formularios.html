@@ -1,8 +1,14 @@
 <section class="wrap-centrado">
   <div class="card">
     <header class="card-header">
-      <h1 class="card-title">Crear nuevo estudio</h1>
-      <p class="card-subtitle">Completá el nombre y, si querés, agregá una imagen.</p>
+      <h1 class="card-title">
+        {{ editar ? 'Editar estudio' : 'Crear nuevo estudio' }}
+      </h1>
+      <p class="card-subtitle">
+        {{ editar
+          ? 'Modificá el nombre, los arquitectos y (si querés) la imagen.'
+          : 'Completá el nombre y, si querés, agregá una imagen.' }}
+      </p>
     </header>
 
     <form [formGroup]="formulario" (ngSubmit)="guardar()" enctype="multipart/form-data" novalidate>
@@ -25,9 +31,24 @@
         }
       </div>
 
-      <!-- Imagen (opcional) -->
+      <!-- Imagen actual (solo edición) -->
+      @if (editar && imagenActualUrl) {
+        <div class="form-group">
+          <label class="label">Imagen actual</label>
+          <div class="img-actual-wrap">
+            <img
+              [src]="imagenActualUrl"
+              alt="Imagen actual del estudio"
+              class="preview"
+              (error)="onImgError($event)"
+            />
+          </div>
+        </div>
+      }
+
+      <!-- Imagen -->
       <div class="form-group">
-        <label class="label">Imagen (opcional)</label>
+        <label class="label">{{ editar ? 'Reemplazar imagen (opcional)' : 'Imagen (opcional)' }}</label>
 
         <div class="dropzone"
              role="button"
@@ -59,15 +80,38 @@
         }
       </div>
 
-      <!-- Acciones -->
+      <!-- Arquitectos (solo modo edición) -->
+      @if (editar) {
+        <div class="form-group">
+          <label class="label">Arquitectos del estudio</label>
+          <div class="chips">
+            @for (id of (formulario.get('arquitectosIds')?.value || []); track id) {
+              <span class="chip">
+                #{{ id }}
+                <button
+                  type="button"
+                  class="chip-close"
+                  (click)="quitarArquitecto(id)"
+                  aria-label="Quitar arquitecto">×</button>
+              </span>
+            }
+            @empty {
+              <small class="help">No hay arquitectos asignados.</small>
+            }
+          </div>
+        </div>
+      }
+
+      <!-- Botón -->
       <div class="acciones">
-          <button type="submit"
-           class="btn-primario"
-           [disabled]="formulario.invalid || subiendo">INGRESAR ESTUDIO
-          </button>
+        <button
+          type="submit"
+          class="btn-primario"
+          [disabled]="formulario.invalid || subiendo">
+          {{ editar ? 'GUARDAR CAMBIOS' : 'INGRESAR ESTUDIO' }}
+        </button>
       </div>
-        
+
     </form>
   </div>
 </section>
-
