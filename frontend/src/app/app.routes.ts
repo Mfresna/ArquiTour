@@ -18,4 +18,5 @@ export const routes: Routes = [
   { path: 'estudios/:id', component: EstudioDetalle},
   { path: 'auth/password/:token', component: RecuperarPass}
 
+
 ];  
