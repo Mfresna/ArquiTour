@@ -1,0 +1,73 @@
+<section class="wrap-centrado">
+  <div class="card">
+    <header class="card-header">
+      <h1 class="card-title">Crear nuevo estudio</h1>
+      <p class="card-subtitle">Completá el nombre y, si querés, agregá una imagen.</p>
+    </header>
+
+    <form [formGroup]="formulario" (ngSubmit)="guardar()" enctype="multipart/form-data" novalidate>
+
+      <!-- Nombre -->
+      <div class="form-group">
+        <label for="nombre" class="label">Nombre del estudio</label>
+        <input
+          id="nombre"
+          type="text"
+          formControlName="nombre"
+          class="input"
+          placeholder="Ej.: Estudio ArquiTour"
+          aria-describedby="ayuda-nombre"
+        />
+        <small id="ayuda-nombre" class="help">Mínimo 2 caracteres.</small>
+
+        @if (formulario.get('nombre')?.invalid && formulario.get('nombre')?.touched) {
+          <small class="error" role="alert">Ingrese un nombre válido.</small>
+        }
+      </div>
+
+      <!-- Imagen (opcional) -->
+      <div class="form-group">
+        <label class="label">Imagen (opcional)</label>
+
+        <div class="dropzone"
+             role="button"
+             tabindex="0"
+             aria-label="Zona para cargar imagen. Haga clic o arrastre un archivo."
+             (click)="abrirExplorador()"
+             (keyup.enter)="abrirExplorador()"
+             (dragover)="permitirSoltar($event)"
+             (dragenter)="permitirSoltar($event)"
+             (drop)="soltarArchivo($event)">
+
+          @if (vistaPrevia) {
+            <img [src]="vistaPrevia" alt="Vista previa" class="preview" />
+          } @else {
+            <div class="dropzone-msg">
+              <strong>Arrastre y suelte una imagen aquí</strong>
+              <span>o haga clic para seleccionar desde su equipo</span>
+              <small class="formats">Formatos: JPG, PNG, WEBP</small>
+            </div>
+          }
+
+          <input #inputArchivo type="file" accept="image/*" (change)="seleccionarDesdeInput($event)" hidden />
+        </div>
+
+        @if (vistaPrevia) {
+          <button type="button" class="btn-outline" (click)="limpiarImagen()">
+            Quitar imagen
+          </button>
+        }
+      </div>
+
+      <!-- Acciones -->
+      <div class="acciones">
+          <button type="submit"
+           class="btn-primario"
+           [disabled]="formulario.invalid || subiendo">INGRESAR ESTUDIO
+          </button>
+      </div>
+        
+    </form>
+  </div>
+</section>
+

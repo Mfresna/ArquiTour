@@ -52,9 +52,9 @@ export class EstudioDetalle {
   }
 
   // Roles
-  isAdmin(): boolean { return this.tokenSrv.tieneRol('ROLE_ADMINISTRADOR'); }
-  isArquitecto(): boolean { return this.tokenSrv.tieneRol('ROLE_ARQUITECTO'); }
-  puedeGestionar(): boolean { return this.isAdmin() || this.isArquitecto(); }
+  puedeGestionar(): boolean {
+     return this.tokenSrv.isAdmin() || this.tokenSrv.isArquitecto(); 
+  }
 
   // Acciones (conectar a tu backend cuando quieras)
   editar(): void { alert('Editar (pendiente)'); }
