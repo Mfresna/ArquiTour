@@ -5,7 +5,7 @@ import { Auth } from './auth/pages/autenticacion/auth';
 import { Component } from '@angular/core';
 import { Estudios } from './pages/estudios/estudios/estudios';
 import { EstudioDetalle } from './pages/estudios/estudio-detalle/estudio-detalle';
-import { CambiarPass } from './auth/pages/recuperar-pass/cambiar-pass';
+import { CambiarPass } from './auth/pages/cambiar-pass/cambiar-pass';
 import { EstudiosFormularios } from './pages/estudios/estudios-formularios/estudios-formularios';
 
 export const routes: Routes = [

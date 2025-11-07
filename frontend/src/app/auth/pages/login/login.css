@@ -1,19 +1,117 @@
+#contenedor {
+    background-color: var(--colorFondoTarjeta, #fff);
+    color: var(--colorTerciario, #222);
+
+    border-radius: 1rem;
+    box-shadow: 0 4px 12px var(--sombra);
+
+    overflow: hidden;
+    animation: aparecer 0.25s ease-out;
+    
+    width: 100%;
+    max-width: 450px;
+    display: flex;
+    flex-direction:column;
+    margin:4% auto;
+}
+
+/* Animacion cada vez que se carga el contenedor */
+@keyframes aparecer {
+  from {
+    transform: translateY(15px) scale(0.97);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+}
+
+/* ===== Botón Volver ===== */
+#botoneraSuperior {
+  display: flex;
+  justify-content: flex-start;
+  padding: 0.8rem 1rem 0.8rem 1rem;
+}
+
+#btnVolver {
+    background-color: transparent;
+    color: var(--colorTerciario, #444);
+    /* border: 1px solid rgba(0, 0, 0, 0.2); */
+    border: none;
+    border-radius: 0.5rem;
+    font-size: 0.85rem;
+    padding: 0.2rem 0.4rem;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+#btnVolver:hover {
+    background-color: rgba(0, 0, 0, 0.06);
+    transform: scale(1.04);
+}
+
+
+
+/* ===== Línea decorativa azul debajo ===== */
+#btnVolver::after {
+    content: "";
+    display: block;
+    width: 60%;
+    height: 1.8px;
+    border-radius: 3px;
+    background: linear-gradient(90deg, #555555, #555555);
+    margin: 0.18rem auto 0;
+    opacity: 0.85;
+    transition: width 0.25s ease, opacity 0.25s ease;
+}
+
+/* Efecto hover: la línea crece y se intensifica */
+#btnVolver:hover::after {
+  width: 85%;
+  opacity: 1;
+}
+
+
+
+/* ===== Formulario ===== */
+#formulario {
+  padding: 0 2rem 2rem 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#formulario h3 {
+  text-align: center;
+  margin-top: 0.65rem;
+  margin-bottom: 1.5rem;
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--colorBoton, #0077b6);
+  position: relative;
+  letter-spacing: 0.5px;
+}
+    /* linea inferior del titulo */
+#formulario h3::after {
+  content: "";
+  display: block;
+  width: 50%;
+  height: 3px;
+  border-radius: 3px;
+  background: linear-gradient(90deg, var(--colorBoton, #0077b6), #00b4d8);
+  margin: 0.80rem auto 0;
+  opacity: 0.9;
+}
+
+/* ===== Formulario interno ===== */
 form {
-  max-width: 450px;
-  margin: 2rem auto;
-  padding: 2rem;
-  background-color: var(--colorFondoTarjeta);
-  box-shadow: 0 4px 12px var(--sombra);
-  border-radius: 1rem;
+  width: 100%;
   display: flex;
   flex-direction: column;
   gap: 1.2rem;
-  font-family: var(--fuenteBase);
-  color: var(--colorTerciario);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-/* Fieldset y labels */
 fieldset {
   border: none;
   display: flex;
@@ -21,14 +119,15 @@ fieldset {
   gap: 0.5rem;
 }
 
+/* ===== Inputs ===== */
 label {
   font-weight: 500;
+  margin-left: 0.5rem;
 }
 
-/* Recuadro de Inputs */
 input {
   padding: 0.6rem 0.8rem;
-  border-radius: 0.5rem;
+  border-radius: 1.2rem;
   border: 1px solid #ccc;
   font-family: var(--fuenteBase);
   font-size: 1rem;
@@ -37,8 +136,8 @@ input {
 
 input:focus {
   outline: none;
-  border-color: var(--colorBoton);
-  box-shadow: 0 0 6px rgba(0, 119, 182, 0.3);
+  border-color: var(--colorBoton, #0077b6);
+  box-shadow: 0 0 6px rgba(0, 119, 182, 0.35);
 }
 
 input.invalido {
@@ -46,22 +145,17 @@ input.invalido {
   background: #ffecec;
 }
 
-/* Botones */
-button {
-  padding: 0.7rem 1.2rem;
-  border: none;
-  border-radius: 0.7rem;
-  font-weight: 600;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: background-color 0.2s ease, transform 0.1s ease;
-  margin-top: 0.5rem;
-}
-
-/* Botón de enviar */
+/* ===== Botón INGRESAR ===== */
 #login {
-  background-color: var(--colorBoton);
-  color: var(--colorPrincipal);
+  background-color: var(--colorBoton, #0077b6);
+  color: var(--colorPrincipal, #fff);
+  padding: 0.75rem;
+  border: none;
+  border-radius: 1.35rem;
+  font-weight: 600;
+  font-size: 1.05rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
 
 #login:hover {
@@ -72,78 +166,42 @@ button {
 #login:disabled {
   background-color: #a0c4d9;
   cursor: not-allowed;
+  transform: none;
 }
 
-/* Botón de volver */
-#volver {
-  background-color: var(--colorSecundario);
-  color: var(--colorTerciario);
-}
-
-#volver:hover {
-  background-color: #e0e0e0;
-  transform: scale(1.02);
-}
-
+/* ===== Errores ===== */
 small {
   color: #ff3333;
-  text-align: center;
-}
-
-/* Mensaje de error */
-fieldset small {
+  font-size: 0.9rem;
   text-align: left;
+  margin-left: 0.6rem;
 }
 
+/* ===== “¿Olvidaste la contraseña?” ===== */
 .forgot-container {
-  margin-top: 1rem;
   text-align: center;
+  margin-top: 0.2rem;
+  padding-bottom: 0;
+  margin-bottom: 0;
 }
 
 .forgot-link {
   font-size: 0.9rem;
   color: #007bff;
   text-decoration: none;
+  cursor: pointer;
 }
 
 .forgot-link:hover {
   text-decoration: underline;
 }
 
-
-
-
-
-
-
-.password-field {
-  position: relative;
-}
-
-.input-wrapper {
-  position: relative;
-  display: flex;
-  align-items: center;
-}
-
-input[type="password"],
-input[type="text"] {
-  flex: 1;
-  padding-right: 2.5rem; /* espacio para el ícono */
-}
-
-.toggle-btn {
-  position: absolute;
-  right: 0.5rem;
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: #666;
-  font-size: 1.1rem;
-  display: flex;
-  align-items: center;
-}
-
-.toggle-btn:hover {
-  color: #000;
+/* ===== Responsive ===== */
+@media (max-width: 480px) {
+  #contenedor {
+    max-width: 90%;
+  }
+  #formulario h3 {
+    font-size: 1.5rem;
+  }
 }
