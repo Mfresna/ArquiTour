@@ -85,9 +85,14 @@ button {
   transform: scale(1.02);
 }
 
+small {
+  color: #ff3333;
+  text-align: center;
+}
+
 /* Mensaje de error */
 fieldset small {
-  color: #ff3333;
+  text-align: left;
 }
 
 .forgot-container {
@@ -104,9 +109,6 @@ fieldset small {
 .forgot-link:hover {
   text-decoration: underline;
 }
-
-
-
 
 
 
