@@ -43,6 +43,13 @@ export class TokenService {
     return this.obtenerRoles().includes(rol)
   }
 
+  isAdmin(): boolean { 
+    return this.tieneRol('ROLE_ADMINISTRADOR'); 
+  }
+  isArquitecto(): boolean { 
+    return this.tieneRol('ROLE_ARQUITECTO'); 
+  }
+
   private decodificarBase64Url(cadena: string): string {
     let base64 = cadena.replace(/-/g, '+').replace(/_/g, '/');
     const resto = base64.length % 4;

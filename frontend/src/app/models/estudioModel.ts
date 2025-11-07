@@ -4,4 +4,4 @@ export interface EstudioModel {
   obrasIds?: number[];
   arquitectosIds?: number[];
   imagenUrl?: string; 
-}
+} 
