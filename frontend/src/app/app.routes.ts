@@ -5,17 +5,15 @@ import { Auth } from './auth/pages/autenticacion/auth';
 import { Component } from '@angular/core';
 import { Estudios } from './pages/estudios/estudios/estudios';
 import { EstudioDetalle } from './pages/estudios/estudio-detalle/estudio-detalle';
-import { EstudiosFormularios } from './pages/estudios/estudios-formularios/estudios-formularios';
-
+import { RecuperarPass } from './auth/pages/recuperar-pass/recuperar-pass';
 
 export const routes: Routes = [
   
   { path: '', component: Auth },
+  { path: 'login', component: Auth},
   { path: 'prueba-token', component: PruebaToken},
   { path: 'estudios', component: Estudios},
   { path: 'estudios/:id', component: EstudioDetalle},
-  { path: 'formulario', component: EstudiosFormularios}
- 
+  { path: 'auth/password/:token', component: RecuperarPass}
 
-];
-
+];  
