@@ -8,10 +8,10 @@ import { AuthService } from '../../services/authService/auth-service';
   selector: 'app-recuperar-pass',
   standalone: true,
   imports: [ReactiveFormsModule],
-  templateUrl: './recuperar-pass.html',
-  styleUrl: './recuperar-pass.css',
+  templateUrl: './cambiar-pass.html',
+  styleUrl: './cambiar-pass.css',
 })
-export class RecuperarPass implements OnInit {
+export class CambiarPass implements OnInit {
 
   passForm!: FormGroup;
   token!: string;
