@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '../../services/authService/auth-service';
@@ -22,6 +22,9 @@ export class Login implements OnInit {
   modalTitulo!: string;
   modalMensaje!: string;
 
+  //EMITERS
+  @Output() volverEmit = new EventEmitter<void>();
+
 
   constructor(
     private fb: FormBuilder,
@@ -29,7 +32,7 @@ export class Login implements OnInit {
     private authService: AuthService
   ) {}
 
-   ngOnInit(): void {
+  ngOnInit(): void {
     this.login = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required]]
@@ -91,14 +94,19 @@ export class Login implements OnInit {
 
   }
 
+  volver(): void {
+    //Emite que se apreto el boton, sirve en el authPage para saber que mostrar
+    this.volverEmit.emit();
+  }
+
+
+
+
+
   mostrarPassword = false;
 
   togglePassword(): void {
     this.mostrarPassword = !this.mostrarPassword;
-  }
-
-  onAceptar(): void {
-    alert('hola');
   }
 
 }
