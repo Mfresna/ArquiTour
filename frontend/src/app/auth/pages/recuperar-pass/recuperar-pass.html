@@ -1,0 +1,37 @@
+
+<form [formGroup]="passForm" (submit)="enviarFormulario()">
+
+    <fieldset>
+        <label for="nuevaPasss">Nueva Contraseña: </label>
+        <input 
+            type="password" 
+            id="nuevaPass" 
+            formControlName="nuevaPass" 
+            placeholder="************"
+            [class.invalido]="passForm.get('nuevaPass')?.invalid && passForm.get('nuevaPass')?.touched"
+            autocomplete="new-password">
+
+        @if (passForm.get('nuevaPass')?.errors?.['required'] && passForm.get('nuevaPass')?.touched) {
+            <small>La contraseña es obligatoria.</small>
+        }
+    </fieldset>
+
+    <fieldset>
+        <label for="confirmaPass">Confirmar Contraseña: </label>
+        <input 
+            type="password" 
+            id="confirmaPass" 
+            formControlName="confirmaPass" 
+            placeholder="************"
+            [class.invalido]="passForm.get('confirmaPass')?.invalid && passForm.get('confirmaPass')?.touched"
+            autocomplete="off">
+
+        @if (passForm.get('confirmaPass')?.errors?.['required'] && passForm.get('confirmaPass')?.touched) {
+            <small>La contraseña es obligatoria.</small>
+        }
+    </fieldset>
+
+<button id="enviar" type="submit" [disabled]="passForm.invalid">GUARDAR NUEVA CONTRASEÑA</button>
+
+</form>
+

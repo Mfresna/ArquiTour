@@ -124,7 +124,7 @@ public class AuthController {
     //---------------REFRESH TOKEN ENDPOINT-----------//
 
     @PostMapping("/refresh")
-    public ResponseEntity<Map<String,String>> refreshToken(HttpServletRequest request) {
+    public ResponseEntity<AuthResponse> refreshToken(HttpServletRequest request) {
         //Arma un arreglo con todas las cookies que recibe en la peticion
         List<Cookie> cookies = Optional.ofNullable(request.getCookies())
                 .map(Arrays::asList)
@@ -146,8 +146,8 @@ public class AuthController {
 
         String username = jwtService.extractUsername(refreshToken);
         UserDetails user = userDetailsService.loadUserByUsername(username);
-
-        return ResponseEntity.ok(Map.of("accessToken", jwtService.generarToken(user)));
+        
+        return ResponseEntity.ok(new AuthResponse(jwtService.generarToken(user), false));
     }
 
     @PostMapping("/logout")
