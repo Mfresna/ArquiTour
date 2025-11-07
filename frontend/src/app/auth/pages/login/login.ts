@@ -2,15 +2,21 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '../../services/authService/auth-service';
+import { EsperandoModal } from '../../../components/esperando-modal/esperando-modal';
+import { MensajeModal } from '../../../components/mensaje-modal/mensaje-modal';
+
+
 @Component({
   selector: 'app-login',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule,EsperandoModal,MensajeModal],
   templateUrl: './login.html',
   styleUrl: './login.css',
 })
 export class Login implements OnInit {
 
   login!: FormGroup;
+  enviandoPin!: boolean;
+  modalVisible!: boolean;
 
   constructor(
     private fb: FormBuilder,
@@ -23,6 +29,8 @@ export class Login implements OnInit {
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required]]
     });
+
+    this.modalVisible = true;
   }
 
   loguearse(): void {
@@ -56,11 +64,15 @@ export class Login implements OnInit {
     }else{
       let email = this.login.get('email')?.value.trim().toLowerCase();
 
+      this.enviandoPin = true;
+
       this.authService.enviarRecuperarPass(email).subscribe({
         next: (res) => {
-          alert("MAIL ENVIADO - Siga los Pasos");
+          this.enviandoPin = false
         },
         error: (e) => {
+          this.enviandoPin = false;
+
           if (e.status === 400) {
             alert('Email inválido.');
           } else {

@@ -41,3 +41,16 @@
   <button id="login" type="submit" [disabled]="login.invalid">INGRESAR</button>
 </form>
 
+<app-esperando-modal 
+  [isVisible]="enviandoPin" 
+  mensaje="Enviando correo de recuperación..."
+/>
+
+
+<app-mensaje-modal
+  [isVisible]="modalVisible"
+  titulo="Titulo"
+  tipo= 'warning'
+  [conIcon] = "false"
+  mensaje="ES EL MENSAJE"
+/>
