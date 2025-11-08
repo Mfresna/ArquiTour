@@ -18,6 +18,8 @@ export class Login implements OnInit {
   enviandoPin!: boolean;
   credInvalidas: boolean = false;
 
+  mostrarPassword = false;
+
   modalVisible!: boolean;
   modalTitulo!: string;
   modalMensaje!: string;
@@ -98,12 +100,6 @@ export class Login implements OnInit {
     //Emite que se apreto el boton, sirve en el authPage para saber que mostrar
     this.volverEmit.emit();
   }
-
-
-
-
-
-  mostrarPassword = false;
 
   togglePassword(): void {
     this.mostrarPassword = !this.mostrarPassword;

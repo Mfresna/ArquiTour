@@ -29,20 +29,38 @@
 
       <fieldset>
         <label for="password">Contraseña: </label>
-        <input 
-          type="password" 
-          id="password" 
-          formControlName="password" 
-          placeholder="************"
-          [class.invalido]="login.get('password')?.invalid && login.get('password')?.touched"
-          autocomplete="current-password"
-          (focus)="credInvalidas = false">
+
+        <div class="contenedor-pass">
+          <!-- Campo para ingresar Pass -->
+          <input 
+            [type]="mostrarPassword ? 'text' : 'password'"
+            id="password" 
+            formControlName="password" 
+            placeholder="************"
+            [class.invalido]="login.get('password')?.invalid && login.get('password')?.touched"
+            autocomplete="current-password"
+            (focus)="credInvalidas = false">
+
+          <!-- Boton de Ver Contraseña -->
+          <button 
+            type="button" 
+            class="ver-password"
+            (click)="mostrarPassword = !mostrarPassword">
+
+            <!-- Muestra el icono del ojo importado en index.html de Material Disn -->
+            <span class="material-icons">
+              {{ mostrarPassword ? 'visibility' : 'visibility_off' }}
+            </span>
+
+          </button>
+        </div>
 
         @if (login.get('password')?.errors?.['required'] && login.get('password')?.touched) {
-          <small>La contraseña es obligatoria.</small>
+        <small>La contraseña es obligatoria.</small>
         }
       </fieldset>
-      
+
+
       @if (credInvalidas){
         <small>Credenciales Invalidas, vuelve a intentar. </small>
       }
