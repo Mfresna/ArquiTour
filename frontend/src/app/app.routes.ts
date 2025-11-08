@@ -6,7 +6,8 @@ import { Component } from '@angular/core';
 import { Estudios } from './pages/estudios/estudios/estudios';
 import { EstudioDetalle } from './pages/estudios/estudio-detalle/estudio-detalle';
 import { CambiarPass } from './auth/pages/cambiar-pass/cambiar-pass';
-import { EstudiosFormularios } from './pages/estudios/estudios-formularios/estudios-formularios';
+import { EstudioForm } from './pages/estudios/estudio-form/estudio-form';
+
 
 export const routes: Routes = [
   
@@ -16,9 +17,9 @@ export const routes: Routes = [
 
   { path: 'prueba-token', component: PruebaToken},
   { path: 'estudios', component: Estudios},
-  { path: 'formulario', component: EstudiosFormularios},
+  { path: 'formulario', component: EstudioForm},
   { path: 'estudios/:id', component: EstudioDetalle},
-  { path: 'estudios/:id/editar', component: EstudiosFormularios},
+  { path: 'estudios/:id/editar', component: EstudioForm},
   { path: 'auth/password/:token', component: CambiarPass},
   { path: 'cambiar-pass', component: CambiarPass}
 
