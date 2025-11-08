@@ -58,8 +58,9 @@ export class CambiarPass implements OnInit {
     const pass = this.passForm.get('nuevaPass')?.value
 
     if(this.passForm.valid){
-      //Si hay token y hay pass
+      
       if (this.token && pass) {
+        //Si hay token y hay pass
         this.authService.restaurarPass(this.token, pass).subscribe({
           next: () => {
             alert('¡Contraseña actualizada correctamente!');
@@ -77,8 +78,11 @@ export class CambiarPass implements OnInit {
             this.passForm.reset;
           }
         })
+      }else if (pass){
+        //Si hay pass
+        alert ("Aun no se puede cambiar Contraseña, espere el upgrade!")
       }else{
-        alert ("Error en el token recibido por mail. Reintente")
+        alert ("Error en el proceso")
       }
       
     }else{
