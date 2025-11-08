@@ -53,7 +53,7 @@
 
 
 
-/* ===== Línea decorativa azul debajo ===== */
+/* ===== Línea decorativa debajo ===== */
 #btnVolver::after {
     content: "";
     display: block;
@@ -71,8 +71,6 @@
   width: 85%;
   opacity: 1;
 }
-
-
 
 /* ===== Formulario ===== */
 #formulario {

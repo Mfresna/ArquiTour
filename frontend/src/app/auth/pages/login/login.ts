@@ -54,14 +54,23 @@ export class Login implements OnInit {
             this.modalTitulo="CONTRASEÑA POR DEFECTO"
             this.modalMensaje="Usted posee la contraseña por defecto, debe cambiarla por seguridad"
             
-            this.router.navigate(['/cambiar-password']);
+            this.router.navigate(['/cambiar-pass']);
           } else {
             this.router.navigate(['/home']);
           }
         },
         error: (e) => {
-          this.credInvalidas = true;
-          alert('Credenciales inválidas');
+          if(e.status === 401 || e.status === 403){
+            this.credInvalidas = true;
+            alert('Credenciales inválidas');
+          }else if (e.status >= 500) {
+            alert('Error interno del servidor. Intente nuevamente más tarde.');
+          }else if (e.status === 0) {
+            // Error de red o servidor caído
+            alert('No se pudo conectar con el servidor. Verifique su conexión.');
+          }else{
+            alert('Ocurrió un error inesperado.');
+          }
         }
       });
     }
@@ -99,10 +108,6 @@ export class Login implements OnInit {
   volver(): void {
     //Emite que se apreto el boton, sirve en el authPage para saber que mostrar
     this.volverEmit.emit();
-  }
-
-  togglePassword(): void {
-    this.mostrarPassword = !this.mostrarPassword;
   }
 
 }
