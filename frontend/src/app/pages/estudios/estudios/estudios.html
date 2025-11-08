@@ -30,7 +30,7 @@
       <a class="card" [routerLink]="['/estudios', e.id]">
         <img
           [src]="imagenUrl(e.imagenUrl)"
-          (error)="onImgError($event)"
+          (error)="imagenError($event)"
           alt="Imagen del estudio" />
 
         <div class="card-body">

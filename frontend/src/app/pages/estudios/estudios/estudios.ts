@@ -14,9 +14,9 @@ import { environment } from '../../../../environments/environment';
 })
 export class Estudios implements OnInit {
 
-  estudios: EstudioModel[] = [];
+  estudios!: EstudioModel[];
 
-  readonly imagenDefecto = 'assets/img/descarga.png';
+  imagenDefecto = `${environment.imgEstudio}`;
 
   filtro!: FormGroup;    
   
@@ -31,7 +31,6 @@ export class Estudios implements OnInit {
     this.filtro = this.fb.group({
       nombre: ['', [Validators.minLength(2)]],
     });
-
     this.cargarEstudios();
   }
 
@@ -40,7 +39,7 @@ export class Estudios implements OnInit {
       return `${environment.apiUrl}${uuidImagen}`;
   }
 
-  onImgError(ev: Event): void {
+  imagenError(ev: Event): void {
     const img = ev.target as HTMLImageElement;
     if (img.src.includes(this.imagenDefecto)) return; 
     img.src = this.imagenDefecto;
@@ -60,9 +59,6 @@ export class Estudios implements OnInit {
     this.cargarEstudios();
   }
 
-  irADetalle(id: number): void {
-    this.router.navigate(['/estudios', id]);
-  }
 
 }
 
