@@ -145,6 +145,41 @@ input.invalido {
   background: #ffecec;
 }
 
+/* ===== Input PASS Ver Contraseña ===== */
+
+.contenedor-pass {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.contenedor-pass input {
+  width: 100%;
+  padding-right: 45px; /* Espacio para el botón */
+}
+
+.ver-password {
+  position: absolute;
+  right: 8px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #a2a2a2;
+  transition: color 0.2s;
+}
+
+.ver-password:hover {
+  color: #454545;
+}
+
+.ver-password .material-icons {
+  font-size: 25px;
+}
+
 /* ===== Botón INGRESAR ===== */
 #login {
   background-color: var(--colorBoton, #0077b6);
