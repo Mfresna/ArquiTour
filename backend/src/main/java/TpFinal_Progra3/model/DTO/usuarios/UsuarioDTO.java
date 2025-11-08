@@ -46,8 +46,5 @@ public class UsuarioDTO {
     private String descripcion;
 
     @Schema(description = "URL de imagen de perfil", example = "https://miapp.com/img/perfil.png")
-    @Pattern(
-            regexp = "^(https?://).+\\.(jpg|jpeg|png|gif|bmp|webp)$",
-            message = "La URL debe comenzar con http o https y terminar en una imagen válida (.jpg, .png, etc.).")
     private String imagenUrl;
 }
