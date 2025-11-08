@@ -119,7 +119,7 @@ export class EstudioForm {
     if (this.inputArchivo) this.inputArchivo.nativeElement.value = '';
   }
   // Fallback de imagen para el (error) del <img>
-onImgError(ev: Event): void {
+imagenError(ev: Event): void {
   const img = ev.target as HTMLImageElement;
   if (!img) return;
   if (img.src.includes('assets/img/descarga.png')) return; // evita loop

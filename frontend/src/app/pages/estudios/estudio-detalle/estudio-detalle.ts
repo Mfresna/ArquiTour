@@ -14,7 +14,8 @@ import { EstudioService } from '../../../services/estudioService/estudio-service
 export class EstudioDetalle {
   estudio?: EstudioModel;
   cargando = true;
-  readonly fallback = 'assets/img/descarga.png';
+
+  imagenDefecto = `${environment.imgEstudio}`;
 
   constructor(
     private route: ActivatedRoute,
@@ -34,7 +35,7 @@ export class EstudioDetalle {
   }
 
   imgSrc(nombre?: string): string {
-  if (!nombre) return this.fallback;
+  if (!nombre) return this.imagenDefecto;
 
     // Aseguramos que siempre empiece con "/imagen"
     const path = nombre.startsWith('/') ? nombre : `/${nombre}`;
@@ -43,12 +44,10 @@ export class EstudioDetalle {
     return `${environment.apiUrl}${path}`;
   }
 
-
-
-  onImgError(ev: Event): void {
+  imagenError(ev: Event): void {
     const img = ev.target as HTMLImageElement;
-    if (img.src.includes(this.fallback)) return;
-    img.src = `${location.origin}/${this.fallback.replace(/^\/+/, '')}`;
+    if (img.src.includes(this.imagenDefecto)) return;
+    img.src = `${location.origin}/${this.imagenDefecto.replace(/^\/+/, '')}`;
   }
 
   // Roles

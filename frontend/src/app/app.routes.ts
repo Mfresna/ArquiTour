@@ -1,5 +1,4 @@
 import { Routes } from '@angular/router';
-import { PruebaToken } from './AAprueba-token/prueba-token';
 import { Login } from './auth/pages/login/login';
 import { Auth } from './auth/pages/autenticacion/auth';
 import { Component } from '@angular/core';
@@ -12,10 +11,7 @@ import { EstudioForm } from './pages/estudios/estudio-form/estudio-form';
 export const routes: Routes = [
   
   { path: '', component: Auth },
-  { path: 'home', component: PruebaToken},
   { path: 'login', component: Auth},
-
-  { path: 'prueba-token', component: PruebaToken},
   { path: 'estudios', component: Estudios},
   { path: 'formulario', component: EstudioForm},
   { path: 'estudios/:id', component: EstudioDetalle},
