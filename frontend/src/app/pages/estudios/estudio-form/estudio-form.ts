@@ -8,12 +8,12 @@ import { finalize, switchMap, take } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 
 @Component({
-  selector: 'app-estudios-formularios',
+  selector: 'app-estudio-form',
   imports: [ReactiveFormsModule],
-  templateUrl: './estudios-formularios.html',
-  styleUrl: './estudios-formularios.css',
+  templateUrl: './estudio-form.html',
+  styleUrl: './estudio-form.css',
 })
-export class EstudiosFormularios {
+export class EstudioForm {
   formulario!: FormGroup;
   id?: number;
   imagenActualUrl?: string;

@@ -15,11 +15,11 @@ private readonly URL = `${environment.apiUrl}/imagenes`;
 
   subirUna(file: File) {
   const fd = new FormData();
-  fd.append('archivos', file); // <<< clave EXACTA
+  fd.append('archivos', file); 
   return this.http.post<string[]>(`${environment.apiUrl}/imagenes/subir`, fd);
 }
 
-  /** Sube VARIAS imágenes. Devuelve las URLs en el mismo orden. */
+  // Sube VARIAS imágenes
   subirVarias(files: File[]): Observable<string[]> {
     const form = new FormData();
     files.forEach(f => form.append('archivos', f));

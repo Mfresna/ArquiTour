@@ -2,12 +2,12 @@
   <div class="card">
     <header class="card-header">
       <h1 class="card-title">
-        {{ editar ? 'Editar estudio' : 'Crear nuevo estudio' }}
+        {{ editar ? 'Editar estudio' : 'Registrar nuevo estudio' }}
       </h1>
       <p class="card-subtitle">
         {{ editar
-          ? 'Modificá el nombre, los arquitectos y (si querés) la imagen.'
-          : 'Completá el nombre y, si querés, agregá una imagen.' }}
+          ? ''
+          : 'Ingresá el nombre y, si querés, agregá el logo.' }}
       </p>
     </header>
 
@@ -34,7 +34,7 @@
       <!-- Imagen actual (solo edición) -->
       @if (editar && imagenActualUrl) {
         <div class="form-group">
-          <label class="label">Imagen actual</label>
+          <label class="label">Logo Actual</label>
           <div class="img-actual-wrap">
             <img
               [src]="imagenActualUrl"
@@ -48,7 +48,7 @@
 
       <!-- Imagen -->
       <div class="form-group">
-        <label class="label">{{ editar ? 'Reemplazar imagen (opcional)' : 'Imagen (opcional)' }}</label>
+        <label class="label">{{ editar ? 'Reemplazar Logo' : 'Logo (opcional)' }}</label>
 
         <div class="dropzone"
              role="button"
@@ -64,9 +64,9 @@
             <img [src]="vistaPrevia" alt="Vista previa" class="preview" />
           } @else {
             <div class="dropzone-msg">
-              <strong>Arrastre y suelte una imagen aquí</strong>
-              <span>o haga clic para seleccionar desde su equipo</span>
-              <small class="formats">Formatos: JPG, PNG, WEBP</small>
+              <strong>Arrastre y suelte una imagen aquí<br></strong>
+              <span> o haga clic para seleccionar desde su equipo <br></span>
+              <small class="formats"> Formatos: JPG, PNG, WEBP</small>
             </div>
           }
 
