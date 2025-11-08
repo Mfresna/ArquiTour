@@ -18,7 +18,8 @@
           placeholder="email@correo.com"
           [class.invalido]="login.get('email')?.invalid && login.get('email')?.touched"
           autocomplete="email"
-          (focus)="credInvalidas = false">
+          (focus)="credInvalidas = false"
+          (keydown.space)="$event.preventDefault()">
 
         @if (login.get('email')?.errors?.['required'] && login.get('email')?.touched) {
           <small>El mail es obligatorio.</small>
@@ -39,13 +40,15 @@
             placeholder="************"
             [class.invalido]="login.get('password')?.invalid && login.get('password')?.touched"
             autocomplete="current-password"
-            (focus)="credInvalidas = false">
+            (focus)="credInvalidas = false"
+            (keydown.space)="$event.preventDefault()">
 
           <!-- Boton de Ver Contraseña -->
           <button 
             type="button" 
             class="ver-password"
-            (click)="mostrarPassword = !mostrarPassword">
+            (click)="mostrarPassword = !mostrarPassword"
+            tabindex="-1">
 
             <!-- Muestra el icono del ojo importado en index.html de Material Disn -->
             <span class="material-icons">

@@ -1,8 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { AuthService } from '../../services/authService/auth-service';
+import { CamposIguales } from '../../validadores/igualdadValid';
+import { caracteresValidador } from '../../validadores/caracteresValidador';
+
 
 @Component({
   selector: 'app-recuperar-pass',
@@ -16,6 +19,9 @@ export class CambiarPass implements OnInit {
   passForm!: FormGroup;
   token!: string;
 
+  mostrarPassword = false;
+  mostrarConfirmPassword = false;
+
   constructor(
     private location: Location,
     private fb: FormBuilder,
@@ -27,10 +33,24 @@ export class CambiarPass implements OnInit {
   ngOnInit(): void {
     this.token = this.route.snapshot.params['token'];
 
-    this.passForm = this.fb.group({
-      nuevaPass: ['', [Validators.required, Validators.minLength(3)]],
-      confirmaPass: ['', [Validators.required, Validators.min(0)]]
-    });
+    this.passForm = this.fb.group(
+      {
+      nuevaPass: ['', [
+        Validators.required,
+        Validators.minLength(6),
+        Validators.pattern(/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)[A-Za-z\d@._!+\-]{6,}$/),
+        caracteresValidador]
+      ],
+
+      confirmaPass: ['', [
+        Validators.required,
+        Validators.min(0),
+        caracteresValidador]
+      ]
+      },
+
+      {validators: CamposIguales('nuevaPass', 'confirmaPass')}
+    );
 
   }
 
@@ -66,4 +86,5 @@ export class CambiarPass implements OnInit {
       this.passForm.markAllAsTouched();
     }
   }
+
 }
