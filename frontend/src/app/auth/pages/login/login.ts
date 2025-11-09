@@ -63,7 +63,6 @@ export class Login implements OnInit {
         error: (e) => {
           if(e.status === 401 || e.status === 403){
             this.credInvalidas = true;
-            alert('Credenciales inválidas');
           }else if (e.status >= 500) {
             alert('Error interno del servidor. Intente nuevamente más tarde.');
           }else if (e.status === 0) {
