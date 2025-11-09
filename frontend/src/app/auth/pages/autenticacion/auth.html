@@ -1,5 +1,30 @@
 <div id="contComponentes">
+   <div id="imagenFondo"
+   [style.background-image]="'url(' + imagSeleccionada + ')'"
+   [class.blur] = "vistaActual === 'login' || vistaActual === 'registro'"
+   [class.oscuro] = "vistaActual != 'login' && vistaActual != 'registro'">
+   </div>
    
-   <app-login
-   (volverEmit)="a()"></app-login> 
+   <div class="content-wrapper">
+      <!-- VISTA: INICIO -->
+      @if (vistaActual === 'inicio') {
+         <div class="inicio-content fade-in">
+            <h1 class="titulo-principal">ArquiTour</h1>
+            <p class="subtitulo">Descubre la arquitectura del mundo</p>
+            
+            <div class="botones-container">
+               <button class="btn btn-primary" (click)="vistaActual = 'login'">Iniciar Sesión</button>
+               <button class="btn btn-secondary" (click)="vistaActual = 'registro'">Registrarse</button>
+            </div>
+         </div>
+      }
+
+      <!-- VISTA: LOGIN -->
+      @if (vistaActual === 'login'){
+         <div class="form-container fade-in">
+            <app-login (volverEmit)="vistaActual = 'inicio'"></app-login>
+         </div>
+      }
+   </div>
+
 </div>
