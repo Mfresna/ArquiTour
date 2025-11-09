@@ -41,14 +41,11 @@ export class CambiarPass implements OnInit {
         Validators.pattern(/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)[A-Za-z\d@._!+\-]{6,}$/),
         caracteresValidador]
       ],
-
       confirmaPass: ['', [
         Validators.required,
         Validators.min(0),
         caracteresValidador]
-      ]
-      },
-
+      ]},
       {validators: CamposIguales('nuevaPass', 'confirmaPass')}
     );
 
@@ -66,7 +63,7 @@ export class CambiarPass implements OnInit {
             alert('¡Contraseña actualizada correctamente!');
             this.passForm.reset;
 
-            this.router.navigate(['/']);  //deberia volver al login
+            this.router.navigate(['/login']);  //deberia volver al login
           },
           error: (e) => {
             if (e.status === 401) {
@@ -79,7 +76,7 @@ export class CambiarPass implements OnInit {
           }
         })
       }else if (pass){
-        //Si hay pass
+        //Si no hay token
         alert ("Aun no se puede cambiar Contraseña, espere el upgrade!")
       }else{
         alert ("Error en el proceso")
