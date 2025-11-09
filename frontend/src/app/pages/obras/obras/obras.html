@@ -1,98 +1,71 @@
-<!-- LAYOUT GENERAL: sidebar + contenido con scroll propio -->
-<div class="layout">
+<div class="layout-obras">
+  <div class="panel-filtros">
+    <form [formGroup]="filtro" (ngSubmit)="cargarObras()" class="filtros">
 
-  <!-- filtros en columna -->
-  <aside class="sidebar">
-    <form [formGroup]="filtro" (ngSubmit)="cargarObras()" class="filtros-column">
-
-      <!-- Categoría -->
       <div class="campo">
         <label for="cat">Categoría</label>
         <select id="cat" formControlName="categoria">
           <option value="">-- Todas --</option>
-          @for (c of categorias; track c) {
-            <option [value]="c">{{ CategoriaObraDescripcion[c] || c }}</option>
-          }
+          @for (c of categorias; track c) { <option [value]="c">{{ CategoriaObraDescripcion[c] || c }}</option> }
         </select>
       </div>
 
-      <!-- Estado -->
       <div class="campo">
         <label for="est">Estado</label>
         <select id="est" formControlName="estado">
           <option value="">-- Todos --</option>
-          @for (e of estados; track e) {
-            <option [value]="e">{{ EstadoObraDescripcion[e] || e }}</option>
-          }
+          @for (e of estados; track e) { <option [value]="e">{{ EstadoObraDescripcion[e] || e }}</option> }
         </select>
       </div>
 
-      <!-- Estudio (dropdown con buscador) -->
       <div class="campo estudio-dropdown">
         <label>Estudio</label>
-
-        <button type="button"
-                class="dropdown-trigger"
-                (click)="alternarSelectEstudio()"
-                aria-haspopup="listbox"
-                [attr.aria-expanded]="selectEstudioAbierto">
-          {{ etiquetaEstudioSeleccionado() }}
-          <span class="caret">▾</span>
+        <button type="button" class="dropdown-trigger"
+                (click)="alternarSelectEstudio()" [attr.aria-expanded]="selectEstudioAbierto">
+          {{ etiquetaEstudioSeleccionado() }} <span class="caret">▾</span>
         </button>
-
         @if (selectEstudioAbierto) {
           <div class="dropdown-panel">
-            <input type="text"
-                  placeholder="Buscar estudio..."
-                  [formControl]="buscarEstudio"
-                  class="dropdown-search"
-                  autocomplete="off" />
-            <ul class="dropdown-list" role="listbox">
-              <li class="dropdown-item" role="option" (click)="seleccionarEstudio(null)">
-                Todos los estudios
-              </li>
+            <input class="dropdown-search" type="text" placeholder="Buscar estudio..." [formControl]="buscarEstudio" />
+            <ul class="dropdown-list">
+              <li class="dropdown-item" (click)="seleccionarEstudio(null)">Todos los estudios</li>
               @for (e of estudiosFiltrados; track e.id) {
-                <li class="dropdown-item" role="option" (click)="seleccionarEstudio(e)">
-                  {{ e.nombre }}
-                </li>
+                <li class="dropdown-item" (click)="seleccionarEstudio(e)">{{ e.nombre }}</li>
               }
             </ul>
           </div>
         }
       </div>
 
-      <!-- Nombre de la obra -->
       <div class="campo">
         <label for="nom">Nombre de la obra</label>
         <input id="nom" type="text" formControlName="nombre" placeholder="Buscar por nombre..." />
       </div>
 
-      <!-- Acciones -->
-      <div class="acciones-col">
+      <div class="acciones">
         <button type="submit">Buscar</button>
         <button type="button" (click)="limpiarFiltro()">Limpiar</button>
       </div>
     </form>
-  </aside>
+  </div>
 
-  <!-- CONTENIDO: lista con SCROLL PROPIO y 3 columnas -->
-  <main class="contenido-scroll">
-    @if (obras?.length) {
-      <ul class="lista-obras">
-        @for (o of obras; track o.id ?? $index) {
-          <li class="obra-card">
-            <img [src]="imagenUrl(o.urlsImagenes)"
-                 (error)="imagenError($event)"
-                 alt="Imagen de {{ o.nombre }}" />
-            <div class="info">
-              <h3 class="obra-nombre">{{ o.nombre }}</h3>
-              <small class="obra-estudio">{{ nombreEstudio(o.estudioId) }}</small>
-            </div>
-          </li>
-        }
-      </ul>
-    } @else {
-      <p class="vacio">No se encontraron obras con los filtros seleccionados.</p>
-    }
-  </main>
+  <div class="panel-obras">
+    <div class="contenido-scroll">
+      @if (obras?.length) {
+        <ul class="lista-obras">
+          @for (o of obras; track o.id ?? $index) {
+            <li class="obra-card">
+              <img [src]="imagenUrl(o.urlsImagenes)" (error)="imagenError($event)" alt="Imagen de {{ o.nombre }}" />
+              <div class="info">
+                <h3 class="obra-nombre">{{ o.nombre }}</h3>
+                <small class="obra-estudio">{{ nombreEstudio(o.estudioId) }}</small>
+              </div>
+            </li>
+          }
+        </ul>
+      } @else {
+        <p class="vacio">No se encontraron obras con los filtros seleccionados.</p>
+      }
+    </div>
+  </div>
 </div>
