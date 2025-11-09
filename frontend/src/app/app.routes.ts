@@ -17,6 +17,7 @@ export const routes: Routes = [
 
   //======= APLICAR GUARDS =========//
   { path: 'cambiarpass', component: CambiarPass},  //Cuando el ADM maestro debe cambiar la pass
+  { path: 'home', component: Estudios},
   
 
 

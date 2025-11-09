@@ -1,8 +1,12 @@
 <div id="contComponentes">
    <div id="imagenFondo"
-   [style.background-image]="'url(' + imagSeleccionada + ')'"
-   [class.blur] = "vistaActual === 'login' || vistaActual === 'registro'"
-   [class.oscuro] = "vistaActual != 'login' && vistaActual != 'registro'">
+      [style.background-image]="'url(' + imagSeleccionada + ')'">
+      <!-- CONTIENE LA IMAGENDE FONDO -->
+   </div>
+
+   <div id="capaFiltros"
+      [class.blur] = "vistaActual === 'login' || vistaActual === 'registro'">
+      <!-- CAPA TRANSPARENTE PARA APLICAR BLUR -->
    </div>
    
    <div class="content-wrapper">

@@ -4,6 +4,7 @@ export const environment = {
   apiUrl: 'http://localhost:8080',   //  Su utiliza asi = private readonly baseUrl = `${environment.apiUrl}/auth`;
   portBack: '8080',
   imgEstudio: 'assets/img/por_defecto/estudioPerfil.png',
+  imgObra: 'assets/img/por_defecto/obra.png',
   imagenesFondo: [
     'assets/img/fondo/bg1.webp',
     'assets/img/fondo/bg2.webp',
@@ -14,6 +15,4 @@ export const environment = {
     'assets/img/fondo/bg7.webp',
     'assets/img/fondo/bg8.webp'
   ]
-  imgEstudio: 'assets/img/por_defecto/estudioPerfil.png',
-  imgObra: 'assets/img/por_defecto/obra.png'
 };
