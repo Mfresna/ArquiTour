@@ -101,11 +101,9 @@ export class Obras implements OnInit {
   }
 
 
-  // Select de estudios
-  //VER
-
-  selectEstudio(force?: boolean): void {
-    this.selectEstudioAbierto = force ?? !this.selectEstudioAbierto;
+  // Select de estudios (abre o cierra el select)
+  alternarSelectEstudio(abrir?: boolean): void {
+    this.selectEstudioAbierto = abrir ?? !this.selectEstudioAbierto;
     if (this.selectEstudioAbierto) {
       // al abrir, resetea el buscador y muestra todos
       this.buscarEstudio.setValue('');
@@ -127,7 +125,6 @@ export class Obras implements OnInit {
   }
 
   // Mostrar nombre del estudio en el listado (sin exponer id)
-  //VER
   nombreEstudio(estudioId?: number): string {
     if (!estudioId) return 'Estudio no especificado';
     return this.estudioService.getNombreById(estudioId) ?? 'Estudio desconocido';

@@ -1,7 +1,7 @@
 <!-- LAYOUT GENERAL: sidebar + contenido con scroll propio -->
 <div class="layout">
 
-  <!-- SIDEBAR: filtros en columna -->
+  <!-- filtros en columna -->
   <aside class="sidebar">
     <form [formGroup]="filtro" (ngSubmit)="cargarObras()" class="filtros-column">
 
@@ -33,7 +33,7 @@
 
         <button type="button"
                 class="dropdown-trigger"
-                (click)="selectEstudio()"
+                (click)="alternarSelectEstudio()"
                 aria-haspopup="listbox"
                 [attr.aria-expanded]="selectEstudioAbierto">
           {{ etiquetaEstudioSeleccionado() }}
@@ -87,14 +87,6 @@
             <div class="info">
               <h3 class="obra-nombre">{{ o.nombre }}</h3>
               <small class="obra-estudio">{{ nombreEstudio(o.estudioId) }}</small>
-              <!-- <div class="chips">
-                @if (o.categoria) {
-                  <span class="chip">{{ CategoriaObraDescripcion[o.categoria] || o.categoria }}</span>
-                }
-                @if (o.estado) {
-                  <span class="chip">{{ EstadoObraDescripcion[o.estado] || o.estado }}</span>
-                }
-              </div> -->
             </div>
           </li>
         }
