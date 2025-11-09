@@ -25,9 +25,7 @@ export const routes: Routes = [
   { path: 'estudios', component: Estudios},
   { path: 'formulario', component: EstudioForm},
   { path: 'estudios/:id', component: EstudioDetalle},
-  { path: 'estudios/:id/editar', component: EstudioForm}
-
-
-
+  { path: 'estudios/:id/editar', component: EstudioForm},
+  { path: 'obras', component: Obras}
 
 ];  
