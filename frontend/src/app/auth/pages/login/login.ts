@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '../../services/authService/auth-service';
 import { EsperandoModal } from '../../../components/esperando-modal/esperando-modal';
 import { MensajeModal } from '../../../components/mensaje-modal/mensaje-modal';
+import { finalize } from 'rxjs/operators';
 
 
 @Component({
@@ -87,20 +88,22 @@ export class Login implements OnInit {
 
       this.enviandoPin = true;
 
-      this.authService.enviarRecuperarPass(email).subscribe({
+      this.authService.enviarRecuperarPass(email).pipe(
+        //Se finaliza siempre con error o sin error en el suscribe
+        finalize(() => this.enviandoPin = false) 
+      ).subscribe({
         next: (res) => {
-          this.enviandoPin = false
         },
         error: (e) => {
-          this.enviandoPin = false;
-
-          if (e.status === 400) {
-            alert('Email inválido.');
+          if (e.status >= 400 || e.status <= 499) {
+            alert("Error en el envio del correo de recuperacion");
+            console.error("Error en el envio del correo de recuperacion a: " + email);
           } else {
-            alert('Ocurrió un error. Intentá más tarde.')
+            alert("Ocurrio un error inesperado");
+            console.error("Ocurrio un error inesperado");
           }
         }
-      });
+      })
     }
 
   }
