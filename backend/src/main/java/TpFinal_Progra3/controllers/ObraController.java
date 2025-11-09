@@ -128,14 +128,20 @@ public class ObraController {
     @Operation(summary = "Filtrar obras por categoría, estado y estudio")
     @GetMapping("/filtrar")
     public ResponseEntity<List<ObraResponseDTO>> filtrarObras(
-            @Parameter(description = "Categoría de la obra") @RequestParam(required = false) CategoriaObra categoria,
-            @Parameter(description = "Estado de la obra") @RequestParam(required = false) EstadoObra estado,
-            @Parameter(description = "ID del estudio") @RequestParam(required = false) @Positive Long estudioId) {
+            @Parameter(description = "Categoría de la obra")
+            @RequestParam(required = false) CategoriaObra categoria,
+            @Parameter(description = "Estado de la obra")
+            @RequestParam(required = false) EstadoObra estado,
+            @Parameter(description = "ID del estudio")
+            @RequestParam(required = false) @Positive Long estudioId,
+            @Parameter(description = "Nombre de la obra (parcial o completo)")
+            @RequestParam(required = false) String nombre) {
 
         ObraFiltroDTO filtro = new ObraFiltroDTO();
         filtro.setCategoria(categoria);
         filtro.setEstado(estado);
         filtro.setEstudioId(estudioId);
+        filtro.setNombre(nombre);
 
         return ResponseEntity.ok(obraService.filtrarObras(filtro));
     }

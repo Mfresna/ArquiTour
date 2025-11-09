@@ -22,8 +22,6 @@ export class Estudios implements OnInit {
   
   constructor(
     private fb: FormBuilder,
-    private router: Router,
-    private tokenService: TokenService,
     private estudioSrvice: EstudioService
   ) {}
 
