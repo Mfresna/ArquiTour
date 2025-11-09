@@ -65,8 +65,8 @@ export class EstudioDetalle {
     if (!confirm('¿Eliminar este estudio?')) return;
      alert('Estudio eliminado correctamente.');
     this.estudioSrv.deleteEstudio(this.estudio.id).subscribe({
-      next: _ => this.router.navigate(['/estudios']),
-      error: _ => alert('No se pudo eliminar el estudio')
+      next: () => this.router.navigate(['/estudios']),
+      error: (e) => alert('No se pudo eliminar el estudio')
     });
   }
 

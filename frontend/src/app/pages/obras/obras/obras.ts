@@ -26,8 +26,6 @@ export class Obras implements OnInit {
   estudiosFiltrados: EstudioModel[]= [];
   selectEstudioAbierto = false;
   buscarEstudio = new FormControl<string>(''); // input reactivo del buscador
-    // Mapa LOCAL id -> nombre (solo lo usa este componente)
-  private nombrePorId = new Map<number, string>();
 
   //Mapas de descripción para mostrar en el HTML 
   categorias = Object.values(CategoriaObraModel);
@@ -71,9 +69,11 @@ export class Obras implements OnInit {
         this.estudios = lista ?? [];
         this.estudiosFiltrados = this.estudios;
 
-        this.nombrePorId.clear();
+        // Cachear todos los nombres para usarlos desde cualquier componente
         for (const e of this.estudios) {
-          if (e?.id != null) this.nombrePorId.set(e.id, e.nombre);
+          if (e.id && e.nombre) {
+            this.estudioService.cachearNombre(e.id, e.nombre);
+          }
         }
       },
       error: () => alert('No se pudieron cargar los estudios'),
@@ -125,12 +125,12 @@ export class Obras implements OnInit {
   etiquetaEstudioSeleccionado(): string {
     const id = this.filtro.value.estudioId;
     if (!id) return 'Todos los estudios';
-    return this.nombrePorId.get(Number(id)) ?? 'Estudio desconocido';
+    return this.estudioService.getNombreById(Number(id)) ?? 'Estudio desconocido';
   }
 
   nombreEstudio(estudioId?: number): string {
     if (!estudioId) return 'Estudio no especificado';
-    return this.nombrePorId.get(estudioId) ?? 'Estudio desconocido';
+    return this.estudioService.getNombreById(estudioId) ?? 'Estudio desconocido';
   }
 
 

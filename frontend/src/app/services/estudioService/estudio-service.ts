@@ -70,6 +70,16 @@ export class EstudioService {
     );
   }
 
+  //nombre estudios
+
+  getNombreById(id?: number): string | undefined {
+    if (!id) return undefined;
+  return this.nombrePorId.get(id);
+  }
+  cachearNombre(id: number, nombre: string): void {
+    if (id && nombre) this.nombrePorId.set(id, nombre);
+  }
+
 }
 
 

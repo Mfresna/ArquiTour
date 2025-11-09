@@ -52,9 +52,10 @@
   <div class="panel-obras">
     <div class="contenido-scroll">
       @if (obras?.length) {
-        <ul class="lista-obras">
+        <ul class="lista-obras" >
           @for (o of obras; track o.id ?? $index) {
-            <li class="obra-card">
+            <li class="obra-card"  [routerLink]="['/obras', o.id!]"
+            aria-label="Ver detalle de {{ o.nombre }}">
               <img [src]="imagenUrl(o.urlsImagenes)" (error)="imagenError($event)" alt="Imagen de {{ o.nombre }}" />
               <div class="info">
                 <h3 class="obra-nombre">{{ o.nombre }}</h3>

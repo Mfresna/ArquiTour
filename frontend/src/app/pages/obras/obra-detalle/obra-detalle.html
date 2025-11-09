@@ -1,1 +1,51 @@
-<p>obra-detalle works!</p>
+@if (!cargando && obra) {
+  <div class="obra-page">
+    <div class="titulo">{{ obra.nombre }}</div>
+
+    <div class="contenido">
+      <!-- Columna izquierda (galería) -->
+      <div class="col-izq">
+        <div class="galeria">
+          @if (imgSrc().length > 1) { <button class="nav prev" (click)="anterior()" aria-label="Anterior">‹</button> }
+          <img class="img-principal" [src]="imagenPrincipal()" (error)="imagenError($event)" alt="Imagen principal de {{ obra.nombre }}" />
+          @if (imgSrc().length > 1) { <button class="nav next" (click)="siguiente()" aria-label="Siguiente">›</button> }
+        </div>
+
+        @if (imgSrc().length > 1) {
+          <div class="miniaturas">
+            @for (img of imgSrc(); track $index) {
+              <button type="button" class="thumb" [class.activa]="selectedIndex === $index" (click)="seleccionarImg($index)">
+                <img [src]="img" (error)="imagenError($event)" alt="Miniatura {{$index + 1}}" />
+              </button>
+            }
+          </div>
+        }
+      </div>
+
+      <!-- Columna derecha (info) -->
+      <div class="col-der">
+        <div class="info">
+          <div class="fila"><span class="etq">Estudio</span><span class="val">{{ nombreEstudio || 'Sin asignar' }}</span></div>
+          @if (obra.categoria) { <div class="fila"><span class="etq">Categoría</span><span class="val badge">{{ obra.categoria }}</span></div> }
+          @if (obra.estado)    { <div class="fila"><span class="etq">Estado</span>   <span class="val badge">{{ obra.estado }}</span></div> }
+          @if (obra.anioEstado){ <div class="fila"><span class="etq">Año</span>      <span class="val">{{ obra.anioEstado }}</span></div> }
+
+          @if (obra.descripcion) {
+            <div class="descripcion">{{ obra.descripcion }}</div>
+          }
+        </div>
+
+        @if (puedeGestionar()) {
+          <div class="acciones">
+            <button class="btn primario" (click)="editar()">Editar</button>
+            <button class="btn peligro"  (click)="eliminar()">Eliminar</button>
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+} @else if (cargando) {
+  <div class="estado">Cargando obra…</div>
+} @else {
+  <div class="estado">No se encontró la obra.</div>
+}
