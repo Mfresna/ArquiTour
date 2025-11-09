@@ -14,14 +14,20 @@ export const routes: Routes = [
   { path: '', component: Auth },
   { path: 'login', component: Auth},
   { path: 'registro', component: Auth},
+  { path: 'auth/password/:token', component: CambiarPass},  //Caundo recibo el Mail para recuperar la cuenta
+
+  //======= APLICAR GUARDS =========//
+  { path: 'cambiarpass', component: CambiarPass},  //Cuando el ADM maestro debe cambiar la pass
+  { path: 'home', component: Estudios},
   
+
+
   { path: 'estudios', component: Estudios},
   { path: 'formulario', component: EstudioForm},
   { path: 'estudios/:id', component: EstudioDetalle},
-  { path: 'estudios/:id/editar', component: EstudioForm},
-  { path: 'auth/password/:token', component: CambiarPass},
-  { path: 'cambiar-pass', component: CambiarPass},
-  { path: 'obras', component: Obras}
+  { path: 'estudios/:id/editar', component: EstudioForm}
+
+
 
 
 ];  
