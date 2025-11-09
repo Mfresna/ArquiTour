@@ -37,7 +37,8 @@ export class ObraService {
   getFiltrarObras(
     categoria?: CategoriaObraModel,
     estado?: EstadoObraModel,
-    estudioId?: number
+    estudioId?: number,
+    nombre?: string
     ) {
     let url = `${this.OBRAS_URL}/filtrar`;
 
@@ -46,6 +47,7 @@ export class ObraService {
     if (categoria) params.push(`categoria=${encodeURIComponent(categoria)}`);
     if (estado)    params.push(`estado=${encodeURIComponent(estado)}`);
     if (estudioId != null) params.push(`estudioId=${estudioId}`);
+    if (nombre) params.push(`nombre=${encodeURIComponent(nombre)}`);
 
     // Arma URL con los filtros
     if (params.length) url += `?${params.join('&')}`;
