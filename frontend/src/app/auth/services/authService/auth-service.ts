@@ -91,10 +91,6 @@ export class AuthService {
     return this.http.patch(`${this.AUTH_URL}/password/${token}`,{nuevaPassword});
   }
 
-  
-
-
-
   //----------------------
 
   isRefreshActivo(): boolean {
