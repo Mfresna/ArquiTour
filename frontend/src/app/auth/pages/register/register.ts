@@ -134,8 +134,6 @@ export class Register implements OnInit{
     this.spinerVisible=true;  //muestro la espera
     this.spinerMensaje="Verificando PIN..."
 
-    alert(this.registerForm.get('email')?.value.toString())
-
     this.pinService.validarPin(
       this.registerForm.get('email')?.value,
       this.registerForm.get('pin')?.value
@@ -196,8 +194,6 @@ export class Register implements OnInit{
       //Por seguridad ante manipulaciones seteo antes del envio el mail almacenado
       this.registerForm.get('email')?.setValue(this.emailVerificado);
 
-      console.log(this.registerForm.value);
-
       this.usuarioService.crearUsuario(this.registerForm.value).pipe(
         finalize(() => {
           this.spinerVisible=false;
@@ -206,6 +202,9 @@ export class Register implements OnInit{
       ).subscribe({
         next: () => {
             alert("REGISTRADO EXITOSAMENTE");
+            this.registerForm.reset;
+
+            this.router.navigate(['/login']);
         },
         error: (e) => {
           if (e.status === 422) {
@@ -297,20 +296,17 @@ export class Register implements OnInit{
 
   //SIGNALS DE PASOS
   siguientePaso() {
+    this.deshabilitarEmail();//Deshabilita el Email
+
     if (this.paso() === 'email'){
       this.paso.set('pin');
       this.habilitarBtnSubmit = false;
-      
       this.textoBoton = "VALIDAR PIN"
 
     } else if (this.paso() === 'pin'){
-
       this.paso.set('registrarme');
       this.habilitarBtnSubmit = false;
-      
       this.textoBoton = "REGISTRARME"
-
-      this.deshabilitarEmail();//Deshabilita el Email
 
     } 
   }
