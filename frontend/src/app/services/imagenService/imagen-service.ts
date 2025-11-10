@@ -8,16 +8,15 @@ import { Observable } from 'rxjs';
 })
 export class ImagenService {
 
-private readonly URL = `${environment.apiUrl}/imagenes`;
+  private readonly URL = `${environment.apiUrl}/imagenes`;
 
   constructor(private http: HttpClient) {}
 
-
   subirUna(file: File) {
-  const fd = new FormData();
-  fd.append('archivos', file); 
-  return this.http.post<string[]>(`${environment.apiUrl}/imagenes/subir`, fd);
-}
+    const fd = new FormData();
+    fd.append('archivos', file); 
+    return this.http.post<string[]>(`${environment.apiUrl}/imagenes/subir`, fd);
+  }
 
   // Sube VARIAS imágenes
   subirVarias(files: File[]): Observable<string[]> {
@@ -35,5 +34,4 @@ private readonly URL = `${environment.apiUrl}/imagenes`;
   eliminar(id: number) {
     return this.http.delete<void>(`${this.URL}/${id}`);
   }
-  
 }
