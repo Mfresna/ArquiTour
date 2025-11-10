@@ -1,0 +1,233 @@
+<div id="contenedor">
+  <section id="botoneraSuperior">
+    <button id="btnVolver" (click)="volver()" type="button">Volver</button>
+  </section>
+
+  <section id="formulario">
+
+    <h3>REGISTRARSE</h3>
+
+    <form id="registerForm" [formGroup]="registerForm" (submit)="registrarse()">
+
+      <!-- EMAIL -->
+      <fieldset>
+        <label for="email">Email: </label>
+        <input 
+          type="email" 
+          id="email" 
+          formControlName="email" 
+          placeholder="email@correo.com"
+          [class.invalido]="registerForm.get('email')?.invalid && registerForm.get('email')?.touched"
+          autocomplete="email"
+          (keydown.space)="$event.preventDefault()">
+
+        @if (registerForm.get('email')?.errors?.['required'] && registerForm.get('email')?.touched) {
+          <small>El mail es obligatorio.</small>
+        } @else if (registerForm.get('email')?.errors?.['email'] && registerForm.get('email')?.touched) {
+          <small>El email debe seguir el formato ("correo@email.com").</small>
+        }
+      </fieldset>
+
+
+      @if(this.paso() === "pin"){
+        <!-- PIN -->
+        <div id="contenedorPin">
+          <app-pin-verificador 
+            [invalido]="pinInvalido"
+            (pinCompleto)="reciboPinCompleto($event)"
+            (pinIncompleto)="recibioPinIncompleto()"
+            (enFocus)="pinInvalido=false">
+          </app-pin-verificador>
+
+          <!-- @if (registerForm.get('pin')?.errors?.['required'] && registerForm.get('pin')?.touched) { -->
+          @if (pinInvalido) {
+            <small>El PIN ingresado es invalido.</small>
+          }
+        </div>
+      }
+
+      @if(this.paso() === "registrarme"){
+
+         <!-- NUEVA CONTRASEÑA -->
+        <fieldset>
+            <label for="nuevaPasss">Nueva Contraseña: </label>
+
+            <div class="contenedor-pass">
+            <!-- Campo para ingresar Pass -->
+            <input 
+                [type]="mostrarPassword ? 'text' : 'password'"
+                id="nuevaPass" 
+                formControlName="nuevaPass" 
+                placeholder="************"
+                [class.invalido]="registerForm.get('nuevaPass')?.invalid && (registerForm.get('nuevaPass')?.touched || registerForm.get('nuevaPass')?.dirty)"
+                autocomplete="new-password"
+                (keydown.space)="$event.preventDefault()">
+
+            <!-- Boton de Ver Contraseña -->
+            <button 
+                type="button" 
+                class="ver-password"
+                (click)="mostrarPassword = !mostrarPassword"
+                tabindex="-1">
+
+                <!-- Muestra el icono del ojo importado en index.html de Material Disn -->
+                <span class="material-icons">
+                {{ mostrarPassword ? 'visibility' : 'visibility_off' }}
+                </span>
+
+            </button>
+            </div>
+
+            @if (registerForm.get('nuevaPass')?.errors?.['required'] && registerForm.get('nuevaPass')?.touched) {
+                <small>La contraseña es obligatoria.</small>
+            }@else if (registerForm.get('nuevaPass')?.errors?.['caracterNoPermitido']) {
+                <small>Solo simbolos permitidos (@ . _ ! +) .</small>
+            }@else{
+                @if (
+                    (registerForm.get('nuevaPass')?.errors?.['mayuscula'] ||
+                    registerForm.get('nuevaPass')?.errors?.['minuscula'] ||
+                    registerForm.get('nuevaPass')?.errors?.['faltaNumero'] ||
+                    registerForm.get('nuevaPass')?.errors?.['minlength']) &&
+                    registerForm.get('nuevaPass')?.touched) {
+                    <small>La contraseña debe contener al menos:</small>
+                    <small>
+                        <ul>
+                            <li>1 Mayuscula</li>
+                            <li>1 Minuscula</li>
+                            <li>1 Numero</li>
+                            <li>6 Caracteres</li>
+                        </ul>
+                    </small>
+                }
+            }
+
+        </fieldset>
+
+        <!-- CONFIRMAR CONTRASEÑA -->
+        <fieldset>
+            <label for="confirmaPass">Repetir contraseña: </label>
+
+            <div class="contenedor-pass">
+            <!-- Campo para ingresar Pass -->
+            <input 
+                [type]="mostrarConfirmPassword ? 'text' : 'password'"
+                id="confirmaPass" 
+                formControlName="confirmaPass"
+                appAllowedChars
+                placeholder="************"
+                [class.invalido]="registerForm.get('confirmaPass')?.invalid && registerForm.get('confirmaPass')?.touched"
+                (keydown.space)="$event.preventDefault()">
+
+            <!-- Boton de Ver Contraseña -->
+            <button 
+                type="button" 
+                class="ver-password"
+                (click)="mostrarConfirmPassword = !mostrarConfirmPassword"
+                tabindex="-1">
+
+                <!-- Muestra el icono del ojo importado en index.html de Material Disn -->
+                <span class="material-icons">
+                {{ mostrarConfirmPassword ? 'visibility' : 'visibility_off' }}
+                </span>
+
+            </button>
+            </div>
+
+            @if (registerForm.get('confirmaPass')?.errors?.['required'] && registerForm.get('confirmaPass')?.touched) {
+                <small>La confirmacion de contraseña es obligatoria.</small>
+            }@else if (registerForm.get('confirmaPass')?.errors?.['iguales'] && registerForm.get('confirmaPass')?.dirty) {
+                <!-- Cuando ingreso la contraseña original ya me identifica que no son iguales -->
+                <small>Las contraseñas deben coincidir.</small>
+            }
+
+        </fieldset>
+
+        <!-- NOMBRE -->
+        <fieldset>
+          <label for="nombre">Nombre: </label>
+          <input 
+            type="text" 
+            id="nombre" 
+            formControlName="nombre" 
+            placeholder="nombre"
+            [class.invalido]="registerForm.get('nombre')?.invalid && registerForm.get('nombre')?.touched"
+            autocomplete="name">
+
+          <!-- @if (login.get('email')?.errors?.['required'] && login.get('email')?.touched) {
+            <small>El mail es obligatorio.</small>
+          } @else if (login.get('email')?.errors?.['email'] && login.get('email')?.touched) {
+            <small>El email debe seguir el formato ("correo@email.com").</small>
+          } -->
+        </fieldset>
+
+        <!-- APELLIDO -->
+        <fieldset>
+          <label for="apellido">Apellido: </label>
+          <input 
+            type="text" 
+            id="apellido" 
+            formControlName="apellido" 
+            placeholder="apellido"
+            [class.invalido]="registerForm.get('apellido')?.invalid && registerForm.get('apellido')?.touched"
+            autocomplete="family-name">
+
+          <!-- @if (login.get('email')?.errors?.['required'] && login.get('email')?.touched) {
+            <small>El mail es obligatorio.</small>
+          } @else if (login.get('email')?.errors?.['email'] && login.get('email')?.touched) {
+            <small>El email debe seguir el formato ("correo@email.com").</small>
+          } -->
+        </fieldset>
+
+        <!-- FECHA NACIMIENTO -->
+        <fieldset>
+          <label for="fecNac">Apellido: </label>
+          <input 
+            type="date" 
+            id="fecNac" 
+            formControlName="fechaNacimiento" 
+            [class.invalido]="registerForm.get('fechaNacimiento')?.invalid && registerForm.get('fechaNacimiento')?.touched"
+            autocomplete="bday">
+
+          <!-- @if (login.get('email')?.errors?.['required'] && login.get('email')?.touched) {
+            <small>El mail es obligatorio.</small>
+          } @else if (login.get('email')?.errors?.['email'] && login.get('email')?.touched) {
+            <small>El email debe seguir el formato ("correo@email.com").</small>
+          } -->
+        </fieldset>
+
+
+        <!-- DESCRIPCION -->
+        <fieldset>
+          <label for="descripcion">Sobre mi: </label>
+          <input 
+            type="text" 
+            id="descripcion" 
+            formControlName="descripcion" 
+            [class.invalido]="registerForm.get('descripcion')?.invalid && registerForm.get('descripcion')?.touched">
+
+          <!-- @if (login.get('email')?.errors?.['required'] && login.get('email')?.touched) {
+            <small>El mail es obligatorio.</small>
+          } @else if (login.get('email')?.errors?.['email'] && login.get('email')?.touched) {
+            <small>El email debe seguir el formato ("correo@email.com").</small>
+          } -->
+        </fieldset>
+
+        <!-- IMAGEN-->
+
+    }
+
+      <button 
+        id="btnSiguiente" 
+        type="button" 
+        (click) = "accionBoton()"
+        [disabled]="!habilitarBtnSubmit">{{textoBoton}}</button>
+
+    </form>
+  </section>
+</div>
+
+<app-esperando-modal 
+  [isVisible]="spinerVisible" 
+  [mensaje]="spinerMensaje"
+/>
+
