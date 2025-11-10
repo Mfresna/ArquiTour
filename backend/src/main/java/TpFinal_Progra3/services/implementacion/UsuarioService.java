@@ -55,10 +55,10 @@ public class UsuarioService implements UsuarioServiceInterface {
     public UsuarioResponseDTO registrarUsuario(UsuarioDTO dto) {
         //Validar la existencia de un email
         if(usuarioRepository.existsByEmailIgnoreCase(dto.getEmail())){
-            throw new ProcesoInvalidoException(HttpStatus.BAD_REQUEST, "El email ya existe en la base de datos.");
+            throw new ProcesoInvalidoException(HttpStatus.UNPROCESSABLE_ENTITY, "El email ya existe en la base de datos.");
         }
         if(!validacionEmailService.isEmailValidado(dto.getEmail())){
-            throw new ProcesoInvalidoException(HttpStatus.BAD_REQUEST, "El email no ha sido verificado.");
+            throw new ProcesoInvalidoException(HttpStatus.FORBIDDEN, "El email no ha sido verificado.");
         }
 
         Usuario usuarioNuevo = usuarioMapper.mapUsuario(dto);

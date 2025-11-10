@@ -151,6 +151,19 @@ input.invalido {
   background: #ffecec;
 }
 
+
+textarea{
+  padding: 0.6rem 0.6rem;
+  border-radius: 1.2rem;
+  border: 1px solid #ccc;
+  font-family: var(--fuenteBase);
+  font-size: 1rem;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  resize: none;
+
+}
+
+
 /* ===== Input PASS Ver Contraseña ===== */
 
 .contenedor-pass {

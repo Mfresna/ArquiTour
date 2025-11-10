@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../../../environments/environment';
 import { PinRequestModel } from '../../models/pin/pinRequestModel';
+import { PinResponseModel } from '../../models/pin/pinResponseModel';
 
 @Injectable({
   providedIn: 'root',
@@ -26,7 +27,9 @@ export class PinService {
       pin: pin
     };
 
-    return this.http.post(`${this.PIN_URL}/enviarPin`, {validadorPin})
+    console.log(validadorPin)
+
+    return this.http.post(`${this.PIN_URL}/verificarPin`, validadorPin)
   }
 
   
