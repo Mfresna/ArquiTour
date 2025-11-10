@@ -29,6 +29,13 @@
             <app-login (volverEmit)="vistaActual = 'inicio'"></app-login>
          </div>
       }
+
+      <!-- VISTA: REGISTRO -->
+      @if (vistaActual === 'registro'){
+         <div class="form-container fade-in">
+            <app-register (volverEmit)="vistaActual = 'inicio'"></app-register>
+         </div>
+      }
    </div>
 
 </div>

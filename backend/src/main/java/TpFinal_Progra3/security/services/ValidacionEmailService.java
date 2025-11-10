@@ -52,12 +52,12 @@ public class ValidacionEmailService {
             //Tiene Validacion
             ValidacionEmail validacion = getValidacionExistente(email);
 
-            if (validacion.isValidado()) {
-                throw new ValidacionPinException(HttpStatus.ALREADY_REPORTED, "El correo ya fue verificado previamente. Continuá con el registro.");
-            }
+//            if (validacion.isValidado()) {
+//                throw new ValidacionPinException(HttpStatus.ALREADY_REPORTED, "El correo ya fue verificado previamente. Continuá con el registro.");
+//            }
 
             if (!isExpirado(validacion) && tieneCooldown(validacion)) {
-                throw new ValidacionPinException("Espere " + COOLDOWN + " minutos para volver a enviar un PIN");
+                throw new ValidacionPinException(HttpStatus.LOCKED,"Espere " + COOLDOWN + " minutos para volver a enviar un PIN");
             }
 
             eliminar(validacion);
@@ -77,10 +77,6 @@ public class ValidacionEmailService {
 
         ValidacionEmail validacion = getValidacionExistente(email);
 
-        if (validacion.isValidado()) {
-            throw new ValidacionPinException(HttpStatus.ALREADY_REPORTED, "El correo ya fue verificado previamente. Continuá con el registro.");
-        }
-
         if(isExpirado(validacion)){
             eliminar(validacion);
             throw new ValidacionPinException("El PIN ingresado caducó. Vuelva a generar un PIN");
@@ -92,7 +88,7 @@ public class ValidacionEmailService {
 
         if(!passwordEncoder.matches(dto.pin(), validacion.getPinHash())){
             sumarIntento(validacion);
-            throw new ValidacionPinException(HttpStatus.CONFLICT,"PIN incorrecto");
+            throw new ValidacionPinException(HttpStatus.NOT_ACCEPTABLE,"PIN incorrecto");
         }
 
         setEmailValido(validacion);
