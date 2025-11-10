@@ -7,7 +7,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-auth',
-  imports: [CommonModule, Login],
+  imports: [CommonModule, Login, Register],
   templateUrl: './auth.html',
   styleUrl: './auth.css',
 })
