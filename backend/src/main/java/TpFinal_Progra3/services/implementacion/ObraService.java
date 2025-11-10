@@ -51,6 +51,11 @@ public class ObraService implements ObraServiceInterface{
             throw new ProcesoInvalidoException(HttpStatus.UNAUTHORIZED,"El Arquitecto no puede crear obras para un estudio que no forma parte.");
         }
 
+        //Modificacion 10-11
+        if(!obraRepository.findByNombreIgnoreCase(dto.getNombre()).isEmpty()){
+            throw new ProcesoInvalidoException(HttpStatus.NOT_ACCEPTABLE,"No se puede crear una obra que contenta ese nombre.");
+        }
+
         List<Imagen> imagenesObra = dto.getUrlsImagenes().stream()
                 .map(imagenService::obtenerImagen)
                 .toList();
