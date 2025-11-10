@@ -9,7 +9,7 @@ import { UsrFormModel } from '../../auth/models/register/usrFormModel';
 })
 export class UsuarioService {
 
-  private readonly USUARIO_URL = `${environment.apiUrl}/usuario`;
+  private readonly USUARIO_URL = `${environment.apiUrl}/usuarios`;
 
 
   constructor(
@@ -27,7 +27,7 @@ export class UsuarioService {
       descripcion: formulario.descripcion?.trim() || null,
       imagenUrl: formulario.imagenUrl || null
     } 
-    return this.http.patch(`${this.USUARIO_URL}`, {nuevoUsuario})
+    return this.http.post(`${this.USUARIO_URL}`, nuevoUsuario)
   }
 
 

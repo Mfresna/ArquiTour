@@ -27,8 +27,6 @@ export class PinService {
       pin: pin
     };
 
-    console.log(validadorPin)
-
     return this.http.post(`${this.PIN_URL}/verificarPin`, validadorPin)
   }
 
