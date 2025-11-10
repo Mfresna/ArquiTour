@@ -1,51 +1,129 @@
 @if (!cargando && obra) {
-  <div class="obra-page">
-    <div class="titulo">{{ obra.nombre }}</div>
+  <div class="detalle-obra">
 
-    <div class="contenido">
-      <!-- Columna izquierda (galería) -->
-      <div class="col-izq">
-        <div class="galeria">
-          @if (imgSrc().length > 1) { <button class="nav prev" (click)="anterior()" aria-label="Anterior">‹</button> }
-          <img class="img-principal" [src]="imagenPrincipal()" (error)="imagenError($event)" alt="Imagen principal de {{ obra.nombre }}" />
-          @if (imgSrc().length > 1) { <button class="nav next" (click)="siguiente()" aria-label="Siguiente">›</button> }
-        </div>
+    <!-- ====== Imagen Principal ====== -->
+    <div class="imgPrinc">
+      <img [src]="imagenPrincipal()" (error)="imagenError($event)" alt="Imagen principal de {{ obra.nombre }}" />
+    </div>
 
-        @if (imgSrc().length > 1) {
-          <div class="miniaturas">
-            @for (img of imgSrc(); track $index) {
-              <button type="button" class="thumb" [class.activa]="selectedIndex === $index" (click)="seleccionarImg($index)">
-                <img [src]="img" (error)="imagenError($event)" alt="Miniatura {{$index + 1}}" />
-              </button>
-            }
-          </div>
-        }
-      </div>
+    <!-- ====== Ficha Técnica ====== -->
+    <div class="ficha-tecnica">
+      <h1 class="titulo">{{ obra.nombre }}</h1>
 
-      <!-- Columna derecha (info) -->
-      <div class="col-der">
-        <div class="info">
-          <div class="fila"><span class="etq">Estudio</span><span class="val">{{ nombreEstudio || 'Sin asignar' }}</span></div>
-          @if (obra.categoria) { <div class="fila"><span class="etq">Categoría</span><span class="val badge">{{ obra.categoria }}</span></div> }
-          @if (obra.estado)    { <div class="fila"><span class="etq">Estado</span>   <span class="val badge">{{ obra.estado }}</span></div> }
-          @if (obra.anioEstado){ <div class="fila"><span class="etq">Año</span>      <span class="val">{{ obra.anioEstado }}</span></div> }
-
-          @if (obra.descripcion) {
-            <div class="descripcion">{{ obra.descripcion }}</div>
+      <div class="ft-grid">
+        <!-- Estudio -->
+        <div class="ft-col">
+          <span class="etiqueta">Estudio</span>
+          @if (obra.estudioId) {
+            <a class="burbuja-link" [routerLink]="['/estudios', obra.estudioId]">
+              {{ nombreEstudio }}
+            </a>
+          } @else {
+            <span class="vacio">Sin asignar</span>
           }
         </div>
 
+        <!-- Categoría -->
+        <div class="ft-col">
+          <span class="etiqueta">Categoría</span>
+          @if (obra.categoria) {
+            <span class="burbuja">
+              {{ CategoriaObraDescripcion[obra.categoria] || obra.categoria }}
+            </span>
+          } @else { <span class="vacio">—</span> }
+        </div>
+
+        <!-- Estado -->
+        <div class="ft-col">
+          <span class="etiqueta">Estado actual</span>
+          @if (obra.estado) {
+            <span class="burbuja">
+              {{ EstadoObraDescripcion[obra.estado] || obra.estado }}
+            </span>
+          } @else { <span class="vacio">—</span> }
+        </div>
+
+        <!-- Año -->
+        <div class="ft-col">
+          <span class="etiqueta">Año</span>
+          @if (obra.anioEstado) {
+            <span class="burbuja">{{ obra.anioEstado }}</span>
+          } @else { <span class="vacio">—</span> }
+        </div>
+      </div>
+    </div>
+
+    <!-- ====== Descripción + Mapa ====== -->
+    <div class="descripcion-mapa">
+      <div class="encabezado">
+        <h3>Descripción</h3>
+
         @if (puedeGestionar()) {
           <div class="acciones">
-            <button class="btn primario" (click)="editar()">Editar</button>
-            <button class="btn peligro"  (click)="eliminar()">Eliminar</button>
+            <button class="btn editar" (click)="editar()">Editar</button>
+            <button class="btn eliminar" (click)="eliminar()">Eliminar</button>
           </div>
         }
       </div>
+
+      <div class="contenido">
+        <div class="texto">
+          @if (obra.descripcion) {
+            <p>{{ obra.descripcion }}</p>
+          } @else {
+            <p class="muted">Sin descripción.</p>
+          }
+        </div>
+
+        <div class="mapa">
+          <div class="mapa-placeholder">Mapa (próximamente)</div>
+        </div>
+      </div>
     </div>
+
+
+    <!-- ====== Galería ====== -->
+    <div class="galeria">
+      <h3>Galería de imágenes</h3>
+
+      <div class="carrusel-container">
+        <button class="flecha-carrusel izq" (click)="scrollCarrusel(-1)">
+          <span class="material-icons">chevron_left</span>
+        </button>
+
+        <div class="imagenes" #carruselImagenes>
+          @for (img of imgSrc(); track $index) {
+            <button type="button"
+                    class="imagen"
+                    [class.activa]="selectIndex === $index"
+                    (click)="abrirVentana($index)">
+              <img [src]="img" (error)="imagenError($event)" alt="Miniatura {{ $index + 1 }}" />
+            </button>
+          }
+      </div>
+
+        <button class="flecha-carrusel der" (click)="scrollCarrusel(1)">
+          <span class="material-icons">chevron_right</span>
+        </button>
+      </div>
+
+    </div>
+
+      @if (ventanaAbierta) {
+        <div class="ventana" (click)="cerrarVentana()">
+          <div class="v-contenido" (click)="$event.stopPropagation()">
+            <img class="v-img" [src]="imgSrc()[selectIndex]" (error)="imagenError($event)" alt="Vista ampliada" />
+            <div class="v-controles">
+              <button class="v-btn nav" (click)="mover(1)">‹</button>
+              <button class="v-btn cerrar" (click)="cerrarVentana()">Cerrar</button>
+              <button class="v-btn nav" (click)="mover(+1)">›</button>
+            </div>
+          </div>
+        </div>
+      }
   </div>
 } @else if (cargando) {
-  <div class="estado">Cargando obra…</div>
+    <div class="estado">Cargando obra...</div>
 } @else {
-  <div class="estado">No se encontró la obra.</div>
+    <div class="estado">No se encontró la obra.</div>
 }

@@ -182,7 +182,7 @@ public class ObraController {
     public ResponseEntity<ObraResponseDTO> agregarImagenes(
             HttpServletRequest request,
             @Parameter(description = "ID de la obra") @PathVariable @Positive Long id,
-            @RequestBody List<@Pattern(regexp = "^(https?://).+\\.(jpg|jpeg|png|gif|bmp|webp)$") String> urlAgregar) {
+            @RequestBody List< String> urlAgregar) {
         return ResponseEntity.ok(obraService.agregarImagenes(request, id, urlAgregar));
     }
 
