@@ -1,0 +1,28 @@
+.pin-row {
+  display: flex;
+  gap: 0.85rem;
+  justify-content: center;
+}
+.pin-box {
+  width: 46px;
+  height: 56px;
+  font-size: 26px;
+  text-align: center;
+  border: 1px solid var(--colorBoton, #888);
+  border-radius: 12px;
+  background: var(--colorFondoTarjeta, #fff);
+  transition: border-color .15s ease, box-shadow .15s ease;
+}
+.pin-box:focus {
+  outline: none;
+}
+
+/* Más espacio antes del 4º dígito */
+.pin-row > .pin-box:nth-child(4) {
+  margin-left: 1.4rem; /* ajustá a gusto */
+}
+
+.error{
+  border: 1px solid #ff3333;
+  color: #ff3333;
+}
