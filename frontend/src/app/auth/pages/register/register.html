@@ -199,12 +199,17 @@
         <!-- DESCRIPCION -->
         <fieldset>
           <label for="descripcion">Sobre mi: </label>
-          <input 
+          <textarea 
+            id="descripcion"
             type="text" 
-            id="descripcion" 
+            rows="8"
+            maxlength="280"
             formControlName="descripcion" 
-            [class.invalido]="registerForm.get('descripcion')?.invalid && registerForm.get('descripcion')?.touched">
-
+            [class.invalido]="registerForm.get('descripcion')?.invalid && registerForm.get('descripcion')?.touched"
+            (input)="limitarLineas($event,8)"
+            placeholder="Escribí algo sobre vos...">
+          </textarea>
+          
           <!-- @if (login.get('email')?.errors?.['required'] && login.get('email')?.touched) {
             <small>El mail es obligatorio.</small>
           } @else if (login.get('email')?.errors?.['email'] && login.get('email')?.touched) {

@@ -1,4 +1,4 @@
-export interface UsroRequestModel {
+export interface UsrRequestModel {
     //Recive el Back
     email: string;
     password: string;
@@ -6,6 +6,6 @@ export interface UsroRequestModel {
     apellido: string;
     fechaNacimiento: string;   // formato 'YYYY-MM-DD'
     
-    descripcion?: string;
-    imagenUrl?: string;
+    descripcion?: string | null;
+    imagenUrl?: string | null;
 }

@@ -29,8 +29,7 @@ export const routes: Routes = [
   { path: 'estudios/:id', component: EstudioDetalle},
   { path: 'estudios/:id/editar', component: EstudioForm},
   { path: 'obras', component: Obras},
-  { path: 'obras/:id', component: ObraDetalle}
-  { path: 'obras', component: Obras},
+  { path: 'obras/:id', component: ObraDetalle},
 
   { path: 'prueba', component: Register}
 ];  

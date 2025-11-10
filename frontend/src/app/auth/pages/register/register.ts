@@ -5,7 +5,8 @@ import { UsuarioService } from '../../../services/usuarioService/usuario-service
 import { PinVerificador } from '../../components/pin/pin-verificador';
 import { EsperandoModal } from '../../../components/esperando-modal/esperando-modal';
 import { PinService } from '../../services/pinService/pin-service';
-import { finalize } from 'rxjs/operators';
+import { finalize, tap } from 'rxjs/operators';
+import { SelectorContext } from '@angular/compiler';
 
 
 type Paso = "email" | "pin" | "registrarme";
@@ -93,47 +94,47 @@ export class Register implements OnInit{
     }
   }
 
+//========================== PASOS DE REGISTRACION
   private enviarPin(){
 
-      this.siguientePaso();//BORRAR
+    this.spinerVisible=true;  //muestro la espera
+    this.spinerMensaje="Enviando PIN al Email..."
 
+    this.pinService.enviarPin(this.registerForm.get('email')?.value).pipe(
+      finalize(() => this.spinerVisible=false)
+    ).subscribe({
+      next: () => {
+        this.siguientePaso();
+      },
+      error: (e) => {
+        if (e.status === 409) {
+          alert("El mail ya se encuentra registrado en la base de datos.");
+          this.router.navigate(['/login']);
+          console.warn(e);
 
+        } else if(e.status === 423) {
+          alert("Aguarde para enviar un nuevo PIN.");
+          console.warn(e);
 
-    // this.spinerVisible=true;  //muestro la espera
-    // this.spinerMensaje="Enviando PIN al Email..."
+        }else if(e.status >= 500){
+          alert("ERROR del Servicio, intente mas tarde.");
+          console.warn(e);
 
-    // this.pinService.enviarPin(this.registerForm.get('email')?.value).pipe(
-    //   finalize(() => this.spinerVisible=false)
-    // ).subscribe({
-    //   next: () => {
-    //     this.siguientePaso();
-    //   },
-    //   error: (e) => {
-    //     if (e.status === 409) {
-    //       alert("El mail ya se encuentra registrado en la base de datos.");
-    //       this.router.navigate(['/login']);
-    //       console.warn(e);
+        } else{
+          alert("ERROR INESPERADO.");
+          console.warn(e);
+        }
+      }
+    })
 
-    //     } else if(e.status === 423) {
-    //       alert("Aguarde para enviar un nuevo PIN.");
-    //       console.warn(e);
-
-    //     }else if(e.status >= 500){
-    //       alert("ERROR del Servicio, intente mas tarde.");
-    //       console.warn(e);
-
-    //     } else{
-    //       alert("ERROR INESPERADO.");
-    //       console.warn(e);
-    //     }
-    //   }
-    // })
   }
 
   private verificarPin(){
 
     this.spinerVisible=true;  //muestro la espera
     this.spinerMensaje="Verificando PIN..."
+
+    alert(this.registerForm.get('email')?.value.toString())
 
     this.pinService.validarPin(
       this.registerForm.get('email')?.value,
@@ -184,8 +185,74 @@ export class Register implements OnInit{
 
   private registrarme(){
 
+    if (this.registerForm.invalid) {
+      this.registerForm.markAllAsTouched();
+    }else{
+      this.spinerVisible=true;  //muestro la espera
+      this.spinerMensaje="Almacenando la Informacion..." 
+
+      this.habilitarEmail();
+
+      //Por seguridad ante manipulaciones seteo antes del envio el mail almacenado
+      this.registerForm.get('email')?.setValue(this.emailVerificado);
+
+      console.log(this.registerForm.value);
+
+      this.usuarioService.crearUsuario(this.registerForm.value).pipe(
+        finalize(() => {
+          this.spinerVisible=false;
+          this.habilitarEmail();
+        })
+      ).subscribe({
+        next: () => {
+            alert("REGISTRADO EXITOSAMENTE");
+        },
+        error: (e) => {
+          if (e.status === 422) {
+            //UNPROCESSABLE ENTITY
+            console.error("El Email ya existe. Peticion imposible de resolver", e);
+
+            this.router.navigate(['']);
+
+          } else if(e.status === 403) {
+            //FORBBIDEN
+            console.warn(e);
+            alert("El email no ha sido verificado.");
+
+            this.origenPaso();
+            this.registerForm.get('email')?.setValue(this.emailVerificado);
+
+          }else if(e.status >= 500){
+            alert("ERROR del Servicio, intente mas tarde.");
+            console.warn(e);
+
+            this.router.navigate(['']);
+
+          } else{
+            alert("ERROR INESPERADO.");
+            console.warn(e);
+            
+            this.origenPaso();
+
+            this.router.navigate(['']);
+          }
+        }
+      })
+    }
+    
+  }
+//===================================================
+
+  //HABILITAR ESTADO DE MAIL
+  private deshabilitarEmail(){
+    this.registerForm.get('email')?.disable();
   }
 
+  private habilitarEmail(){
+    this.registerForm.get('email')?.enable();
+  }
+
+  //SUBSCRIPCIONES PARA EL COMPORTAMIENTO DEL BOTON
   private subIniciales(){
     
     //Se suscribe a los cambios de estado de los Input que marcan 
@@ -195,6 +262,7 @@ export class Register implements OnInit{
     const emailControl = this.registerForm.get('email')
     const pinControl = this.registerForm.get('pin');
 
+      //Campo Email
     emailControl?.statusChanges.subscribe(status => {
       if (status === 'VALID') {
         //Solo cuando el mail sea valido se habilita el boton
@@ -204,6 +272,7 @@ export class Register implements OnInit{
       }
     });
 
+      //Campo PIN
     pinControl?.statusChanges.subscribe(status => {
       if (status === 'VALID') {
         //Solo cuando el mail sea valido se habilita el boton
@@ -212,10 +281,21 @@ export class Register implements OnInit{
         this.habilitarBtnSubmit = false;
       }
     });
+
+      //Todo el formulario
+    this.registerForm.statusChanges.subscribe(status => {
+      if (status === 'VALID' && this.paso() === 'registrarme') {
+        this.habilitarBtnSubmit = true;
+      } else if(this.paso() === 'registrarme') {
+          //solo si es etapa de registro
+        this.habilitarBtnSubmit = false;
+      }
+    });
+
   
   }
 
-  //Signal de pasos
+  //SIGNALS DE PASOS
   siguientePaso() {
     if (this.paso() === 'email'){
       this.paso.set('pin');
@@ -230,6 +310,8 @@ export class Register implements OnInit{
       
       this.textoBoton = "REGISTRARME"
 
+      this.deshabilitarEmail();//Deshabilita el Email
+
     } 
   }
 
@@ -240,13 +322,23 @@ export class Register implements OnInit{
       
       this.textoBoton = "SIGUIENTE"
 
+      this.habilitarEmail();//Habilita el Email
+
     } else if (this.paso() === 'registrarme'){
       this.paso.set('pin');
       this.habilitarBtnSubmit = false;
 
       this.textoBoton = "VALIDAR PIN"
 
+      this.habilitarEmail();//Habilita el Email
     } 
+  }
+
+  origenPaso(){
+    this.paso.set('email');
+    this.habilitarBtnSubmit = false;
+    this.textoBoton = "SIGUIENTE";
+    this.registerForm.reset;
   }
 
   //RECIBE PIN DEL COMPONENTE
@@ -258,6 +350,17 @@ export class Register implements OnInit{
   recibioPinIncompleto(){
     this.registerForm.get('pin')?.setValue('');
   }
+
+  //LIMITA LA CANTIDAD DE LINEAS DEL TEXTAREA
+  limitarLineas(event: Event, maxLineas: number) {
+    const textarea = event.target as HTMLTextAreaElement;
+    const lineas = textarea.value.split('\n');
+    if (lineas.length > maxLineas) {
+      textarea.value = lineas.slice(0, maxLineas).join('\n');
+      this.registerForm.get('descripcion')?.setValue(textarea.value);
+    }
+  }
+
 
 }
 
