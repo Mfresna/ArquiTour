@@ -1,0 +1,147 @@
+/* --- CONTENEDOR PÁGINA --- */
+.obra-page{
+  height: 100%;
+  display: grid;
+  grid-template-rows: auto 1fr;   /* título | contenido */
+  gap: .75rem;
+  padding: .75rem 1rem;
+  background: #f5f6f7;
+  overflow: hidden;               /* no scroll de ventana */
+  box-sizing: border-box;
+}
+
+/* Título: color legible */
+.titulo{
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: var(--colorPrincipal, #0a73c0); /* NO blanco */
+  text-align: left;
+}
+
+/* --- DOS COLUMNAS MISMA ALTURA --- */
+.contenido{
+  display: grid;
+  grid-template-columns: minmax(420px, 55%) 1fr;
+  gap: 1rem;
+  height: 100%;     /* ocupa el 1fr disponible */
+  min-height: 0;    /* clave para evitar desbordes */
+  overflow: hidden; /* sin scroll de contenedor */
+}
+
+/* Cada columna = misma altura, sin rebasar */
+.col-izq,
+.col-der{
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) auto; /* bloque principal + pie fijo */
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 6px 18px rgba(0,0,0,.06);
+  padding: .9rem;
+  min-height: 0; 
+  overflow: hidden; 
+  box-sizing: border-box;
+}
+
+/* -------- IZQUIERDA: GALERÍA -------- */
+/* Reservá una altura fija para miniaturas y dásela explícita */
+.miniaturas{
+  height: 80px;                     /* fija -> no “crece” */
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(66px, 92px);
+  gap: .5rem;
+  overflow: hidden;                  /* sin barra */
+  padding-top: .6rem;
+}
+
+/* La galería usa el espacio restante exacto = columna - miniaturas - gaps */
+.galeria{
+  min-height: 0;                     /* para que pueda achicarse */
+  height: 100%;
+  position: relative;
+  background: #e9ecef;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.img-principal{
+  width: 100%;
+  height: 100%;
+  object-fit: contain;               /* entra completa */
+  background: #fff;
+}
+
+/* Flechas compactas */
+.nav{
+  position: absolute; top: 50%; transform: translateY(-50%);
+  width: 36px; height: 36px; border-radius: 50%;
+  border: none; color: #fff; background: rgba(0,0,0,.45);
+  font-size: 18px; cursor: pointer;
+}
+.nav:hover{ background: rgba(0,0,0,.65); }
+.prev{ left: 10px; } .next{ right: 10px; }
+
+.thumb{
+  border: 2px solid transparent; border-radius: 10px; background: #fff;
+  padding: 0; cursor: pointer;
+}
+.thumb.activa{ border-color: var(--colorPrincipal, #0a73c0); }
+.thumb img{ width: 100%; height: 64px; object-fit: cover; border-radius: 8px; display: block; }
+
+/* -------- DERECHA: INFO -------- */
+.info{
+  min-height: 0; 
+  overflow: hidden;                  /* sin barra visible */
+  display: grid;
+  align-content: start;
+  gap: .5rem;
+}
+.fila{
+  display: grid; grid-template-columns: 140px 1fr; gap: .5rem;
+  align-items: baseline; padding: .15rem 0;
+}
+.etq{ color:#6b7280; font-weight: 700; }
+.val{ color:#111827; }
+
+/* Chips lindos */
+.badge{
+  display: inline-block;
+  padding: .25rem .6rem;
+  border-radius: 999px;
+  background: #e3f2fd;
+  color: #0b5aa7;
+  font-weight: 700;
+  font-size: .9rem;
+}
+
+/* Limita la descripción para que no empuje el footer */
+.descripcion{
+  margin-top: .4rem;
+  line-height: 1.55;
+  color:#374151;
+  background:#fafafa;
+  border:1px solid #eee;
+  border-radius: 10px;
+  padding:.75rem;
+  max-height: 9rem;   /* límite visual */
+  overflow: hidden;   /* sin scroll ni barras */
+}
+
+/* Botones más prolijos */
+.acciones{
+  display:flex; gap:.6rem; justify-content:flex-end; align-items:center;
+}
+.btn{
+  padding:.6rem 1rem; border:none; border-radius:10px;
+  font-weight:700; cursor:pointer;
+  box-shadow: 0 2px 8px rgba(0,0,0,.08);
+  transition: transform .1s ease, box-shadow .15s ease, filter .15s ease;
+}
+.btn:hover{ transform: translateY(-1px); box-shadow: 0 6px 16px rgba(0,0,0,.12); }
+.primario{ background: var(--colorPrincipal, #0a73c0); color:#fff; }
+.peligro { background:#e74c3c; color:#fff; }
+
+/* Responsive: apila columnas si no entra */
+@media (max-width: 960px){
+  .contenido{ grid-template-columns: 1fr; }
+}

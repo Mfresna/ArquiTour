@@ -70,36 +70,16 @@ export class EstudioService {
     );
   }
 
-  //Para el filtro de estudios en obras
-
-  //1) Precarga TODA la lista de estudios (para select y resolver nombre por id) 
-  precargarTodos() {
-    return this.getFiltrarEstudios().pipe(
-      tap(lista => {
-        this.estudios = lista ?? [];
-        this.reconstruirMapaNombres(this.estudios);
-      })
-    );
-  }
+  //nombre estudios
 
   getNombreById(id?: number): string | undefined {
     if (!id) return undefined;
-    return this.nombrePorId.get(id);
+  return this.nombrePorId.get(id);
+  }
+  cachearNombre(id: number, nombre: string): void {
+    if (id && nombre) this.nombrePorId.set(id, nombre);
   }
 
-  // Búsqueda en memoria para el buscador dentro del select 
-  buscarEnCachePorNombre(q: string): EstudioModel[] {
-    const s = (q ?? '').trim().toLowerCase();
-    if (!s) return this.estudios;
-    return this.estudios.filter(e => (e.nombre ?? '').toLowerCase().includes(s));
-  }
-
-  private reconstruirMapaNombres(lista: EstudioModel[]) {
-    this.nombrePorId.clear();
-    for (const e of (lista ?? [])) {
-      if (e?.id != null) this.nombrePorId.set(e.id, e.nombre);
-    }
-  }
 }
 
 

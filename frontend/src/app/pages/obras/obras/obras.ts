@@ -17,13 +17,13 @@ import { EstudioService } from '../../../services/estudioService/estudio-service
 })
 export class Obras implements OnInit {
 
-  obras!: ObraModel[];
+  obras: ObraModel[]= [];
   imagenDefecto = `${environment.imgObra}`;
   filtro!: FormGroup; 
 
   //Para el select de Estudios
-  estudios!: EstudioModel[];
-  estudiosFiltrados!: EstudioModel[];
+  estudios: EstudioModel[]= [];
+  estudiosFiltrados: EstudioModel[]= [];
   selectEstudioAbierto = false;
   buscarEstudio = new FormControl<string>(''); // input reactivo del buscador
 
@@ -64,17 +64,21 @@ export class Obras implements OnInit {
 
   //Trae estudios para mostrar en el filtro
   private cargarEstudiosFiltro(): void {
-    //VER
-    this.estudioService.precargarTodos().subscribe({
+    this.estudioService.getFiltrarEstudios().subscribe({
       next: lista => {
-        this.estudios = this.estudioService.estudios ?? [];
+        this.estudios = lista ?? [];
         this.estudiosFiltrados = this.estudios;
-      },
-        error: () => {
-          alert('No se pudieron cargar los estudios');
+
+        // Cachear todos los nombres para usarlos desde cualquier componente
+        for (const e of this.estudios) {
+          if (e.id && e.nombre) {
+            this.estudioService.cachearNombre(e.id, e.nombre);
+          }
         }
-      });
-    }
+      },
+      error: () => alert('No se pudieron cargar los estudios'),
+    });
+  }
 
   cargarObras(): void {
     const categoria = this.filtro.value.categoria || undefined;
@@ -124,7 +128,6 @@ export class Obras implements OnInit {
     return this.estudioService.getNombreById(Number(id)) ?? 'Estudio desconocido';
   }
 
-  // Mostrar nombre del estudio en el listado (sin exponer id)
   nombreEstudio(estudioId?: number): string {
     if (!estudioId) return 'Estudio no especificado';
     return this.estudioService.getNombreById(estudioId) ?? 'Estudio desconocido';
@@ -143,7 +146,7 @@ export class Obras implements OnInit {
   const img = ev.target as HTMLImageElement;
   if (img.src.includes(this.imagenDefecto)) return;
   img.src = this.imagenDefecto;
-}
+  }
 
 
 
