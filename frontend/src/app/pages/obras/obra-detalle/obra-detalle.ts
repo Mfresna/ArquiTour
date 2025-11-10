@@ -1,14 +1,16 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { ObraModel } from '../../../models/obraModels/obraModel';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { environment } from '../../../../environments/environment';
 import { TokenService } from '../../../auth/services/tokenService/token-service';
 import { EstudioService } from '../../../services/estudioService/estudio-service';
 import { ObraService } from '../../../services/obra-service';
+import { CategoriaObraDescripcion } from '../../../models/obraModels/categoriaObraModel';
+import { EstadoObraDescripcion } from '../../../models/obraModels/estadoObraModel';
 
 @Component({
   selector: 'app-obra-detalle',
-  imports: [],
+  imports: [RouterLink],
   templateUrl: './obra-detalle.html',
   styleUrl: './obra-detalle.css',
 })
@@ -21,7 +23,17 @@ export class ObraDetalle {
   nombreEstudio?: string;
 
   // Galería
-  selectedIndex = 0;
+  selectIndex = 0;
+
+  //Carrusel miniaturas
+  @ViewChild('carruselImagenes') carruselImagenes!: ElementRef;
+
+  //Para mostrar el nombre prolijo de estado y categoria
+  CategoriaObraDescripcion = CategoriaObraDescripcion;
+  EstadoObraDescripcion = EstadoObraDescripcion;
+
+  //Ventana de imagen
+  ventanaAbierta = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -65,44 +77,55 @@ export class ObraDetalle {
   // Imágenes
 
   imgSrc(): string[] {
-  const urls = this.obra?.urlsImagenes ?? [];
-  if (!urls.length) return [this.imagenDefecto];
+    const urls = this.obra?.urlsImagenes ?? [];
+    if (!urls.length) return [this.imagenDefecto];
 
-  return urls.map(u => {
-    const path = u.startsWith('/') ? u : `/${u}`;
-    return `${environment.apiUrl}${path}`;
-  });
-}
+    return urls.map(u => {
+     const path = u.startsWith('/') ? u : `/${u}`;
+      return `${environment.apiUrl}${path}`;
+    });
+  }
 
-/** Imagen principal según el índice seleccionado. */
-imagenPrincipal(): string {
-  const imgs = this.imgSrc();
-  return imgs[Math.min(this.selectedIndex, imgs.length - 1)];
-}
+  /** Imagen principal según el índice seleccionado. */
+  imagenPrincipal(): string {
+    const imgs = this.imgSrc();
+    return imgs[Math.min(this.selectIndex, imgs.length - 1)];
+  }
 
-imagenError(ev: Event): void {
-  const img = ev.target as HTMLImageElement;
-  if (img.src.includes(this.imagenDefecto)) return; 
-  img.src = this.imagenDefecto;
-}
-  
+  imagenError(ev: Event): void {
+    const img = ev.target as HTMLImageElement;
+    if (img.src.includes(this.imagenDefecto)) return; 
+    img.src = this.imagenDefecto;
+  }
+    
   // --------- Interacción de la galería ----------
   seleccionarImg(index: number): void {
-    this.selectedIndex = index;
+    this.selectIndex = index;
   }
 
-  anterior(): void {
-    const total = this.imgSrc().length;
-    if (total <= 1) return;
-    this.selectedIndex = (this.selectedIndex - 1 + total) % total;
+  mover(paso: number): void {
+    const n = this.imgSrc().length;
+    if (n <= 1) return;
+
+    this.selectIndex = (this.selectIndex + paso + n) % n;
   }
 
-  siguiente(): void {
-    const total = this.imgSrc().length;
-    if (total <= 1) return;
-    this.selectedIndex = (this.selectedIndex + 1) % total;
+  scrollCarrusel(direccion: number) {
+    const contenedor = this.carruselImagenes.nativeElement;
+    const scrollAmount = 260; // ancho de imagen (240) + gap (10) + margen (10)
+    contenedor.scrollLeft += scrollAmount * direccion;
+  }
+    
+  // --- Ventana (imagen en grande) ---
+
+  abrirVentana(i: number): void {
+    this.selectIndex = i;
+    this.ventanaAbierta = true;
   }
 
+  cerrarVentana(): void {
+    this.ventanaAbierta = false;
+  }
 
   // Roles y acciones
 
