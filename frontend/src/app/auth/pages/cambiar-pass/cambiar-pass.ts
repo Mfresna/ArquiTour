@@ -1,10 +1,9 @@
 import { Component, input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Location } from '@angular/common';
 import { AuthService } from '../../services/authService/auth-service';
-import { CamposIguales } from '../../validadores/igualdadValid';
-import { caracteresValidador } from '../../validadores/caracteresValidador';
+import { CamposIguales } from '../../validadores/igualdadValidador';
+import { caracteresValidador } from '../../validadores/passCaracteresValidador';
 import { UsuarioService } from '../../../services/usuarioService/usuario-service';
 import { EsperandoModal } from '../../../components/esperando-modal/esperando-modal';
 import { finalize } from 'rxjs';
@@ -28,7 +27,6 @@ export class CambiarPass implements OnInit {
   spinerVisible: boolean = false;
 
   constructor(
-    private location: Location,
     private fb: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,

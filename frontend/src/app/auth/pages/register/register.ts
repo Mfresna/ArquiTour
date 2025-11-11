@@ -7,6 +7,9 @@ import { EsperandoModal } from '../../../components/esperando-modal/esperando-mo
 import { PinService } from '../../services/pinService/pin-service';
 import { finalize, tap } from 'rxjs/operators';
 import { SelectorContext } from '@angular/compiler';
+import { caracteresValidador } from '../../validadores/passCaracteresValidador';
+import { CamposIguales } from '../../validadores/igualdadValidador';
+import { apellidoValidador, nombreValidador } from '../../validadores/textoValidador';
 
 
 type Paso = "email" | "pin" | "registrarme";
@@ -46,16 +49,37 @@ export class Register implements OnInit{
   ) {}
   
   ngOnInit(): void {
-    this.registerForm = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
-      pin: ['', [Validators.required, Validators.pattern(/^\d{6}$/)]],
-      nuevaPass: ['', [Validators.required]],
-      confirmaPass: ['', [Validators.required]],
-      nombre: ['', [Validators.required]],
-      apellido: ['', [Validators.required]],
-      fechaNacimiento: ['', [Validators.required]],
-      descripcion: ['', [Validators.required]]
-    });
+    this.registerForm = this.fb.group(
+      {
+        email: ['', [Validators.required, Validators.email]],
+        pin: ['', [Validators.required, Validators.pattern(/^\d{6}$/)]],
+        nuevaPass: ['', [
+            Validators.required,
+            Validators.minLength(6),
+            Validators.pattern(/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)[A-Za-z\d@._!+\-]{6,}$/),
+            caracteresValidador]
+          ],
+        confirmaPass: ['', [
+            Validators.required,
+            Validators.min(0),
+            caracteresValidador]
+          ],
+        nombre: ['', [
+          Validators.required, 
+          Validators.minLength(2),
+          Validators.maxLength(50),  
+          nombreValidador]],
+        apellido: ['', [
+          Validators.required,
+          Validators.minLength(2),
+          Validators.maxLength(50), 
+          apellidoValidador
+        ]],
+        fechaNacimiento: ['', [Validators.required]],
+        descripcion: ['', [Validators.required]]
+      },
+      {validators: CamposIguales('nuevaPass', 'confirmaPass')}
+    );
 
     this.subIniciales();
   }  
@@ -97,88 +121,92 @@ export class Register implements OnInit{
 //========================== PASOS DE REGISTRACION
   private enviarPin(){
 
-    this.spinerVisible=true;  //muestro la espera
-    this.spinerMensaje="Enviando PIN al Email..."
+    this.siguientePaso();
 
-    this.pinService.enviarPin(this.registerForm.get('email')?.value).pipe(
-      finalize(() => this.spinerVisible=false)
-    ).subscribe({
-      next: () => {
-        this.siguientePaso();
-      },
-      error: (e) => {
-        if (e.status === 409) {
-          alert("El mail ya se encuentra registrado en la base de datos.");
-          this.router.navigate(['/login']);
-          console.warn(e);
+    // this.spinerVisible=true;  //muestro la espera
+    // this.spinerMensaje="Enviando PIN al Email..."
 
-        } else if(e.status === 423) {
-          alert("Aguarde para enviar un nuevo PIN.");
-          console.warn(e);
+    // this.pinService.enviarPin(this.registerForm.get('email')?.value).pipe(
+    //   finalize(() => this.spinerVisible=false)
+    // ).subscribe({
+    //   next: () => {
+    //     this.siguientePaso();
+    //   },
+    //   error: (e) => {
+    //     if (e.status === 409) {
+    //       alert("El mail ya se encuentra registrado en la base de datos.");
+    //       this.router.navigate(['/login']);
+    //       console.warn(e);
 
-        }else if(e.status >= 500){
-          alert("ERROR del Servicio, intente mas tarde.");
-          console.warn(e);
+    //     } else if(e.status === 423) {
+    //       alert("Aguarde para enviar un nuevo PIN.");
+    //       console.warn(e);
 
-        } else{
-          alert("ERROR INESPERADO.");
-          console.warn(e);
-        }
-      }
-    })
+    //     }else if(e.status >= 500){
+    //       alert("ERROR del Servicio, intente mas tarde.");
+    //       console.warn(e);
+
+    //     } else{
+    //       alert("ERROR INESPERADO.");
+    //       console.warn(e);
+    //     }
+    //   }
+    // });
 
   }
 
   private verificarPin(){
+    this.emailVerificado = this.registerForm.get('email')?.value;
+    this.siguientePaso();
 
-    this.spinerVisible=true;  //muestro la espera
-    this.spinerMensaje="Verificando PIN..."
+    // this.spinerVisible=true;  //muestro la espera
+    // this.spinerMensaje="Verificando PIN..."
 
-    this.pinService.validarPin(
-      this.registerForm.get('email')?.value,
-      this.registerForm.get('pin')?.value
-    ).pipe(
-      finalize(() => this.spinerVisible=false)
-    ).subscribe({
-      next: () => {
-        this.emailVerificado = this.registerForm.get('email')?.value;
-        this.siguientePaso();
-      },
-      error: (e) => {
-        if (e.status === 409) {
-          //CONFLICT
-          alert("El PIN caducó.");
-          this.anteriorPaso();
+    // this.pinService.validarPin(
+    //   this.registerForm.get('email')?.value,
+    //   this.registerForm.get('pin')?.value
+    // ).pipe(
+    //   finalize(() => this.spinerVisible=false)
+    // ).subscribe({
+    //   next: () => {
+    //     this.emailVerificado = this.registerForm.get('email')?.value;
+    //     this.siguientePaso();
+    //   },
+    //   error: (e) => {
+    //     if (e.status === 409) {
+    //       //CONFLICT
+    //       alert("El PIN caducó.");
+    //       this.anteriorPaso();
 
-          console.warn(e);
+    //       console.warn(e);
 
-        } else if(e.status === 410) {
-          //GONE
-          alert("Demasiados Intentos vuelva a generar un PIN");
-          this.anteriorPaso();
-          console.warn(e);
+    //     } else if(e.status === 410) {
+    //       //GONE
+    //       alert("Demasiados Intentos vuelva a generar un PIN");
+    //       this.anteriorPaso();
+    //       console.warn(e);
 
-        }else if(e.status === 403) {
-          //FORBBIDEN
-          alert("Error en la solicitud");
-          this.router.navigate(['']);
-          console.warn(e);
+    //     }else if(e.status === 403) {
+    //       //FORBBIDEN
+    //       alert("Error en la solicitud");
+    //       this.router.navigate(['']);
+    //       console.warn(e);
 
-        } else if(e.status === 406) {
-          //NOT ACCEPTABLE
-          this.pinInvalido = true;
-          console.warn(e);
+    //     } else if(e.status === 406) {
+    //       //NOT ACCEPTABLE
+    //       this.pinInvalido = true;
+    //       console.warn(e);
 
-        }else if(e.status >= 500){
-          alert("ERROR del Servicio, intente mas tarde.");
-          console.warn(e);
+    //     }else if(e.status >= 500){
+    //       alert("ERROR del Servicio, intente mas tarde.");
+    //       console.warn(e);
 
-        } else{
-          alert("ERROR INESPERADO.");
-          console.warn(e);
-        }
-      }
-    })
+    //     } else{
+    //       alert("ERROR INESPERADO.");
+    //       console.warn(e);
+    //     }
+    //   }
+    // });
   }
 
   private registrarme(){
