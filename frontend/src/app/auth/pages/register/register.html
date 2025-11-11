@@ -39,7 +39,6 @@
             (enFocus)="pinInvalido=false">
           </app-pin-verificador>
 
-          <!-- @if (registerForm.get('pin')?.errors?.['required'] && registerForm.get('pin')?.touched) { -->
           @if (pinInvalido) {
             <small>El PIN ingresado es invalido.</small>
           }
@@ -153,11 +152,18 @@
             [class.invalido]="registerForm.get('nombre')?.invalid && registerForm.get('nombre')?.touched"
             autocomplete="name">
 
-          <!-- @if (login.get('email')?.errors?.['required'] && login.get('email')?.touched) {
-            <small>El mail es obligatorio.</small>
-          } @else if (login.get('email')?.errors?.['email'] && login.get('email')?.touched) {
-            <small>El email debe seguir el formato ("correo@email.com").</small>
-          } -->
+
+          @if (registerForm.get('nombre')?.errors?.['required'] && registerForm.get('nombre')?.touched) {
+            <small>El nombre es obligatorio.</small>
+          }@else if(registerForm.get('nombre')?.errors?.['minlength'] && registerForm.get('nombre')?.touched) {
+            <small>Su nombre no parece ser verdadero (min. 2 caraceres)</small>
+          }@else if(registerForm.get('nombre')?.errors?.['maxlength']) {
+            <small>Su nombre no parece ser verdadero (max. 50 caraceres)</small>
+          }@else if (registerForm.get('nombre')?.errors?.['espacios'] && registerForm.get('nombre')?.touched) {
+            <small>Complete su nombre... (No se haga el vivo)</small>
+          }@else if (registerForm.get('nombre')?.errors?.['formato'] && registerForm.get('nombre')?.touched) {
+            <small>Formato de nombre invalido (revise espacios)</small>
+          }
         </fieldset>
 
         <!-- APELLIDO -->
