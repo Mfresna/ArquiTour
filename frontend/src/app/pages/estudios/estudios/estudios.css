@@ -1,142 +1,223 @@
-/* ===== Layout base: título arriba, sidebar izq, grid der ===== */
-.container{
-  max-width: 1600px;
-  margin: 0 auto;
-  padding: 20px;
+#global {
+  height: 100%;
+  flex-grow: 1;
+  display: flex;
+  overflow: hidden;
+}
+
+#contenedor-estudios {
   display: grid;
-  grid-template-columns: 320px 1fr;
-  grid-template-areas:
-    "title title"
-    "sidebar content";
-  gap: 24px;
-  background: #f3f5f8; /* gris claro del fondo */
-}
-
-.container > h1{
-  grid-area: title;
-  margin: 0;
-  font-size: 1.6rem;
-  font-weight: 700;
-  color: #1b1f24;
-}
-
-/* ===== Sidebar (tu <form class="fila">) ===== */
-.fila{
-  grid-area: sidebar;
-  position: sticky; top: 16px; /* se queda visible */
-  display: flex; flex-direction: column; gap: 14px;
-
-  background: #fff;
-  border-radius: 14px;
-  box-shadow: 0 8px 24px rgba(0,0,0,.06);
-  border: 1px solid #e7ebf0;
-  padding: 16px;
-}
-
-.fila fieldset{ border: 0; margin: 0; padding: 0; }
-
-.fila label{
-  display:block;
-  font-weight: 700;
-  color:#2b3036;
-  margin-bottom: 6px;
-}
-
-.fila select,
-.fila input[type="text"]{
+  grid-template-columns: auto 1fr;
   width: 100%;
-  height: 42px;
-  padding: 0 12px;
-  border-radius: 10px;
-  border: 1px solid #d7dee6;
-  background: #f9fbfd;
-  color: #1b1f24;
+  gap: 10px;
+}
+
+#panel-der {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+#panel-scroll {
+  flex-grow: 1;
+  overflow-y: auto;
+  height: 0;
+  padding-right: 6px;
+  scrollbar-width: thin;
+}
+
+/* ======== PANEL IZQUIERDO ======== */
+#panel-izq .titulo {
+  text-transform: uppercase;
+  font-size: 2rem;
+  font-weight: 700;
+  margin: 0 0 1rem 0;
+  color: var(--colorTerciario);
+  flex-shrink: 0;
+  text-align: center;
+}
+
+#panel-filtros {
+  border-radius: 12px;
+  padding: 1.5rem;
+  flex-shrink: 0;
+  width: 320px;
+
+}
+
+/* ======== FORMULARIO ======== */
+.fila {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.fila fieldset {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  border: none;
+  margin: 0;
+  padding: 0;
+}
+
+.fila label {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--colorTerciario);
+}
+
+.fila input[type="text"] {
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  background: var(--colorPrincipal);
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.fila input[type="text"]:focus {
   outline: none;
-  transition: border-color .15s, box-shadow .15s, background .15s;
+  border-color: var(--colorBoton);
+  box-shadow: 0 0 6px rgba(0, 119, 182, 0.35);
 }
 
-.fila select:focus,
-.fila input[type="text"]:focus{
-  border-color: #0a73c0;
-  box-shadow: 0 0 0 3px rgba(10,115,192,.15);
-  background: #fff;
+.fila input.invalido {
+  border: 2px solid #ff5c5c;
+  background: #ffecec;
 }
 
-.fila small{ color:#c23b3b; font-size:.85rem; margin-top:6px; }
-
-/* Estado inválido que ya usás */
-.invalido{
-  border-color:#d64545 !important;
-  box-shadow:0 0 0 3px rgba(214,69,69,.15);
+.fila small {
+  color: #c2410c;
+  font-size: 0.85rem;
+  margin-left: 0.2rem;
 }
 
-/* Botonera del sidebar */
-.botones{ display:flex; gap:10px; margin-top:6px; }
-.botones button{
-  flex:1; height:40px; border:0; border-radius:10px; cursor:pointer;
-  font-weight:700; letter-spacing:.3px;
-}
-.botones button[type="submit"]{ background:#0a73c0; color:#fff; }
-.botones button[type="submit"]:hover{ background:#0a67ab; }
-.botones button[type="button"]{ background:#e7edf3; color:#2b3036; }
-.botones button[type="button"]:hover{ background:#dfe6ee; }
-
-/* ===== Grid de tarjetas (tu <div class="grid">) ===== */
-.grid{
-  grid-area: content;
+/* ======== BOTONES ======== */
+.botones {
   display: grid;
-  gap: 24px;
-  grid-template-columns: repeat(3, 1fr);
-  align-content: start;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.8rem;
 }
 
-/* ===== Card ===== */
-.card{
-  display:flex; flex-direction:column;
-  background:#fff;
-  border-radius:18px;
-  overflow:hidden;
-  text-decoration:none; color:inherit;
-  box-shadow: 0 10px 28px rgba(0,0,0,.08);
-  border: 1px solid #e8ecf1;
-  transition: transform .12s ease, box-shadow .2s ease;
-}
-.card:hover{ transform:translateY(-3px); box-shadow:0 14px 34px rgba(0,0,0,.12); }
-
-.card img{
-  width:100%;
-  height: 200px;           /* alto grande como en la foto */
-  object-fit:cover;
-  background:#e5e8ec;      /* placeholder gris */
+.botones button {
+  padding: 0.7rem 1rem;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  font-weight: 700;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: transform 0.15s, box-shadow 0.2s, background-color 0.2s;
 }
 
-/* Franja inferior blanca con título/subtítulo */
-.card-body{
-  background:#fff;
-  padding:14px 16px 18px;
-  border-top:1px solid #eef2f6;
+/* Buscar */
+.botones button[type="submit"] {
+  background: var(--colorBoton, #0077b6);
+  color: #fff;
 }
-.card-body h2{
-  font-size:1.15rem; font-weight:800; margin:0 0 6px; color:#1b1f24;
-}
-.card-body .sub{
-  font-size:.95rem; color:#6a7480; margin:0;
+.botones button[type="submit"]:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 16px rgba(0, 119, 182, 0.25);
 }
 
-/* ===== Mensaje vacío ===== */
-.vacio{
-  grid-column: 1 / -1;
-  text-align:center; color:#6a7480; padding:32px 0;
+/* Limpiar */
+.botones button[type="button"] {
+  background: #f9fafb;
+  color: #1e293b;
+  border-color: #dbe3eb;
+}
+.botones button[type="button"]:hover {
+  background: #eef2f6;
 }
 
-/* ===== Responsive ===== */
-@media (max-width: 980px){
-  .container{
+/* Responsive botones */
+@media (max-width: 480px) {
+  .botones {
     grid-template-columns: 1fr;
-    grid-template-areas:
-      "title"
-      "sidebar"
-      "content";
   }
-  .fila{ position: static; }
+}
+
+/* ======== GRID DE TARJETAS ======== */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+  list-style: none;
+  margin: 0;
+  padding: 20px 20px 15px 10px;
+}
+
+/* ======== TARJETAS ======== */
+.card {
+  display: block;
+  background: var(--colorPrincipal);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px var(--sombra);
+  transition: transform 0.2s, box-shadow 0.2s;
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 16px var(--sombra);
+}
+
+.card img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  display: block;
+}
+
+.card-body {
+  padding: 1rem;
+}
+
+.card-body h2 {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--colorTerciario);
+}
+
+/* ======== MENSAJE VACÍO ======== */
+.vacio {
+  text-align: center;
+  color: #999;
+  padding: 4rem 2rem;
+  font-size: 1.1rem;
+}
+
+/* ======== RESPONSIVE ======== */
+@media (max-width: 900px) {
+  #contenedor-estudios {
+    grid-template-columns: 1fr;
+  }
+
+  #panel-filtros {
+    width: 100%;
+    box-shadow: none;
+    border-bottom: 1px solid #eee;
+    border-radius: 0;
+  }
+
+  #panel-scroll {
+    padding-top: 0.5rem;
+  }
+}
+
+/* ===== Scrollbar fino opcional ===== */
+#panel-scroll::-webkit-scrollbar {
+  width: 8px;
+}
+#panel-scroll::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+}
+#panel-scroll::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.3);
 }
