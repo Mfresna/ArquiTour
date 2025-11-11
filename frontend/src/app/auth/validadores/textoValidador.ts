@@ -23,8 +23,8 @@ export const nombreValidador: ValidatorFn = (control: AbstractControl): Validati
 
 export const apellidoValidador: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
 
-    const APELLIDO_PATTERN = /^[A-Za-zÁÉÍÓÚáéíóúÑñ]+(?: [A-Za-zÁÉÍÓÚáéíóúÑñ]+)?$/;
-    ^[A-Za-zÁÉÍÓÚáéíóúÑñ]+(?: [A-Za-zÁÉÍÓÚáéíóúÑñ]+){0,3}$
+    const APELLIDO_PATTERN = /^[A-Za-zÁÉÍÓÚáéíóúÑñ]+(?: [A-Za-zÁÉÍÓÚáéíóúÑñ]+){0,3}$/;
+   
 
 
     const value = control.value ?? '';
