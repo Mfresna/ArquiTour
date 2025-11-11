@@ -1,17 +1,17 @@
 import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 
 
-export const fechaNacimientoValidador = (edadMinima: number): ValidatorFn => {
+export const fechaNacValidador = (edadMinima: number): ValidatorFn => {
 
   return (control: AbstractControl): ValidationErrors | null => {
-    const value = control.value;
+    let value = control.value;
 
     if (!value) return null;
 
-    const fecha = new Date(value);
+    let fecha = new Date(value);
     const hoy = new Date();
 
-    const errores: ValidationErrors = {};
+    let errores: ValidationErrors = {};
 
     //LA FECHA VALIDA
     if (isNaN(fecha.getTime())) {
@@ -33,7 +33,14 @@ export const fechaNacimientoValidador = (edadMinima: number): ValidatorFn => {
     );
 
     if (fecha > fechaLimite) {
-      errores['edadMinima'] = { requerida: edadMinima };
+      errores['edadMinima'] = true;
+    }
+
+    //FECHA ANTERIOR LIMITE
+    const fechaAnteriorLimite = new Date(1900,0,1);
+
+    if (fecha < fechaAnteriorLimite) {
+      errores['fechaLimite'] = true;
     }
 
     return Object.keys(errores).length ? errores : null;

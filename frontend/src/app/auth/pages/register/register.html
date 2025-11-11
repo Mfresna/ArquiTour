@@ -197,14 +197,21 @@
             type="date" 
             id="fecNac" 
             formControlName="fechaNacimiento" 
-            [class.invalido]="registerForm.get('fechaNacimiento')?.invalid && registerForm.get('fechaNacimiento')?.touched"
+            [class.invalido]="registerForm.get('fechaNacimiento')?.invalid && (registerForm.get('fechaNacimiento')?.touched || registerForm.get('fechaNacimiento')?.dirty)"
             autocomplete="bday">
 
-          <!-- @if (login.get('email')?.errors?.['required'] && login.get('email')?.touched) {
-            <small>El mail es obligatorio.</small>
-          } @else if (login.get('email')?.errors?.['email'] && login.get('email')?.touched) {
-            <small>El email debe seguir el formato ("correo@email.com").</small>
-          } -->
+          @if (registerForm.get('fechaNacimiento')?.errors?.['required'] && registerForm.get('fechaNacimiento')?.touched) {
+            <small>La fecha de nacimiento es obligatoria.</small>
+          } @else if (registerForm.get('fechaNacimiento')?.errors?.['formato'] && registerForm.get('fechaNacimiento')?.dirty) {
+            <small>El formato de la fecha no es correcto, recuerde (dia/mes/año).</small>
+          } @else if (registerForm.get('fechaNacimiento')?.errors?.['fechaFutura'] && registerForm.get('fechaNacimiento')?.dirty) {
+            <small>La fecha es invalida, no puede ser fecha futura.</small>
+          } @else if (registerForm.get('fechaNacimiento')?.errors?.['edadMinima'] && registerForm.get('fechaNacimiento')?.dirty) {
+            <small>La fecha es muy proxima a hoy.</small>
+          } @else if (registerForm.get('fechaNacimiento')?.errors?.['fechaLimite'] && registerForm.get('fechaNacimiento')?.dirty) {
+            <small>La fecha parece ser invalida.</small>
+          }
+    
         </fieldset>
 
 
