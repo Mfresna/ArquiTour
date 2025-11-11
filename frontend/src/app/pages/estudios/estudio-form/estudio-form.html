@@ -1,17 +1,12 @@
-<section class="wrap-centrado">
-  <div class="card">
-    <header class="card-header">
-      <h1 class="card-title">
+<div id="contenedor-gral">
+  <div id="contenedor-form">
+    <div id="titulo">
+      <h1>
         {{ editar ? 'Editar estudio' : 'Registrar nuevo estudio' }}
       </h1>
-      <p class="card-subtitle">
-        {{ editar
-          ? ''
-          : 'Ingresá el nombre y, si querés, agregá el logo.' }}
-      </p>
-    </header>
+    </div>
 
-    <form [formGroup]="formulario" (ngSubmit)="guardar()" enctype="multipart/form-data" novalidate>
+    <form [formGroup]="formulario" (Submit)="guardar()" enctype="multipart/form-data" novalidate>
 
       <!-- Nombre -->
       <div class="form-group">
@@ -114,4 +109,4 @@
 
     </form>
   </div>
-</section>
+</div>
