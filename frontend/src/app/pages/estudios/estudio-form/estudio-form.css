@@ -1,12 +1,12 @@
 /* contenedor centrado y tarjeta */
-.wrap-centrado { 
+#contenedor-gral { 
   min-height: 100dvh; 
   display: grid; 
   place-items: center; 
   background: #f7f8fa; 
 }
 
-.card { 
+#contenedor-form { 
   background:#fff; 
   width:100%; 
   max-width: 520px; 
@@ -16,9 +16,9 @@
 }
 
 /* tipografía */
-.card-title { 
+#titulo { 
   margin:0 0 6px; 
-  font-size:24px; 
+  font-size:18px; 
   font-weight:800; 
   color:#111827; 
 }

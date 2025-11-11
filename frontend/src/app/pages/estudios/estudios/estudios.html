@@ -1,45 +1,65 @@
-<section class="container">
-  <h1>Estudios</h1>
+<div id="global">
 
-  <!-- BUSCADOR -->
-  <form [formGroup]="filtro" (submit)="cargarEstudios()" class="fila">
-    <fieldset>
-      <label for="filtroNombre">Buscar por nombre:</label>
-      <input
-        id="filtroNombre"
-        type="text"
-        formControlName="nombre"
-        placeholder="Ej: Estudio Sur Arquitectos"
-        [class.invalido]="filtro.get('nombre')?.invalid && filtro.get('nombre')?.touched"
-        autocomplete="off">
+  <div id="contenedor-estudios">
+    <div id="panel-izq">
+      <h3 class="titulo">Estudios</h3>
+      <div id="panel-filtros">
+          <form [formGroup]="filtro" (submit)="cargarEstudios()" class="fila">
+            <fieldset>
+              <label for="filtroNombre">Buscar por nombre:</label>
+              <input
+                id="filtroNombre"
+                type="text"
+                formControlName="nombre"
+                placeholder="Ej: Estudio Sur Arquitectos"
+                [class.invalido]="filtro.get('nombre')?.invalid && filtro.get('nombre')?.touched"
+                autocomplete="off">
 
-      @if (filtro.get('nombre')?.errors?.['minlength'] && filtro.get('nombre')?.touched) {
-        <small>Mínimo 2 caracteres.</small>
-      }
-    </fieldset>
+              @if (filtro.get('nombre')?.errors?.['minlength'] && filtro.get('nombre')?.touched) {
+                <small>Mínimo 2 caracteres.</small>
+              }
+            </fieldset>
 
-    <div class="botones">
-      <button type="submit">BUSCAR</button>
-      <button type="button" (click)="limpiarFiltro()">LIMPIAR</button>
+            <div class="botones">
+              <button type="submit">BUSCAR</button>
+              <button type="button" (click)="limpiarFiltro()">LIMPIAR</button>
+            </div>
+
+          </form>
+
+
+
+
+      </div>
+
+
+
     </div>
-  </form>
 
-  <!-- GRID DE TARJETAS -->
-  <div class="grid">
-    @for (e of estudios; track e?.id ?? $index) {
-      <a class="card" [routerLink]="['/estudios', e.id]">
-        <img
-          [src]="imagenUrl(e.imagenUrl)"
-          (error)="imagenError($event)"
-          alt="Imagen del estudio" />
+    <div id="panel-der">
+      <div id="panel-scroll">
+        <div class="grid">
+          @for (e of estudios; track e?.id ?? $index) {
+            <a class="card" [routerLink]="['/estudios', e.id]">
+            <img
+              [src]="imagenUrl(e.imagenUrl)"
+              (error)="imagenError($event)"
+              alt="Imagen del estudio" />
 
-        <div class="card-body">
-          <h2>{{ e.nombre }}</h2>
+            <div class="card-body">
+              <h2>{{ e.nombre }}</h2>
+            </div>
+            </a>
+          }
+          @empty {
+            <p class="vacio">No hay estudios para mostrar.</p>
+          }
         </div>
-      </a>
-    }
-    @empty {
-      <p class="vacio">No hay estudios para mostrar.</p>
-    }
+
+      </div>
+
+    </div>
+
   </div>
-</section>
+    
+</div>
