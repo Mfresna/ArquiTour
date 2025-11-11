@@ -1,81 +1,404 @@
-/* Contenedor del componente (sin semántica) */
-.layout-obras {
+#global {
+  height: 100%;
+  flex-grow: 1;
   display: flex;
-  height: 100vh;             /* si tu layout general ya fija altura, podés usar 100% */
-  overflow: hidden;          /* evita scroll del body */
-  background: #f5f6f7;
-  max-height: 500px;
-  width: 100%;}
-
-/* LADO IZQUIERDO: filtros */
-.panel-filtros {
-  flex: 0 0 300px;           /* ancho del panel */
-  padding: 1.25rem;
-  background: #fafafa;
-  border-right: 1px solid #cfcfcf;
-  overflow-y: auto;          /* scroll si el panel crece */
+  overflow: hidden;
 }
 
-.filtros { display: flex; flex-direction: column; gap: 1rem; }
-.campo { display: flex; flex-direction: column; gap: .25rem; }
-.campo label { font-weight: 600; color: #333; }
-.campo select, .campo input {
-  border: 1px solid #cfcfcf; border-radius: 8px;
-  padding: .5rem .65rem; background: #fff; font-size: .95rem;
+#contenedor-obras {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  width: 100%;
+  gap: 10px;
 }
-.campo select:focus, .campo input:focus { outline: none; border-color: #0a73c0; }
 
-.acciones { display: flex; gap: .5rem; }
-.acciones button {
-  flex: 1; padding: .55rem 1rem; border: none; border-radius: 8px; font-weight: 600; cursor: pointer;
+#contenedor-lista {
+  padding: 0;
+  padding-left: 0;
 }
-.acciones button[type="submit"] { background: #0a73c0; color: #fff; }
-.acciones button[type="button"] { background: #e3e6ea; color: #333; }
 
-/* DROPDOWN estudios */
-.estudio-dropdown { position: relative; }
+#panel-der {
+  height: 100%; 
+  display: flex;
+  flex-direction: column;
+}
+
+#panel-scroll { 
+  flex-grow: 1;  
+  overflow-y: auto; 
+  height: 0; 
+}
+
+/*HASTA ACA FUNCIONA EL LAYOUT*/
+
+#panel-izq 
+.titulo {
+  text-transform: uppercase;
+  font-size: 2rem;
+  font-weight: 700;
+  margin: 0;
+  color: var(--colorTerciario);
+  flex-shrink: 0;
+  text-align: center;
+}
+
+
+
+#panel-filtros {
+
+  border-radius: 12px;
+  padding: 1.5rem;
+  flex-shrink: 0;
+  width: 320px;
+}
+
+.form-filtros {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.campo {
+  display: flex;
+  flex-direction: column;
+ /*gap*/
+}
+
+.campo label {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--colorTerciario);
+}
+
+.campo input,
+.campo select {
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  background: var(--colorPrincipal);
+  transition: border-color 0.2s;
+}
+
+.campo input:focus,
+.campo select:focus {
+  outline: none;
+  border-color: var(--colorBoton);
+}
+
+/* Dropdown personalizado para estudio */
+.estudio-dropdown {
+  position: relative;
+}
+
 .dropdown-trigger {
-  display: flex; justify-content: space-between; align-items: center;
-  border: 1px solid #cfcfcf; border-radius: 8px; padding: .5rem .65rem; background: #fff; cursor: pointer;
+  width: 100%;
+  padding: 0.75rem;
+  background: var(--colorPrincipal);
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  text-align: left;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.95rem;
+  transition: border-color 0.2s;
 }
-.caret { font-size: .75rem; opacity: .7; }
+
+.dropdown-trigger:hover {
+  border-color: var(--colorBoton);
+}
+
+.dropdown-trigger .caret {
+  color: #666;
+  font-size: 0.8rem;
+}
+
 .dropdown-panel {
-  position: absolute; left: 0; right: 0; top: calc(100% + 6px);
-  background: #fff; border: 1px solid #ddd; border-radius: .5rem;
-  box-shadow: 0 8px 20px rgba(0,0,0,.12); padding: .5rem; z-index: 20;
+  position: absolute;
+  top: 100%;
+  margin-top: 0.5rem;
+  left: 0;
+  right: 0;
+  background: var(--colorPrincipal);
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px var(--sombra);
+  z-index: 100;
+  max-height: 200px;
+  display: flex;
+  flex-direction: column;
 }
-.dropdown-search { width: 100%; padding: .4rem .6rem; border: 1px solid #ccc; border-radius: .4rem; margin-bottom: .5rem; }
-.dropdown-list { list-style: none; margin: 0; padding: 0; max-height: 220px; overflow-y: auto; }
-.dropdown-item { padding: .4rem .5rem; border-radius: .35rem; cursor: pointer; }
-.dropdown-item:hover { background: #0a73c0; color: #fff; }
 
-/* LADO DERECHO: obras con scroll propio */
-.panel-obras { flex: 1; display: flex; }
-.contenido-scroll {
-  flex: 1; overflow-y: auto; padding: 1.5rem 2rem;
+.dropdown-search {
+  padding: 0.75rem;
+  border: none;
+  border-bottom: 1px solid var(--colorSecundario);
+  font-size: 0.9rem;
 }
 
-/* 3 columnas de obras */
+.dropdown-search:focus {
+  outline: none;
+  background: var(--colorSecundario);
+}
+
+.dropdown-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  overflow-y: auto;
+  max-height: 240px;
+}
+
+.dropdown-item {
+  padding: 0.75rem 1rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  font-size: 0.9rem;
+}
+
+.dropdown-item:hover {
+  background-color: var(--colorSecundario);
+}
+
+/*HASTA ACA PANEL DE LA IZQUIERDA*/
+
+/* Grid de obras - 3 columnas */
 .lista-obras {
-  display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem;
-  list-style: none; margin: 0; padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+  list-style: none;
+  margin: 0;
+  padding: 20px 20px 15px 10px;
 }
-@media (max-width: 1200px) { .lista-obras { grid-template-columns: repeat(2, 1fr); } }
-@media (max-width: 768px)  { .lista-obras { grid-template-columns: 1fr; } }
 
-/* Card */
 .obra-card {
-  background: #fff; border-radius: 14px; box-shadow: 0 2px 10px rgba(0,0,0,.08);
-  overflow: hidden; transition: transform .18s, box-shadow .18s;
+  background: var(--colorPrincipal);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px var(--sombra);
+  transition: transform 0.2s, box-shadow 0.2s;
+  cursor: pointer;
 }
-.obra-card:hover { transform: translateY(-3px); box-shadow: 0 6px 16px rgba(0,0,0,.14); }
+
+.obra-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 16px var(--sombra);
+}
 
 .obra-card img {
-  width: 100%; height: 180px; object-fit: cover; background: #e9ecef; display: block;
-  border-bottom: 1px solid #ececec;
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 }
-.info { padding: .85rem 1rem 1rem; }
-.obra-nombre { margin: 0 0 .15rem; font-size: 1.05rem; font-weight: 700; color: #222; }
-.obra-estudio { color: #6b7785; font-size: .92rem; }
 
-.vacio { text-align: center; color: #777; margin-top: 2rem; font-style: italic; }
+.obra-card .info {
+  padding: 1rem;
+}
+
+.obra-nombre {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--colorTerciario);
+}
+
+.obra-estudio {
+  color: #666;
+  font-size: 0.85rem;
+}
+
+/* Mensaje de lista vacía */
+.vacio {
+  text-align: center;
+  color: #999;
+  padding: 4rem 2rem;
+  font-size: 1.1rem;
+}
+
+
+/**/
+
+
+/* ===== Form base ===== */
+.form-filtros{
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.form-filtros .campo{
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+/* ===== Etiquetas ===== */
+.form-filtros label{
+  font-weight: 500;
+  margin-left: 0.5rem;
+}
+
+/* ===== Controles (input / select / trigger / search) ===== */
+.form-filtros input[type="text"],
+.form-filtros select,
+.form-filtros .dropdown-trigger,
+.form-filtros .dropdown-search{
+  padding: 0.3rem 0.8rem;
+  border-radius: 1.2rem;
+  border: 1px solid #ccc;
+  font-family: var(--fuenteBase, "Segoe UI", Roboto, sans-serif);
+  font-size: 1rem;
+  background: #fff;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color .2s ease;
+}
+
+/* Quitar estilos nativos del select en la medida de lo posible */
+.form-filtros select{
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image:
+    linear-gradient(45deg, transparent 50%, #666 50%),
+    linear-gradient(135deg, #666 50%, transparent 50%);
+  background-position:
+    calc(100% - 18px) 52%,
+    calc(100% - 12px) 52%;
+  background-size: 6px 6px, 6px 6px;
+  background-repeat: no-repeat;
+  padding-right: 2rem; /* espacio para la flecha */
+}
+
+/* Botón que actúa como “input” del dropdown Estudio */
+.form-filtros .dropdown-trigger{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  text-align: left;
+  background: #fff;
+}
+.form-filtros .dropdown-trigger .caret{ opacity: .75; }
+
+/* Foco consistente */
+.form-filtros input[type="text"]:focus,
+.form-filtros select:focus,
+.form-filtros .dropdown-trigger:focus,
+.form-filtros .dropdown-search:focus{
+  outline: none;
+  border-color: var(--colorBoton, #0077b6);
+  box-shadow: 0 0 6px rgba(0,119,182,0.35);
+}
+
+/* Estado inválido (aplicable a input, select y trigger) */
+.form-filtros input.invalido,
+.form-filtros select.invalido,
+.form-filtros .dropdown-trigger.invalido{
+  border: 2px solid #ff5c5c;
+  background: #ffecec;
+}
+
+/* ===== Panel del dropdown Estudio ===== */
+.estudio-dropdown{ position: relative; }
+
+.dropdown-panel{
+  position: absolute;
+  inset-inline: 0;
+  top: calc(100% + 6px);
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  box-shadow: 0 12px 24px rgba(0,0,0,.12);
+  padding: 10px;
+  display: grid;
+  gap: 8px;
+  z-index: 20;
+}
+
+.dropdown-search{
+  background: #fff;
+}
+
+.dropdown-list{
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-height: 220px;
+  overflow: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 transparent;
+}
+
+.dropdown-item{
+  padding: 0.55rem .7rem;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: .95rem;
+}
+
+.dropdown-item:hover{
+  background: #f0f4ff;
+  color: #1a3e78;
+}
+
+/* ===== Acciones ===== */
+.acciones{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: .8rem;
+}
+
+.acciones button{
+  padding: .65rem .9rem;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  font-weight: 700;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: transform .15s, box-shadow .2s, background-color .2s;
+}
+
+.acciones button[type="submit"]{
+  background: var(--colorBoton, #0077b6);
+  color: #fff;
+}
+
+.acciones button[type="submit"]:hover{
+  transform: translateY(-2px);
+  box-shadow: 0 8px 16px rgba(0,119,182,.25);
+}
+
+.acciones button[type="button"]{
+  background: #f9fafb;
+  color: #1e293b;
+  border-color: #dbe3eb;
+}
+
+.acciones button[type="button"]:hover{
+  background: #eef2f6;
+}
+
+/* ===== Responsive pequeño: apilar acciones ===== */
+@media (max-width: 480px){
+  .acciones{ grid-template-columns: 1fr; }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
