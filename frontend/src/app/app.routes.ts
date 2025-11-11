@@ -11,6 +11,7 @@ import { ObraDetalle } from './pages/obras/obra-detalle/obra-detalle';
 import { Register } from './auth/pages/register/register';
 
 
+
 export const routes: Routes = [
   
   { path: '', component: Auth },
