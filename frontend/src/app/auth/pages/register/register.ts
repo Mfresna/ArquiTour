@@ -10,6 +10,7 @@ import { SelectorContext } from '@angular/compiler';
 import { caracteresValidador } from '../../validadores/passCaracteresValidador';
 import { CamposIguales } from '../../validadores/igualdadValidador';
 import { apellidoValidador, nombreValidador } from '../../validadores/textoValidador';
+import { fechaNacValidador } from '../../validadores/fechaValidador';
 
 
 type Paso = "email" | "pin" | "registrarme";
@@ -75,7 +76,10 @@ export class Register implements OnInit{
           Validators.maxLength(50), 
           apellidoValidador
         ]],
-        fechaNacimiento: ['', [Validators.required]],
+        fechaNacimiento: ['', [
+          Validators.required,
+          fechaNacValidador(5)
+        ]],
         descripcion: ['', [Validators.required]]
       },
       {validators: CamposIguales('nuevaPass', 'confirmaPass')}
