@@ -1,102 +1,142 @@
-.container {
-  max-width: 1100px;
+/* ===== Layout base: título arriba, sidebar izq, grid der ===== */
+.container{
+  max-width: 1600px;
   margin: 0 auto;
-  padding: 1rem;
-}
-
-h1 {
-  text-align: center;
-  margin-bottom: 1.5rem;
-}
-
-/* --- Filtro --- */
-.fila {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  align-items: flex-end;
-  justify-content: center;
-  margin-bottom: 1.5rem;
-}
-
-fieldset {
-  border: none;
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-}
-
-input {
-  padding: 0.4rem 0.6rem;
-  border-radius: 0.4rem;
-  border: 1px solid #ccc;
-  min-width: 250px;
-}
-
-input.invalido {
-  border-color: #e74c3c;
-}
-
-small {
-  color: #e74c3c;
-}
-
-button {
-  padding: 0.45rem 0.8rem;
-  border: none;
-  background: #007bff;
-  color: white;
-  border-radius: 0.35rem;
-  cursor: pointer;
-  transition: background 0.2s ease;
-}
-
-button:hover {
-  background: #0056b3;
-}
-
-/* --- Grid de tarjetas --- */
-.grid {
+  padding: 20px;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 1rem;
+  grid-template-columns: 320px 1fr;
+  grid-template-areas:
+    "title title"
+    "sidebar content";
+  gap: 24px;
+  background: #f3f5f8; /* gris claro del fondo */
 }
 
-.card {
-  background: #fff;
-  border-radius: 0.8rem;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-  overflow: hidden;
-  cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-  text-align: center;
-}
-
-.card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-}
-
-.card img {
-  width: 100%;
-  height: 180px;
-  object-fit: cover;
-  background: #f5f5f5;
-}
-
-.card-body {
-  padding: 0.8rem;
-}
-
-.card-body h2 {
-  font-size: 1.1rem;
-  color: #333;
+.container > h1{
+  grid-area: title;
   margin: 0;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #1b1f24;
 }
 
-.vacio {
+/* ===== Sidebar (tu <form class="fila">) ===== */
+.fila{
+  grid-area: sidebar;
+  position: sticky; top: 16px; /* se queda visible */
+  display: flex; flex-direction: column; gap: 14px;
+
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 8px 24px rgba(0,0,0,.06);
+  border: 1px solid #e7ebf0;
+  padding: 16px;
+}
+
+.fila fieldset{ border: 0; margin: 0; padding: 0; }
+
+.fila label{
+  display:block;
+  font-weight: 700;
+  color:#2b3036;
+  margin-bottom: 6px;
+}
+
+.fila select,
+.fila input[type="text"]{
+  width: 100%;
+  height: 42px;
+  padding: 0 12px;
+  border-radius: 10px;
+  border: 1px solid #d7dee6;
+  background: #f9fbfd;
+  color: #1b1f24;
+  outline: none;
+  transition: border-color .15s, box-shadow .15s, background .15s;
+}
+
+.fila select:focus,
+.fila input[type="text"]:focus{
+  border-color: #0a73c0;
+  box-shadow: 0 0 0 3px rgba(10,115,192,.15);
+  background: #fff;
+}
+
+.fila small{ color:#c23b3b; font-size:.85rem; margin-top:6px; }
+
+/* Estado inválido que ya usás */
+.invalido{
+  border-color:#d64545 !important;
+  box-shadow:0 0 0 3px rgba(214,69,69,.15);
+}
+
+/* Botonera del sidebar */
+.botones{ display:flex; gap:10px; margin-top:6px; }
+.botones button{
+  flex:1; height:40px; border:0; border-radius:10px; cursor:pointer;
+  font-weight:700; letter-spacing:.3px;
+}
+.botones button[type="submit"]{ background:#0a73c0; color:#fff; }
+.botones button[type="submit"]:hover{ background:#0a67ab; }
+.botones button[type="button"]{ background:#e7edf3; color:#2b3036; }
+.botones button[type="button"]:hover{ background:#dfe6ee; }
+
+/* ===== Grid de tarjetas (tu <div class="grid">) ===== */
+.grid{
+  grid-area: content;
+  display: grid;
+  gap: 24px;
+  grid-template-columns: repeat(3, 1fr);
+  align-content: start;
+}
+
+/* ===== Card ===== */
+.card{
+  display:flex; flex-direction:column;
+  background:#fff;
+  border-radius:18px;
+  overflow:hidden;
+  text-decoration:none; color:inherit;
+  box-shadow: 0 10px 28px rgba(0,0,0,.08);
+  border: 1px solid #e8ecf1;
+  transition: transform .12s ease, box-shadow .2s ease;
+}
+.card:hover{ transform:translateY(-3px); box-shadow:0 14px 34px rgba(0,0,0,.12); }
+
+.card img{
+  width:100%;
+  height: 200px;           /* alto grande como en la foto */
+  object-fit:cover;
+  background:#e5e8ec;      /* placeholder gris */
+}
+
+/* Franja inferior blanca con título/subtítulo */
+.card-body{
+  background:#fff;
+  padding:14px 16px 18px;
+  border-top:1px solid #eef2f6;
+}
+.card-body h2{
+  font-size:1.15rem; font-weight:800; margin:0 0 6px; color:#1b1f24;
+}
+.card-body .sub{
+  font-size:.95rem; color:#6a7480; margin:0;
+}
+
+/* ===== Mensaje vacío ===== */
+.vacio{
   grid-column: 1 / -1;
-  text-align: center;
-  color: #777;
-  margin-top: 1rem;
+  text-align:center; color:#6a7480; padding:32px 0;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 980px){
+  .container{
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "title"
+      "sidebar"
+      "content";
+  }
+  .fila{ position: static; }
 }
