@@ -16,8 +16,8 @@ public class UsuarioFiltroDTO {
     private String nombre;
 
     @Schema(description = "Apellido a filtrar", example = "González")
-    @Pattern(regexp = "^[A-Za-zÁÉÍÓÚáéíóúÑñ]+( [A-Za-zÁÉÍÓÚáéíóúÑñ]+)*$",
-            message = "El apellido solo puede contener letras.")
+    @Pattern(regexp = "^[A-Za-zÁÉÍÓÚáéíóúÑñ]+(?: [A-Za-zÁÉÍÓÚáéíóúÑñ]+){0,3}$\n",
+            message = "El apelldio solo puede contener letras y un solo espacio entre estas, hasta 4 palabras.")
     private String apellido;
 
     @Schema(description = "Email a filtrar", example = "pedro@gmail.com")

@@ -177,11 +177,17 @@
             [class.invalido]="registerForm.get('apellido')?.invalid && registerForm.get('apellido')?.touched"
             autocomplete="family-name">
 
-          <!-- @if (login.get('email')?.errors?.['required'] && login.get('email')?.touched) {
-            <small>El mail es obligatorio.</small>
-          } @else if (login.get('email')?.errors?.['email'] && login.get('email')?.touched) {
-            <small>El email debe seguir el formato ("correo@email.com").</small>
-          } -->
+          @if (registerForm.get('apellido')?.errors?.['required'] && registerForm.get('apellido')?.touched) {
+            <small>El apellido es obligatorio.</small>
+          }@else if(registerForm.get('apellido')?.errors?.['minlength'] && registerForm.get('apellido')?.touched) {
+            <small>Su apellido no parece ser verdadero (min. 2 caraceres)</small>
+          }@else if(registerForm.get('apellido')?.errors?.['maxlength']) {
+            <small>Su apellido no parece ser verdadero (max. 50 caraceres)</small>
+          }@else if (registerForm.get('apellido')?.errors?.['espacios'] && registerForm.get('apellido')?.touched) {
+            <small>Complete su apellido... (No se haga el vivo)</small>
+          }@else if (registerForm.get('apellido')?.errors?.['formato'] && registerForm.get('apellido')?.touched) {
+            <small>Formato de apellido invalido (revise espacios)</small>
+          }
         </fieldset>
 
         <!-- FECHA NACIMIENTO -->
