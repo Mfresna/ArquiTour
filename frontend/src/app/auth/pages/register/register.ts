@@ -5,12 +5,14 @@ import { UsuarioService } from '../../../services/usuarioService/usuario-service
 import { PinVerificador } from '../../components/pin/pin-verificador';
 import { EsperandoModal } from '../../../components/esperando-modal/esperando-modal';
 import { PinService } from '../../services/pinService/pin-service';
-import { finalize } from 'rxjs/operators';
+import { catchError, finalize, map, switchMap } from 'rxjs/operators';
 import { caracteresValidador } from '../../validadores/passCaracteresValidador';
 import { CamposIguales } from '../../validadores/igualdadValidador';
 import { apellidoValidador, nombreValidador } from '../../validadores/textoValidador';
 import { fechaNacValidador } from '../../validadores/fechaValidador';
 import { DragZoneImagenes } from '../../../components/drag-zone-imagenes/drag-zone-imagenes';
+import { ImagenService } from '../../../services/imagenService/imagen-service';
+import { Observable, of, throwError } from 'rxjs';
 
 
 type Paso = "email" | "pin" | "registrarme";
@@ -49,7 +51,8 @@ export class Register implements OnInit, AfterViewInit{
     private fb: FormBuilder,
     private router: Router,
     private usuarioService: UsuarioService,
-    private pinService: PinService
+    private pinService: PinService,
+    private imagenService: ImagenService
   ) {}
 
   
@@ -87,8 +90,8 @@ export class Register implements OnInit, AfterViewInit{
         descripcion: ['', [
           Validators.maxLength(280),
           Validators.pattern(/^[A-Za-zÁÉÍÓÚáéíóúÑñ0-9\-_\!¡&]+$/)
-        ]]
-
+        ]],
+        imagenUrl:['',[]]
       },
       {validators: CamposIguales('nuevaPass', 'confirmaPass')}
     );
@@ -118,8 +121,7 @@ export class Register implements OnInit, AfterViewInit{
         break;
 
       case 'registrarme':
-        this.traerArchivoImagen();
-        //this.registrarme();
+        this.registrarme();
         break;
 
       default:
@@ -134,92 +136,88 @@ export class Register implements OnInit, AfterViewInit{
 //========================== PASOS DE REGISTRACION
   private enviarPin(){
 
-    this.siguientePaso();
+    this.spinerVisible=true;  //muestro la espera
+    this.spinerMensaje="Enviando PIN al Email..."
 
-    // this.spinerVisible=true;  //muestro la espera
-    // this.spinerMensaje="Enviando PIN al Email..."
+    this.pinService.enviarPin(this.registerForm.get('email')?.value).pipe(
+      finalize(() => this.spinerVisible=false)
+    ).subscribe({
+      next: () => {
+        this.siguientePaso();
+      },
+      error: (e) => {
+        if (e.status === 409) {
+          alert("El mail ya se encuentra registrado en la base de datos.");
+          this.router.navigate(['/login']);
+          console.warn(e);
 
-    // this.pinService.enviarPin(this.registerForm.get('email')?.value).pipe(
-    //   finalize(() => this.spinerVisible=false)
-    // ).subscribe({
-    //   next: () => {
-    //     this.siguientePaso();
-    //   },
-    //   error: (e) => {
-    //     if (e.status === 409) {
-    //       alert("El mail ya se encuentra registrado en la base de datos.");
-    //       this.router.navigate(['/login']);
-    //       console.warn(e);
+        } else if(e.status === 423) {
+          alert("Aguarde para enviar un nuevo PIN.");
+          console.warn(e);
 
-    //     } else if(e.status === 423) {
-    //       alert("Aguarde para enviar un nuevo PIN.");
-    //       console.warn(e);
+        }else if(e.status >= 500){
+          alert("ERROR del Servicio, intente mas tarde.");
+          console.warn(e);
 
-    //     }else if(e.status >= 500){
-    //       alert("ERROR del Servicio, intente mas tarde.");
-    //       console.warn(e);
-
-    //     } else{
-    //       alert("ERROR INESPERADO.");
-    //       console.warn(e);
-    //     }
-    //   }
-    // });
+        } else{
+          alert("ERROR INESPERADO.");
+          console.warn(e);
+        }
+      }
+    });
 
   }
 
   private verificarPin(){
-    this.emailVerificado = this.registerForm.get('email')?.value;
-    this.siguientePaso();
 
-    // this.spinerVisible=true;  //muestro la espera
-    // this.spinerMensaje="Verificando PIN..."
+    this.spinerVisible=true;  //muestro la espera
+    this.spinerMensaje="Verificando PIN..."
 
-    // this.pinService.validarPin(
-    //   this.registerForm.get('email')?.value,
-    //   this.registerForm.get('pin')?.value
-    // ).pipe(
-    //   finalize(() => this.spinerVisible=false)
-    // ).subscribe({
-    //   next: () => {
-    //     this.emailVerificado = this.registerForm.get('email')?.value;
-    //     this.siguientePaso();
-    //   },
-    //   error: (e) => {
-    //     if (e.status === 409) {
-    //       //CONFLICT
-    //       alert("El PIN caducó.");
-    //       this.anteriorPaso();
+    this.pinService.validarPin(
+      this.registerForm.get('email')?.value,
+      this.registerForm.get('pin')?.value
+    ).pipe(
+      finalize(() => this.spinerVisible=false)
+    ).subscribe({
+      next: () => {
+        this.emailVerificado = this.registerForm.get('email')?.value;
+        this.siguientePaso();
+      },
+      error: (e) => {
+        if (e.status === 409) {
+          //CONFLICT
+          alert("El PIN caducó.");
+          this.anteriorPaso();
 
-    //       console.warn(e);
+          console.warn(e);
 
-    //     } else if(e.status === 410) {
-    //       //GONE
-    //       alert("Demasiados Intentos vuelva a generar un PIN");
-    //       this.anteriorPaso();
-    //       console.warn(e);
+        } else if(e.status === 410) {
+          //GONE
+          alert("Demasiados Intentos vuelva a generar un PIN");
+          this.anteriorPaso();
+          console.warn(e);
 
-    //     }else if(e.status === 403) {
-    //       //FORBBIDEN
-    //       alert("Error en la solicitud");
-    //       this.router.navigate(['']);
-    //       console.warn(e);
+        }else if(e.status === 403) {
+          //FORBBIDEN
+          alert("Error en la solicitud");
+          this.router.navigate(['']);
+          console.warn(e);
 
-    //     } else if(e.status === 406) {
-    //       //NOT ACCEPTABLE
-    //       this.pinInvalido = true;
-    //       console.warn(e);
+        } else if(e.status === 406) {
+          //NOT ACCEPTABLE
+          this.pinInvalido = true;
+          console.warn(e);
 
-    //     }else if(e.status >= 500){
-    //       alert("ERROR del Servicio, intente mas tarde.");
-    //       console.warn(e);
+        }else if(e.status >= 500){
+          alert("ERROR del Servicio, intente mas tarde.");
+          console.warn(e);
 
-    //     } else{
-    //       alert("ERROR INESPERADO.");
-    //       console.warn(e);
-    //     }
-    //   }
-    // });
+        } else{
+          alert("ERROR INESPERADO.");
+          console.warn(e);
+        }
+      }
+    });
   }
 
   private registrarme(){
@@ -235,19 +233,38 @@ export class Register implements OnInit, AfterViewInit{
       //Por seguridad ante manipulaciones seteo antes del envio el mail almacenado
       this.registerForm.get('email')?.setValue(this.emailVerificado);
 
-      this.usuarioService.crearUsuario(this.registerForm.value).pipe(
+      //Observable de la Imagen
+      this.obtenerUrlImagen()
+      .pipe(
+        switchMap((url) => {
+          if(url){
+            this.registerForm.get('imagenUrl')?.setValue(url);
+          }
+          return this.usuarioService.crearUsuario(this.registerForm.value);
+        }),
         finalize(() => {
           this.spinerVisible=false;
-          this.habilitarEmail();
-        })
-      ).subscribe({
+          this.deshabilitarEmail();
+        }))
+      .subscribe({
         next: () => {
-            alert("REGISTRADO EXITOSAMENTE");
-            this.registerForm.reset;
+          alert("REGISTRADO EXITOSAMENTE");
+            this.registerForm.reset();
 
             this.router.navigate(['/login']);
         },
-        error: (e) => {
+        error: (e) =>{
+          //==============ERRORES DE SUBIR IMAGEN
+          if(e.status === 400){
+            //BAD_REQUEST
+            alert("Verifique la imagen, su nombre y su extension.")
+
+          }else if(e.status === 415){
+            //UNSUPPORTED_MEDIA_TYPE
+            alert("El tipo de archivo no es soportado, solo se pueden cargar imagenes");
+          }
+          
+          //=============ERRORES DE REGISTRAR USUARIOS
           if (e.status === 422) {
             //UNPROCESSABLE ENTITY
             console.error("El Email ya existe. Peticion imposible de resolver", e);
@@ -277,9 +294,8 @@ export class Register implements OnInit, AfterViewInit{
             this.router.navigate(['']);
           }
         }
-      })
+      });
     }
-    
   }
 //===================================================
 
@@ -375,7 +391,7 @@ export class Register implements OnInit, AfterViewInit{
     this.paso.set('email');
     this.habilitarBtnSubmit = false;
     this.textoBoton = "SIGUIENTE";
-    this.registerForm.reset;
+    this.registerForm.reset();
   }
 
   //RECIBE PIN DEL COMPONENTE
@@ -398,18 +414,32 @@ export class Register implements OnInit, AfterViewInit{
     }
   }
 
-  //TRAE LA IMAGEN DEL COMPONENTE HIJO
-  traerArchivoImagen(): File | null {
+  //SUBE LA IMAGEN Y ASIGNA LA URL AL FORMULARIO
+  private obtenerUrlImagen(): Observable<string | null> {
+
+    /*devuelve la url o null pero en formato observable, 
+    cuando me subscriba ejecuta la parte de subir imagen*/
+
     const archivo = this.campoImagen?.obtenerArchivoActual();
 
-    if (!archivo) {
-      alert('No hay imagen cargada en el componente hijo.');
-      return null;
-    }else{
-      alert(archivo.name);
-    }
-    return null;
-  }
+    return archivo
+      ? this.imagenService.subirImagen([archivo]).pipe(
+          map((urls: string[]) => urls[0] ?? null),
+          catchError((e) => {
+            //lo propago hacia arriba
+            console.error(e);
+            if(e.status >= 500){
+              console.warn("ERROR de Servidor al guardar la imagen, se procede sin esta", e);
+              return of<string | null>(null);
 
+            }else{
+              return throwError(() => e);
+            }
+            
+          })
+        )
+      : of<string | null>(null);
+  }
+  
 }
 
