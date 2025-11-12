@@ -39,11 +39,6 @@ export class UsuarioService {
 
   
 
-
-
-
-  
-
 }
 
 function normalizarFecha(valor: string): string {
@@ -57,21 +52,3 @@ function normalizarFecha(valor: string): string {
 
   return fecha.toISOString().split('T')[0]; // 'YYYY-MM-DD'
 }
-
-  // login(formulario: LoginForm){
-
-  //   //Mapeo de atributos
-  //   let credenciales: AuthRequest = {
-  //     username: formulario.email,
-  //     password: formulario.password
-  //   };
-
-  //   return this.http.post<AuthResponse>(`${this.AUTH_URL}/login`, credenciales, {
-  //     withCredentials: true,
-  //   }).pipe(
-  //     tap(res => {
-  //       this.tokenService.set(res.accessToken);
-  //       this.refreshTokenSubject.next(res.accessToken);
-  //     })
-  //   );
-  // }
