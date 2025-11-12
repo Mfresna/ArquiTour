@@ -7,7 +7,7 @@
 
     <h3>REGISTRARSE</h3>
 
-    <form id="registerForm" [formGroup]="registerForm" (submit)="registrarse()">
+    <form id="registerForm" [formGroup]="registerForm">
 
       <!-- EMAIL -->
       <fieldset>
@@ -224,21 +224,25 @@
             rows="8"
             maxlength="280"
             formControlName="descripcion" 
-            [class.invalido]="registerForm.get('descripcion')?.invalid && registerForm.get('descripcion')?.touched"
+            [class.invalido]="registerForm.get('descripcion')?.invalid && (registerForm.get('descripcion')?.touched && registerForm.get('descripcion')?.dirty)"
             (input)="limitarLineas($event,8)"
             placeholder="Escribí algo sobre vos...">
           </textarea>
           
-          <!-- @if (login.get('email')?.errors?.['required'] && login.get('email')?.touched) {
-            <small>El mail es obligatorio.</small>
-          } @else if (login.get('email')?.errors?.['email'] && login.get('email')?.touched) {
-            <small>El email debe seguir el formato ("correo@email.com").</small>
-          } -->
+          @if (registerForm.get('descripcion')?.errors?.['maxLength'] && registerForm.get('descripcion')?.dirty) {
+            <small>Caracteres maximos excedidos.</small>
+          } @else if (registerForm.get('descripcion')?.errors?.['pattern'] && registerForm.get('descripcion')?.dirty) {
+            <small>Caracter invalido, solo se permiten (- _ ! ¡ &).</small>
+          }
         </fieldset>
 
         <!-- IMAGEN-->
+        <app-drag-zone-imagenes
+          #campoImagen
+          label="Imagen de Perfil: ">
+        </app-drag-zone-imagenes>
 
-    }
+      }
 
       <button 
         id="btnSiguiente" 

@@ -8,9 +8,11 @@ import { Observable } from 'rxjs';
 })
 export class ImagenService {
 
-  private readonly URL = `${environment.apiUrl}/imagenes`;
+  private readonly IMG_URL = `${environment.apiUrl}/imagenes`;
 
   constructor(private http: HttpClient) {}
+
+  ////CAPAS SE BORRA
 
   subirUna(file: File) {
     const fd = new FormData();
@@ -22,16 +24,24 @@ export class ImagenService {
   subirVarias(files: File[]): Observable<string[]> {
     const form = new FormData();
     files.forEach(f => form.append('archivos', f));
-    return this.http.post<string[]>(`${this.URL}/subir`, form);
+    return this.http.post<string[]>(`${this.IMG_URL}/subir`, form);
   }
 
+  ////CAPAS SE BORRA
+
+
+  subirImagen(files: File[]): Observable<string[]> {
+    const form = new FormData();
+    files.forEach(f => form.append('archivos', f));
+
+    return this.http.post<string[]>(`${this.IMG_URL}/subir`, form);
+  }
 
   obtenerPorId(id: number) {
-    return this.http.get<{ url: string }>(`${this.URL}/${id}`);
+    return this.http.get<{ url: string }>(`${this.IMG_URL}/${id}`);
   }
 
-
   eliminar(id: number) {
-    return this.http.delete<void>(`${this.URL}/${id}`);
+    return this.http.delete<void>(`${this.IMG_URL}/${id}`);
   }
 }

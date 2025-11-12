@@ -151,7 +151,6 @@ input.invalido {
   background: #ffecec;
 }
 
-
 textarea{
   padding: 0.6rem 0.6rem;
   border-radius: 1.2rem;
@@ -228,16 +227,6 @@ small {
   text-align: left;
   margin-left: 0.6rem;
 }
-/* ===== Responsive ===== */
-@media (max-width: 480px) {
-  #contenedor {
-    max-width: 90%;
-  }
-  #formulario h3 {
-    font-size: 1.5rem;
-  }
-}
-
 
 #contenedorPin{
   margin-top: 1rem;
@@ -250,3 +239,15 @@ small {
 #contenedorPin small{
   margin-top: 1rem;
 }
+
+/* ============== Responsive ================== */
+
+@media (max-width: 480px) {
+  #contenedor {
+    max-width: 90%;
+  }
+  #formulario h3 {
+    font-size: 1.5rem;
+  }
+}
+
