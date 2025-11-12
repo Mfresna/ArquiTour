@@ -2,6 +2,7 @@ package TpFinal_Progra3.exceptions;
 
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 
 @Getter
 public class CoordenadaException extends RuntimeException {
