@@ -4,6 +4,7 @@ import TpFinal_Progra3.exceptions.CargarImagenException;
 import TpFinal_Progra3.services.interfaces.ImagenStorageInterface;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -43,17 +44,17 @@ public class LocalStorageService implements ImagenStorageInterface {
     public String subirImagen(MultipartFile archivo){
 
         if (archivo.isEmpty()) {
-            throw new CargarImagenException("El archivo está vacio.");
+            throw new CargarImagenException(HttpStatus.BAD_REQUEST,"El archivo está vacio.");
         }
 
         //VALIDACIONES DE SEGURIDAD
             //Valida que la imagen sea imagen
         try {
             if (ImageIO.read(archivo.getInputStream()) == null) {
-                throw new CargarImagenException("El archivo no es una imagen válida.");
+                throw new CargarImagenException(HttpStatus.UNSUPPORTED_MEDIA_TYPE,"El archivo no es una imagen válida.");
             }
         } catch (IOException e) {
-            throw new CargarImagenException("No se pudo leer la imagen.");
+            throw new CargarImagenException(HttpStatus.UNSUPPORTED_MEDIA_TYPE,"No se pudo leer la imagen.");
         }
 
             // Valida la extension del archivo
@@ -74,7 +75,7 @@ public class LocalStorageService implements ImagenStorageInterface {
         try {
             Files.copy(archivo.getInputStream(), target, StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException e) {
-            throw new CargarImagenException("Error al guardar la imagen.");
+            throw new CargarImagenException(HttpStatus.INTERNAL_SERVER_ERROR ,"Error al guardar la imagen.");
         }
 
         return "/imagen/" + nombreArchivo;
@@ -111,11 +112,11 @@ public class LocalStorageService implements ImagenStorageInterface {
             extension = nombreArchivo.substring(i).toLowerCase();
 
             if (!EXTENSIONES_VALIDAS.contains(extension)) {
-                throw new RuntimeException("La extensión '" + extension + "' no está permitida. Solo se aceptan: " + EXTENSIONES_VALIDAS);
+                throw new CargarImagenException(HttpStatus.BAD_REQUEST, "La extensión '" + extension + "' no está permitida. Solo se aceptan: " + EXTENSIONES_VALIDAS);
             }
 
         } else {
-            throw new CargarImagenException("El nombre de archivo no contiene una extensión válida.");
+            throw new CargarImagenException(HttpStatus.BAD_REQUEST, "El nombre de archivo no contiene una extensión válida.");
         }
 
         return extension;
