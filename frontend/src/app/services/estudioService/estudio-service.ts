@@ -76,6 +76,8 @@ export class EstudioService {
     if (!id) return undefined;
   return this.nombrePorId.get(id);
   }
+
+  //se almacena para ganar velocidad y no tener que consultarlo siempre
   cachearNombre(id: number, nombre: string): void {
     if (id && nombre) this.nombrePorId.set(id, nombre);
   }

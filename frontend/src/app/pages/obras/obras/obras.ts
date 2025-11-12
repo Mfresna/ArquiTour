@@ -21,20 +21,13 @@ export class Obras implements OnInit {
   imagenDefecto = `${environment.imgObra}`;
   filtro!: FormGroup; 
 
-  //Para el select de Estudios
-  estudios: EstudioModel[]= [];
-  estudiosFiltrados: EstudioModel[]= [];
-  selectEstudioAbierto = false;
-  buscarEstudio = new FormControl<string>(''); // input reactivo del buscador
-
   //Mapas de descripción para mostrar en el HTML 
   categorias = Object.values(CategoriaObraModel);
   estados = Object.values(EstadoObraModel);
   CategoriaObraDescripcion = CategoriaObraDescripcion;
   EstadoObraDescripcion    = EstadoObraDescripcion;
-
+  estudios: EstudioModel[]= [];
  
-
   constructor(
     private fb: FormBuilder,
     private obraService: ObraService,
@@ -45,19 +38,11 @@ export class Obras implements OnInit {
     this.filtro = this.fb.group({
       categoria: [''],
       estado: [''],
-      estudioId: [null],
+      estudioId: [''],
       nombre: [''],
     });
 
     this.cargarEstudiosFiltro();
-
-    // 2) Conectar el buscador del select 
-    this.buscarEstudio.valueChanges.subscribe((q) => {
-      const s = (q ?? '').trim().toLowerCase();
-      this.estudiosFiltrados = !s
-        ? this.estudios
-        : this.estudios.filter(e => (e.nombre ?? '').toLowerCase().includes(s));
-    });
 
     this.cargarObras();
   }
@@ -67,7 +52,6 @@ export class Obras implements OnInit {
     this.estudioService.getFiltrarEstudios().subscribe({
       next: lista => {
         this.estudios = lista ?? [];
-        this.estudiosFiltrados = this.estudios;
 
         // Cachear todos los nombres para usarlos desde cualquier componente
         for (const e of this.estudios) {
@@ -99,27 +83,9 @@ export class Obras implements OnInit {
 
   limpiarFiltro(): void {
     this.filtro.reset({ categoria: '', estado: '', estudioId: null, nombre: '' });
-    this.buscarEstudio.setValue(''); // limpieza del buscador del dropdown
-    this.estudiosFiltrados = this.estudios;
     this.cargarObras();
   }
 
-
-  // Select de estudios (abre o cierra el select)
-  alternarSelectEstudio(abrir?: boolean): void {
-    this.selectEstudioAbierto = abrir ?? !this.selectEstudioAbierto;
-    if (this.selectEstudioAbierto) {
-      // al abrir, resetea el buscador y muestra todos
-      this.buscarEstudio.setValue('');
-      this.estudiosFiltrados = this.estudios;
-    }
-  }
-
-  // Al seleccionar un estudio, guarda SOLO el id en el form 
-  seleccionarEstudio(e: EstudioModel | null): void {
-    this.filtro.patchValue({ estudioId: e?.id ?? null });
-    this.selectEstudioAbierto = false;
-  }
 
   // Texto que se ve en el botón del select cuando está cerrado
   etiquetaEstudioSeleccionado(): string {
