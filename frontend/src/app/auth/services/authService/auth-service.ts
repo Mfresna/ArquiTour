@@ -78,8 +78,6 @@ export class AuthService {
         next: () => console.log('Sesión cerrada en el servidor'),
         error: (err) => console.log('Error al cerrar sesión:', err)
       });
-
-    this.router.navigate(['/login']);
   }
   
 
