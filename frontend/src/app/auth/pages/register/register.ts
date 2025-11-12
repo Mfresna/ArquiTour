@@ -1,27 +1,27 @@
-import {Component, EventEmitter, OnInit, Output, signal} from '@angular/core';
+import {AfterViewInit, Component, EventEmitter, OnInit, Output, signal, ViewChild} from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { UsuarioService } from '../../../services/usuarioService/usuario-service';
 import { PinVerificador } from '../../components/pin/pin-verificador';
 import { EsperandoModal } from '../../../components/esperando-modal/esperando-modal';
 import { PinService } from '../../services/pinService/pin-service';
-import { finalize, tap } from 'rxjs/operators';
-import { SelectorContext } from '@angular/compiler';
+import { finalize } from 'rxjs/operators';
 import { caracteresValidador } from '../../validadores/passCaracteresValidador';
 import { CamposIguales } from '../../validadores/igualdadValidador';
 import { apellidoValidador, nombreValidador } from '../../validadores/textoValidador';
 import { fechaNacValidador } from '../../validadores/fechaValidador';
+import { DragZoneImagenes } from '../../../components/drag-zone-imagenes/drag-zone-imagenes';
 
 
 type Paso = "email" | "pin" | "registrarme";
 
 @Component({
   selector: 'app-register',
-  imports: [ReactiveFormsModule, PinVerificador, EsperandoModal],
+  imports: [ReactiveFormsModule, PinVerificador, EsperandoModal, DragZoneImagenes],
   templateUrl: './register.html',
   styleUrl: './register.css',
 })
-export class Register implements OnInit{
+export class Register implements OnInit, AfterViewInit{
 
   registerForm!: FormGroup;
 
@@ -42,12 +42,16 @@ export class Register implements OnInit{
     //EMITERS
   @Output() volverEmit = new EventEmitter<void>();
 
+    //COMPONENTE DE IMAGEN
+  @ViewChild('campoImagen') campoImagen!: DragZoneImagenes;
+
   constructor(
     private fb: FormBuilder,
     private router: Router,
     private usuarioService: UsuarioService,
     private pinService: PinService
   ) {}
+
   
   ngOnInit(): void {
     this.registerForm = this.fb.group(
@@ -80,28 +84,28 @@ export class Register implements OnInit{
           Validators.required,
           fechaNacValidador(5)
         ]],
-        descripcion: ['', [Validators.required]]
+        descripcion: ['', [
+          Validators.maxLength(280),
+          Validators.pattern(/^[A-Za-zÁÉÍÓÚáéíóúÑñ0-9\-_\!¡&]+$/)
+        ]]
+
       },
       {validators: CamposIguales('nuevaPass', 'confirmaPass')}
     );
 
     this.subIniciales();
-  }  
-
-  registrarse(){
-    alert(this.registerForm.get('pin')?.value)
   }
 
+  ngAfterViewInit(): void {
+    //Esto carga el componente del hijo
+  }
 
   volver(): void {
     //Emite que se apreto el boton, sirve en el authPage para saber que mostrar
     this.volverEmit.emit();
   }
 
-
-  toggleBotonPrincipal(){
-    this.habilitarBtnSubmit = !this.habilitarBtnSubmit
-  }
+//========================== REGISTRO EN EL FORMULARIO
 
   accionBoton(){
     switch (this.paso()) {
@@ -114,12 +118,17 @@ export class Register implements OnInit{
         break;
 
       case 'registrarme':
-        this.registrarme();
+        this.traerArchivoImagen();
+        //this.registrarme();
         break;
 
       default:
         console.error("Paso fuera del rango: ", this.paso);
     }
+  }
+
+  toggleBotonPrincipal(){
+    this.habilitarBtnSubmit = !this.habilitarBtnSubmit
   }
 
 //========================== PASOS DE REGISTRACION
@@ -389,6 +398,18 @@ export class Register implements OnInit{
     }
   }
 
+  //TRAE LA IMAGEN DEL COMPONENTE HIJO
+  traerArchivoImagen(): File | null {
+    const archivo = this.campoImagen?.obtenerArchivoActual();
+
+    if (!archivo) {
+      alert('No hay imagen cargada en el componente hijo.');
+      return null;
+    }else{
+      alert(archivo.name);
+    }
+    return null;
+  }
 
 }
 

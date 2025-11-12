@@ -223,6 +223,7 @@ quitarArquitecto(arqId: number): void {
 
   // Caso B: con imagen → subir y luego crear estudio con imagenUrl
   const archivo = this.imagenSeleccionada as File; // estabiliza tipo File
+  
   this.imagenService.subirUna(archivo).subscribe({
     next: (rutas: string[]) => {
       const imagenUrl = rutas?.[0];
@@ -238,6 +239,7 @@ quitarArquitecto(arqId: number): void {
     },
     error: (err) => this.finalizarGuardado(false, 'No se pudo subir la imagen.', err),
   });
+  
 }
 
 
