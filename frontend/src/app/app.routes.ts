@@ -9,6 +9,7 @@ import { EstudioForm } from './pages/estudios/estudio-form/estudio-form';
 import { Obras } from './pages/obras/obras/obras';
 import { ObraDetalle } from './pages/obras/obra-detalle/obra-detalle';
 import { Register } from './auth/pages/register/register';
+import { ObraForm } from './pages/obras/obra-form/obra-form';
 
 
 
@@ -30,7 +31,9 @@ export const routes: Routes = [
   { path: 'estudios/:id', component: EstudioDetalle},
   { path: 'estudios/:id/editar', component: EstudioForm},
   { path: 'obras', component: Obras},
+  { path: 'formularioOb', component: ObraForm},
   { path: 'obras/:id', component: ObraDetalle},
+
 
   { path: 'prueba', component: Register}
 ];  

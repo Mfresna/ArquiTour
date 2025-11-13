@@ -1,13 +1,13 @@
-<div id="contenedor-gral">
-  <div id="contenedor-form">
-    <div id="titulo">
-      <h1>
-        {{ editar ? 'Editar estudio' : 'Registrar nuevo estudio' }}
-      </h1>
-    </div>
+<div id="global">
 
-    <form [formGroup]="formulario" (submit)="guardar()" enctype="multipart/form-data" novalidate>
-      <div id="contenido-scroll">
+  <div id="contenedor-form">
+ 
+    <h1 id="titulo">
+      {{ editar ? 'Editar estudio' : 'Registrar nuevo estudio' }}
+    </h1>
+
+    <div id="panel-campos">
+      <form [formGroup]="formulario" (submit)="guardar()"  enctype="multipart/form-data" novalidate>
           <!-- Nombre -->
         <fieldset class="form-group">
           <label for="nombre" class="label">Nombre del estudio</label>
@@ -19,8 +19,7 @@
             placeholder="Ej.: Estudio ArquiTour"
             aria-describedby="ayuda-nombre"
           />
-          <small id="ayuda-nombre" class="help">Mínimo 2 caracteres.</small>
-
+        
           @if (formulario.get('nombre')?.invalid && formulario.get('nombre')?.touched) {
             <small class="error" role="alert">Ingrese un nombre válido.</small>
           }
@@ -30,12 +29,12 @@
 
         <app-drag-zone-imagenes
           label="Imagen de Perfil:"
-          [imgExistente]="editar ? (imagenActualUrl || imagenDefecto) : imagenDefecto"
+          [imgExistente]="editar ? imagenActualUrl  : null"
           (archivoChange)="archivoSeleccionado = $event">  <!-- File | null -->
         </app-drag-zone-imagenes>
 
         <!-- Arquitectos (solo modo edición) -->
-        @if (editar) {
+        <!-- @if (editar) {
           <div class="form-group">
             <label class="label">Arquitectos del estudio</label>
             <div class="chips">
@@ -54,7 +53,7 @@
               }
             </div>
           </div>
-        }
+        } -->
 
         <!-- Botón -->
         <div class="acciones">
@@ -68,9 +67,9 @@
 
 
         
-      </div>
-    
-
-    </form>
+     
+      </form>
+   
   </div>
+
 </div>

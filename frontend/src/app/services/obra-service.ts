@@ -13,6 +13,7 @@ export class ObraService {
   private readonly OBRAS_URL = `${environment.apiUrl}/obras`
 
   obras: ObraModel[];
+  private nombrePorId = new Map<number, string>(); // id -> nombre
 
   constructor(private http: HttpClient) {
       this.obras = [];
@@ -53,6 +54,13 @@ export class ObraService {
     if (params.length) url += `?${params.join('&')}`;
 
     return this.http.get<ObraModel[]>(url);
+  }
+
+  cachearNombre(id: number, nombre: string) {
+    if (id != null && !!nombre) this.nombrePorId.set(id, nombre);
+  }
+  getNombreById(id: number): string | undefined {
+    return this.nombrePorId.get(id);
   }
   
 }

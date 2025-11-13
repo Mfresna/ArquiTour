@@ -1,77 +1,78 @@
 <div id="global">
     
-    <div id="contenedor-obras">
+  <div id="contenedor-obras">
 
-      <div id="panel-izq">
-        <h3 class="titulo">Obras</h3>
-        <div id="panel-filtros">
-          <form [formGroup]="filtro" (submit)="cargarObras()" class="form-filtros">
+    <div id="panel-izq">
+      <h3 class="titulo">Obras</h3>
+      <div id="panel-filtros">
+        <form [formGroup]="filtro" (submit)="cargarObras()" class="form-filtros">
 
-            <div class="campo">
-              <label for="cat">Categoría</label>
-              <select id="cat" formControlName="categoria" (change)="cargarObras()">
-                <option value="">-- Todas --</option>
-                @for (c of categorias; track c) { <option [value]="c">{{ CategoriaObraDescripcion[c] || c }}</option> }
-              </select>
-            </div>
+          <fieldset class="campo">
+            <label for="cat">Categoría</label>
+            <select id="cat" formControlName="categoria" (change)="cargarObras()">
+              <option value="">-- Todas --</option>
+              @for (c of categorias; track c) { <option [value]="c">{{ CategoriaObraDescripcion[c] || c }}</option> }
+            </select>
+          </fieldset>
 
-            <div class="campo">
-              <label for="est">Estado</label>
-              <select id="est" formControlName="estado" (change)="cargarObras()">
-                <option value="">-- Todos --</option>
-                @for (e of estados; track e) { <option [value]="e">{{ EstadoObraDescripcion[e] || e }}</option> }
-              </select>
-            </div>
+          <fieldset class="campo">
+            <label for="est">Estado</label>
+            <select id="est" formControlName="estado" (change)="cargarObras()">
+              <option value="">-- Todos --</option>
+              @for (e of estados; track e) { <option [value]="e">{{ EstadoObraDescripcion[e] || e }}</option> }
+            </select>
+          </fieldset>
 
-            <div class="campo">
-              <label for="estudio">Estudio</label>
-              <select id="estudio" formControlName="estudioId" (change)="cargarObras()">
+          <fieldset class="campo">
+            <label for="estudio">Estudio</label>
+            <select id="estudio" formControlName="estudioId" (change)="cargarObras()">
               <option value="">-- Todos --</option>
               @for (e of (estudios); track e.id) {
               <option [value]="e.id">{{ e.nombre }}</option>}
-              </select>
-            </div>
+            </select>
+          </fieldset>
 
-            <div class="campo">
-              <label for="nom">Nombre de la obra</label>
-              <input id="nom" type="text" formControlName="nombre" placeholder="Buscar por nombre..." />
-            </div>
+          <fieldset class="campo">
+            <label for="nom">Nombre de la obra</label>
+            <input id="nom" type="text" formControlName="nombre" placeholder="Buscar por nombre..." />
+          </fieldset>
 
-            <div class="acciones">
-              <button type="submit">Buscar</button>
-              <button type="button" (click)="limpiarFiltro()">Limpiar</button>
-            </div>
-          </form>
-        </div>
-      </div>
-
-      <div id="panel-der">
-        <div id="panel-scroll">
-          <!-- ACA -->
-          <div id="contenedor-lista">
-            @if (obras?.length) {
-              <ul class="lista-obras" >
-              @for (o of obras; track o.id ?? $index) {
-                <li 
-                  class="obra-card" 
-                  [routerLink]="['/obras', o.id!]"
-                  aria-label="Ver detalle de {{ o.nombre }}">
-
-                  <img [src]="imagenUrl(o.urlsImagenes)" (error)="imagenError($event)" alt="Imagen de {{ o.nombre }}" />
-                  <div class="info">
-                    <h3 class="obra-nombre">{{ o.nombre }}</h3>
-                    <small class="obra-estudio">{{ nombreEstudio(o.estudioId) }}</small>
-                  </div>
-                </li>
-              }
-              </ul>
-            } @else {
-              <p class="vacio">No se encontraron obras con los filtros seleccionados.</p>
-            }
+          <div class="acciones">
+            <button type="submit">Buscar</button>
+            <button type="button" (click)="limpiarFiltro()">Limpiar</button>
           </div>
-          
-
-        </div>
+        </form>
       </div>
     </div>
+
+    <div id="panel-der">
+      <div id="panel-scroll">
+        <!-- ACA -->
+        <div id="contenedor-lista">
+          @if (obras) {
+            <ul class="lista-obras" >
+            @for (o of obras; track o.id ?? $index) {
+              <li 
+                class="obra-card" 
+                [routerLink]="['/obras', o.id!]"
+                aria-label="Ver detalle de {{ o.nombre }}">
+
+                <img [src]="imagenUrl(o.urlsImagenes)" (error)="imagenError($event)" alt="Imagen de {{ o.nombre }}" />
+                <div class="info">
+                  <h3 class="obra-nombre">{{ o.nombre }}</h3>
+                  <small class="obra-estudio">{{ nombreEstudio(o.estudioId) }}</small>
+                </div>
+              </li>
+            }
+            </ul>
+          } @else {
+            <p class="vacio">No se encontraron obras con los filtros seleccionados.</p>
+          }
+        </div>
+        
+
+      </div>
+    </div>
+  </div>
+
 </div>

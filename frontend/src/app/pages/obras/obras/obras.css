@@ -51,18 +51,31 @@
   gap: 1.2rem;
 }
 
-.form-filtros .campo{
+/* Reset de fieldset dentro del panel de filtros */
+#panel-filtros .form-filtros fieldset.campo {
+  border: 0;
+  padding: 0;
+  margin: 0;
   display: flex;
   flex-direction: column;
   gap: 0.2rem;
 }
 
-.form-filtros label{
-  font-weight: 500;          
+
+#panel-filtros .form-filtros fieldset.campo > label {
+  font-weight: 500;
   margin-left: 0.5rem;
   font-size: 0.9rem;
   color: var(--colorTerciario);
 }
+
+#panel-filtros .form-filtros fieldset.campo > :first-child {
+   margin-top: 0; 
+  }
+
+#panel-filtros .form-filtros fieldset.campo > :last-child  { 
+  margin-bottom: 0;
+ }
 
 /* Controles del panel de filtros */
 .form-filtros input[type="text"],

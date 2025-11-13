@@ -21,11 +21,12 @@ export class Obras implements OnInit {
   imagenDefecto = `${environment.imgObra}`;
   filtro!: FormGroup; 
 
-  //Mapas de descripción para mostrar en el HTML 
+
   categorias = Object.values(CategoriaObraModel);
   estados = Object.values(EstadoObraModel);
   CategoriaObraDescripcion = CategoriaObraDescripcion;
   EstadoObraDescripcion    = EstadoObraDescripcion;
+  
   estudios: EstudioModel[]= [];
  
   constructor(
