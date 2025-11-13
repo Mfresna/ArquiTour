@@ -60,6 +60,8 @@ export class EstudioForm {
         if (data.imagenUrl) {
           const path = data.imagenUrl.startsWith('/') ? data.imagenUrl : `/${data.imagenUrl}`;
           this.imagenActualUrl = `${environment.apiUrl}${path}`;
+        } else {
+          this.imagenActualUrl = this.imagenDefecto;
         }
       },
       error: () => alert('No se pudo cargar el estudio.'),
@@ -68,7 +70,7 @@ export class EstudioForm {
 
 
   guardar(event?: Event): void {
-    event?.preventDefault(); // evita recargar la página
+    event?.preventDefault();
 
     const nombre = (this.formulario.get('nombre')?.value ?? '').trim();
     if (!nombre) {

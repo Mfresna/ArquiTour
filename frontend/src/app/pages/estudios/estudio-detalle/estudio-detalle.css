@@ -1,115 +1,187 @@
+/* === Contenedor principal === */
 .detalle {
-  max-width: 800px;
-  margin: 2rem auto;
-  padding: 1.5rem 2rem;
-  background: #fff;
-  border-radius: 1rem;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-  font-family: 'Segoe UI', Roboto, sans-serif;
-  color: #333;
-}
-
-/* CABECERA */
-.cabecera {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-bottom: 2px solid #eee;
-  padding-bottom: 0.75rem;
-  margin-bottom: 1.5rem;
-}
-
-.cabecera h1 {
-  font-size: 1.8rem;
-  margin: 0;
-  color: #1a1a1a;
-}
-
-.acciones {
-  display: flex;
-  gap: 0.75rem;
-}
-
-.acciones button {
-  border: none;
-  border-radius: 0.5rem;
-  padding: 0.5rem 1rem;
-  cursor: pointer;
-  font-weight: 500;
-  background: #007bff;
-  color: white;
-  transition: all 0.2s ease-in-out;
-}
-
-.acciones button:hover {
-  background: #0056b3;
-}
-
-.acciones .danger {
-  background: #dc3545;
-}
-
-.acciones .danger:hover {
-  background: #a71d2a;
-}
-
-/* IMAGEN */
-.media {
   display: flex;
   justify-content: center;
-  margin-bottom: 1.5rem;
+  padding: 2rem 1rem;
+  background: var(--colorFondo, #f5f6fa);
+  box-sizing: border-box;
 }
 
-.media img {
-  max-width: 100%;
-  border-radius: 0.75rem;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  object-fit: cover;
+/* === Tarjeta general === */
+.tarjeta-detalle {
   width: 100%;
-  max-height: 400px;
+  max-width: 1100px;
+  background: var(--colorFondoTarjeta, #fff);
+  border-radius: 1rem;
+  box-shadow: 0 8px 24px rgba(0,0,0,.08);
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
 }
 
-/* METADATOS */
-.meta p {
-  margin: 0.5rem 0;
-  font-size: 1rem;
+/* === Fila 1: título + botones === */
+.cabecera-general {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: .75rem;
 }
 
-.meta strong {
-  color: #222;
+.titulo {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin: 0;
 }
 
-/* LISTAS DE IDS */
+.acciones-der {
+  display: flex;
+  gap: .5rem;
+}
+
+.acciones-der button {
+  padding: .5rem .9rem;
+  border: none;
+  border-radius: .6rem;
+  background: var(--colorBoton, #2563eb);
+  color: #fff;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background .2s ease;
+}
+
+.acciones-der button:hover {
+  background: #1d4ed8;
+}
+
+.acciones-der .danger {
+  background: #e44949;
+}
+
+.acciones-der .danger:hover {
+  background: #c93535;
+}
+
+/* === Fila 2: imagen + obras === */
+.fila-contenido {
+  display: grid;
+  grid-template-columns: 0.9fr 1.1fr; /* izquierda más angosta */
+  gap: 1.25rem;
+  align-items: stretch;
+}
+
+/* ===== Imagen cuadrada ===== */
+.thumb {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;           /* 🔹 SIEMPRE CUADRADO */
+  background: #f8fafc;
+  border-radius: .8rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,.1);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;              /* 🔹 Rellena el cuadrado recortando */
+  border-radius: .8rem;
+  background: #f2f2f2;
+}
+
+/* Panel de obras */
+.panel {
+  background: var(--colorFondoTarjeta, #fff);
+  border-radius: .8rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,.06);
+  padding: 1rem;
+}
+
+.encabezado h3 {
+  margin: 0 0 .6rem 0;
+  font-size: 1.05rem;
+  font-weight: 600;
+}
+
+/* Panel de obras */
+.panel-obras {
+  max-height: 55vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Elimina los puntos originales */
+.obras-scroll {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: .75rem;
+}
+
+/* Cada obra como tarjeta */
+.obra-item {
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  color: #1e293b;
+  padding: .75rem 1rem;
+  border-radius: .6rem;
+  box-shadow: 0 1px 3px rgba(0,0,0,.04);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: .5rem;
+  transition: all .2s ease;
+}
+
+.obra-item:hover {
+  background: #f1f5f9;
+  border-color: #cbd5e1;
+  transform: translateY(-1px);
+}
+
+/* Opcional: si luego querés botón o link */
+.obra-item a {
+  text-decoration: none;
+  color: inherit;
+  font-weight: 500;
+}
+
+.obra-item a:hover {
+  color: #2563eb;
+}
+
+/* === Fila 3: arquitectos === */
+.panel-arquitectos {
+  width: 100%;
+}
+
 .chips {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem;
+  gap: .5rem;
   list-style: none;
-  margin: 0.5rem 0 1rem 0;
   padding: 0;
+  margin: 0;
 }
 
 .chips li {
-  background: #f0f4ff;
-  color: #1a3e78;
-  border: 1px solid #c9dcff;
+  padding: .35rem .75rem;
   border-radius: 999px;
-  padding: 0.3rem 0.75rem;
-  font-size: 0.9rem;
-  font-weight: 500;
+  background: #eef2f7;
+  color: #334155;
+  font-size: .9rem;
 }
 
-.muted {
-  color: #777;
-  font-style: italic;
-  margin-top: 0.25rem;
-}
-
-/* ESTADO DE CARGA */
-.detalle p {
-  line-height: 1.5;
-}
-
-.detalle p:first-letter {
-  text-transform: uppercase;
+/* === Responsive === */
+@media (max-width: 900px) {
+  .fila-contenido {
+    grid-template-columns: 1fr;
+  }
 }

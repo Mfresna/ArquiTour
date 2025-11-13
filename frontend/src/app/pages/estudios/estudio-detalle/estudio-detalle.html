@@ -1,58 +1,67 @@
 <section class="detalle">
+  @if (!cargando && estudio) {
+    <div class="tarjeta-detalle">
 
-  @if (cargando) {
-    <p>Cargando...</p>
-  } @else if (estudio) {
+      <!-- ====== Fila 1: nombre + botones ====== -->
+      <div class="cabecera-general">
+        <h1 class="titulo">{{ estudio.nombre }}</h1>
 
-    <!-- CABECERA -->
-    <div class="cabecera">
-      <h1>{{ estudio.nombre }}</h1>
+        @if (puedeGestionar()) {
+          <div class="acciones-der">
+            <button type="button" (click)="editar()">Editar</button>
+            <button type="button" class="danger" (click)="eliminar()">Eliminar</button>
+          </div>
+        }
+      </div>
 
-      @if (puedeGestionar()) {
-        <div class="acciones">
-          <button type="button" (click)="editar()">Editar</button>
-          <button type="button" class="danger" (click)="eliminar()">Eliminar</button>
+      <!-- ====== Fila 2: imagen + obras ====== -->
+      <div class="fila-contenido">
+        <!-- Imagen -->
+        <div class="thumb">
+          <img
+            [src]="imgSrc(estudio.imagenUrl)"
+            (error)="imagenError($event)"
+            alt="Imagen del estudio" />
         </div>
-      }
-    </div>
 
-    <!-- IMAGEN -->
-    <div class="media">
-      <img
-        [src]="imgSrc(estudio.imagenUrl)"
-        (error)="imagenError($event)"
-        alt="Imagen del estudio" />
-    </div>
+        <!-- Obras -->
+        <div class="panel panel-obras">
+          <div class="encabezado">
+            <h3>Obras vinculadas ({{ obrasVinculadas.length }})</h3>
+          </div>
 
-    <!-- DATOS -->
-    <div class="meta">
-
-      <p><strong>Obras vinculadas ({{ estudio.obrasIds?.length || 0 }}):</strong></p>
-      @if (estudio.obrasIds?.length) {
-        <ul class="chips">
-          @for (oid of estudio.obrasIds; track $index) {
-            <li>#{{ oid }}</li>
+          @if (obrasVinculadas.length) {
+            <ul class="obras-scroll">
+              @for (obra of obrasVinculadas; track obra.id) {
+                <li class="obra-item">{{ obra.nombre }}</li>
+              }
+            </ul>
+          } @else {
+            <p class="muted">Sin obras asociadas.</p>
           }
-        </ul>
-      } @else {
-        <p class="muted">Sin obras asociadas.</p>
-      }
+        </div>
+      </div>
 
-      <p><strong>Arquitectos vinculados ({{ estudio.arquitectosIds?.length || 0 }}):</strong></p>
-      @if (estudio.arquitectosIds?.length) {
-        <ul class="chips">
-          @for (aid of estudio.arquitectosIds; track $index) {
-            <li>#{{ aid }}</li>
-          }
-        </ul>
-      } @else {
-        <p class="muted">Sin arquitectos asociados.</p>
-      }
+      <!-- ====== Fila 3: arquitectos ====== -->
+      <div class="panel panel-arquitectos">
+        <div class="encabezado">
+          <h3>Arquitectos vinculados ({{ estudio.arquitectosIds?.length || 0 }})</h3>
+        </div>
+
+        @if (estudio.arquitectosIds?.length) {
+          <ul class="chips">
+            @for (aid of estudio.arquitectosIds; track $index) {
+              <li>#{{ aid }}</li>
+              <!-- si tenés helper: {{ nombreArquitecto(aid) }} -->
+            }
+          </ul>
+        } @else {
+          <p class="muted">Sin arquitectos asociados.</p>
+        }
+      </div>
 
     </div>
-
   } @else {
     <p>No se encontró el estudio.</p>
   }
-
 </section>
