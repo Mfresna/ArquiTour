@@ -13,7 +13,7 @@ export function CamposIguales(campo: string, confirmCampo: string): ValidatorFn 
     
     if (!ctrl || !confirm) return null;
 
-    const iguales = ctrl.value.trim() === confirm.value.trim();
+    const iguales = ctrl.value?.trim() === confirm.value?.trim();
 
     // Marca error SOLO en el confirmCampo
     if (!iguales) {

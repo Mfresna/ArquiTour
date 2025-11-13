@@ -8,11 +8,12 @@ import TpFinal_Progra3.model.entities.Usuario;
 import TpFinal_Progra3.security.model.DTO.PasswordDTO;
 import TpFinal_Progra3.security.model.DTO.RolesDTO;
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
 public interface UsuarioServiceInterface {
-    UsuarioResponseDTO registrarUsuario(UsuarioDTO dto);
+    UsuarioResponseDTO registrarUsuario(UsuarioDTO dto, MultipartFile imagenPerfil);
     Usuario buscarUsuario(Long id);
     Usuario buscarUsuario(String email);
     UsuarioResponseDTO obtenerUsuario(Long id);
