@@ -57,7 +57,7 @@ export class CambiarPass implements OnInit {
 
   enviarFormulario(): void { 
     const pass = this.passForm.get('nuevaPass')?.value
-
+    
     if(this.passForm.valid){
       
       if (this.token && pass) {
@@ -114,7 +114,6 @@ export class CambiarPass implements OnInit {
     ).subscribe({
       next: () => {
         alert('¡Contraseña actualizada correctamente!');
-        this.passForm.reset;
 
         this.router.navigate(['/home']);
 
