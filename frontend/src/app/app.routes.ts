@@ -33,6 +33,7 @@ export const routes: Routes = [
   { path: 'obras', component: Obras},
   { path: 'formularioOb', component: ObraForm},
   { path: 'obras/:id', component: ObraDetalle},
+  { path: 'obras/:id/editar', component: ObraForm},
 
 
   { path: 'prueba', component: Register}

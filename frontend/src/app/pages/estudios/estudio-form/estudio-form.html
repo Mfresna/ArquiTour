@@ -30,6 +30,7 @@
         <app-drag-zone-imagenes
           label="Imagen de Perfil:"
           [imgExistente]="editar ? imagenActualUrl  : null"
+          [multiple]="false"
           (archivoChange)="archivoSeleccionado = $event">  <!-- File | null -->
         </app-drag-zone-imagenes>
 
