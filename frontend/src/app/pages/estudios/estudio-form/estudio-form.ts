@@ -56,17 +56,33 @@ export class EstudioForm {
           nombre: data.nombre, 
           obrasIds: data.obrasIds ?? [],
           arquitectosIds: data.arquitectosIds ?? []
-          });
-        if (data.imagenUrl) {
+        });
+        
+        if (data.imagenUrl && !this.esImagenPorDefecto(data.imagenUrl)) {
           const path = data.imagenUrl.startsWith('/') ? data.imagenUrl : `/${data.imagenUrl}`;
           this.imagenActualUrl = `${environment.apiUrl}${path}`;
         } else {
-          this.imagenActualUrl = this.imagenDefecto;
+          // si no tiene propia o es la default -> drag vacío
+          this.imagenActualUrl = null;
         }
       },
       error: () => alert('No se pudo cargar el estudio.'),
     });
   }
+
+  private esImagenPorDefecto(imagenUrl: string): boolean {
+
+    const soloPath = imagenUrl.replace(/^https?:\/\/[^/]+/, ''); 
+
+    const defNormalizada = this.imagenDefecto.startsWith('/')
+      ? this.imagenDefecto
+      : `/${this.imagenDefecto}`;
+
+    return soloPath === defNormalizada;
+  }
+
+
+
 
 
   guardar(event?: Event): void {

@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { DragZoneImagenes } from '../../../components/drag-zone-imagenes/drag-zone-imagenes';
 import { ActivatedRoute, Router } from '@angular/router';
-import { take, finalize, switchMap } from 'rxjs';
+import { take, finalize, switchMap, forkJoin } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 import { CategoriaObraModel, CategoriaObraDescripcion } from '../../../models/obraModels/categoriaObraModel';
 import { EstadoObraModel, EstadoObraDescripcion } from '../../../models/obraModels/estadoObraModel';
@@ -26,7 +26,7 @@ export class ObraForm {
   // Preview
   imagenActualUrl: string | null = null;
   imagenDefecto = `${environment.imgObra}`;
-  archivoSeleccionado: File | null = null;
+  archivosSeleccionados: File[] = [];
 
   subiendo = false;
 
@@ -68,6 +68,11 @@ export class ObraForm {
       this.cargarObra(this.id);
     }
   }
+
+  onArchivosChange(files: File[]) {
+  this.archivosSeleccionados = files;
+  }
+
 
   //Trae estudios para mostrar en el select
   private cargarEstudios(): void {
@@ -126,32 +131,25 @@ export class ObraForm {
   guardar(event?: Event): void {
   event?.preventDefault();
 
-  // Validación mínima al estilo Estudio (nombre obligatorio)
   const nombre = (this.formulario.get('nombre')?.value ?? '').trim();
   if (!nombre) {
     alert('Debe ingresar un nombre válido.');
     return;
   }
 
-  // Tomo el resto de campos desde el form 
-  const categoria   = this.formulario.get('categoria')?.value as CategoriaObraModel | null;
-  const estado      = this.formulario.get('estado')?.value as EstadoObraModel | null;
+
+  const categoria   = this.formulario.get('categoria')?.value as CategoriaObraModel
+  const estado      = this.formulario.get('estado')?.value as EstadoObraModel;
   const estudioId   = Number(this.formulario.get('estudioId')?.value ?? NaN);
   const anioEstado  = Number(this.formulario.get('anioEstado')?.value ?? NaN);
   const latitud     = Number(this.formulario.get('latitud')?.value ?? NaN);
-  const longitud    = Number(this.formulario.get('longitud')?.value ?? NaN);
+  const longitud    = Number(this.formulario.get('longitud')?.value );
   const descripcion = (this.formulario.get('descripcion')?.value ?? '').trim();
 
-  // (Opcional) chequeo rápido de los requeridos del DTO
-  if (!categoria || !estado || !estudioId || isNaN(anioEstado) || isNaN(latitud) || isNaN(longitud) || !descripcion) {
-    alert('Complete correctamente los campos obligatorios.');
-    return;
-  }
-
   this.subiendo = true;
-  const archivo = this.archivoSeleccionado; // File | null
+  const archivos = this.archivosSeleccionados; // 🔹 ahora es un array de File
 
-  // ===== EDICIÓN =====
+  // ==================== EDICIÓN ====================
   if (this.editar && this.id != null) {
     const updatePayload: ObraModel = {
       id: this.id,
@@ -163,11 +161,10 @@ export class ObraForm {
       latitud,
       longitud,
       descripcion,
-      // urlsImagenes: (solo si se sube nueva imagen)
     };
 
-    // Sin cambio de imagen
-    if (!archivo) {
+    // Sin cambio de imágenes
+    if (!archivos.length) {
       this.obraService.updateObra(updatePayload)
         .pipe(finalize(() => this.subiendo = false))
         .subscribe({
@@ -177,26 +174,40 @@ export class ObraForm {
       return;
     }
 
-    // Con imagen: subo y actualizo poniendo portada
-    this.imagenService.subirUna(archivo).pipe(
-      take(1),
-      switchMap(rutas => {
-        const imagenUrl = rutas?.[0];
-        if (!imagenUrl) throw new Error('Sin URL de imagen');
-        return this.obraService.updateObra({ ...updatePayload, urlsImagenes: [imagenUrl] });
+    // Con cambio de imágenes
+    const uploads$ = archivos.map(file =>
+      this.imagenService.subirUna(file).pipe(take(1))
+    );
+
+    forkJoin(uploads$).pipe(
+      switchMap(rutasArray => {
+
+        const urls = rutasArray
+          .map(r => r?.[0])
+          .filter((u): u is string => !!u);
+
+        if (!urls.length) {
+          throw new Error('Sin URLs de imágenes');
+        }
+
+        return this.obraService.updateObra({
+          ...updatePayload,
+          urlsImagenes: urls
+        });
       }),
       finalize(() => this.subiendo = false)
     ).subscribe({
       next: () => {
-        this.archivoSeleccionado = null;
+        this.archivosSeleccionados = [];
         this.router.navigate(['/obras', this.id!]);
       },
       error: () => alert('No se pudo actualizar la obra.')
     });
+
     return;
   }
 
-  // ===== CREACIÓN =====
+  // ==================== CREACIÓN ====================
   const createPayload: ObraModel = {
     nombre,
     categoria,
@@ -206,51 +217,49 @@ export class ObraForm {
     latitud,
     longitud,
     descripcion,
-    // urlsImagenes: (solo si se sube imagen)
   };
 
-  // Sin imagen
-  if (!archivo) {
-    this.obraService.postObra(createPayload)
-      .pipe(finalize(() => this.subiendo = false))
-      .subscribe({
-        next: () => {
-          this.formulario.reset();
-          this.archivoSeleccionado = null;
-          alert('Obra creada');
-          this.router.navigate(['/obras']);
-        },
-        error: () => alert('No se pudo crear la obra.')
-      });
+  if (!archivos.length) {
+    this.subiendo = false;
+    alert('Debe cargar al menos una imagen para la obra.');
     return;
   }
 
-  // Con imagen: subo y creo con portada
-  this.imagenService.subirUna(archivo).pipe(take(1)).subscribe({
-    next: rutas => {
-      const imagenUrl = rutas?.[0];
-      if (!imagenUrl) {
+
+  const uploads$ = archivos.map(file =>
+    this.imagenService.subirUna(file).pipe(take(1))
+  );
+
+  forkJoin(uploads$).subscribe({
+    next: rutasArray => {
+      const urls = rutasArray
+        .map(r => r?.[0])
+        .filter((u): u is string => !!u);
+
+      if (!urls.length) {
         this.subiendo = false;
-        alert('Sin URL de imagen');
+        alert('Sin URLs de imágenes');
         return;
       }
-      this.obraService.postObra({ ...createPayload, urlsImagenes: [imagenUrl] })
+
+      this.obraService.postObra({ ...createPayload, urlsImagenes: urls })
         .pipe(finalize(() => this.subiendo = false))
         .subscribe({
           next: () => {
             this.formulario.reset();
-            this.archivoSeleccionado = null;
+            this.archivosSeleccionados = [];
             alert('Obra creada');
             this.router.navigate(['/obras']);
           },
           error: () => alert('No se pudo crear la obra.')
-        });
-      },
+          });
+        },
       error: () => {
         this.subiendo = false;
-        alert('No se pudo subir la imagen.');
-      }
-    });
-  } 
+        alert('No se pudieron subir las imágenes.');
+        }
+      });
+   }
+
 
 }

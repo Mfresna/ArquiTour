@@ -1,4 +1,4 @@
-<fieldset>
+<!-- <fieldset>
     <label for="imagen">{{label}}</label>
 
     <div id="dropzone"
@@ -10,11 +10,12 @@
         (dragenter)="permitirSoltar($event)">
 
         <div id="contenedor-img">
-            <!-- Preview de IMG -->
-            @if (vistaPrevia) {
-            <img id="preview" [src]="vistaPrevia" alt="Vista previa"/>
+        
+            @if (vistaPrevia || imgExistente) {
+                <img id="preview" [src]="vistaPrevia || imgExistente!" alt="Vista previa"/>
             } @else {
             <div id="dropzone-msg">
+                
                 <strong>Arrastre y suelte una imagen aquí<br></strong>
                 <span> o haga clic para seleccionar desde su equipo <br></span>
                 <small class="formats"> Formatos: JPG, PNG, WEBP</small>
@@ -31,8 +32,8 @@
 
         </div>
 
-        <!-- Boton quitar IMG -->
-        @if (vistaPrevia) {
+      
+        @if (vistaPrevia || imgExistente) {
             <div id="botonera-img" (click)="$event.stopPropagation()">
                 <button type="button" 
                     class="btn-outline" 
@@ -41,5 +42,93 @@
         }
         
     </div>
+
+</fieldset> -->
+
+
+<fieldset>
+  <label for="imagen">{{ label }}</label>
+
+  <div id="dropzone"
+       role="button"
+       tabindex="0"
+       (click)="abrirExplorador($event)"
+       (keyup.enter)="abrirExplorador($event)"
+       (dragover)="permitirSoltar($event)"
+       (dragenter)="permitirSoltar($event)"
+       (drop)="capturarArchivo($event)">
+
+    <div id="contenedor-img">
+
+      <!-- 🟣 MODO MULTIPLE -->
+      @if (multiple) {
+        @if (vistasPrevias.length) {
+          <div class="grid-previas">
+            @for (url of vistasPrevias; let i = $index; track i) {
+              <div class="item-previa">
+                <img [src]="url" alt="Imagen {{ i + 1 }}" />
+                <button type="button"
+                        class="btn-quitar"
+                        (click)="quitarImagen(i, $event)">✕</button>
+              </div>
+            }
+          </div>
+        } @else {
+          <div id="dropzone-msg">
+            <strong>Arrastre y suelte una o varias imágenes aquí<br></strong>
+            <span> o haga clic para seleccionar desde su equipo <br></span>
+            <small class="formats"> Formatos: JPG, PNG, WEBP</small>
+          </div>
+        }
+      } @else {
+
+      <!-- 🟢 MODO SINGLE (como antes) -->
+        @if (vistasPrevias.length || imgExistente) {
+          <img
+            id="preview"
+            [src]="vistasPrevias[0] || imgExistente!"
+            alt="Vista previa" />
+        } @else {
+          <div id="dropzone-msg">
+            <strong>Arrastre y suelte una imagen aquí<br></strong>
+            <span> o haga clic para seleccionar desde su equipo <br></span>
+            <small class="formats"> Formatos: JPG, PNG, WEBP</small>
+          </div>
+        }
+      }
+
+      <input
+        #inputArchivo
+        id="imagen"
+        type="file"
+        accept="image/*"
+        [attr.multiple]="multiple ? '' : null"
+        hidden
+        (change)="capturarArchivo($event)" />
+
+    </div>
+
+    <!-- Botón quitar -->
+    @if (!multiple && (vistasPrevias.length || imgExistente)) {
+      <div id="botonera-img" (click)="$event.stopPropagation()">
+        <button type="button"
+                class="btn-outline"
+                (click)="limpiarImagen($event)">
+          {{ labelBoton }}
+        </button>
+      </div>
+    }
+
+    @if (multiple && vistasPrevias.length) {
+      <div id="botonera-img" (click)="$event.stopPropagation()">
+        <button type="button"
+                class="btn-outline"
+                (click)="limpiarImagen($event)">
+          Quitar todas
+        </button>
+      </div>
+    }
+
+  </div>
 
 </fieldset>
