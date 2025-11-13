@@ -121,6 +121,7 @@ export class Register implements OnInit, AfterViewInit{
         break;
 
       case 'registrarme':
+        //this.registrarme();
         this.registrarme();
         break;
 
@@ -233,28 +234,23 @@ export class Register implements OnInit, AfterViewInit{
       //Por seguridad ante manipulaciones seteo antes del envio el mail almacenado
       this.registerForm.get('email')?.setValue(this.emailVerificado);
 
-      //Observable de la Imagen
-      this.obtenerUrlImagen()
-      .pipe(
-        switchMap((url) => {
-          if(url){
-            this.registerForm.get('imagenUrl')?.setValue(url);
-          }
-          return this.usuarioService.crearUsuario(this.registerForm.value);
-        }),
+      
+      const archivoImg = this.campoImagen?.obtenerArchivoActual();
+
+      this.usuarioService.crearUsuario(this.registerForm.value,archivoImg).pipe(
         finalize(() => {
           this.spinerVisible=false;
-          this.deshabilitarEmail();
-        }))
-      .subscribe({
+          this.habilitarEmail();
+        })
+      ).subscribe({
         next: () => {
           alert("REGISTRADO EXITOSAMENTE");
-            this.registerForm.reset();
+          this.registerForm.reset();
 
-            this.router.navigate(['/login']);
+          this.router.navigate(['/login']);
         },
         error: (e) =>{
-          //==============ERRORES DE SUBIR IMAGEN
+          //============== ERRORES DE SUBIR IMAGEN
           if(e.status === 400){
             //BAD_REQUEST
             alert("Verifique la imagen, su nombre y su extension.")
@@ -264,7 +260,7 @@ export class Register implements OnInit, AfterViewInit{
             alert("El tipo de archivo no es soportado, solo se pueden cargar imagenes");
           }
           
-          //=============ERRORES DE REGISTRAR USUARIOS
+          //============= ERRORES DE REGISTRAR USUARIOS
           if (e.status === 422) {
             //UNPROCESSABLE ENTITY
             console.error("El Email ya existe. Peticion imposible de resolver", e);
@@ -294,7 +290,7 @@ export class Register implements OnInit, AfterViewInit{
             this.router.navigate(['']);
           }
         }
-      });
+      });      
     }
   }
 //===================================================
@@ -412,33 +408,6 @@ export class Register implements OnInit, AfterViewInit{
       textarea.value = lineas.slice(0, maxLineas).join('\n');
       this.registerForm.get('descripcion')?.setValue(textarea.value);
     }
-  }
-
-  //SUBE LA IMAGEN Y ASIGNA LA URL AL FORMULARIO
-  private obtenerUrlImagen(): Observable<string | null> {
-
-    /*devuelve la url o null pero en formato observable, 
-    cuando me subscriba ejecuta la parte de subir imagen*/
-
-    const archivo = this.campoImagen?.obtenerArchivoActual();
-
-    return archivo
-      ? this.imagenService.subirImagen([archivo]).pipe(
-          map((urls: string[]) => urls[0] ?? null),
-          catchError((e) => {
-            //lo propago hacia arriba
-            console.error(e);
-            if(e.status >= 500){
-              console.warn("ERROR de Servidor al guardar la imagen, se procede sin esta", e);
-              return of<string | null>(null);
-
-            }else{
-              return throwError(() => e);
-            }
-            
-          })
-        )
-      : of<string | null>(null);
   }
   
 }

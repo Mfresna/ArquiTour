@@ -3,6 +3,7 @@ import { environment } from '../../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { UsrRequestModel } from '../../auth/models/register/usrRequestModel';
 import { UsrFormModel } from '../../auth/models/register/usrFormModel';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -16,7 +17,7 @@ export class UsuarioService {
     private http: HttpClient
   ){}
 
-  crearUsuario(formulario: UsrFormModel){
+  crearUsuario(formulario: UsrFormModel, imagenPerfil?: File | null) {
 
     let nuevoUsuario: UsrRequestModel = {
       email: formulario.email,
@@ -27,17 +28,30 @@ export class UsuarioService {
       descripcion: formulario.descripcion?.trim() || null,
       imagenUrl: formulario.imagenUrl || null
     } 
-    return this.http.post(`${this.USUARIO_URL}`, nuevoUsuario)
+    
+    const formData = new FormData();
+
+    formData.append(
+      'datosUsuario',
+      new Blob([JSON.stringify(nuevoUsuario)], { type: 'application/json' })
+    );
+
+    if (imagenPerfil) {
+      formData.append('imagenPerfil', imagenPerfil, imagenPerfil.name);
+    }
+
+    return this.http.post(`${this.USUARIO_URL}/registrarme`, formData);
   }
 
+  actualizarFotoPerfil(urlImagen: string){
+    return this.http.patch(`${this.USUARIO_URL}/imagenPerfil`, {urlImagen});
+  }
 
 
   //NO TOCAR
-  cambiarPass(nuevaPass: string){
-    return this.http.patch(`${this.USUARIO_URL}/password`, {nuevaPass})
+  cambiarPass(nuevaPassword: string){
+    return this.http.patch(`${this.USUARIO_URL}/password`, {nuevaPassword})
   }
-
-  
 
 }
 

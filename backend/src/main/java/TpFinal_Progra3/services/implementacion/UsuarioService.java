@@ -31,7 +31,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -51,13 +53,55 @@ public class UsuarioService implements UsuarioServiceInterface {
     @Value("${default.admin.email}")
     private String defaultAdminEmail;
 
+//    @Transactional
+//    public UsuarioResponseDTO registrarUsuario(UsuarioDTO dto) {
+//        try {
+//            //Validar la existencia de un email
+//            if (usuarioRepository.existsByEmailIgnoreCase(dto.getEmail())) {
+//                throw new ProcesoInvalidoException(HttpStatus.UNPROCESSABLE_ENTITY, "El email ya existe en la base de datos.");
+//            }
+//            if (!validacionEmailService.isEmailValidado(dto.getEmail())) {
+//                throw new ProcesoInvalidoException(HttpStatus.FORBIDDEN, "El email no ha sido verificado.");
+//            }
+//
+//            Usuario usuarioNuevo = usuarioMapper.mapUsuario(dto);
+//
+//            //Agrega la Credencial nueva con el Rol Usuario
+//            usuarioNuevo.setCredencial(Credencial.builder()
+//                    .email(dto.getEmail())
+//                    .usuario(usuarioNuevo)
+//                    .password(passwordEncoder.encode(dto.getPassword()))
+//                    .roles(Set.of(rolRepository.findByRol(RolUsuario.ROLE_USUARIO)
+//                            .orElseThrow(() -> new NotFoundException(HttpStatus.INTERNAL_SERVER_ERROR,
+//                                    "El rol asignado automaticamente no existe en la Base de Datos"))))
+//                    .build());
+//
+//            //Agrega la imagen si existe en el DTO
+//            if (dto.getImagenUrl() != null) {
+//                usuarioNuevo.setImagen(imagenService.obtenerImagen(dto.getImagenUrl()));
+//            }
+//
+//            UsuarioResponseDTO usrNuevo = usuarioMapper.mapResponseDTO(usuarioRepository.save(usuarioNuevo));
+//
+//            validacionEmailService.eliminar(dto.getEmail());
+//
+//            return usrNuevo;
+//        } catch (Exception e) {
+//            //En caso de error borra la imagen si ya fue dada de alta en la BD
+//            if (!dto.getImagenUrl().isEmpty()) {
+//                imagenService.eliminarImagen(dto.getImagenUrl());
+//            }
+//            throw e;
+//        }
+//    }
+
     @Transactional
-    public UsuarioResponseDTO registrarUsuario(UsuarioDTO dto) {
+    public UsuarioResponseDTO registrarUsuario(UsuarioDTO dto,MultipartFile imagenPerfil) {
         //Validar la existencia de un email
-        if(usuarioRepository.existsByEmailIgnoreCase(dto.getEmail())){
+        if (usuarioRepository.existsByEmailIgnoreCase(dto.getEmail())) {
             throw new ProcesoInvalidoException(HttpStatus.UNPROCESSABLE_ENTITY, "El email ya existe en la base de datos.");
         }
-        if(!validacionEmailService.isEmailValidado(dto.getEmail())){
+        if (!validacionEmailService.isEmailValidado(dto.getEmail())) {
             throw new ProcesoInvalidoException(HttpStatus.FORBIDDEN, "El email no ha sido verificado.");
         }
 
@@ -73,17 +117,31 @@ public class UsuarioService implements UsuarioServiceInterface {
                                 "El rol asignado automaticamente no existe en la Base de Datos"))))
                 .build());
 
-        //Agrega la imagen si existe en el DTO
-        if(dto.getImagenUrl() != null) {
-            usuarioNuevo.setImagen(imagenService.obtenerImagen(dto.getImagenUrl()));
+
+        //Carga la img
+        String urlImg = "";
+        if (imagenPerfil != null && !imagenPerfil.isEmpty()) {
+            urlImg = imagenService.subirImagenes(List.of(imagenPerfil)).getFirst();
+            usuarioNuevo.setImagen(imagenService.obtenerImagen(urlImg));
         }
 
-        UsuarioResponseDTO usrNuevo = usuarioMapper.mapResponseDTO(usuarioRepository.save(usuarioNuevo));
+        try {
+            UsuarioResponseDTO usrNuevo = usuarioMapper.mapResponseDTO(usuarioRepository.save(usuarioNuevo));
 
-        validacionEmailService.eliminar(dto.getEmail());
+            validacionEmailService.eliminar(dto.getEmail());
 
-        return usrNuevo;
+            return usrNuevo;
+        }catch (Exception e){
+            //La borro de la base de datos
+            if(imagenPerfil != null && !imagenPerfil.isEmpty()){
+                imagenService.eliminarImagen(urlImg);
+            }
+
+            throw e;
+        }
     }
+
+
 
     public Usuario buscarUsuario(Long id) {
         return usuarioRepository.findById(id)

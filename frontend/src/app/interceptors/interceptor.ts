@@ -12,9 +12,10 @@ export const jwtInterceptor: HttpInterceptorFn = (req, next) => {
   // Rutas públicas que no necesitan token
   const urlsPublicas = [
     '/auth/login',
-    '/auth/register',
     '/auth/password',
-    '/auth/refresh'
+    '/auth/refresh',
+    '/auth/logout',
+    '/usuarios/registrarme'
   ];
 
   if (urlsPublicas.some(url => req.url.includes(url))) {
