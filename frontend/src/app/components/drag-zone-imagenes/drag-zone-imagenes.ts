@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { ImagenService } from '../../services/imagenService/imagen-service';
 
 @Component({
@@ -12,6 +12,7 @@ export class DragZoneImagenes implements OnInit{
   @Input() label: string = 'Imagen'
   @Input() labelBoton: string = 'Quitar imagen'
   @Input() imgExistente: string | null = null;
+  @Output() archivoChange = new EventEmitter<File | null>();
 
   // Estado relacionado a la imagen
   imagenSeleccionada: File | null = null;   // archivo temporal seleccionado por el usuario
@@ -26,6 +27,7 @@ export class DragZoneImagenes implements OnInit{
       this.vistaPrevia = this.imgExistente;
     }
   }
+  
 
   abrirExplorador(e?: Event): void {
     if (e){
@@ -62,6 +64,7 @@ export class DragZoneImagenes implements OnInit{
     // limpiar vista previa previa (si existe) y generar una nueva
     if (this.vistaPrevia) URL.revokeObjectURL(this.vistaPrevia);
     this.vistaPrevia = URL.createObjectURL(archivo);
+    this.archivoChange.emit(archivo);
   }
 
   permitirSoltar(evento: DragEvent): void {
@@ -78,7 +81,10 @@ export class DragZoneImagenes implements OnInit{
       URL.revokeObjectURL(this.vistaPrevia);
       this.vistaPrevia = null;
     }
-    if (this.inputArchivo) this.inputArchivo.nativeElement.value = '';
+    if (this.inputArchivo) {
+      this.inputArchivo.nativeElement.value = '';
+      this.archivoChange.emit(null);
+    }
   }
 
   obtenerArchivoActual(): File | null {

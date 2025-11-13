@@ -6,106 +6,70 @@
       </h1>
     </div>
 
-    <form [formGroup]="formulario" (Submit)="guardar()" enctype="multipart/form-data" novalidate>
+    <form [formGroup]="formulario" (submit)="guardar()" enctype="multipart/form-data" novalidate>
+      <div id="contenido-scroll">
+          <!-- Nombre -->
+        <fieldset class="form-group">
+          <label for="nombre" class="label">Nombre del estudio</label>
+          <input
+            id="nombre"
+            type="text"
+            formControlName="nombre"
+            class="input"
+            placeholder="Ej.: Estudio ArquiTour"
+            aria-describedby="ayuda-nombre"
+          />
+          <small id="ayuda-nombre" class="help">Mínimo 2 caracteres.</small>
 
-      <!-- Nombre -->
-      <div class="form-group">
-        <label for="nombre" class="label">Nombre del estudio</label>
-        <input
-          id="nombre"
-          type="text"
-          formControlName="nombre"
-          class="input"
-          placeholder="Ej.: Estudio ArquiTour"
-          aria-describedby="ayuda-nombre"
-        />
-        <small id="ayuda-nombre" class="help">Mínimo 2 caracteres.</small>
-
-        @if (formulario.get('nombre')?.invalid && formulario.get('nombre')?.touched) {
-          <small class="error" role="alert">Ingrese un nombre válido.</small>
-        }
-      </div>
-
-      <!-- Imagen actual (solo edición) -->
-      @if (editar && imagenActualUrl) {
-        <div class="form-group">
-          <label class="label">Logo Actual</label>
-          <div class="img-actual-wrap">
-            <img
-              [src]="imagenActualUrl"
-              alt="Imagen actual del estudio"
-              class="preview"
-              (error)="imagenError($event)"
-            />
-          </div>
-        </div>
-      }
-
-      <!-- Imagen -->
-      <div class="form-group">
-        <label class="label">{{ editar ? 'Reemplazar Logo' : 'Logo (opcional)' }}</label>
-
-        <div class="dropzone"
-             role="button"
-             tabindex="0"
-             aria-label="Zona para cargar imagen. Haga clic o arrastre un archivo."
-             (click)="abrirExplorador()"
-             (keyup.enter)="abrirExplorador()"
-             (dragover)="permitirSoltar($event)"
-             (dragenter)="permitirSoltar($event)"
-             (drop)="soltarArchivo($event)">
-
-          @if (vistaPrevia) {
-            <img [src]="vistaPrevia" alt="Vista previa" class="preview" />
-          } @else {
-            <div class="dropzone-msg">
-              <strong>Arrastre y suelte una imagen aquí<br></strong>
-              <span> o haga clic para seleccionar desde su equipo <br></span>
-              <small class="formats"> Formatos: JPG, PNG, WEBP</small>
-            </div>
+          @if (formulario.get('nombre')?.invalid && formulario.get('nombre')?.touched) {
+            <small class="error" role="alert">Ingrese un nombre válido.</small>
           }
+        </fieldset>
 
-          <input #inputArchivo type="file" accept="image/*" (change)="seleccionarDesdeInput($event)" hidden />
-        </div>
+        <!-- Imagen -->
 
-        @if (vistaPrevia) {
-          <button type="button" class="btn-outline" (click)="limpiarImagen()">
-            Quitar imagen
-          </button>
-        }
-      </div>
+        <app-drag-zone-imagenes
+          label="Imagen de Perfil:"
+          [imgExistente]="editar ? (imagenActualUrl || imagenDefecto) : imagenDefecto"
+          (archivoChange)="archivoSeleccionado = $event">  <!-- File | null -->
+        </app-drag-zone-imagenes>
 
-      <!-- Arquitectos (solo modo edición) -->
-      @if (editar) {
-        <div class="form-group">
-          <label class="label">Arquitectos del estudio</label>
-          <div class="chips">
-            @for (id of (formulario.get('arquitectosIds')?.value || []); track id) {
-              <span class="chip">
-                #{{ id }}
-                <button
-                  type="button"
-                  class="chip-close"
-                  (click)="quitarArquitecto(id)"
-                  aria-label="Quitar arquitecto">×</button>
-              </span>
-            }
-            @empty {
-              <small class="help">No hay arquitectos asignados.</small>
-            }
+        <!-- Arquitectos (solo modo edición) -->
+        @if (editar) {
+          <div class="form-group">
+            <label class="label">Arquitectos del estudio</label>
+            <div class="chips">
+              @for (id of (formulario.get('arquitectosIds')?.value || []); track id) {
+                <span class="chip">
+                  #{{ id }}
+                  <button
+                    type="button"
+                    class="chip-close"
+                    (click)="quitarArquitecto(id)"
+                    aria-label="Quitar arquitecto">×</button>
+                </span>
+              }
+              @empty {
+                <small class="help">No hay arquitectos asignados.</small>
+              }
+            </div>
           </div>
-        </div>
-      }
+        }
 
-      <!-- Botón -->
-      <div class="acciones">
-        <button
-          type="submit"
-          class="btn-primario"
-          [disabled]="formulario.invalid || subiendo">
-          {{ editar ? 'GUARDAR CAMBIOS' : 'INGRESAR ESTUDIO' }}
-        </button>
+        <!-- Botón -->
+        <div class="acciones">
+          <button
+            type="submit"
+            class="btn-primario"
+            [disabled]="formulario.invalid || subiendo">
+            {{ editar ? 'GUARDAR CAMBIOS' : 'INGRESAR ESTUDIO' }}
+          </button>
+        </div>
+
+
+        
       </div>
+    
 
     </form>
   </div>
