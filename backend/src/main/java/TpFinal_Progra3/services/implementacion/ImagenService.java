@@ -45,6 +45,10 @@ public class ImagenService implements ImagenServiceInterface {
         imagenRepository.deleteById(id);
     }
 
+    public void eliminarImagen(String url){
+        imagenRepository.findByUrl(url).ifPresent(imagenRepository::delete);
+    }
+
     public List<String> subirImagenes(List<MultipartFile> archivos){
         //Sube las imagenes y las guarda en la base de datos
         List<String> urls = almacImagenSerive.subirImagenes(archivos);

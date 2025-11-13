@@ -9,6 +9,7 @@ import TpFinal_Progra3.model.entities.Usuario;
 import TpFinal_Progra3.security.model.DTO.PasswordDTO;
 import TpFinal_Progra3.security.model.DTO.RolesDTO;
 import TpFinal_Progra3.security.model.enums.RolUsuario;
+import TpFinal_Progra3.services.implementacion.ImagenService;
 import TpFinal_Progra3.services.implementacion.UsuarioService;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import jakarta.servlet.http.HttpServletRequest;
@@ -30,6 +31,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -56,7 +58,7 @@ public class UsuarioController {
                     content = @Content(mediaType = "application/json", schema = @Schema(implementation = UsuarioResponseDTO.class))),
             @ApiResponse(responseCode = "400", description = "Datos inválidos o email ya registrado", content = @Content),
     })
-    @PostMapping
+    @PostMapping("/registrarme")
     public ResponseEntity<UsuarioResponseDTO> registrarUsuario(
             @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     description = "Datos para registrar un nuevo usuario",
@@ -74,11 +76,16 @@ public class UsuarioController {
                       "descripcion": "Arquitecto especializado en viviendas sustentables",
                       "imagenUrl": "https://miapp.com/img/perfil.png"
                     }
-                """)
+                    """)
                     )
             )
-            @RequestBody @Valid UsuarioDTO dto) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(usuarioService.registrarUsuario(dto));
+            //@RequestBody @Valid UsuarioDTO dto
+            @RequestPart("datosUsuario") UsuarioDTO datosUsuario,
+            @RequestPart(value = "imagenPerfil", required = false) MultipartFile imagenPerfil) {
+
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(usuarioService.registrarUsuario(datosUsuario, imagenPerfil));
+        
     }
 
     @Operation(summary = "Obtener usuario por ID", description = "Devuelve los datos públicos de un usuario según su ID.")
@@ -217,6 +224,7 @@ public class UsuarioController {
     public ResponseEntity<Void> cambiarPassword(HttpServletRequest request,
                                                   @RequestBody @Valid PasswordDTO passDTO) {
         Usuario usr = usuarioService.buscarUsuario(usuarioService.obtenerMiPerfil(request).getId());
+        usuarioService.cambiarPassword(usr, passDTO);
         return ResponseEntity.ok().build();
     }
 

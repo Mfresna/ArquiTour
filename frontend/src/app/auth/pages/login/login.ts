@@ -55,6 +55,8 @@ export class Login implements OnInit {
             this.modalTitulo="CONTRASEÑA POR DEFECTO"
             this.modalMensaje="Usted posee la contraseña por defecto, debe cambiarla por seguridad"
             
+            alert("Debe cambiar la Contraseña")
+
             this.router.navigate(['/cambiarpass']);
           } else {
             this.router.navigate(['/home']);
