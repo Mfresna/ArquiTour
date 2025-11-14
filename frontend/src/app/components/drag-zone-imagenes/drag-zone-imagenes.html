@@ -1,51 +1,3 @@
-<!-- <fieldset>
-    <label for="imagen">{{label}}</label>
-
-    <div id="dropzone"
-        role="button"
-        tabindex="0"
-        (click)="abrirExplorador($event)"
-        (keyup.enter)="abrirExplorador($event)"
-        (dragover)="permitirSoltar($event)"
-        (dragenter)="permitirSoltar($event)">
-
-        <div id="contenedor-img">
-        
-            @if (vistaPrevia || imgExistente) {
-                <img id="preview" [src]="vistaPrevia || imgExistente!" alt="Vista previa"/>
-            } @else {
-            <div id="dropzone-msg">
-                
-                <strong>Arrastre y suelte una imagen aquí<br></strong>
-                <span> o haga clic para seleccionar desde su equipo <br></span>
-                <small class="formats"> Formatos: JPG, PNG, WEBP</small>
-            </div>
-            }
-
-            <input 
-                #inputArchivo
-                id="imagen"
-                type="file" 
-                accept="image/*" 
-                hidden 
-                (change)="capturarArchivo($event)"/>
-
-        </div>
-
-      
-        @if (vistaPrevia || imgExistente) {
-            <div id="botonera-img" (click)="$event.stopPropagation()">
-                <button type="button" 
-                    class="btn-outline" 
-                    (click)="limpiarImagen()">{{labelBoton}}</button>
-            </div>
-        }
-        
-    </div>
-
-</fieldset> -->
-
-
 <fieldset>
   <label for="imagen">{{ label }}</label>
 
@@ -60,29 +12,50 @@
 
     <div id="contenedor-img">
 
-      <!-- 🟣 MODO MULTIPLE -->
+      <!--MODO MULTIPLE -->
       @if (multiple) {
-        @if (vistasPrevias.length) {
+
+        @if (imagenesExistentes.length || vistasPrevias.length) {
+
           <div class="grid-previas">
-            @for (url of vistasPrevias; let i = $index; track i) {
+
+            <!-- EXISTENTES -->
+            @for (url of imagenesExistentes; let i = $index; track i) {
               <div class="item-previa">
-                <img [src]="url" alt="Imagen {{ i + 1 }}" />
+                <img [src]="url" alt="Imagen existente {{ i + 1 }}" />
                 <button type="button"
                         class="btn-quitar"
-                        (click)="quitarImagen(i, $event)">✕</button>
+                        (click)="quitarExistente(i, $event)">
+                        <span id="a" class="material-icons">delete</span>
+                      </button>
               </div>
             }
+
+            <!-- NUEVAS -->
+            @for (url of vistasPrevias; let i = $index; track i) {
+              <div class="item-previa">
+                <img [src]="url" alt="Imagen nueva {{ i + 1 }}" />
+                <button type="button"
+                        class="btn-quitar"
+                        (click)="quitarNueva(i, $event)">✕</button>
+              </div>
+            }
+
           </div>
+
         } @else {
+
           <div id="dropzone-msg">
             <strong>Arrastre y suelte una o varias imágenes aquí<br></strong>
             <span> o haga clic para seleccionar desde su equipo <br></span>
             <small class="formats"> Formatos: JPG, PNG, WEBP</small>
           </div>
+
         }
+
       } @else {
 
-      <!-- 🟢 MODO SINGLE (como antes) -->
+        <!-- MODO SINGLE -->
         @if (vistasPrevias.length || imgExistente) {
           <img
             id="preview"
@@ -95,8 +68,10 @@
             <small class="formats"> Formatos: JPG, PNG, WEBP</small>
           </div>
         }
+
       }
 
+      <!-- input real -->
       <input
         #inputArchivo
         id="imagen"
@@ -108,7 +83,7 @@
 
     </div>
 
-    <!-- Botón quitar -->
+    <!-- Botón quitar (single) -->
     @if (!multiple && (vistasPrevias.length || imgExistente)) {
       <div id="botonera-img" (click)="$event.stopPropagation()">
         <button type="button"
@@ -119,7 +94,8 @@
       </div>
     }
 
-    @if (multiple && vistasPrevias.length) {
+    <!-- Botón quitar todas (multi) -->
+    @if (multiple && (imagenesExistentes.length || vistasPrevias.length)) {
       <div id="botonera-img" (click)="$event.stopPropagation()">
         <button type="button"
                 class="btn-outline"
@@ -132,3 +108,4 @@
   </div>
 
 </fieldset>
+

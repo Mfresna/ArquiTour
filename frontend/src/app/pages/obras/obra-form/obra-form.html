@@ -90,13 +90,14 @@
             }
           </fieldset>
 
-          <!-- Portada (preview) -->
-          <app-drag-zone-imagenes
-            label="Imágenes de la obra:"
-            [imgExistente]="editar ? imagenActualUrl : null"
-            [multiple]="true"
-            (archivosChange)="archivosSeleccionados = $event">
-          </app-drag-zone-imagenes>
+         <app-drag-zone-multiple
+          label="Imágenes de la obra:"
+          [imagenesExistentes]="imagenesExistentes"
+          (archivosChange)="archivosSeleccionados = $event"
+          (existentesChange)="imagenesExistentes = $event">
+        </app-drag-zone-multiple>
+
+
 
           <!-- Botón -->
           <div class="acciones">

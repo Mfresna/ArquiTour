@@ -77,19 +77,19 @@ label {
   aspect-ratio: 1 / 1;
 }
 
-.btn-quitar{
-  visibility: hidden;
-}
-
-
-.item-previa:hover .btn-quitar{
-  visibility: visible;
-}
-
 .item-previa img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+
+/* Oculto el botón hasta hover */
+.btn-quitar{
+  visibility: hidden;
+}
+
+.item-previa:hover .btn-quitar{
+  visibility: visible;
 }
 
 /* ================== BOTÓN QUITAR (delete icon) ================== */
@@ -109,7 +109,7 @@ label {
   cursor: pointer;
 }
 
-#delete {
+.btn-quitar .material-icons {
   font-size: 18px;
   color: white;
   pointer-events: none;
@@ -118,10 +118,9 @@ label {
 /* Hover delete */
 .btn-quitar:hover {
   background: rgba(0,0,0,0.6);
-  visibility: hidden;
 }
 
-/* ================== BOTONERA INFERIOR (NO TOCAR) ================== */
+/* ================== BOTONERA INFERIOR ================== */
 #botonera-img{
   flex-shrink: 0;
   background: #f3f6fb;
@@ -147,7 +146,7 @@ label {
   transform: translateY(-1px);
 }
 
-/* Responsive */
 @media (max-width: 480px){
   #dropzone{ min-height: 200px; }
 }
+
