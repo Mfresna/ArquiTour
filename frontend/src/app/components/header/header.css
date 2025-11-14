@@ -1,7 +1,7 @@
 header {
   width: 100%;
   background-color: var(--colorTerciario);
-  padding: 10px 30px 8px;
+  padding: 10px 35px 8px;
   min-height: 3.2rem;
   box-shadow: 0 2px 4px var(--sombra);
   display: flex;
@@ -9,71 +9,108 @@ header {
   justify-content: space-between;
 }
 
-#menu-central ul {
+
+/*============ DISTRIBUCION PANELES ============*/
+#panel-izquierda{
+  margin: 0;
+  padding: 0;
+
+  display: flex;
+  flex: 1;
+
+  align-items: center;
+}
+
+#panel-central{
+  display: flex;
+  flex: 1;
+  justify-content: center;
+
+}
+
+#panel-derecha{
+  margin: 0;
+  padding: 0;
+  margin: auto;
+
+  display: flex;
+  flex: 1;
+  justify-content: flex-end;
+  height: 100%;
+  align-items: center;
+
+  position: relative; /*Le sirve al panel desplegable*/
+  gap: 30px;
+}
+
+/*============ PANELES ============*/
+    /*PANEL IZQUIERDO*/
+
+
+    /*PANEL CENTRAL*/
+#panel-central ul {
   display: flex;
   justify-content: center;
   align-items: center;
+
   list-style: none;
-  gap: 2rem;
+
   margin: 0;
   padding: 0;
+  gap: 2.5rem;
+
   user-select: none; /*no permite seleccionar el texto*/
 }
 
-#menu-central li a {
+#panel-central li .boton {
   color: var(--colorSecundario);
+
   text-decoration: none;
+
   font-weight: bold;
+  font-size: 1.25rem;
   letter-spacing: 0.5px;
+
   transition: color 0.3s ease, transform 0.2s ease;
   cursor: pointer;
 }
 
-#menu-central li a:hover {
-  color: var(--colorBoton);
+#panel-central li .boton:hover {
+  color: var(--colorLink, rgb(84, 127, 237));
   transform: scale(1.05);
 }
 
 
-/*============ PANEL DERECHA ============*/
-#panel-derecha{
-  margin: 0;
-  padding: 0;
-  height: 100%;
-  display: flex;
-  align-items: center;
-
-  position: relative; /*Le sirve al panel*/
-}
-
+    /*PANEL DERECHO*/
 #panel-derecha > span{
+  font-size: 30px;
   height: 100%;
-  font-size: 28px;
-
   user-select: none;
-  cursor: default;
+  cursor: pointer;
 
-  color: #007bff;
+  color: rgba(248, 247, 247);
+  transition: color 0.3s ease, transform 0.4s ease;
 }
 
+#panel-derecha > span:hover {
+  color: var(--colorLink);
+  transform: scale(1.05);
+}
 
-
-/*============ MENU DESPLEGABLE ============*/
+/*============ MENUES DESPLEGABLE ============*/
 .menu-desplegable {
   /*Posicion del menu*/
   position: absolute;
   top:100%;
-  right: 0;
-  z-index: 1000;
-
   margin-top: 20px;
 
+  z-index: 1000;
+  
   /*Diseño estetico*/
   background-color: white;
   border: 1px solid #ccc;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
 
-  min-width: 210px;
   padding: 10px;
 }
 
@@ -81,13 +118,13 @@ header {
   background-color: #f0f0f0;
 }
 
-  /*MENU PERFIL DISPOSICION INTERNA */
-#lista-botones{
-  margin: 0;
-  padding: 0;
+        /*MENU USUARIO*/
+#menu-usuario{
+  right: 0;
+  min-width: 210px;
 }
 
-#menu-perfil a{
+#menu-usuario a{
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -97,8 +134,7 @@ header {
 
   margin: 2px 0px;
   padding: 8px 15px;
-  
-  cursor: pointer;
+
   user-select: none;
 }
 
@@ -106,8 +142,7 @@ a:hover #logout{
   color: red;
 }
 
-
-  /*MODO NOCHE*/
+  /*Modo Noche*/
 #modo-noche{
   padding-top: 0px !important;
   padding-bottom: 0px !important;
@@ -118,49 +153,107 @@ a:hover #logout{
 
 #noche-toggle{
   font-size: 38px;
-  transition: color .8s ease;
+  transition: color .5s ease;
 }
 
 #noche-toggle[modoNoche = "true"]{
-  color: #05537d
+  color: #05537d;
 }
 
 #noche-toggle[modoNoche = "false"]{
-  color: #2693ce
+  color: #2693ce;
 }
 
-
-
   /*Linea divisoria*/
-#menu-perfil hr{
+#menu-usuario hr{
   border: none;
 
   height: 1px;
   width: 80%;
   margin: 8px auto; /*Centra la linea*/
   background-color: #ccc;
-
 }
 
+        /*MENU OBRAS*/
+#panel-obras{
+  /*Le Sirve al menu desplegable*/
+  position: relative;
+}
 
-/*============== BORDES ===========================*/
+#menu-obras{
+  right: 0;
+  min-width: 190px;
+  z-index: 10000;
+
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+#menu-obras a {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+
+  text-decoration: none;
+  text-align: center;
+  color: #333;
+
+  margin: 2px 0px;
+  padding: 8px 15px;
+  
+  cursor: pointer;
+  user-select: none;
+  width: 100%; 
+}
+
+        /*MENU OBRAS*/
+#panel-estudios{
+  /*Le Sirve al menu desplegable*/
+  position: relative;
+}
+
+#menu-estudios{
+  right: 0;
+  min-width: 190px;
+  z-index: 10000;
+
+  left: 50%;
+  transform: translateX(-50%);
+}
+ 
+#menu-estudios a {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+
+  text-decoration: none;
+  text-align: center;
+  color: #333;
+
+  margin: 2px 0px;
+  padding: 8px 15px;
+  
+  cursor: pointer;
+  user-select: none;
+  width: 100%; 
+
+  border-radius: 5px;
+}
+
+/*============ CLASES BORDES============*/
+/*TODOS LOS BORDES*/
 .borde-sup-der{
   border-top-right-radius: var(--radioMenu, 10px);
 }
-
 .borde-sup-izq{
   border-top-left-radius: var(--radioMenu, 10px);
 }
-
 .borde-inf-der{
   border-bottom-right-radius: var(--radioMenu, 10px);
 }
-
 .borde-inf-izq{
   border-bottom-left-radius:  var(--radioMenu, 10px);
 }
-
-/*SUP e INF*/
 
 .bordes-radius-sup{
   border-top-right-radius: var(--radioMenu, 10px);
@@ -171,11 +264,14 @@ a:hover #logout{
   border-bottom-left-radius:  var(--radioMenu, 10px);
 }
 
-/*TODOS LOS BORDES*/
-
 .bordes-radius{
   border-top-right-radius: var(--radioMenu, 10px);
   border-top-left-radius: var(--radioMenu, 10px);
   border-bottom-right-radius: var(--radioMenu, 10px);
   border-bottom-left-radius:  var(--radioMenu, 10px);
+}
+
+.deshabilitado{
+  color:  #4c4949 !important;
+  cursor: default !important;
 }
