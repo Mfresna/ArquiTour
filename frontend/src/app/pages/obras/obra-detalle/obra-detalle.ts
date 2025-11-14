@@ -4,7 +4,7 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { environment } from '../../../../environments/environment';
 import { TokenService } from '../../../auth/services/tokenService/token-service';
 import { EstudioService } from '../../../services/estudioService/estudio-service';
-import { ObraService } from '../../../services/obra-service';
+import { ObraService } from '../../../services/obraService/obra-service';
 import { CategoriaObraDescripcion } from '../../../models/obraModels/categoriaObraModel';
 import { EstadoObraDescripcion } from '../../../models/obraModels/estadoObraModel';
 
@@ -27,6 +27,7 @@ export class ObraDetalle {
 
   //Carrusel miniaturas
   @ViewChild('carruselImagenes') carruselImagenes!: ElementRef;
+  
 
   //Para mostrar el nombre prolijo de estado y categoria
   CategoriaObraDescripcion = CategoriaObraDescripcion;
@@ -126,6 +127,7 @@ export class ObraDetalle {
   cerrarVentana(): void {
     this.ventanaAbierta = false;
   }
+
 
   // Roles y acciones
 

@@ -3,7 +3,7 @@ import { ObraModel } from '../../../models/obraModels/obraModel';
 import { environment } from '../../../../environments/environment';
 import { ReactiveFormsModule, FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { RouterLink } from '@angular/router';
-import { ObraService } from '../../../services/obra-service';
+import { ObraService } from '../../../services/obraService/obra-service';
 import { CategoriaObraDescripcion, CategoriaObraModel } from '../../../models/obraModels/categoriaObraModel';
 import { EstadoObraDescripcion, EstadoObraModel } from '../../../models/obraModels/estadoObraModel';
 import { EstudioModel } from '../../../models/estudioModel';
@@ -17,18 +17,17 @@ import { EstudioService } from '../../../services/estudioService/estudio-service
 })
 export class Obras implements OnInit {
 
-  obras: ObraModel[]= [];
+  obras: ObraModel[] = [];
   imagenDefecto = `${environment.imgObra}`;
-  filtro!: FormGroup; 
-
+  filtro!: FormGroup;
 
   categorias = Object.values(CategoriaObraModel);
-  estados = Object.values(EstadoObraModel);
+  estados    = Object.values(EstadoObraModel);
   CategoriaObraDescripcion = CategoriaObraDescripcion;
   EstadoObraDescripcion    = EstadoObraDescripcion;
-  
-  estudios: EstudioModel[]= [];
- 
+
+  estudios: EstudioModel[] = [];
+
   constructor(
     private fb: FormBuilder,
     private obraService: ObraService,
@@ -44,17 +43,15 @@ export class Obras implements OnInit {
     });
 
     this.cargarEstudiosFiltro();
-
     this.cargarObras();
   }
 
-  //Trae estudios para mostrar en el filtro
+  /** Trae estudios para mostrar en el filtro y cachea nombres */
   private cargarEstudiosFiltro(): void {
     this.estudioService.getFiltrarEstudios().subscribe({
-      next: lista => {
+      next: (lista: EstudioModel[]) => {
         this.estudios = lista ?? [];
 
-        // Cachear todos los nombres para usarlos desde cualquier componente
         for (const e of this.estudios) {
           if (e.id && e.nombre) {
             this.estudioService.cachearNombre(e.id, e.nombre);
@@ -66,33 +63,28 @@ export class Obras implements OnInit {
   }
 
   cargarObras(): void {
-    const categoria = this.filtro.value.categoria || undefined;
-    const estado    = this.filtro.value.estado || undefined;
+    const obra = this.filtro.value;
 
-    // si hay algo en estudioId, lo paso a número; si no, no lo envío
-    const estudioId = (this.filtro.value.estudioId !== null && this.filtro.value.estudioId !== '')
-      ? Number(this.filtro.value.estudioId)
-      : undefined;
-
-    const nombre = (this.filtro.value.nombre ?? '').trim() || undefined;
-
-    this.obraService.getFiltrarObras(categoria, estado, estudioId, nombre).subscribe({
-      next: lista => this.obras = lista,
+    this.obraService.getFiltrarObras(
+      obra.categoria || undefined,
+      obra.estado    || undefined,
+      obra.estudioId ? Number(obra.estudioId) : undefined,
+      obra.nombre?.trim() || undefined
+    )
+    .subscribe({
+      next: (lista: ObraModel[]) => this.obras = lista,
       error: () => alert('No se pudo cargar la lista de obras'),
     });
   }
 
   limpiarFiltro(): void {
-    this.filtro.reset({ categoria: '', estado: '', estudioId: null, nombre: '' });
+    this.filtro.reset({
+      categoria: '',
+      estado: '',
+      estudioId: '',
+      nombre: ''
+    });
     this.cargarObras();
-  }
-
-
-  // Texto que se ve en el botón del select cuando está cerrado
-  etiquetaEstudioSeleccionado(): string {
-    const id = this.filtro.value.estudioId;
-    if (!id) return 'Todos los estudios';
-    return this.estudioService.getNombreById(Number(id)) ?? 'Estudio desconocido';
   }
 
   nombreEstudio(estudioId?: number): string {
@@ -100,9 +92,7 @@ export class Obras implements OnInit {
     return this.estudioService.getNombreById(estudioId) ?? 'Estudio desconocido';
   }
 
-
-  //Imágenes
-
+  // Imágenes
   imagenUrl(urls?: string[]): string {
     if (!urls || urls.length === 0) return this.imagenDefecto;
     const primera = urls[0];
@@ -110,11 +100,8 @@ export class Obras implements OnInit {
   }
 
   imagenError(ev: Event): void {
-  const img = ev.target as HTMLImageElement;
-  if (img.src.includes(this.imagenDefecto)) return;
-  img.src = this.imagenDefecto;
+    const img = ev.target as HTMLImageElement;
+    if (img.src.includes(this.imagenDefecto)) return;
+    img.src = this.imagenDefecto;
   }
-
-
-
 }

@@ -29,12 +29,15 @@
 /* ======== PANEL IZQUIERDO ======== */
 #panel-izq .titulo {
   text-transform: uppercase;
-  font-size: 2rem;
+  font-size: 1.8rem;
   font-weight: 700;
-  margin: 0 0 1rem 0;
+  margin-top: 10px;
   color: var(--colorTerciario);
   flex-shrink: 0;
   text-align: center;
+  letter-spacing: 0.5px;
+  position: relative;
+  color: var(--colorBoton, #0077b6);
 }
 
 #panel-filtros {
@@ -62,23 +65,28 @@
 }
 
 .fila label {
-  font-weight: 600;
+  font-weight: 500;
+  margin-left: 0.5rem;
   font-size: 0.9rem;
   color: var(--colorTerciario);
 }
 
 .fila input[type="text"] {
-  padding: 0.75rem;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  font-size: 0.95rem;
-  background: var(--colorPrincipal);
-  transition: border-color 0.2s, box-shadow 0.2s;
+  width: 100%;
+  padding: 0.6rem 0.8rem;
+  border-radius: 1.2rem;          
+  border: 1px solid #ccc;
+  font-family: var(--fuenteBase, "Segoe UI", Roboto, sans-serif);
+  font-size: 1rem;
+  background-color: #fff;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  height: 42px;
+  box-sizing: border-box;
 }
 
 .fila input[type="text"]:focus {
   outline: none;
-  border-color: var(--colorBoton);
+  border-color: var(--colorBoton, #0077b6);
   box-shadow: 0 0 6px rgba(0, 119, 182, 0.35);
 }
 
@@ -169,8 +177,9 @@
   width: 100%;
   height: 200px;
   object-fit: cover;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #dfe0e6 0%, #e1e4e7 100%);
   display: block;
+  border-bottom: 1px solid rgb(204, 198, 198);
 }
 
 .card-body {
