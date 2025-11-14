@@ -27,6 +27,7 @@ export class ObraDetalle {
 
   //Carrusel miniaturas
   @ViewChild('carruselImagenes') carruselImagenes!: ElementRef;
+  
 
   //Para mostrar el nombre prolijo de estado y categoria
   CategoriaObraDescripcion = CategoriaObraDescripcion;
@@ -126,6 +127,7 @@ export class ObraDetalle {
   cerrarVentana(): void {
     this.ventanaAbierta = false;
   }
+
 
   // Roles y acciones
 

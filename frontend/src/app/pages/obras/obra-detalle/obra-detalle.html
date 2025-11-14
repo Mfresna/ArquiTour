@@ -8,7 +8,11 @@
 
     <!-- ====== Ficha Técnica ====== -->
     <div class="ficha-tecnica">
-      <h1 class="titulo">{{ obra.nombre }}</h1>
+      <div class="tit-fav">
+        <h1 class="titulo">{{ obra.nombre }}</h1>
+        <span class="material-icons icono-fav">favorite</span>
+      </div>
+      
 
       <div class="ft-grid">
         <!-- Estudio -->
@@ -88,7 +92,7 @@
 
       <div class="carrusel-container">
         <button class="flecha-carrusel izq" (click)="scrollCarrusel(-1)">
-          <span class="material-icons">chevron_left</span>
+          <span class="material-icons icon-flecha">chevron_left</span>
         </button>
 
         <div class="imagenes" #carruselImagenes>
@@ -100,10 +104,10 @@
               <img [src]="img" (error)="imagenError($event)" alt="Miniatura {{ $index + 1 }}" />
             </button>
           }
-      </div>
+        </div>
 
         <button class="flecha-carrusel der" (click)="scrollCarrusel(1)">
-          <span class="material-icons">chevron_right</span>
+          <span class="material-icons icon-flecha">chevron_right</span>
         </button>
       </div>
 
@@ -114,9 +118,16 @@
           <div class="v-contenido" (click)="$event.stopPropagation()">
             <img class="v-img" [src]="imgSrc()[selectIndex]" (error)="imagenError($event)" alt="Vista ampliada" />
             <div class="v-controles">
-              <button class="v-btn nav" (click)="mover(1)">‹</button>
-              <button class="v-btn cerrar" (click)="cerrarVentana()">Cerrar</button>
-              <button class="v-btn nav" (click)="mover(+1)">›</button>
+              <button class="v-btn nav" (click)="mover(1)">
+                <span class="material-icons icon-ventana">chevron_left</span>
+              </button>
+              <button class="v-btn cerrar" (click)="cerrarVentana()">
+                <span class="material-icons icon-cerrar">close</span>
+              </button>
+              <button class="v-btn nav" (click)="mover(+1)">
+                <span class="material-icons icon-ventana">chevron_right</span>
+            
+              </button>
             </div>
           </div>
         </div>

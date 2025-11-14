@@ -62,44 +62,38 @@ export class Obras implements OnInit {
         }
       },
       error: () => alert('No se pudieron cargar los estudios'),
-    });
-  }
+      });
+    }
 
   cargarObras(): void {
-    const categoria = this.filtro.value.categoria || undefined;
-    const estado    = this.filtro.value.estado || undefined;
+    const obra = this.filtro.value;
 
-    // si hay algo en estudioId, lo paso a número; si no, no lo envío
-    const estudioId = (this.filtro.value.estudioId !== null && this.filtro.value.estudioId !== '')
-      ? Number(this.filtro.value.estudioId)
-      : undefined;
-
-    const nombre = (this.filtro.value.nombre ?? '').trim() || undefined;
-
-    this.obraService.getFiltrarObras(categoria, estado, estudioId, nombre).subscribe({
+    this.obraService.getFiltrarObras(
+      obra.categoria || undefined,
+      obra.estado    || undefined,
+      obra.estudioId ? Number(obra.estudioId) : undefined,
+      obra.nombre?.trim() || undefined
+    )
+    .subscribe({
       next: lista => this.obras = lista,
       error: () => alert('No se pudo cargar la lista de obras'),
     });
   }
 
   limpiarFiltro(): void {
-    this.filtro.reset({ categoria: '', estado: '', estudioId: null, nombre: '' });
+    this.filtro.reset({ 
+      categoria: '', 
+      estado: '', 
+      estudioId: '', 
+      nombre: '' 
+    });
     this.cargarObras();
-  }
-
-
-  // Texto que se ve en el botón del select cuando está cerrado
-  etiquetaEstudioSeleccionado(): string {
-    const id = this.filtro.value.estudioId;
-    if (!id) return 'Todos los estudios';
-    return this.estudioService.getNombreById(Number(id)) ?? 'Estudio desconocido';
   }
 
   nombreEstudio(estudioId?: number): string {
     if (!estudioId) return 'Estudio no especificado';
     return this.estudioService.getNombreById(estudioId) ?? 'Estudio desconocido';
   }
-
 
   //Imágenes
 
@@ -110,11 +104,9 @@ export class Obras implements OnInit {
   }
 
   imagenError(ev: Event): void {
-  const img = ev.target as HTMLImageElement;
-  if (img.src.includes(this.imagenDefecto)) return;
-  img.src = this.imagenDefecto;
+    const img = ev.target as HTMLImageElement;
+    if (img.src.includes(this.imagenDefecto)) return;
+    img.src = this.imagenDefecto;
   }
-
-
 
 }
