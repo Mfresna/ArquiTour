@@ -6,10 +6,13 @@ import { Estudios } from './pages/estudios/estudios/estudios';
 import { EstudioDetalle } from './pages/estudios/estudio-detalle/estudio-detalle';
 import { CambiarPass } from './auth/pages/cambiar-pass/cambiar-pass';
 import { EstudioForm } from './pages/estudios/estudio-form/estudio-form';
-import { Obras } from './pages/obras/obras/obras';
+
 import { ObraDetalle } from './pages/obras/obra-detalle/obra-detalle';
 import { Register } from './auth/pages/register/register';
 import { ObraForm } from './pages/obras/obra-form/obra-form';
+import { Favoritos } from './pages/favoritos/favoritos/favoritos';
+import { Obras } from './pages/obras/obras/obras';
+
 
 
 
@@ -34,6 +37,8 @@ export const routes: Routes = [
   { path: 'formularioOb', component: ObraForm},
   { path: 'obras/:id', component: ObraDetalle},
   { path: 'obras/:id/editar', component: ObraForm},
+  { path: 'favoritos', component: Favoritos},
+
 
 
   { path: 'prueba', component: Register}
