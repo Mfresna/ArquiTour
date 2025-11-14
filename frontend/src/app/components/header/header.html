@@ -1,4 +1,59 @@
 <header>
+  <div id="logo">
+    <span class="material-icons">person</span>
+  </div>
+
+  <div id="menu-central">
+    <ul>
+      <li><a routerLink="/">HOME</a></li>
+      <li><a routerLink="/estudios">CLIENTE NUEVO</a></li>
+      <li><a routerLink="/auth/password">CLIENTE NUEVO</a></li>
+      <li><a routerLink="/obras">CLIENTE NUEVO</a></li>
+      <li><a routerLink="/formulario">FORM</a></li>
+      <li><a routerLink="/formularioOb">FORMob</a></li>
+
+      <li (click)="cerrarSesion()"><a routerLink="/">CERRAR SESION</a></li>
+    </ul>
+  </div>
+  
+  <div id="panel-derecha">
+
+    <span 
+      class="material-icons"
+      (click)="toggleUsuarioMenu()"
+      (keydown.escape)="toggleUsuarioMenu()"
+      tabindex="0">person</span>  
+
+    @if(usuarioMenu){
+      <div id="menu-perfil" 
+        class="menu-desplegable bordes-radius-inf borde-sup-izq">
+
+        <a routerLink="/" (click)="cerrarSesion()">Cerrar Sesion
+          <span id="logout" class="material-icons user-icon-trigger">logout</span>
+        </a>
+        <a routerLink="/">Ver mi Perfil</a>
+        <a routerLink="/estudios">Gestionar Usuarios</a>
+        <hr>
+        <a id="modo-noche" (click)="toggleModoNoche()">Modo Noche
+          <span id="noche-toggle" 
+            class="material-icons user-icon-trigger"
+            [attr.modoNoche]="modoNoche">
+              {{modoNoche ? 'toggle_on' : 'toggle_off' }}
+          </span>
+        </a>
+
+      </div>
+    }
+    
+
+  </div>
+
+</header>
+
+
+
+
+<!-- 
   <ul>
     <li><a routerLink="/">HOME</a></li>
     <li><a routerLink="/estudios">CLIENTE NUEVO</a></li>
@@ -8,5 +63,10 @@
     <li><a routerLink="/formularioOb">FORMob</a></li>
 
     <li (click)="cerrarSesion()"><a routerLink="/">CERRAR SESION</a></li>
-  </ul>
-</header>
+    <span class="material-icons">person</span>
+    <span class="material-symbols-outlined">person</span>
+
+    <span class="material-icons">account_circle</span>
+    <span class="material-icons">
+</span>
+  </ul> -->

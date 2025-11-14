@@ -1,11 +1,15 @@
 header {
   width: 100%;
   background-color: var(--colorTerciario);
-  padding: 15px 0;
+  padding: 10px 30px 8px;
+  min-height: 3.2rem;
   box-shadow: 0 2px 4px var(--sombra);
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 }
 
-ul {
+#menu-central ul {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -16,7 +20,7 @@ ul {
   user-select: none; /*no permite seleccionar el texto*/
 }
 
-li a {
+#menu-central li a {
   color: var(--colorSecundario);
   text-decoration: none;
   font-weight: bold;
@@ -25,7 +29,153 @@ li a {
   cursor: pointer;
 }
 
-li a:hover {
+#menu-central li a:hover {
   color: var(--colorBoton);
   transform: scale(1.05);
+}
+
+
+/*============ PANEL DERECHA ============*/
+#panel-derecha{
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  display: flex;
+  align-items: center;
+
+  position: relative; /*Le sirve al panel*/
+}
+
+#panel-derecha > span{
+  height: 100%;
+  font-size: 28px;
+
+  user-select: none;
+  cursor: default;
+
+  color: #007bff;
+}
+
+
+
+/*============ MENU DESPLEGABLE ============*/
+.menu-desplegable {
+  /*Posicion del menu*/
+  position: absolute;
+  top:100%;
+  right: 0;
+  z-index: 1000;
+
+  margin-top: 20px;
+
+  /*Diseño estetico*/
+  background-color: white;
+  border: 1px solid #ccc;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+
+  min-width: 210px;
+  padding: 10px;
+}
+
+.menu-desplegable a:hover {
+  background-color: #f0f0f0;
+}
+
+  /*MENU PERFIL DISPOSICION INTERNA */
+#lista-botones{
+  margin: 0;
+  padding: 0;
+}
+
+#menu-perfil a{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+
+  text-decoration: none;
+  color: #333;
+
+  margin: 2px 0px;
+  padding: 8px 15px;
+  
+  cursor: pointer;
+  user-select: none;
+}
+
+a:hover #logout{
+  color: red;
+}
+
+
+  /*MODO NOCHE*/
+#modo-noche{
+  padding-top: 0px !important;
+  padding-bottom: 0px !important;
+  
+  display: flex;
+  align-items: center;
+}
+
+#noche-toggle{
+  font-size: 38px;
+  transition: color .8s ease;
+}
+
+#noche-toggle[modoNoche = "true"]{
+  color: #05537d
+}
+
+#noche-toggle[modoNoche = "false"]{
+  color: #2693ce
+}
+
+
+
+  /*Linea divisoria*/
+#menu-perfil hr{
+  border: none;
+
+  height: 1px;
+  width: 80%;
+  margin: 8px auto; /*Centra la linea*/
+  background-color: #ccc;
+
+}
+
+
+/*============== BORDES ===========================*/
+.borde-sup-der{
+  border-top-right-radius: var(--radioMenu, 10px);
+}
+
+.borde-sup-izq{
+  border-top-left-radius: var(--radioMenu, 10px);
+}
+
+.borde-inf-der{
+  border-bottom-right-radius: var(--radioMenu, 10px);
+}
+
+.borde-inf-izq{
+  border-bottom-left-radius:  var(--radioMenu, 10px);
+}
+
+/*SUP e INF*/
+
+.bordes-radius-sup{
+  border-top-right-radius: var(--radioMenu, 10px);
+  border-top-left-radius: var(--radioMenu, 10px);
+}
+.bordes-radius-inf{
+  border-bottom-right-radius: var(--radioMenu, 10px);
+  border-bottom-left-radius:  var(--radioMenu, 10px);
+}
+
+/*TODOS LOS BORDES*/
+
+.bordes-radius{
+  border-top-right-radius: var(--radioMenu, 10px);
+  border-top-left-radius: var(--radioMenu, 10px);
+  border-bottom-right-radius: var(--radioMenu, 10px);
+  border-bottom-left-radius:  var(--radioMenu, 10px);
 }
