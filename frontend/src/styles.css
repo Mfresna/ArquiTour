@@ -6,6 +6,7 @@
   --sombra: rgba(0, 0, 0, 0.15);
   --colorBoton: #0077b6;
   --fuenteBase: "Segoe UI", Roboto, sans-serif;
+  --radioMenu: 15px;
 }
 
 * {
