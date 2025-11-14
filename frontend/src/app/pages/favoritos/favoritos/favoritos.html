@@ -1,0 +1,67 @@
+<div id="global">
+  <div id="contenedor-obras">
+
+    <!-- PANEL IZQUIERDO -->
+    <div id="panel-izq">
+      <h3 class="titulo">Mis listas de favoritos</h3>
+
+      <div id="panel-filtros">
+        <div class="bloque-texto">
+          <p>
+            Organizá tus obras favoritas en distintas listas.
+          </p>
+          <p>
+            Hacé clic en una lista para ver las obras que contiene.
+          </p>
+        </div>
+
+        <!-- Si más adelante querés un botón para crear lista, va acá -->
+        <!--
+        <div class="acciones">
+          <button type="button" (click)="irACrearLista()">Nueva lista</button>
+        </div>
+        -->
+      </div>
+    </div>
+
+    <!-- PANEL DERECHO -->
+    <div id="panel-der">
+      <div id="panel-scroll">
+        <div id="contenedor-lista">
+
+          <!-- Estado cargando -->
+          @if (cargando) {
+            <p class="vacio">Cargando listas de favoritos...</p>
+          }
+          <!-- Listas cargadas -->
+          @else if (favoritos && favoritos.length > 0) {
+            <ul class="lista-obras lista-favoritos">
+              @for (fav of favoritos; track fav.id ?? $index) {
+                <li
+                  class="obra-card favorito-card"
+             
+                  aria-label="Ver lista de favoritos {{ fav.nombre }}"
+                >
+                  <div class="info">
+                    <h3 class="obra-nombre">{{ fav.nombre }}</h3>
+                    <small class="obra-estudio">
+                      Ver obras de esta lista
+                    </small>
+                  </div>
+                </li>
+              }
+            </ul>
+          }
+          <!-- Sin listas -->
+          @else {
+            <p class="vacio">
+              Todavía no tenés listas de favoritos creadas.
+            </p>
+          }
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

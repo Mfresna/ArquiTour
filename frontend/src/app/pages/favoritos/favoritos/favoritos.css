@@ -1,0 +1,15 @@
+/* Opcional: ajusta un poco las cards de favoritos si querés */
+.lista-favoritos .favorito-card {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+}
+
+.lista-favoritos .favorito-card .obra-nombre {
+  margin: 0;
+}
+
+.lista-favoritos .favorito-card .obra-estudio {
+  color: #6b7280;
+}

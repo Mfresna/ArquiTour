@@ -46,8 +46,6 @@
   font-size: 2.1rem;
   font-weight: 800;
   color: var(--color-primario);
-  border-bottom: 2px solid #e5e7eb;
-  padding-bottom: .8rem;
 }
 
 /* 4 columnas: Estudio | Categoría | Estado | Año */
@@ -315,10 +313,6 @@
   border-color: var(--color-primario);
 }
 
-.imagen.activa {
-  border-color: var(--color-primario);
-}
-
 .flecha-carrusel {
   position: absolute;
   top: 50%;
@@ -356,7 +350,7 @@
   right: 12px;
 }
 
-.material-icons {
+/* .material-icons {
   font-size: 26px;
   line-height: 1;
   font-variation-settings:
@@ -369,7 +363,7 @@
 
 .flecha-carrusel:hover .material-icons {
   transform: scale(1.1);
-}
+} */
 
 /* ====== Ventana de Imágenes ====== */
 
@@ -400,7 +394,7 @@
 .v-controles{
   display:flex; 
   justify-content:center; 
-  gap:10px;
+  gap:20px;
 }
 
 .v-btn{ 
@@ -437,79 +431,92 @@
   background: #e74c3c;
 }
 
-
-/* ====== Responsive ====== */
-/* ====== >= 1200px (desktop grande) ====== */
-@media (min-width: 1200px) {
-  .imgPrinc { height: 56vh; max-height: 620px; }
+/* Por defecto: flechas visibles */
+.carrusel-container .flecha-carrusel {
+  display: grid; /* o flex, o inline-flex, lo que uses */
 }
 
-/* ====== <= 1024px (laptop/tablet horizontal) ====== */
-@media (max-width: 1024px) {
-  .detalle-obra { padding: 12px 16px; }
-  .imgPrinc { height: 48vh; max-height: 480px; }
 
-  .ft-grid { grid-template-columns: repeat(2, 1fr); } /* 4 → 2 */
-  .titulo { font-size: 1.8rem; }
-
-  .contenido { grid-template-columns: 1fr; height: auto; } /* texto↑ mapa↓ */
-  .mapa { height: 260px; }
-  .mapa-placeholder { height: 100%; }
-
-  .imagen { min-width: 220px; max-width: 220px; height: 165px; }
-  .flecha-carrusel { width: 42px; height: 42px; }
-  .material-icons { font-size: 24px; }
-
-  .v-contenido { max-width: min(94vw, 900px); max-height: 88vh; gap: 10px; }
-  .v-img { max-height: 70vh; }
-  .v-controles { gap: 14px; }
-  .v-btn { width: 44px; height: 44px; }
+/* Que sea lo más neutro posible */
+.material-icons {
+  line-height: 1;
+  display: inline-block;
+}
+/* Tamaño base de las flechas */
+.icon-flecha {
+  font-size: 26px;
+  font-variation-settings:
+    'FILL' 1,
+    'wght' 500,
+    'GRAD' 0,
+    'opsz' 24;
+  font-weight: 900;
 }
 
-/* ====== <= 768px (tablet vertical / móvil grande) ====== */
-@media (max-width: 768px) {
-  .titulo { font-size: 1.5rem; }
-  .acciones { gap: 8px; }
-  .btn { min-width: 90px; font-size: .78rem; }
-
-  .galeria { gap: 8px; }
-  .carrusel-container { padding: 12px 0; }
-  .imagenes { gap: 8px; -webkit-overflow-scrolling: touch; }
-  .imagen { min-width: 200px; max-width: 200px; height: 150px; border-radius: 16px; }
-
-  .flecha-carrusel { width: 40px; height: 40px; }
-  .material-icons { font-size: 22px; }
-
-  .v-img { max-height: 68vh; }
+/* Opcional: un poquito de escala solo en hover */
+.flecha-carrusel:hover .icon-flecha {
+  transform: scale(1.05);
+  transition: transform 0.2s ease;
+}
+.icon-cerrar {
+  font-size: 28px;          /* acá cambiás y se nota, no afecta a las flechas */
+  font-variation-settings:
+    'FILL' 1,
+    'wght' 500,
+    'GRAD' 0,
+    'opsz' 24;
+  transition: transform 0.2s ease;
+  color: #fff;             /* o el color que quieras */
+  font-weight: 900;
 }
 
-/* ====== <= 480px (móvil) ====== */
-@media (max-width: 480px) {
-  .detalle-obra { --gap: 12px; padding: 10px 12px; }
-  .imgPrinc { height: 38vh; min-height: 240px; max-height: 360px; border-radius: 10px; }
 
-  .ft-grid { grid-template-columns: 1fr; gap: 12px; } /* 1 col */
-  .ft-col { justify-items: stretch; text-align: left; }
-  .burbuja, .burbuja-link { width: 100%; height: 2.2rem; }
-
-  .contenido { grid-template-columns: 1fr; gap: 14px; }
-  .texto { padding-right: 6px; }
-  .mapa { height: 220px; }
-
-  .galeria h3 { font-size: .75rem; }
-  .imagen { min-width: 160px; max-width: 160px; height: 120px; border-radius: 14px; }
-  .flecha-carrusel { width: 36px; height: 36px; }
-  .material-icons { font-size: 20px; }
-
-  .v-contenido { max-width: 96vw; max-height: 86vh; }
-  .v-img { max-height: 62vh; border-radius: 8px; }
-  .v-controles { gap: 12px; }
-  .v-btn { width: 40px; height: 40px; }
+/* Efecto cuando pasás por el botón cerrar */
+.v-btn.cerrar:hover .icon-cerrar {
+  transform: scale(1.1);
 }
 
-/* Accesibilidad: menos movimiento */
-@media (prefers-reduced-motion: reduce) {
-  .flecha-carrusel, .v-btn { transition: none; transform: none !important; }
+/* ===== Desktop / pantallas grandes ===== */
+@media (min-width: 801px) {
+  /* Ocultar flechas si hay 1, 2 o 3 imágenes */
+  .carrusel-container:has(.imagen:nth-child(-n+3):last-child) .flecha-carrusel {
+    display: none;
+  }
+}
+
+/* ===== Mobile / pantallas chicas ===== */
+@media (max-width: 800px) {
+  /* Ocultar flechas solo si hay 1 imagen */
+  .carrusel-container:has(.imagen:first-child:last-child) .flecha-carrusel {
+    display: none;
+  }
+}
+/* Encabezado alineado correctamente */
+.tit-fav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 6px;
+  border-bottom: 2px solid #e5e7eb;
+}
+
+
+/* Icono del corazón */
+.icono-fav {
+  font-size: 40px;
+  line-height: 1;
+  color: transparent;
+  -webkit-text-stroke: 2px #928787;   
+  transition: transform 0.2s ease;
+  margin-right: 50px;
+  cursor: pointer;
+}
+
+/* Hover */
+.icono-fav:hover {
+   color: #e63946;                      
+  -webkit-text-stroke: 0px transparent; 
+
 }
 
 

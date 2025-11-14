@@ -45,6 +45,7 @@ label {
   flex-direction: column;
   padding: 16px;
   overflow: hidden;
+  justify-content: center;
 }
 
 /* ================== MENSAJE ================== */

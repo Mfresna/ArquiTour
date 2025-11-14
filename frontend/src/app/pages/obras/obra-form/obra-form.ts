@@ -7,7 +7,7 @@ import { environment } from '../../../../environments/environment';
 import { CategoriaObraModel, CategoriaObraDescripcion } from '../../../models/obraModels/categoriaObraModel';
 import { EstadoObraModel, EstadoObraDescripcion } from '../../../models/obraModels/estadoObraModel';
 import { ImagenService } from '../../../services/imagenService/imagen-service';
-import { ObraService } from '../../../services/obra-service';
+import { ObraService } from '../../../services/obraService/obra-service';
 import { EstudioModel } from '../../../models/estudioModel';
 import { EstudioService } from '../../../services/estudioService/estudio-service';
 import { ObraModel } from '../../../models/obraModels/obraModel';
