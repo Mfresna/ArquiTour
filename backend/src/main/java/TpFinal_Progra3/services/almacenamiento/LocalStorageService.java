@@ -30,8 +30,7 @@ public class LocalStorageService implements ImagenStorageInterface {
             ".jpeg",
             ".png",
             ".gif",
-            ".webp",
-            ".svg");
+            ".webp");
 
     private LocalStorageService(@Value("${dir.imagenes}") String dirImagenes) throws IOException {
         //La ruta relativa ./imagenes => la convierte en absoluta (C://usr/fotos/imagenes/)

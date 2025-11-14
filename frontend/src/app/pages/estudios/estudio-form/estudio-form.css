@@ -42,12 +42,13 @@
   margin-bottom: 1.4rem;
   position: relative;
   letter-spacing: 0.5px;
+  text-transform: uppercase;
 }
 
 #titulo::after {
   content: "";
   display: block;
-  width: 45%;
+  width: 50%;
   height: 3px;
   border-radius: 3px;
   background: linear-gradient(90deg, var(--colorBoton, #0077b6), #00b4d8);
