@@ -5,6 +5,7 @@ import TpFinal_Progra3.exceptions.NotFoundException;
 import TpFinal_Progra3.exceptions.ProcesoInvalidoException;
 import TpFinal_Progra3.model.DTO.CoordenadasDTO;
 import TpFinal_Progra3.model.DTO.IPLocationDTO;
+import TpFinal_Progra3.model.DTO.ImagenDTO;
 import TpFinal_Progra3.model.DTO.obras.ObraDTO;
 import TpFinal_Progra3.model.DTO.obras.ObraResponseDTO;
 import TpFinal_Progra3.model.DTO.usuarios.UsuarioResponseDTO;
@@ -25,11 +26,16 @@ import TpFinal_Progra3.utils.CoordenadasUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
+import org.hibernate.mapping.Set;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
@@ -153,8 +159,8 @@ public class ObraService implements ObraServiceInterface{
         EstudioArq estudio = estudioArqRepository.findById(obraDTO.getEstudioId())
                 .orElseThrow(() -> new NotFoundException("Estudio de arquitectura no encontrado con ID: " + obraDTO.getEstudioId()));
 
-        if(!puedeGestionarObra(request,id)) {
-            throw new ProcesoInvalidoException(HttpStatus.UNAUTHORIZED,"El Arquitecto no puede modificar obras para un estudio que no forma parte.");
+        if (!puedeGestionarObra(request, id)) {
+            throw new ProcesoInvalidoException(HttpStatus.UNAUTHORIZED, "El Arquitecto no puede modificar obras para un estudio que no forma parte.");
         }
 
         obra.setNombre(obraDTO.getNombre());
@@ -166,7 +172,13 @@ public class ObraService implements ObraServiceInterface{
         obra.setCategoria(obraDTO.getCategoria());
         obra.setEstudio(estudio);
 
+        //Primero Actualizo la obra si no me da error, actualizo las imagenes
+
         Obra obraActualizada = obraRepository.save(obra);
+
+        List<String> urlExistentes = obra.getImagenes().stream().map(Imagen::getUrl).toList();
+        actualizarImagenesObra(request,id,urlExistentes,obraDTO.getUrlsImagenes());
+
         return obraMapper.mapResponseDTO(obraActualizada);
     }
 
@@ -222,4 +234,24 @@ public class ObraService implements ObraServiceInterface{
         return usr.getCredencial().tieneRolUsuario(RolUsuario.ROLE_ADMINISTRADOR)
                 || usr.getEstudios().stream().anyMatch(e -> e.getId().equals(id));
     }
+
+    private void actualizarImagenesObra(HttpServletRequest request,
+                                        Long id,
+                                        List<String> urlsExistentes,
+                                        List<String> urlsNuevas){
+        //AGREGO IMG NUEVAS
+        List<String> urlsAgregar = urlsNuevas.stream()
+                .filter(url -> !urlsExistentes.contains(url))
+                .toList();
+
+        //BORRO IMG QUE NO QUIERO
+        List<String> urlsBorrar = urlsExistentes.stream()
+                .filter(url -> !urlsNuevas.contains(url))
+                .toList();
+
+
+        agregarImagenes(request, id, urlsAgregar);
+        eliminarImagenes(request, id, urlsBorrar);
+    }
+
 }

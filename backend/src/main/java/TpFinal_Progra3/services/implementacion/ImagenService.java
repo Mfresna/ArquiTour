@@ -38,6 +38,15 @@ public class ImagenService implements ImagenServiceInterface {
                 .orElseThrow(() -> new NotFoundException("Imagen no encontrada con URL: " + url));
     }
 
+    public List<Imagen> obtenerImagenes(List<String> urls) {
+
+        return urls.stream()
+                .map(url -> imagenRepository.findByUrl(url)
+                        .orElseThrow(() -> new NotFoundException("Imagen no encontrada: " + url))
+                )
+                .toList();
+    }
+
     public void eliminarImagen(Long id) {
         if (!imagenRepository.existsById(id)) {
             throw new NotFoundException("Imagen no encontrada.");

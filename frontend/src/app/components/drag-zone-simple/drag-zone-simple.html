@@ -1,0 +1,49 @@
+<fieldset>
+  <label for="imagen">{{ label }}</label>
+
+  <div id="dropzone"
+       role="button"
+       tabindex="0"
+       (click)="abrirExplorador($event)"
+       (keyup.enter)="abrirExplorador($event)"
+       (dragover)="permitirSoltar($event)"
+       (dragenter)="permitirSoltar($event)"
+       (drop)="capturarArchivo($event)">
+
+    <div id="contenedor-img">
+
+      @if (vistasPrevias.length || imgExistente) {
+        <img
+          id="preview"
+          [src]="vistasPrevias[0] || imgExistente!"
+          alt="Vista previa" />
+      } @else {
+        <div id="dropzone-msg">
+          <strong>Arrastre y suelte una imagen aquí<br></strong>
+          <span> o haga clic para seleccionar desde su equipo <br></span>
+          <small class="formats"> Formatos: JPG, PNG, WEBP</small>
+        </div>
+      }
+
+      <input
+        #inputArchivo
+        id="imagen"
+        type="file"
+        accept="image/*"
+        hidden
+        (change)="capturarArchivo($event)" />
+
+    </div>
+
+    @if (vistasPrevias.length || imgExistente) {
+      <div id="botonera-img" (click)="$event.stopPropagation()">
+        <button type="button"
+                class="btn-outline"
+                (click)="limpiarImagen($event)">
+          {{ labelBoton }}
+        </button>
+      </div>
+    }
+
+  </div>
+</fieldset>

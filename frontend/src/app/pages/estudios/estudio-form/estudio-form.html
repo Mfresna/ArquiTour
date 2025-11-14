@@ -27,12 +27,12 @@
 
         <!-- Imagen -->
 
-        <app-drag-zone-imagenes
+        <app-drag-zone-simple
           label="Imagen de Perfil:"
-          [imgExistente]="editar ? imagenActualUrl  : null"
-          [multiple]="false"
-          (archivoChange)="archivoSeleccionado = $event">  <!-- File | null -->
-        </app-drag-zone-imagenes>
+          [imgExistente]="editar ? imagenActualUrl : null"
+          (archivoChange)="archivoSeleccionado = $event">
+        </app-drag-zone-simple>
+
 
         <!-- Arquitectos (solo modo edición) -->
         <!-- @if (editar) {

@@ -7,10 +7,11 @@ import { EstudioService } from '../../../services/estudioService/estudio-service
 import { finalize, switchMap, take } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 import { DragZoneImagenes } from "../../../components/drag-zone-imagenes/drag-zone-imagenes";
+import { DragZoneSimple } from '../../../components/drag-zone-simple/drag-zone-simple';
 
 @Component({
   selector: 'app-estudio-form',
-  imports: [ReactiveFormsModule, DragZoneImagenes],
+  imports: [ReactiveFormsModule, DragZoneSimple],
   templateUrl: './estudio-form.html',
   styleUrl: './estudio-form.css',
 })
