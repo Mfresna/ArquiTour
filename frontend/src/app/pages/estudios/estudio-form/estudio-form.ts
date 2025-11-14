@@ -7,10 +7,11 @@ import { EstudioService } from '../../../services/estudioService/estudio-service
 import { finalize, switchMap, take } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 import { DragZoneImagenes } from "../../../components/drag-zone-imagenes/drag-zone-imagenes";
+import { DragZoneSimple } from '../../../components/drag-zone-simple/drag-zone-simple';
 
 @Component({
   selector: 'app-estudio-form',
-  imports: [ReactiveFormsModule, DragZoneImagenes],
+  imports: [ReactiveFormsModule, DragZoneSimple],
   templateUrl: './estudio-form.html',
   styleUrl: './estudio-form.css',
 })
@@ -56,17 +57,33 @@ export class EstudioForm {
           nombre: data.nombre, 
           obrasIds: data.obrasIds ?? [],
           arquitectosIds: data.arquitectosIds ?? []
-          });
-        if (data.imagenUrl) {
+        });
+        
+        if (data.imagenUrl && !this.esImagenPorDefecto(data.imagenUrl)) {
           const path = data.imagenUrl.startsWith('/') ? data.imagenUrl : `/${data.imagenUrl}`;
           this.imagenActualUrl = `${environment.apiUrl}${path}`;
         } else {
-          this.imagenActualUrl = this.imagenDefecto;
+          // si no tiene propia o es la default -> drag vacío
+          this.imagenActualUrl = null;
         }
       },
       error: () => alert('No se pudo cargar el estudio.'),
     });
   }
+
+  private esImagenPorDefecto(imagenUrl: string): boolean {
+
+    const soloPath = imagenUrl.replace(/^https?:\/\/[^/]+/, ''); 
+
+    const defNormalizada = this.imagenDefecto.startsWith('/')
+      ? this.imagenDefecto
+      : `/${this.imagenDefecto}`;
+
+    return soloPath === defNormalizada;
+  }
+
+
+
 
 
   guardar(event?: Event): void {

@@ -1,5 +1,4 @@
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
-import { ImagenService } from '../../services/imagenService/imagen-service';
 
 @Component({
   selector: 'app-drag-zone-imagenes',
@@ -7,88 +6,132 @@ import { ImagenService } from '../../services/imagenService/imagen-service';
   templateUrl: './drag-zone-imagenes.html',
   styleUrl: './drag-zone-imagenes.css',
 })
-export class DragZoneImagenes implements OnInit{
 
-  @Input() label: string = 'Imagen'
-  @Input() labelBoton: string = 'Quitar imagen'
+export class DragZoneImagenes implements OnInit {
+
+  @Input() label: string = 'Imagen';
+  @Input() labelBoton: string = 'Quitar imagen';
   @Input() imgExistente: string | null = null;
+  @Input() multiple: boolean = false;
+  @Input() imagenesExistentes: string[] = [];
+  
   @Output() archivoChange = new EventEmitter<File | null>();
+  @Output() archivosChange = new EventEmitter<File[]>();
+  @Output() existentesChange = new EventEmitter<string[]>();
 
-  // Estado relacionado a la imagen
-  imagenSeleccionada: File | null = null;   // archivo temporal seleccionado por el usuario
-  vistaPrevia: string | null = null;        // URL temporal para previsualizar la imagen
-  subiendo = false;                         // estado de proceso de guardado
+  imagenes: File[] = [];       // nuevas
+  vistasPrevias: string[] = []; // previews de nuevas
 
-  // Referencia al input de archivos (para abrir el explorador al hacer click en el área)
   @ViewChild('inputArchivo') inputArchivo!: ElementRef<HTMLInputElement>;
 
   ngOnInit(): void {
-    if(this.imgExistente){
-      this.vistaPrevia = this.imgExistente;
+    if (!this.multiple && this.imgExistente) {
+      this.vistasPrevias = [this.imgExistente];
     }
   }
-  
 
   abrirExplorador(e?: Event): void {
-    if (e){
-      //frena la propagacion del click en otros elementos
-      e.stopPropagation();  
-    }        
-
-    if (!this.vistaPrevia){
-      this.inputArchivo?.nativeElement.click();
-    }    
-  }
-
-  // ===================== SELECCIONAR EL ARCHIVO
-  capturarArchivo(evento: DragEvent | Event): void {
-    evento.preventDefault?.();
-    let archivo: File | null = null;
-
-    if (evento instanceof DragEvent) {
-      //input de dragzone
-      archivo = evento.dataTransfer?.files?.[0] ?? null;
-    } else if (evento.target instanceof HTMLInputElement) {
-      //input desde explorador de archivos
-      archivo = evento.target.files?.[0] ?? null;
-    }
-
-    if (archivo) {
-      this.setArchivoSeleccionado(archivo);
-    }
-  }
-
-  private setArchivoSeleccionado(archivo: File): void {
-    this.imagenSeleccionada = archivo;
-
-    // limpiar vista previa previa (si existe) y generar una nueva
-    if (this.vistaPrevia) URL.revokeObjectURL(this.vistaPrevia);
-    this.vistaPrevia = URL.createObjectURL(archivo);
-    this.archivoChange.emit(archivo);
+    e?.stopPropagation();
+    this.inputArchivo?.nativeElement.click();
   }
 
   permitirSoltar(evento: DragEvent): void {
     evento.preventDefault();
   }
 
-  limpiarImagen(e?: Event): void {
+  capturarArchivo(evento: DragEvent | Event): void {
+    evento.preventDefault?.();
 
+    let files: FileList | null = null;
+
+    if (evento instanceof DragEvent) {
+      files = evento.dataTransfer?.files ?? null;
+    } else if (evento.target instanceof HTMLInputElement) {
+      files = evento.target.files ?? null;
+    }
+
+    if (!files?.length) return;
+
+    const nuevos = Array.from(files);
+
+    if (this.multiple) {
+      const combinados = [...this.imagenes, ...nuevos];
+      this.setImagenes(combinados);
+    } else {
+      this.setImagenes([nuevos[0]]);
+    }
+  }
+
+  private setImagenes(archivos: File[]): void {
+    this.vistasPrevias.forEach(url => {
+      if (!this.imgExistente || url !== this.imgExistente) {
+        URL.revokeObjectURL(url);
+      }
+    });
+
+    this.imagenes = archivos;
+    this.vistasPrevias = archivos.map(a => URL.createObjectURL(a));
+
+    if (this.multiple) {
+      this.archivosChange.emit(this.imagenes);
+    } else {
+      this.archivoChange.emit(this.imagenes[0] ?? null);
+    }
+  }
+
+  // quitar nueva
+  quitarNueva(index: number, e?: Event) {
     e?.stopPropagation();
 
-    this.imagenSeleccionada = null;
+    const url = this.vistasPrevias[index];
+    URL.revokeObjectURL(url);
 
-    if (this.vistaPrevia) {
-      URL.revokeObjectURL(this.vistaPrevia);
-      this.vistaPrevia = null;
-    }
+    this.imagenes.splice(index, 1);
+    this.vistasPrevias.splice(index, 1);
+
+    this.archivosChange.emit(this.imagenes);
+  }
+
+  // quitar existente (urls del back)
+  quitarExistente(index: number, e?: Event) {
+    e?.stopPropagation();
+
+    const nuevas = this.imagenesExistentes.filter((_, i) => i !== index);
+    
+    this.imagenesExistentes = nuevas;
+    this.existentesChange.emit(nuevas);
+  }
+
+  limpiarImagen(e?: Event): void {
+    e?.stopPropagation();
+
+    this.imagenes = [];
+    this.vistasPrevias.forEach(url => {
+      if (!this.imgExistente || url !== this.imgExistente) {
+        URL.revokeObjectURL(url);
+      }
+    });
+
+    this.vistasPrevias = [];
+    this.imgExistente = null;
+    this.imagenesExistentes = [];
+
     if (this.inputArchivo) {
       this.inputArchivo.nativeElement.value = '';
+    }
+
+    if (this.multiple) {
+      this.archivosChange.emit([]);
+      this.existentesChange.emit([]);
+    } else {
       this.archivoChange.emit(null);
     }
   }
 
   obtenerArchivoActual(): File | null {
-    return this.imagenSeleccionada;
+    return this.imagenes[0] ?? null;
   }
 
+
 }
+

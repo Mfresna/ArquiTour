@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { EstudioModel } from '../../../models/estudioModel';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { environment } from '../../../../environments/environment';
 import { TokenService } from '../../../auth/services/tokenService/token-service';
 import { EstudioService } from '../../../services/estudioService/estudio-service';
@@ -9,7 +9,7 @@ import { ObraService } from '../../../services/obra-service';
 
 @Component({
   selector: 'app-estudio-detalle',
-  imports: [],
+  imports: [RouterLink],
   templateUrl: './estudio-detalle.html',
   styleUrl: './estudio-detalle.css',
 })

@@ -42,6 +42,7 @@ label {
 #contenedor-img {
   flex: 1;
   display: flex;
+  justify-content: center;
   flex-direction: column;
   padding: 16px;
   overflow: hidden;
@@ -55,73 +56,20 @@ label {
   animation: aparecer-msg .3s ease-out;
 }
 
-/* ================== GRID DE IMÁGENES ================== */
-.grid-previas {
-  width: 100%;
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-  gap: 1rem;
-
-  max-height: 260px;
-  overflow-y: auto;
-  padding-bottom: 10px;
-}
-
-/* Imagen individual */
-.item-previa {
-  position: relative;
-  border: 1px solid #ddd;
+/* Preview única */
+#preview{
+  display: block;
+  max-width: min(360px, 100%);
+  max-height: 280px;
   border-radius: 10px;
-  overflow: hidden;
-  background: white;
-  aspect-ratio: 1 / 1;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 6px 18px rgba(0,0,0,.06);
+  object-fit: contain;
+  background: #fff;
+  padding: 5px;
 }
 
-.btn-quitar{
-  visibility: hidden;
-}
-
-
-.item-previa:hover .btn-quitar{
-  visibility: visible;
-}
-
-.item-previa img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-/* ================== BOTÓN QUITAR (delete icon) ================== */
-.btn-quitar {
-  position: absolute;
-  top: 6px;
-  right: 6px;
-  background: rgba(0,0,0,0.35);
-  border: none;
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  padding: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
-}
-
-#delete {
-  font-size: 18px;
-  color: white;
-  pointer-events: none;
-}
-
-/* Hover delete */
-.btn-quitar:hover {
-  background: rgba(0,0,0,0.6);
-  visibility: hidden;
-}
-
-/* ================== BOTONERA INFERIOR (NO TOCAR) ================== */
+/* ================== BOTONERA INFERIOR ================== */
 #botonera-img{
   flex-shrink: 0;
   background: #f3f6fb;
@@ -147,7 +95,6 @@ label {
   transform: translateY(-1px);
 }
 
-/* Responsive */
 @media (max-width: 480px){
   #dropzone{ min-height: 200px; }
 }
