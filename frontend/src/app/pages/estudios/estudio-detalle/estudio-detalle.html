@@ -33,7 +33,9 @@
           @if (obrasVinculadas.length) {
             <ul class="obras-scroll">
               @for (obra of obrasVinculadas; track obra.id) {
-                <li class="obra-item">{{ obra.nombre }}</li>
+                <li class="obra-item" [routerLink]="['/obras', obra.id]">
+                     {{ obra.nombre }}
+                </li>
               }
             </ul>
           } @else {

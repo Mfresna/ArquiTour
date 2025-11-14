@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { DragZoneImagenes } from '../../../components/drag-zone-imagenes/drag-zone-imagenes';
 import { ActivatedRoute, Router } from '@angular/router';
-import { take, finalize, switchMap } from 'rxjs';
+import { take, finalize, switchMap, forkJoin } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 import { CategoriaObraModel, CategoriaObraDescripcion } from '../../../models/obraModels/categoriaObraModel';
 import { EstadoObraModel, EstadoObraDescripcion } from '../../../models/obraModels/estadoObraModel';
@@ -11,10 +11,11 @@ import { ObraService } from '../../../services/obra-service';
 import { EstudioModel } from '../../../models/estudioModel';
 import { EstudioService } from '../../../services/estudioService/estudio-service';
 import { ObraModel } from '../../../models/obraModels/obraModel';
+import { DragZoneMultiple } from '../../../components/drag-zone-multiple/drag-zone-multiple';
 
 @Component({
   selector: 'app-obra-form',
-  imports: [ReactiveFormsModule, DragZoneImagenes],
+  imports: [ReactiveFormsModule, DragZoneMultiple],
   templateUrl: './obra-form.html',
   styleUrl: './obra-form.css',
 })
@@ -23,10 +24,14 @@ export class ObraForm {
   editar = false;
   id?: number;
 
-  // Preview
   imagenActualUrl: string | null = null;
   imagenDefecto = `${environment.imgObra}`;
-  archivoSeleccionado: File | null = null;
+
+  // Nuevas imágenes que vienen del drag-zone
+  archivosSeleccionados: File[] = [];
+
+  // Imágenes que ya existen en la obra
+  imagenesExistentes: string[] = [];
 
   subiendo = false;
 
@@ -47,12 +52,11 @@ export class ObraForm {
   ) {}
 
   ngOnInit(): void {
-
     this.formulario = this.fb.group({
       nombre: ['', [Validators.required, Validators.minLength(2)]],
-      categoria: ['', [Validators.required]],      
-      estado:    ['', [Validators.required]],        
-      estudioId: ['', [Validators.required]],         
+      categoria: ['', [Validators.required]],
+      estado:    ['', [Validators.required]],
+      estudioId: ['', [Validators.required]],
       anioEstado: ['', [Validators.required, Validators.min(1800), Validators.max(new Date().getFullYear())]],
       latitud: ['', [Validators.required, Validators.min(-90), Validators.max(90)]],
       longitud: ['', [Validators.required, Validators.min(-180), Validators.max(180)]],
@@ -69,7 +73,9 @@ export class ObraForm {
     }
   }
 
-  //Trae estudios para mostrar en el select
+  // ==================== AUXILIARES ====================
+
+  // Trae estudios para mostrar en el select
   private cargarEstudios(): void {
     this.estudioService.getFiltrarEstudios().subscribe({
       next: lista => {
@@ -86,17 +92,32 @@ export class ObraForm {
     });
   }
 
-
-  //Traduce estado y categoria en modo edición
+  // Traduce estado y categoria en modo edición
   private extraerCodigoCategoria(c: any): CategoriaObraModel | '' {
     if (!c) return '';
     return (typeof c === 'string' ? c : c.codigo ?? '') as CategoriaObraModel | '';
   }
+
   private extraerCodigoEstado(e: any): EstadoObraModel | '' {
     if (!e) return '';
     return (typeof e === 'string' ? e : e.codigo ?? '') as EstadoObraModel | '';
   }
 
+  // Pasa de URL absoluta a ruta relativa tipo 
+  private aRutaRelativa(urlCompleta: string): string {
+    const base = environment.apiUrl.replace(/\/+$/, ''); 
+    let relativa = urlCompleta;
+
+    if (relativa.startsWith(base)) {
+      relativa = relativa.substring(base.length);
+    }
+    if (!relativa.startsWith('/')) {
+      relativa = '/' + relativa;
+    }
+    return relativa;
+  }
+
+  // Carga obra en modo edición
   private cargarObra(id: number): void {
     this.obraService.getObra(id).pipe(take(1)).subscribe({
       next: (obra) => {
@@ -112,49 +133,123 @@ export class ObraForm {
         });
 
         if (obra.urlsImagenes?.length) {
+          // Guardamos las urls como absolutas para el drag-zone
+          this.imagenesExistentes = obra.urlsImagenes.map(img => {
+            const path = img.startsWith('/') ? img : `/${img}`;
+            return `${environment.apiUrl}${path}`;
+          });
+
+          // (Opcional) primera como "portada"
           const img = obra.urlsImagenes[0];
           const path = img.startsWith('/') ? img : `/${img}`;
           this.imagenActualUrl = `${environment.apiUrl}${path}`;
         } else {
           this.imagenActualUrl = this.imagenDefecto;
+          this.imagenesExistentes = [];
         }
+
       },
       error: () => alert('No se pudo cargar la obra.'),
     });
   }
 
+  // ==================== GUARDAR ====================
+
   guardar(event?: Event): void {
-  event?.preventDefault();
+    event?.preventDefault();
 
-  // Validación mínima al estilo Estudio (nombre obligatorio)
-  const nombre = (this.formulario.get('nombre')?.value ?? '').trim();
-  if (!nombre) {
-    alert('Debe ingresar un nombre válido.');
-    return;
-  }
+    const nombre = (this.formulario.get('nombre')?.value ?? '').trim();
+    if (!nombre) {
+      alert('Debe ingresar un nombre válido.');
+      return;
+    }
 
-  // Tomo el resto de campos desde el form 
-  const categoria   = this.formulario.get('categoria')?.value as CategoriaObraModel | null;
-  const estado      = this.formulario.get('estado')?.value as EstadoObraModel | null;
-  const estudioId   = Number(this.formulario.get('estudioId')?.value ?? NaN);
-  const anioEstado  = Number(this.formulario.get('anioEstado')?.value ?? NaN);
-  const latitud     = Number(this.formulario.get('latitud')?.value ?? NaN);
-  const longitud    = Number(this.formulario.get('longitud')?.value ?? NaN);
-  const descripcion = (this.formulario.get('descripcion')?.value ?? '').trim();
+    const categoria   = this.formulario.get('categoria')?.value as CategoriaObraModel;
+    const estado      = this.formulario.get('estado')?.value as EstadoObraModel;
+    const estudioId   = Number(this.formulario.get('estudioId')?.value ?? NaN);
+    const anioEstado  = Number(this.formulario.get('anioEstado')?.value ?? NaN);
+    const latitud     = Number(this.formulario.get('latitud')?.value ?? NaN);
+    const longitud    = Number(this.formulario.get('longitud')?.value );
+    const descripcion = (this.formulario.get('descripcion')?.value ?? '').trim();
 
-  // (Opcional) chequeo rápido de los requeridos del DTO
-  if (!categoria || !estado || !estudioId || isNaN(anioEstado) || isNaN(latitud) || isNaN(longitud) || !descripcion) {
-    alert('Complete correctamente los campos obligatorios.');
-    return;
-  }
+    this.subiendo = true;
+    const archivos = this.archivosSeleccionados;
 
-  this.subiendo = true;
-  const archivo = this.archivoSeleccionado; // File | null
+    // ==================== EDICIÓN ====================
+    if (this.editar && this.id != null) {
+      const modificarObra: ObraModel = {
+        id: this.id,
+        nombre,
+        categoria,
+        estado,
+        estudioId,
+        anioEstado,
+        latitud,
+        longitud,
+        descripcion,
+      };
 
-  // ===== EDICIÓN =====
-  if (this.editar && this.id != null) {
-    const updatePayload: ObraModel = {
-      id: this.id,
+      // URLs existentes que quedaron después de borrar (las pasamos a relativas)
+      const urlsExistentesRel = this.imagenesExistentes.map(u => this.aRutaRelativa(u));
+
+      // Sin nuevas imágenes: actualizo con las existentes (pueden ser 0 y queda sin imágenes)
+      if (!archivos.length) {
+
+          // si no quedaron imágenes, no permitimos guardar
+        if (urlsExistentesRel.length === 0) {
+          this.subiendo = false;
+          alert('La obra debe tener al menos una imagen.');
+          return;
+        }
+    
+        this.obraService.updateObra({
+          ...modificarObra,
+          urlsImagenes: urlsExistentesRel,
+        })
+          .pipe(finalize(() => this.subiendo = false))
+          .subscribe({
+            next: () => this.router.navigate(['/obras', this.id]),
+            error: () => alert('No se pudo actualizar la obra.')
+          });
+        return;
+      }
+
+      // Con nuevas imágenes
+      const archivosSubir = archivos.map(file =>
+        this.imagenService.subirUna(file).pipe(take(1))
+      );
+
+      forkJoin(archivosSubir).pipe(
+        switchMap(rutasArray => {
+          const urlsNuevas = rutasArray
+            .map(r => r?.[0])
+            .filter((u): u is string => !!u);
+
+          if (!urlsNuevas.length && !urlsExistentesRel.length) {
+            throw new Error('Sin URLs de imágenes');
+          }
+
+          const todas = [...urlsExistentesRel, ...urlsNuevas];
+
+          return this.obraService.updateObra({
+            ...modificarObra,
+            urlsImagenes: todas
+          });
+        }),
+        finalize(() => this.subiendo = false)
+      ).subscribe({
+        next: () => {
+          this.archivosSeleccionados = [];
+          this.router.navigate(['/obras', this.id!]);
+        },
+        error: () => alert('No se pudo actualizar la obra.')
+      });
+
+      return;
+    }
+
+    // ==================== CREACIÓN ====================
+    const crearObra: ObraModel = {
       nombre,
       categoria,
       estado,
@@ -163,94 +258,48 @@ export class ObraForm {
       latitud,
       longitud,
       descripcion,
-      // urlsImagenes: (solo si se sube nueva imagen)
     };
 
-    // Sin cambio de imagen
-    if (!archivo) {
-      this.obraService.updateObra(updatePayload)
-        .pipe(finalize(() => this.subiendo = false))
-        .subscribe({
-          next: () => this.router.navigate(['/obras', this.id]),
-          error: () => alert('No se pudo actualizar la obra.')
-        });
+    if (!archivos.length) {
+      this.subiendo = false;
+      alert('Debe cargar al menos una imagen para la obra.');
       return;
     }
 
-    // Con imagen: subo y actualizo poniendo portada
-    this.imagenService.subirUna(archivo).pipe(
-      take(1),
-      switchMap(rutas => {
-        const imagenUrl = rutas?.[0];
-        if (!imagenUrl) throw new Error('Sin URL de imagen');
-        return this.obraService.updateObra({ ...updatePayload, urlsImagenes: [imagenUrl] });
-      }),
-      finalize(() => this.subiendo = false)
-    ).subscribe({
-      next: () => {
-        this.archivoSeleccionado = null;
-        this.router.navigate(['/obras', this.id!]);
-      },
-      error: () => alert('No se pudo actualizar la obra.')
-    });
-    return;
-  }
+    const archivosSubir = archivos.map(file =>
+      this.imagenService.subirUna(file).pipe(take(1))
+    );
 
-  // ===== CREACIÓN =====
-  const createPayload: ObraModel = {
-    nombre,
-    categoria,
-    estado,
-    estudioId,
-    anioEstado,
-    latitud,
-    longitud,
-    descripcion,
-    // urlsImagenes: (solo si se sube imagen)
-  };
+    forkJoin(archivosSubir).subscribe({
+      next: rutasArray => {
+        const urls = rutasArray
+          .map(r => r?.[0])
+          .filter((u): u is string => !!u);
 
-  // Sin imagen
-  if (!archivo) {
-    this.obraService.postObra(createPayload)
-      .pipe(finalize(() => this.subiendo = false))
-      .subscribe({
-        next: () => {
-          this.formulario.reset();
-          this.archivoSeleccionado = null;
-          alert('Obra creada');
-          this.router.navigate(['/obras']);
-        },
-        error: () => alert('No se pudo crear la obra.')
-      });
-    return;
-  }
+        if (!urls.length) {
+          this.subiendo = false;
+          alert('Sin URLs de imágenes');
+          return;
+        }
 
-  // Con imagen: subo y creo con portada
-  this.imagenService.subirUna(archivo).pipe(take(1)).subscribe({
-    next: rutas => {
-      const imagenUrl = rutas?.[0];
-      if (!imagenUrl) {
-        this.subiendo = false;
-        alert('Sin URL de imagen');
-        return;
-      }
-      this.obraService.postObra({ ...createPayload, urlsImagenes: [imagenUrl] })
-        .pipe(finalize(() => this.subiendo = false))
-        .subscribe({
-          next: () => {
-            this.formulario.reset();
-            this.archivoSeleccionado = null;
-            alert('Obra creada');
-            this.router.navigate(['/obras']);
-          },
-          error: () => alert('No se pudo crear la obra.')
-        });
+        this.obraService.postObra({ ...crearObra, urlsImagenes: urls })
+          .pipe(finalize(() => this.subiendo = false))
+          .subscribe({
+            next: () => {
+              this.formulario.reset();
+              this.archivosSeleccionados = [];
+              this.imagenesExistentes = [];
+              alert('Obra creada');
+              this.router.navigate(['/obras']);
+            },
+            error: () => alert('No se pudo crear la obra.')
+          });
       },
       error: () => {
         this.subiendo = false;
-        alert('No se pudo subir la imagen.');
+        alert('No se pudieron subir las imágenes.');
       }
     });
-  } 
-
+  }
 }
+
