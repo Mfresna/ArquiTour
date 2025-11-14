@@ -4,7 +4,7 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { environment } from '../../../../environments/environment';
 import { TokenService } from '../../../auth/services/tokenService/token-service';
 import { EstudioService } from '../../../services/estudioService/estudio-service';
-import { ObraService } from '../../../services/obra-service';
+import { ObraService } from '../../../services/obraService/obra-service';
 import { CategoriaObraDescripcion } from '../../../models/obraModels/categoriaObraModel';
 import { EstadoObraDescripcion } from '../../../models/obraModels/estadoObraModel';
 

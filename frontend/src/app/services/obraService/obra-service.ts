@@ -1,9 +1,10 @@
-import { Injectable } from '@angular/core';
-import { environment } from '../../environments/environment';
-import { ObraModel } from '../models/obraModels/obraModel';
-import { HttpClient } from '@angular/common/http';
-import { CategoriaObraModel } from '../models/obraModels/categoriaObraModel';
-import { EstadoObraModel } from '../models/obraModels/estadoObraModel';
+import { HttpClient } from "@angular/common/http";
+import { Injectable } from "@angular/core";
+import { environment } from "../../../environments/environment";
+import { CategoriaObraModel } from "../../models/obraModels/categoriaObraModel";
+import { EstadoObraModel } from "../../models/obraModels/estadoObraModel";
+import { ObraModel } from "../../models/obraModels/obraModel";
+
 
 @Injectable({
   providedIn: 'root',

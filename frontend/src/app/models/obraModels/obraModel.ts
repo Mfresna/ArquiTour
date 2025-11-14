@@ -1,6 +1,7 @@
 import { CategoriaObraModel } from "./categoriaObraModel";
 import { EstadoObraModel } from "./estadoObraModel";
 
+
 export interface ObraModel {
   id?: number;               
   nombre: string;

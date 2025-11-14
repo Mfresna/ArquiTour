@@ -1,10 +1,10 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { EstudioModel } from '../../../models/estudioModel';
-import { EstudioService } from '../../../services/estudioService/estudio-service';
-import { Router, RouterLink } from '@angular/router';
-import { TokenService } from '../../../auth/services/tokenService/token-service';
-import { environment } from '../../../../environments/environment';
+import { Component, OnInit } from "@angular/core";
+import { ReactiveFormsModule, FormGroup, FormBuilder, Validators } from "@angular/forms";
+import { RouterLink } from "@angular/router";
+import { environment } from "../../../../environments/environment";
+import { EstudioModel } from "../../../models/estudioModel";
+import { EstudioService } from "../../../services/estudioService/estudio-service";
+
 
 @Component({
   selector: 'app-estudios',
