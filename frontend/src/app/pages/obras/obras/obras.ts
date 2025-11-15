@@ -6,7 +6,7 @@ import { RouterLink } from '@angular/router';
 import { ObraService } from '../../../services/obraService/obra-service';
 import { CategoriaObraDescripcion, CategoriaObraModel } from '../../../models/obraModels/categoriaObraModel';
 import { EstadoObraDescripcion, EstadoObraModel } from '../../../models/obraModels/estadoObraModel';
-import { EstudioModel } from '../../../models/estudioModel';
+import { EstudioModel } from '../../../models/estudioModels/estudioModel';
 import { EstudioService } from '../../../services/estudioService/estudio-service';
 
 @Component({

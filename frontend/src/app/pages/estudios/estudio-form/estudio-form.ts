@@ -2,7 +2,7 @@ import { Component} from '@angular/core';
 import { FormGroup, FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ImagenService } from '../../../services/imagenService/imagen-service';
-import { EstudioModel } from '../../../models/estudioModel';
+import { EstudioModel } from '../../../models/estudioModels/estudioModel';
 import { EstudioService } from '../../../services/estudioService/estudio-service';
 import { finalize, switchMap, take } from 'rxjs';
 import { environment } from '../../../../environments/environment';
