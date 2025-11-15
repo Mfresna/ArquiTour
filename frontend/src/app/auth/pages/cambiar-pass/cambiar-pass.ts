@@ -83,7 +83,10 @@ export class CambiarPass implements OnInit {
     this.spinerVisible=true;  //muestro la espera
 
     this.authService.restaurarPass(this.token, pass).pipe(
-      finalize(() => this.spinerVisible=false)
+      finalize(() => {
+        this.spinerVisible=false;
+        this.authService.logout();
+      })
     ).subscribe({
       next: () => {
         alert('¡Contraseña actualizada correctamente!');
@@ -110,7 +113,10 @@ export class CambiarPass implements OnInit {
     this.spinerVisible=true;  //muestro la espera
 
     this.usuarioService.cambiarPass(pass).pipe(
-      finalize(() => this.spinerVisible=false)
+      finalize(() => {
+        this.spinerVisible=false;
+        this.authService.logout();
+      })
     ).subscribe({
       next: () => {
         alert('¡Contraseña actualizada correctamente!');

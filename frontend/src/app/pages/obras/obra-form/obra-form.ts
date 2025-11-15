@@ -8,7 +8,7 @@ import { CategoriaObraModel, CategoriaObraDescripcion } from '../../../models/ob
 import { EstadoObraModel, EstadoObraDescripcion } from '../../../models/obraModels/estadoObraModel';
 import { ImagenService } from '../../../services/imagenService/imagen-service';
 import { ObraService } from '../../../services/obraService/obra-service';
-import { EstudioModel } from '../../../models/estudioModel';
+import { EstudioModel } from '../../../models/estudioModels/estudioModel';
 import { EstudioService } from '../../../services/estudioService/estudio-service';
 import { ObraModel } from '../../../models/obraModels/obraModel';
 import { DragZoneMultiple } from '../../../components/drag-zone-multiple/drag-zone-multiple';

@@ -2,7 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import { ReactiveFormsModule, FormGroup, FormBuilder, Validators } from "@angular/forms";
 import { RouterLink } from "@angular/router";
 import { environment } from "../../../../environments/environment";
-import { EstudioModel } from "../../../models/estudioModel";
+import { EstudioModel } from "../../../models/estudioModels/estudioModel";
 import { EstudioService } from "../../../services/estudioService/estudio-service";
 
 
