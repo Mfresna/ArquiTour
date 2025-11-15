@@ -5,6 +5,8 @@ import { UsrRequestModel } from '../../auth/models/register/usrRequestModel';
 import { UsrFormModel } from '../../auth/models/register/usrFormModel';
 import { Observable } from 'rxjs';
 import { UsuarioModel } from '../../models/usuarioModels/usuaroModel';
+import { UsuarioBasicoModel } from '../../models/usuarioModels/usuarioBasicoModel';
+import { UsuarioFormBasicoModel } from '../../models/usuarioModels/usuarioFormBasicoModel';
 
 @Injectable({
   providedIn: 'root',
@@ -47,6 +49,20 @@ export class UsuarioService {
   actualizarFotoPerfil(urlImagen: string){
     return this.http.patch(`${this.USUARIO_URL}/imagenPerfil`, {urlImagen});
   }
+
+  actualizarPerfil(formulario: UsuarioFormBasicoModel){
+
+    let actualizarUsr: UsuarioBasicoModel = {
+      nombre: formulario.nombre.trim(),
+      apellido: formulario.apellido.trim(),
+      fechaNacimiento: normalizarFecha(formulario.fechaNacimiento),
+      descripcion: formulario.descripcion?.trim() || null,
+      urlImagen: formulario.imagenUrl || null
+    }
+
+    return this.http.put(`${this.USUARIO_URL}/${formulario.id}`, actualizarUsr);
+  }
+
 
   getUsuarios(){
 

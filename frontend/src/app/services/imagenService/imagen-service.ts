@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
-import { Observable } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -14,7 +14,10 @@ export class ImagenService {
 
   ////CAPAS SE BORRA
 
-  subirUna(file: File) {
+  subirUna(file: File | null) {
+    
+    if (!file) return throwError(() => 'Sin imagen');
+
     const fd = new FormData();
     fd.append('archivos', file); 
     return this.http.post<string[]>(`${environment.apiUrl}/imagenes/subir`, fd);

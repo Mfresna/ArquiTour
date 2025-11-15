@@ -1,4 +1,10 @@
-/******************************************************/
+#mi-perfil-cont{
+  min-height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 #contenedor-tarjeta{
     background-color: var(--colorFondoTarjeta, #fff);
     color: var(--colorTerciario, #222);
@@ -308,6 +314,10 @@ small {
 
 @media (min-width: 2000px) {
   /*Pantalla UltraWide*/
+  #mi-perfil-cont{
+    align-items: flex-start;
+    padding-top: 2rem; 
+  }
   #contenedor-tarjeta {
     max-width: 80%;
   }

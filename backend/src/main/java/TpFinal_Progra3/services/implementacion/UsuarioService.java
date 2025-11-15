@@ -188,7 +188,6 @@ public class UsuarioService implements UsuarioServiceInterface {
 
         //Si el usuario no existe lanza excepcion el metodo buscarUsuario
         Usuario usuario = buscarUsuario(id);
-
         usuario.setNombre(usrDto.getNombre());
         usuario.setApellido(usrDto.getApellido());
         usuario.setFechaNacimiento(usrDto.getFechaNacimiento());
