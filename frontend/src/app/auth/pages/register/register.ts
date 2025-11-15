@@ -89,7 +89,7 @@ export class Register implements OnInit, AfterViewInit{
         ]],
         descripcion: ['', [
           Validators.maxLength(280),
-          Validators.pattern(/^[A-Za-zÁÉÍÓÚáéíóúÑñ0-9\-_\!¡&]+$/)
+          Validators.pattern(/^[A-Za-zÁÉÍÓÚáéíóúÑñ0-9\-_\!¡&\s\.,]+$/)
         ]],
         imagenUrl:['',[]]
       },

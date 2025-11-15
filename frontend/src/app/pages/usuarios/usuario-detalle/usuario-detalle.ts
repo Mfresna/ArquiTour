@@ -73,7 +73,7 @@ export class UsuarioDetalle implements OnInit, AfterViewInit{
         ]],
         descripcion: [{ value: '', disabled: true }, [
           Validators.maxLength(280),
-          Validators.pattern(/^[A-Za-zÁÉÍÓÚáéíóúÑñ0-9\-_\!¡&]+$/)
+          Validators.pattern(/^[A-Za-zÁÉÍÓÚáéíóúÑñ0-9\-_\!¡&\s\.,]+$/)
         ]],
         imagenUrl:[{ value: '', disabled: true },[]]
       }
