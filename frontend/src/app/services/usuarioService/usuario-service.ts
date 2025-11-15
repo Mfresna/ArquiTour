@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { UsrRequestModel } from '../../auth/models/register/usrRequestModel';
 import { UsrFormModel } from '../../auth/models/register/usrFormModel';
 import { Observable } from 'rxjs';
+import { UsuarioModel } from '../../models/usuarioModels/usuaroModel';
 
 @Injectable({
   providedIn: 'root',
@@ -45,6 +46,19 @@ export class UsuarioService {
 
   actualizarFotoPerfil(urlImagen: string){
     return this.http.patch(`${this.USUARIO_URL}/imagenPerfil`, {urlImagen});
+  }
+
+  getUsuarios(){
+
+  }
+  
+  getUsuario(id: string): Observable<UsuarioModel>{
+    //Hay que acomodarlo
+    return this.http.get<UsuarioModel>(`${this.USUARIO_URL}/${id}`)
+  }
+
+  getUsuarioMe(): Observable<UsuarioModel>{
+    return this.http.get<UsuarioModel>(`${this.USUARIO_URL}/me`)
   }
 
 

@@ -12,6 +12,7 @@ import { Register } from './auth/pages/register/register';
 import { ObraForm } from './pages/obras/obra-form/obra-form';
 import { Favoritos } from './pages/favoritos/favoritos/favoritos';
 import { Obras } from './pages/obras/obras/obras';
+import { UsuarioDetalle } from './pages/usuarios/usuario-detalle/usuario-detalle';
 
 
 
@@ -39,6 +40,8 @@ export const routes: Routes = [
   { path: 'obras/:id/editar', component: ObraForm},
   { path: 'favoritos', component: Favoritos},
 
+  { path: 'usuario', component: UsuarioDetalle},
+  { path: 'usuario/:id', component: UsuarioDetalle},
 
 
   { path: 'prueba', component: Register}

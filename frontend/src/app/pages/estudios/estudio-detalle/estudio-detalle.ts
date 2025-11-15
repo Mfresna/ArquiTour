@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { EstudioModel } from '../../../models/estudioModel';
+import { EstudioModel } from '../../../models/estudioModels/estudioModel';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { environment } from '../../../../environments/environment';
 import { TokenService } from '../../../auth/services/tokenService/token-service';
