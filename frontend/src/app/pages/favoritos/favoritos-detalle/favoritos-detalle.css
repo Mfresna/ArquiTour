@@ -1,0 +1,53 @@
+.obras-lista {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+  list-style: none;
+  margin: 0;
+  padding: 40px 40px;
+}
+
+/* TARJETA DE OBRA */
+.obras-lista .card {
+  background: var(--colorPrincipal);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px var(--sombra);
+  transition: transform 0.2s, box-shadow 0.2s;
+  cursor: pointer;
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
+.obras-lista .card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 16px var(--sombra);
+}
+
+.obras-lista .card img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  background: linear-gradient(135deg, #dfe0e6 0%, #e1e4e7 100%);
+  border-bottom: 1px solid rgb(204, 198, 198);
+}
+
+.obras-lista .card-body {
+  padding: 1rem;
+}
+
+.obras-lista .card-body h2 {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--colorTerciario);
+}
+
+/* MENSAJE VACÍO */
+.vacio {
+  text-align: center;
+  color: #999;
+  padding: 4rem 2rem;
+  font-size: 1.1rem;
+}

@@ -1,10 +1,10 @@
-/* Cuando está vacío: todo centrado */
 #global {
   height: 100%;
   flex-grow: 1;
   display: flex;
   overflow: hidden;
 }
+
 #contenedor-favoritos {
   display: grid;
   grid-template-columns: auto 1fr;
@@ -24,25 +24,27 @@
   height: 0;
   padding-right: 6px;
   scrollbar-width: thin;
+  margin-top: 20px;
+  margin-left: 20px;
 }
+
+/* ======== PANEL IZQUIERDO ======== */
 #panel-izq .titulo {
   text-transform: uppercase;
   font-size: 1.8rem;
   font-weight: 700;
   margin-top: 10px;
-  color: var(--colorTerciario);
   flex-shrink: 0;
   text-align: center;
   letter-spacing: 0.5px;
-  position: relative;
   color: var(--colorBoton, #0077b6);
 }
+
 #panel-filtros {
   border-radius: 12px;
   padding: 1.5rem;
   flex-shrink: 0;
   width: 320px;
-
 }
 
 /* ======== FORMULARIO ======== */
@@ -71,7 +73,7 @@
 .fila input[type="text"] {
   width: 100%;
   padding: 0.6rem 0.8rem;
-  border-radius: 1.2rem;          
+  border-radius: 1.2rem;
   border: 1px solid #ccc;
   font-family: var(--fuenteBase, "Segoe UI", Roboto, sans-serif);
   font-size: 1rem;
@@ -98,7 +100,7 @@
   margin-left: 0.2rem;
 }
 
-/* ======== BOTONES ======== */
+/* ======== BOTONES FORM ======== */
 .botones {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -152,42 +154,142 @@
   padding: 20px 20px 15px 10px;
 }
 
-/* ======== TARJETAS ======== */
+/* ======== TARJETAS FAVORITOS ======== */
 .card {
   display: block;
-  background: var(--colorPrincipal);
+  background: var(--colorFondoTarjeta, #fff);
   border-radius: 12px;
   overflow: hidden;
   box-shadow: 0 2px 8px var(--sombra);
   transition: transform 0.2s, box-shadow 0.2s;
   text-decoration: none;
   color: inherit;
-  cursor: pointer;
 }
 
 .card:hover {
   transform: translateY(-4px);
   box-shadow: 0 4px 16px var(--sombra);
 }
-
-.card img {
-  width: 100%;
-  height: 200px;
-  object-fit: cover;
-  background: linear-gradient(135deg, #dfe0e6 0%, #e1e4e7 100%);
-  display: block;
-  border-bottom: 1px solid rgb(204, 198, 198);
+.card.editando:hover {
+  transform: none;
+  box-shadow: 0 2px 8px var(--sombra);
+  cursor: default;
 }
 
 .card-body {
-  padding: 1rem;
+  position: relative;
+  padding: 1rem 1rem 0.8rem 1rem;
 }
 
+/* Título de la lista */
 .card-body h2 {
-  margin: 0;
+  margin: 0 0 0.3rem 0;
   font-size: 1.1rem;
   font-weight: 600;
   color: var(--colorTerciario);
+}
+
+/* Cantidad de obras */
+.contador {
+  margin: 0.4rem 0 0.4rem 0;
+  font-size: 0.9rem;
+  color: #555;
+}
+
+
+.btn-editar,
+.btn-eliminar {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  opacity: 0.8;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.2s ease, transform 0.15s ease;
+}
+
+.btn-editar {
+  color: var(--colorBoton, #0077b6);
+}
+
+.btn-eliminar {
+  color: var(--colorRojo, #962b1f);
+}
+
+.btn-editar:hover,
+.btn-eliminar:hover {
+  opacity: 1;
+  transform: scale(1.05);
+}
+
+/* Ocultar botones por defecto */
+.btn-editar,
+.btn-eliminar {
+  visibility: hidden;
+}
+
+/* Mostrar solo cuando se hace hover en la tarjeta */
+.card:hover .btn-editar:not(.forzar-visible),
+.card:hover .btn-eliminar:not(.forzar-visible) {
+  visibility: visible;
+}
+
+
+/* ======== MODO EDICIÓN ======== */
+.input-edicion {
+  width: 100%;
+  padding: 0.4rem 0.6rem;
+  font-size: 1rem;
+  border-radius: 0.6rem;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+  margin-top: 4px;
+}
+
+.input-edicion:focus {
+  outline: none;
+  border-color: var(--colorBoton, #0077b6);
+  box-shadow: 0 0 6px rgba(0, 119, 182, 0.25);
+}
+
+.error {
+  color: var(--colorRojo, #e74c3c);
+  font-size: 0.8rem;
+  margin-top: 0.25rem;
+  display: inline-block;
+}
+
+.acciones-edicion {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+  justify-content: flex-end;
+}
+
+.btn-guardar,
+.btn-cancelar {
+  padding: 0.3rem 0.8rem;
+  font-size: 0.7rem;
+  border-radius: 0.6rem;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-guardar {
+  background: var(--colorBoton, #0077b6);
+  color: #fff;
+}
+
+.btn-guardar:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.btn-cancelar {
+  background: #e5e7eb;
+  color: #111827;
 }
 
 /* ======== MENSAJE VACÍO ======== */
@@ -200,7 +302,7 @@
 
 /* ======== RESPONSIVE ======== */
 @media (max-width: 900px) {
-  #contenedor-estudios {
+  #contenedor-favoritos {
     grid-template-columns: 1fr;
   }
 
@@ -226,4 +328,52 @@
 }
 #panel-scroll::-webkit-scrollbar-thumb:hover {
   background: rgba(0, 0, 0, 0.3);
+}
+
+
+/* Fila inferior: contador + botones */
+.fila-inferior {
+  margin-top: 0.4rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Contador */
+.contador {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #555;
+}
+
+/* Botones de editar / eliminar en la parte inferior */
+.acciones-inferiores {
+  display: flex;
+  gap: 0.4rem;
+}
+
+.acciones-inferiores .btn-editar,
+.acciones-inferiores .btn-eliminar {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  opacity: 0.8;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.2s ease, transform 0.15s ease;
+}
+
+.acciones-inferiores .btn-editar {
+  color: var(--colorBoton, #0077b6);
+}
+
+.acciones-inferiores .btn-eliminar {
+  color: var(--colorRojo, #c0392b);
+}
+
+.acciones-inferiores button:hover {
+  opacity: 1;
+  transform: scale(1.05);
 }

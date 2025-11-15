@@ -1,1 +1,20 @@
-<p>favoritos-detalle works!</p>
+<div class="obras-lista">
+    <h1 class="titulo">{{nombreLista}}</h1>
+    @for (o of obras; track o?.id ?? $index) {
+
+        <a class="card" [routerLink]="['/obras', o.id]">
+        <img
+            [src]="imagenUrl(o.urlsImagenes)"  
+            (error)="imagenError($event)"
+            alt="Imagen de la obra" />
+
+        <div class="card-body">
+            <h2>{{ o.nombre }}</h2>
+        </div>
+        </a>
+
+    }
+    @empty {
+        <p class="vacio">No hay obras para mostrar en esta lista.</p>
+    }
+</div>

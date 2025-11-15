@@ -13,6 +13,7 @@ import { ObraForm } from './pages/obras/obra-form/obra-form';
 import { Favoritos } from './pages/favoritos/favoritos/favoritos';
 import { Obras } from './pages/obras/obras/obras';
 import { UsuarioDetalle } from './pages/usuarios/usuario-detalle/usuario-detalle';
+import { FavoritosDetalle } from './pages/favoritos/favoritos-detalle/favoritos-detalle';
 
 
 
@@ -39,6 +40,7 @@ export const routes: Routes = [
   { path: 'obras/:id', component: ObraDetalle},
   { path: 'obras/:id/editar', component: ObraForm},
   { path: 'favoritos', component: Favoritos},
+  { path: 'favoritos/:id', component: FavoritosDetalle},
 
   { path: 'usuario', component: UsuarioDetalle},
   { path: 'usuario/:id', component: UsuarioDetalle},

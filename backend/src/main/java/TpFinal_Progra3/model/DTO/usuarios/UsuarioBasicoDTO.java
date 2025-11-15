@@ -35,8 +35,8 @@ public class UsuarioBasicoDTO {
     @Size(max = 255, message = "La descripción no debe superar los 255 caracteres.")
     private String descripcion;
 
-    @Pattern(
-            regexp = "^(https?://).+\\.(jpg|jpeg|png|gif|bmp|webp)$",
-            message = "La URL debe comenzar con http o https y terminar en una imagen válida (.jpg, .png, etc.).")
+//     @Pattern(
+//             regexp = "^(https?://).+\\.(jpg|jpeg|png|gif|bmp|webp)$",
+//             message = "La URL debe comenzar con http o https y terminar en una imagen válida (.jpg, .png, etc.).")
     private String urlImagen;
 }

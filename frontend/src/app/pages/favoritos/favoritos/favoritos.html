@@ -36,13 +36,66 @@
       <div id="panel-scroll">
         <div class="grid">
           @for (l of listas; track l?.id ?? $index) {
-            <a class="card">
-
+            <div class="card" 
+                 [class.editando]="editandoId === l.id"
+                [routerLink]="['/favoritos', l.id]"
+                >
             <div class="card-body">
-              <h2>{{ l.nombre }}</h2>
+
+             
+                
+
+                <!-- MODO NORMAL -->
+                @if (editandoId !== l.id) {
+                  <h2>{{ l.nombre }}</h2>
+
+                  <div class="fila-inferior">
+                    <p class="contador">{{ l.cantidadObras }} obras</p>
+
+                    <div class="acciones-inferiores">
+                      <button class="btn-editar" (click)="activarEdicion(l)">
+                        <span class="material-icons">edit</span>
+                      </button>
+
+                      <button class="btn-eliminar" (click)="eliminarLista(l.id)">
+                        <span class="material-icons">delete</span>
+                      </button>
+                    </div>
+                  </div>
+                }
+
+
+                <!-- MODO EDICIÓN -->
+                @if (editandoId === l.id) {
+                  <label for="nombre" class="label">Nombre de la Lista</label>
+                  <input
+                    id="nombre"
+                    type="text"
+                    [formControl]="controlEdicion"
+                    class="input-edicion"
+                  />
+
+                  @if (controlEdicion.invalid && controlEdicion.touched) {
+                    <small class="error">Mínimo 2 caracteres.</small>
+                  }
+
+                  <div class="acciones-edicion">
+                    <button class="btn-guardar" (click)="guardarEdicion(l.id)" [disabled]="controlEdicion.invalid">
+                      Guardar
+                    </button>
+                    <button class="btn-cancelar" (click)="cancelarEdicion()">
+                      Cancelar
+                    </button>
+                  </div>
+                }
+
+                
+
+              </div>
+
             </div>
-            </a>
           }
+
           @empty {
             <p class="vacio">No hay listas para para mostrar.</p>
           }
