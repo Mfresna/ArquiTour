@@ -19,21 +19,21 @@ export class FavoritosService {
     return this.http.post<FavoritosModel>(this.FAVORITOS_URL, body);
   }
 
-  obtenerFavoritosDelUsuario() {
+  getFavoritosDelUsuario() {
     return this.http.get<FavoritoBasicoModel[]>(this.FAVORITOS_URL);
   }
 
-  listarObrasDeFavorito(idFavorito: number) {
+  getObrasDeFavorito(idFavorito: number) {
     const url = `${this.FAVORITOS_URL}/${idFavorito}/obras`;
     return this.http.get<ObraModel[]>(url);
   }
 
-  agregarObraAFavorito(idFavorito: number, obraId: number) {
+  putObraAFavorito(idFavorito: number, obraId: number) {
     const url = `${this.FAVORITOS_URL}/${idFavorito}/obras/${obraId}`;
     return this.http.patch<FavoritosModel>(url, {});
   }
 
-  eliminarObraDeFavorito(idFavorito: number, obraId: number) {
+  deleteObraDeFavorito(idFavorito: number, obraId: number) {
     const url = `${this.FAVORITOS_URL}/${idFavorito}/obras/${obraId}`;
     return this.http.delete<FavoritosModel>(url);
   }
@@ -44,7 +44,7 @@ export class FavoritosService {
     return this.http.patch<FavoritosModel>(url, body);
   }
 
-  eliminarFavorito(idFavorito: number) {
+  deleteFavorito(idFavorito: number) {
     const url = `${this.FAVORITOS_URL}/${idFavorito}`;
     return this.http.delete<void>(url);
   }

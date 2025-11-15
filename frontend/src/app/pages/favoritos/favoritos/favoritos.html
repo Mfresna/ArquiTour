@@ -1,67 +1,57 @@
 <div id="global">
-  <div id="contenedor-obras">
 
-    <!-- PANEL IZQUIERDO -->
+  <div id="contenedor-favoritos">
     <div id="panel-izq">
-      <h3 class="titulo">Mis listas de favoritos</h3>
-
+      <h3 class="titulo">Listas de Favoritos</h3>
       <div id="panel-filtros">
-        <div class="bloque-texto">
-          <p>
-            Organizá tus obras favoritas en distintas listas.
-          </p>
-          <p>
-            Hacé clic en una lista para ver las obras que contiene.
-          </p>
-        </div>
+          <form [formGroup]="filtro" (submit)="cargarListas()" class="fila">
+            <fieldset>
+              <label for="filtroNombre">Buscar por nombre:</label>
+              <input
+                id="filtroNombre"
+                type="text"
+                formControlName="nombre"
+                placeholder="Ej: Edificios Residenciales"
+                [class.invalido]="filtro.get('nombre')?.invalid && filtro.get('nombre')?.touched"
+                autocomplete="off">
 
-        <!-- Si más adelante querés un botón para crear lista, va acá -->
-        <!--
-        <div class="acciones">
-          <button type="button" (click)="irACrearLista()">Nueva lista</button>
-        </div>
-        -->
+              @if (filtro.get('nombre')?.errors?.['minlength'] && filtro.get('nombre')?.touched) {
+                <small>Mínimo 2 caracteres.</small>
+              }
+            </fieldset>
+
+            <div class="botones">
+              <button type="submit">BUSCAR</button>
+              <button type="button" (click)="limpiarFiltro()">LIMPIAR</button>
+            </div>
+
+          </form>
+
+
       </div>
+
     </div>
 
-    <!-- PANEL DERECHO -->
     <div id="panel-der">
       <div id="panel-scroll">
-        <div id="contenedor-lista">
+        <div class="grid">
+          @for (l of listas; track l?.id ?? $index) {
+            <a class="card">
 
-          <!-- Estado cargando -->
-          @if (cargando) {
-            <p class="vacio">Cargando listas de favoritos...</p>
+            <div class="card-body">
+              <h2>{{ l.nombre }}</h2>
+            </div>
+            </a>
           }
-          <!-- Listas cargadas -->
-          @else if (favoritos && favoritos.length > 0) {
-            <ul class="lista-obras lista-favoritos">
-              @for (fav of favoritos; track fav.id ?? $index) {
-                <li
-                  class="obra-card favorito-card"
-             
-                  aria-label="Ver lista de favoritos {{ fav.nombre }}"
-                >
-                  <div class="info">
-                    <h3 class="obra-nombre">{{ fav.nombre }}</h3>
-                    <small class="obra-estudio">
-                      Ver obras de esta lista
-                    </small>
-                  </div>
-                </li>
-              }
-            </ul>
+          @empty {
+            <p class="vacio">No hay listas para para mostrar.</p>
           }
-          <!-- Sin listas -->
-          @else {
-            <p class="vacio">
-              Todavía no tenés listas de favoritos creadas.
-            </p>
-          }
-
         </div>
+
       </div>
+
     </div>
 
   </div>
+    
 </div>
