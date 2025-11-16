@@ -5,5 +5,5 @@ export interface UsuarioFormBasicoModel {
     apellido: string;
     fechaNacimiento: string;
     descripcion?: string;
-    imagenUrl?: string;
+    imagenUrl?: string | null;
 }

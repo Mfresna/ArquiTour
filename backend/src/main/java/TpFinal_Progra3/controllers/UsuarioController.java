@@ -133,10 +133,10 @@ public class UsuarioController {
             @ApiResponse(responseCode = "404", description = "Imagen no encontrada")
     })
     @DeleteMapping("/imagenPerfil")
-    public ResponseEntity<UsuarioResponseDTO> borrarImagenPerfil(HttpServletRequest request,
-                                                                     @RequestBody @Valid ImagenDTO imgDTO){
+    public ResponseEntity<UsuarioResponseDTO> borrarImagenPerfil(HttpServletRequest request){
+
         //Borrar solo la imagen de perfil del usuario
-        return ResponseEntity.ok(usuarioService.borrarImagenPerfil(request, imgDTO.getUrl()));
+        return ResponseEntity.ok(usuarioService.borrarImagenPerfil(request));
     }
 
     @Operation(summary = "Habilitar o inhabilitar cuenta", description = "Cambia el estado activo de la cuenta del usuario.")

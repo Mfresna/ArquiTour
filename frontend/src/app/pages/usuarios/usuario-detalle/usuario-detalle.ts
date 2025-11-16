@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, EventEmitter, OnInit, Output, signal, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { catchError, finalize, map, Observable, of, switchMap, tap, throwError } from 'rxjs';
+import { catchError, concat, finalize, map, Observable, of, switchMap, tap, throwError } from 'rxjs';
 import { PinService } from '../../../auth/services/pinService/pin-service';
 import { fechaNacValidador } from '../../../auth/validadores/fechaValidador';
 import { CamposIguales } from '../../../auth/validadores/igualdadValidador';
@@ -122,80 +122,86 @@ export class UsuarioDetalle implements OnInit, AfterViewInit{
     this.spinerVisible = true;
     this.spinerMensaje = "Actualizando Usuario...";
 
-    this.verficiarImgNueva().pipe(
-      switchMap(() => {
-        const formularioCompleto = {
-          ...this.perfilForm.getRawValue(),
-          id: this.id
-        };
-        return this.usuarioService.actualizarPerfil(formularioCompleto);
-      }),
-      finalize(() =>{
-        this.spinerVisible = false;
+
+    this.verficiarImgNueva();
+
+    const formularioCompleto = {
+      ...this.perfilForm.getRawValue(),
+      id: this.id
+    };
+
+    this.usuarioService.actualizarPerfil(formularioCompleto).pipe(
+      finalize(() => {
+        this.deshabilitarCampos();
         this.editando = false;
+        this.spinerVisible=false; 
       })
     ).subscribe({
-      next: () => {
-        //Recarga al usuario
+      next: ()=>{
+        //Recarga las Variables
         const idParam = this.route.snapshot.params['id'];
         idParam ? this.cargarusuario(idParam) : this.cargarMe();
-
-        this.deshabilitarCampos()
-        //Recargar Componente
-      }
-      ,
+      },
       error: (e) => {
-        if (e.status === 400) alert("Error en los datos cargados");
-        else if (e.status === 403) alert("El usuario no se puede modificar");
-        else console.error(e);
+        if(e.status === 400){
+          //BAD_REQUEST
+          alert("Error en los Datos cargados")
+        }else if(e.status === 403){
+          //FORBBIDEN
+          alert("El usuario no se puede modificar");
+        }
       }
     });
 
   }
 
-  private verficiarImgNueva(): Observable<void> {
+  //============================ ACTUALIZACION DE IMAGEN
 
+  private verficiarImgNueva(){
     if (this.nuevaImagen) {
-      return this.actualizarImg().pipe(
-        tap((url) => {
-          this.perfilForm.get('imagenUrl')?.setValue(url);
-        }),
-        map(() => void 0)
-      );
-
-    } else {
-
-      if (this.quitadoImg){
-        //HABIA IMG Y LA SACARON
-        this.perfilForm.get('imagenUrl')?.setValue(null);
-      } else {
-        this.perfilForm.get('imagenUrl')?.setValue(this.imagenUrlExistente);
-      }
-
-      return of(void 0);
+      //HAY FOTO NUEVA
+      this.actualizarFotoPerfil();
+    } else if(this.imagenUrlExistente && this.quitadoImg) {
+      //HABIA IMG Y LA SACARON
+      this.borrarImg();
     }
-
   }
 
-
-  private actualizarImg(): Observable<string> {
-
-    return this.imagenService.subirImagen([this.nuevaImagen!]).pipe(
-      map(urls => urls[0]),
-      switchMap(urlImagen =>
-        this.usuarioService.actualizarFotoPerfil(urlImagen).pipe(
-          map(() => urlImagen)
-        )
-      ),
-      catchError((err) => {
-        console.error("Error en la actualización de la imagen", err);
-        return throwError(() => err);
+  private actualizarFotoPerfil() {
+    this.subirImg().pipe(
+      // subirImg devuelve la URL de la imagen
+      switchMap((url) => {
+        return this.usuarioService.actualizarFotoPerfil(url);
       })
-    );
-
+    ).subscribe({
+      next: () => {console.log("IMG SUBIDA");},
+      error: (e) => {
+        console.error(e)
+        if(e.status === 400){
+          //BAD_REQUEST
+          alert("Verifique la imagen, su nombre y su extension.")
+        }else if(e.status === 415){
+          //UNSUPPORTED_MEDIA_TYPE
+          alert("El tipo de archivo no es soportado, solo se pueden cargar imagenes");
+        }else{
+          alert("El proceso de subir la Imagen Fallo.")
+        }
+      }
+    });
   }
 
+  private subirImg(): Observable<string> {
+    return this.imagenService.subirImagen([this.nuevaImagen!]).pipe(
+      map(urls => urls[0])
+    );
+  }
 
+  private borrarImg(){
+    this.usuarioService.borrarFotoPerfil().subscribe({
+      next: () =>{console.log("Img Borrada Exitosamente")},
+      error: (e) => {console.error("ERROR al borrar la img", e)}
+    })
+  }
   
 //===================================================
 
@@ -232,6 +238,11 @@ export class UsuarioDetalle implements OnInit, AfterViewInit{
         this.nombre = item.nombre;
         this.apellido = item.apellido;
         this.imagenUrlExistente = item.urlImagen;
+
+
+        this.nuevaImagen = null;
+        this.quitadoImg = false;
+
       },
       error: (e) => {
         console.error("No se puede leer el usuario", e);
@@ -249,6 +260,10 @@ export class UsuarioDetalle implements OnInit, AfterViewInit{
         this.nombre = item.nombre;
         this.apellido = item.apellido;
         this.imagenUrlExistente = item.urlImagen;
+
+        this.nuevaImagen = null;
+        this.quitadoImg = false;
+
       },
       error: (e) => {
         console.error("No se puede leer el usuario", e);

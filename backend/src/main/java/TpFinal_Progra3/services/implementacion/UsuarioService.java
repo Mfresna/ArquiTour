@@ -192,31 +192,9 @@ public class UsuarioService implements UsuarioServiceInterface {
         usuario.setApellido(usrDto.getApellido());
         usuario.setFechaNacimiento(usrDto.getFechaNacimiento());
         usuario.setDescripcion(usrDto.getDescripcion());
-
-//        usuario.setImagen(Optional.ofNullable(usrDto.getUrlImagen())
-//                .map(imagenService::obtenerImagen)
-//                .orElse(usuario.getImagen()));
-
-        usuario.setImagen(traerImg(request,usuario,usrDto.getUrlImagen())
-                .map(imagenService::obtenerImagen)
-                .orElse(null));
+        //NO ACTUALIZO LA IMG ESO SE ENCARGAN OTROS METODOS
 
         return usuarioMapper.mapResponseDTO(usuarioRepository.save(usuario));
-    }
-
-    private Optional<String> traerImg(HttpServletRequest request,Usuario usr, String urlNueva){
-        if(usr.getImagen().getUrl().equals(urlNueva)){
-            return Optional.of(urlNueva);
-        }
-
-        borrarImagenPerfil(request,usr.getImagen().getUrl());
-
-        if(urlNueva.isEmpty()) {
-            return Optional.empty();
-        }else{
-            return Optional.of(urlNueva);
-        }
-
     }
 
     public UsuarioResponseDTO actualizarImagenPerfil(HttpServletRequest request, String url) {
@@ -227,12 +205,19 @@ public class UsuarioService implements UsuarioServiceInterface {
         return usuarioMapper.mapResponseDTO(usuarioRepository.save(usuario));
     }
 
-    public UsuarioResponseDTO borrarImagenPerfil(HttpServletRequest request, String url) {
+    public UsuarioResponseDTO borrarImagenPerfil(HttpServletRequest request) {
         //Usuario Logeado
         Usuario usuario = buscarUsuario(obtenerMiPerfil(request).getId());
+        String urlBorrar = usuario.getImagen().getUrl();
+
         usuario.setImagen(null);
 
-        return usuarioMapper.mapResponseDTO(usuarioRepository.save(usuario));
+        UsuarioResponseDTO usuarioActualizado =  usuarioMapper.mapResponseDTO(usuarioRepository.save(usuario));
+        
+        //Elimina la imagen de la BD luego de guardar el usuario por las constrains de la BD
+        imagenService.eliminarImagen(urlBorrar);
+
+        return usuarioActualizado;
     }
 
     public UsuarioResponseDTO inhabilitarCuenta(Long id,HttpServletRequest request) {
