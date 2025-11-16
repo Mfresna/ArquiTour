@@ -39,7 +39,7 @@
               <div id="menu-estudios" 
                 class="menu-desplegable bordes-radius">
 
-                <a routerLink="/">Ver Estudios</a>
+                <a routerLink="/estudios">Ver Estudios</a>
                 @if(isArq()){<a routerLink="/estudios">Crear Estudio</a>}
                 @if(isAdmin()){<a routerLink="/estudios">Gestionar Estudios</a>}
 
@@ -76,10 +76,10 @@
         <a routerLink="/" (click)="cerrarSesion()">Cerrar Sesion
           <span id="logout" class="material-icons user-icon-trigger">logout</span>
         </a>
-        <a routerLink="/">Ver mi Perfil</a>
+        <a routerLink="/me">Ver mi Perfil</a>
 
         @if(isAdmin()){
-          <a routerLink="/estudios">Gestionar Usuarios</a>
+          <a routerLink="/gestionar-usuarios">Gestionar Usuarios</a>
         }
 
         <hr>

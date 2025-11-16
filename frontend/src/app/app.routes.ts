@@ -24,17 +24,19 @@ export const routes: Routes = [
   { path: 'login', component: Auth},
   { path: 'registro', component: Auth},
   { path: 'auth/password/:token', component: CambiarPass},  //Caundo recibo el Mail para recuperar la cuenta
-
-  //======= APLICAR GUARDS =========//
   { path: 'cambiarpass', component: CambiarPass},  //Cuando el ADM maestro debe cambiar la pass
+  //======= APLICAR GUARDS =========//
+
   { path: 'home', component: Estudios},
   
+ { path: 'formulario', component: EstudioForm},
 
 
+    //Estudios
   { path: 'estudios', component: Estudios},
-  { path: 'formulario', component: EstudioForm},
   { path: 'estudios/:id', component: EstudioDetalle},
   { path: 'estudios/:id/editar', component: EstudioForm},
+
   { path: 'obras', component: Obras},
   { path: 'formularioOb', component: ObraForm},
   { path: 'obras/:id', component: ObraDetalle},
@@ -42,8 +44,12 @@ export const routes: Routes = [
   { path: 'favoritos', component: Favoritos},
   { path: 'favoritos/:id', component: FavoritosDetalle},
 
-  { path: 'usuario', component: UsuarioDetalle},
+  //Ver Perfil Usuario
+  { path: 'me', component: UsuarioDetalle},
   { path: 'usuario/:id', component: UsuarioDetalle},
+
+  //Gestionar Usuarios
+  { path: 'gestionar-usaurios', component: UsuarioDetalle},
 
 
   { path: 'prueba', component: Register}

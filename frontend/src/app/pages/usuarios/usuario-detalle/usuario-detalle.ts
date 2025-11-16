@@ -31,6 +31,8 @@ export class UsuarioDetalle implements OnInit, AfterViewInit{
   nombre!: string;
   apellido!: string;
 
+  miPerfil: boolean = false;
+
   imagenUrlExistente!: string;
   nuevaImagen: File | null = null;
   quitadoImg: boolean = false;
@@ -231,6 +233,8 @@ export class UsuarioDetalle implements OnInit, AfterViewInit{
   private cargarMe(){
     this.usuarioService.getUsuarioMe().subscribe({
       next: (item) => {
+        this.miPerfil = true;
+        
         this.perfilForm.patchValue(item);
 
         this.id = item.id;

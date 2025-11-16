@@ -11,19 +11,22 @@
       
       <h2>{{nombre + ' ' + apellido}}</h2>
 
-      <div id="botonera">
-        <button 
-          id="btn-editar"
-          class="boton" 
-          type="button" 
-          (click) = "accionBoton()">{{editando ? 'GUARDAR' : 'EDITAR'}}</button>
+      @if(miPerfil){
+        <div id="botonera">
+          <button 
+            id="btn-editar"
+            class="boton" 
+            type="button" 
+            (click) = "accionBoton()">{{editando ? 'GUARDAR' : 'EDITAR'}}</button>
 
-        <button 
-          id="btn-pass"
-          class="boton" 
-          type="button" 
-          (click) = "cambiarPass()">CAMBIAR CONTRASEÑA</button>  
-      </div>
+          <button 
+            id="btn-pass"
+            class="boton" 
+            type="button" 
+            (click) = "cambiarPass()">CAMBIAR CONTRASEÑA</button>  
+        </div>
+      }
+
     </div>
 
     <!-- ====== Fila 2: imagen + obras ====== -->
