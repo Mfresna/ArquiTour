@@ -192,9 +192,7 @@ public class UsuarioService implements UsuarioServiceInterface {
         usuario.setApellido(usrDto.getApellido());
         usuario.setFechaNacimiento(usrDto.getFechaNacimiento());
         usuario.setDescripcion(usrDto.getDescripcion());
-        usuario.setImagen(Optional.ofNullable(usrDto.getUrlImagen())
-                .map(imagenService::obtenerImagen)
-                .orElse(usuario.getImagen()));
+        //NO ACTUALIZO LA IMG ESO SE ENCARGAN OTROS METODOS
 
         return usuarioMapper.mapResponseDTO(usuarioRepository.save(usuario));
     }
@@ -207,12 +205,19 @@ public class UsuarioService implements UsuarioServiceInterface {
         return usuarioMapper.mapResponseDTO(usuarioRepository.save(usuario));
     }
 
-    public UsuarioResponseDTO borrarImagenPerfil(HttpServletRequest request, String url) {
+    public UsuarioResponseDTO borrarImagenPerfil(HttpServletRequest request) {
         //Usuario Logeado
         Usuario usuario = buscarUsuario(obtenerMiPerfil(request).getId());
+        String urlBorrar = usuario.getImagen().getUrl();
+
         usuario.setImagen(null);
 
-        return usuarioMapper.mapResponseDTO(usuarioRepository.save(usuario));
+        UsuarioResponseDTO usuarioActualizado =  usuarioMapper.mapResponseDTO(usuarioRepository.save(usuario));
+        
+        //Elimina la imagen de la BD luego de guardar el usuario por las constrains de la BD
+        imagenService.eliminarImagen(urlBorrar);
+
+        return usuarioActualizado;
     }
 
     public UsuarioResponseDTO inhabilitarCuenta(Long id,HttpServletRequest request) {

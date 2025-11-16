@@ -46,8 +46,12 @@ export class UsuarioService {
     return this.http.post(`${this.USUARIO_URL}/registrarme`, formData);
   }
 
-  actualizarFotoPerfil(urlImagen: string){
-    return this.http.patch(`${this.USUARIO_URL}/imagenPerfil`, {urlImagen});
+  actualizarFotoPerfil(url: string){
+    return this.http.patch(`${this.USUARIO_URL}/imagenPerfil`, {url});
+  }
+
+  borrarFotoPerfil(){
+    return this.http.delete(`${this.USUARIO_URL}/imagenPerfil`);
   }
 
   actualizarPerfil(formulario: UsuarioFormBasicoModel){
@@ -57,7 +61,7 @@ export class UsuarioService {
       apellido: formulario.apellido.trim(),
       fechaNacimiento: normalizarFecha(formulario.fechaNacimiento),
       descripcion: formulario.descripcion?.trim() || null,
-      urlImagen: formulario.imagenUrl || null
+      urlImagen: formulario.imagenUrl?.trim() || null
     }
 
     return this.http.put(`${this.USUARIO_URL}/${formulario.id}`, actualizarUsr);

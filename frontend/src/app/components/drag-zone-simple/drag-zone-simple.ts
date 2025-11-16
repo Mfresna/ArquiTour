@@ -10,9 +10,11 @@ export class DragZoneSimple {
 
   @Input() label: string = 'Imagen';
   @Input() labelBoton: string = 'Quitar imagen';
+  @Input() verBoton: boolean = true;
   @Input() imgExistente: string | null = null;
 
   @Output() archivoChange = new EventEmitter<File | null>();
+  @Output() quitadoImg = new EventEmitter<boolean>();
 
   imagenes: File[] = [];
   vistasPrevias: string[] = [];
@@ -56,6 +58,7 @@ export class DragZoneSimple {
     this.vistasPrevias = archivos.map(a => URL.createObjectURL(a));
 
     this.archivoChange.emit(this.imagenes[0] ?? null);
+    this.quitadoImg.emit(false);
   }
 
   limpiarImagen(e?: Event): void {
@@ -72,6 +75,7 @@ export class DragZoneSimple {
     if (this.inputArchivo) this.inputArchivo.nativeElement.value = '';
 
     this.archivoChange.emit(null);
+    this.quitadoImg.emit(true);
   }
 
   obtenerArchivoActual(): File | null {

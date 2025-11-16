@@ -47,7 +47,7 @@
 #titulo h1 {
   text-align: center;
   margin-top: 0.65rem;
-  margin-bottom: 0.8rem;
+  margin-bottom: 0.5rem;
   font-size: 1.8rem;
   font-weight: 700;
   color: var(--colorBoton, #0077b6);
@@ -197,7 +197,6 @@
 .area-img-disable {
   user-select: none;
   pointer-events: none;
-  opacity: 0.6;
 }
 
 #detalle-formulario{
@@ -319,7 +318,7 @@ small {
     padding-top: 2rem; 
   }
   #contenedor-tarjeta {
-    max-width: 80%;
+    max-width: 60%;
   }
   #titulo h1 {
     font-size: 2.1rem;
