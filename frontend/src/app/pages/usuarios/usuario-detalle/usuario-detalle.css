@@ -66,6 +66,50 @@
   opacity: 0.9;
 }
 
+/* ========================BOTON VOVLERr ======================== */
+
+#botoneraSuperior {
+  display: flex;
+  justify-content: flex-start;
+  padding: 0.8rem 1rem 0rem 1rem;
+}
+
+#btnVolver {
+    background-color: transparent;
+    color: var(--colorTerciario, #444);
+    /* border: 1px solid rgba(0, 0, 0, 0.2); */
+    border: none;
+    border-radius: 0.5rem;
+    font-size: 0.95rem;
+    padding: 0.2rem 0.4rem;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+#btnVolver:hover {
+    background-color: rgba(0, 0, 0, 0.06);
+    transform: scale(1.04);
+}
+
+/* ===== Línea decorativa debajo ===== */
+#btnVolver::after {
+    content: "";
+    display: block;
+    width: 60%;
+    height: 1.8px;
+    border-radius: 3px;
+    background: linear-gradient(90deg, #555555, #555555);
+    margin: 0.18rem auto 0;
+    opacity: 0.85;
+    transition: width 0.25s ease, opacity 0.25s ease;
+}
+
+/* Efecto hover: la línea crece y se intensifica */
+#btnVolver:hover::after {
+  width: 85%;
+  opacity: 1;
+}
+
 /*============== INFO SUPERIOR ==============*/
 #info-superior {
   display: flex;

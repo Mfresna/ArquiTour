@@ -14,6 +14,7 @@ import { Favoritos } from './pages/favoritos/favoritos/favoritos';
 import { Obras } from './pages/obras/obras/obras';
 import { UsuarioDetalle } from './pages/usuarios/usuario-detalle/usuario-detalle';
 import { FavoritosDetalle } from './pages/favoritos/favoritos-detalle/favoritos-detalle';
+import { UsuarioLista } from './pages/usuarios/usuario-lista/usuario-lista';
 
 
 
@@ -49,7 +50,7 @@ export const routes: Routes = [
   { path: 'usuario/:id', component: UsuarioDetalle},
 
   //Gestionar Usuarios
-  { path: 'gestionar-usaurios', component: UsuarioDetalle},
+  { path: 'gestionar-usuarios', component: UsuarioLista},
 
 
   { path: 'prueba', component: Register}

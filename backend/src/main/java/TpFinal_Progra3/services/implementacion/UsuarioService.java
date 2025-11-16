@@ -213,7 +213,7 @@ public class UsuarioService implements UsuarioServiceInterface {
         usuario.setImagen(null);
 
         UsuarioResponseDTO usuarioActualizado =  usuarioMapper.mapResponseDTO(usuarioRepository.save(usuario));
-        
+
         //Elimina la imagen de la BD luego de guardar el usuario por las constrains de la BD
         imagenService.eliminarImagen(urlBorrar);
 

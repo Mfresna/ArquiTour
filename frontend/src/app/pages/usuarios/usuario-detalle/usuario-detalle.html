@@ -2,9 +2,15 @@
 
   <div id="contenedor-tarjeta">
 
+    @if(!miPerfil){
+      <section id="botoneraSuperior">
+        <button id="btnVolver" (click)="volver()" type="button">Volver</button>
+      </section>
+    }
+
     <!-- ====== Fila 1: nombre + botones ====== -->
     <div id="titulo">
-      <h1>MI PERFIL</h1>
+      <h1>{{titulo}}</h1>
     </div>
 
     <div id="info-superior">

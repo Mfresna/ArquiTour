@@ -1,19 +1,16 @@
-import { AfterViewInit, Component, EventEmitter, OnInit, Output, signal, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { catchError, concat, finalize, map, Observable, of, switchMap, tap, throwError } from 'rxjs';
-import { PinService } from '../../../auth/services/pinService/pin-service';
+import { finalize, map, Observable, switchMap } from 'rxjs';
 import { fechaNacValidador } from '../../../auth/validadores/fechaValidador';
-import { CamposIguales } from '../../../auth/validadores/igualdadValidador';
-import { caracteresValidador } from '../../../auth/validadores/passCaracteresValidador';
 import { nombreValidador, apellidoValidador } from '../../../auth/validadores/textoValidador';
 import { DragZoneImagenes } from '../../../components/drag-zone-imagenes/drag-zone-imagenes';
 import { ImagenService } from '../../../services/imagenService/imagen-service';
 import { UsuarioService } from '../../../services/usuarioService/usuario-service';
-import { PinVerificador } from '../../../auth/components/pin/pin-verificador';
 import { EsperandoModal } from '../../../components/esperando-modal/esperando-modal';
 import { DragZoneSimple } from '../../../components/drag-zone-simple/drag-zone-simple';
 import { environment } from '../../../../environments/environment';
+import { Location } from '@angular/common';
 
 
 @Component({
@@ -25,6 +22,8 @@ import { environment } from '../../../../environments/environment';
 export class UsuarioDetalle implements OnInit, AfterViewInit{
 
   perfilForm!: FormGroup;
+
+  titulo: string = 'PERFIL DE USUARIO'
 
   id!: number;
   emailRegistrado!: string;
@@ -54,7 +53,7 @@ export class UsuarioDetalle implements OnInit, AfterViewInit{
     private imagenService: ImagenService,
     private router: Router,
     private route: ActivatedRoute,
-    private pinService: PinService    
+    private location: Location   
   ) {}
   
   ngOnInit(): void {
@@ -231,6 +230,8 @@ export class UsuarioDetalle implements OnInit, AfterViewInit{
   //CARGAR DATOS
 
   private cargarMe(){
+    this.titulo = 'MI PERFIL';
+
     this.usuarioService.getUsuarioMe().subscribe({
       next: (item) => {
         this.miPerfil = true;
@@ -283,6 +284,9 @@ export class UsuarioDetalle implements OnInit, AfterViewInit{
     return null;
   }
 
+  volver(){
+    this.location.back();
+  }
 
 
 }

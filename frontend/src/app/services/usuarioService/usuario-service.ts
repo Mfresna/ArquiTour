@@ -7,6 +7,7 @@ import { Observable } from 'rxjs';
 import { UsuarioModel } from '../../models/usuarioModels/usuaroModel';
 import { UsuarioBasicoModel } from '../../models/usuarioModels/usuarioBasicoModel';
 import { UsuarioFormBasicoModel } from '../../models/usuarioModels/usuarioFormBasicoModel';
+import { RolModel } from '../../models/usuarioModels/RolModel';
 
 @Injectable({
   providedIn: 'root',
@@ -68,9 +69,31 @@ export class UsuarioService {
   }
 
 
-  getUsuarios(){
+  getUsuarios(
+    nombre?: string,
+    apellido?: string,
+    email?: string,
+    isActivo?: boolean,
+    rol?: RolModel): Observable<UsuarioModel[]>  {
 
+    let url = `${this.USUARIO_URL}/filtrar`;
+
+    const params: string[] = [];
+
+    if (nombre)   params.push(`nombre=${encodeURIComponent(nombre)}`);
+    if (apellido) params.push(`apellido=${encodeURIComponent(apellido)}`);
+    if (email)    params.push(`email=${encodeURIComponent(email)}`);
+    //Solo lo mando si no es null
+    if (isActivo !== undefined && isActivo !== null) {params.push(`isActivo=${isActivo}`)};
+    if (rol) params.push(`rol=${encodeURIComponent(rol)}`);
+
+    if (params.length) {
+      url += `?${params.join('&')}`;
+    }
+
+    return this.http.get<UsuarioModel[]>(url);
   }
+
   
   getUsuario(id: string): Observable<UsuarioModel>{
     //Hay que acomodarlo
