@@ -5,7 +5,7 @@ import { FavoritosService } from '../../../services/favoritosService/favoritos-s
 import { RouterLink } from '@angular/router';
 
 @Component({
-  selector: 'app-favoritos-detalle',
+  selector: 'app-favoritos',
   imports: [RouterLink,ReactiveFormsModule],
   templateUrl: './favoritos.html',
   styleUrl: './favoritos.css',

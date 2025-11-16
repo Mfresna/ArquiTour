@@ -3,6 +3,7 @@ import { ObraModel } from '../../../models/obraModels/obraModel';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { environment } from '../../../../environments/environment';
 import { FavoritosService } from '../../../services/favoritosService/favoritos-service';
+import { FavoritoBasicoModel } from '../../../models/favoritosModels/favoritoBasicoModel';
 
 @Component({
   selector: 'app-favoritos-detalle',
@@ -12,6 +13,7 @@ import { FavoritosService } from '../../../services/favoritosService/favoritos-s
 })
 export class FavoritosDetalle implements OnInit {
 
+  lista?: FavoritoBasicoModel;
   obras: ObraModel[] = [];
   idLista!: number;
   nombreLista: string = '';
@@ -26,8 +28,24 @@ export class FavoritosDetalle implements OnInit {
   ngOnInit(): void {
    
     this.idLista = Number(this.route.snapshot.paramMap.get('id'));
-    this.cargarObrasDeLista();
+    this.cargarDatosLista();
   }
+
+  private cargarDatosLista(): void {
+    this.favoritosService.getFavoritosDelUsuario().subscribe({
+      next: (listas: FavoritoBasicoModel[]) => {
+        this.lista = listas.find(l => l.id === this.idLista);
+        this.nombreLista = this.lista?.nombre ?? 'Lista sin nombre';
+
+        this.cargarObrasDeLista();
+      },
+      error: () => {
+        this.nombreLista = 'Lista de favoritos';
+        this.cargarObrasDeLista(); // igual intento cargar obras
+      }
+    });
+  }
+
 
   cargarObrasDeLista(): void {
     this.favoritosService.getObrasDeFavorito(this.idLista).subscribe({
@@ -48,4 +66,29 @@ export class FavoritosDetalle implements OnInit {
     if (img.src.includes(this.imagenDefecto)) return;
     img.src = this.imagenDefecto;
   }
+
+  eliminarObraDeLista(obraId: number, event?: Event): void {
+    // Para que NO navegue al detalle de la obra al hacer clic en el botón
+    event?.stopPropagation();
+    event?.preventDefault();
+
+    if (!confirm('¿Quitar esta obra de la lista?')) return;
+
+    this.favoritosService.deleteObraDeFavorito(this.idLista, obraId).subscribe({
+      next: () => {
+        this.obras = this.obras.filter(o => o.id !== obraId);
+      },
+      error: () => {
+        alert('No se pudo quitar la obra de la lista.');
+      }
+    });
+  } 
+
+
+
+
+
+
+
+
 }

@@ -10,8 +10,29 @@
     <div class="ficha-tecnica">
       <div class="tit-fav">
         <h1 class="titulo">{{ obra.nombre }}</h1>
-        <span class="material-icons icono-fav">favorite</span>
+        <div class="favorito">
+          <span
+            class="material-icons icono-fav"
+            tabindex="0"
+            (click)="mostrarOcultarSelectorFavoritos($event)"
+            [class.activo]="estaEnFavoritos"
+            > favorite
+          </span>
+
+          @if (mostrarSelectorFavoritos && obra.id) {
+            <app-select-favorito
+              [obraId]="obra.id!"
+              (cerrado)="onCerradoSelector()"
+              (estadoFavoritoCambio)="onEstadoFavoritoCambio($event)"
+            />
+          }
+
+
+        </div>
+
+      
       </div>
+
       
 
       <div class="ft-grid">

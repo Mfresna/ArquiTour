@@ -37,7 +37,7 @@
   text-align: center;
   letter-spacing: 0.5px;
   position: relative;
-  color: var(--colorBoton, #0077b6);
+  color: var(#0077b6);
 }
 
 #panel-filtros {

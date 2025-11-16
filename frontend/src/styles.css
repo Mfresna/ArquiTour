@@ -25,4 +25,10 @@ html, body, app-root {
   min-height: 100vh;
 } 
 
+.no-scroll {
+  overflow: hidden !important;
+}
+
+
+
 
