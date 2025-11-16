@@ -7,10 +7,12 @@ import { EstudioService } from '../../../services/estudioService/estudio-service
 import { ObraService } from '../../../services/obraService/obra-service';
 import { CategoriaObraDescripcion } from '../../../models/obraModels/categoriaObraModel';
 import { EstadoObraDescripcion } from '../../../models/obraModels/estadoObraModel';
+import { SelectFavorito } from '../../../components/select-favorito/select-favorito';
+import { FavoritosService } from '../../../services/favoritosService/favoritos-service';
 
 @Component({
   selector: 'app-obra-detalle',
-  imports: [RouterLink],
+  imports: [RouterLink, SelectFavorito],
   templateUrl: './obra-detalle.html',
   styleUrl: './obra-detalle.css',
 })
@@ -18,6 +20,10 @@ export class ObraDetalle {
 
   obra?: ObraModel;
   cargando = true;
+
+  //Estado Favoritos
+  mostrarSelectorFavoritos = false;
+  estaEnFavoritos = false;
 
   imagenDefecto = `${environment.imgObra}`;
   nombreEstudio?: string;
@@ -27,6 +33,7 @@ export class ObraDetalle {
 
   //Carrusel miniaturas
   @ViewChild('carruselImagenes') carruselImagenes!: ElementRef;
+
   
 
   //Para mostrar el nombre prolijo de estado y categoria
@@ -41,7 +48,8 @@ export class ObraDetalle {
     private router: Router,
     private obraSrvice: ObraService,
     private tokenSrvice: TokenService,
-    private estudioSrvice: EstudioService
+    private estudioSrvice: EstudioService,
+    private favoritosService: FavoritosService
   ) {}
 
   ngOnInit(): void {
@@ -72,8 +80,60 @@ export class ObraDetalle {
       },
       error: () => this.router.navigate(['/obras']),
     });
+
+    this.verificarSiEstaEnFavoritos(id);
+  }
+  
+
+  // ================== FAVORITOS: CORAZÓN + POPUP ==================
+
+  private verificarSiEstaEnFavoritos(idObra: number): void {
+  this.favoritosService.getFavoritosDelUsuario().subscribe({
+    next: (listas) => {
+      // Busco en cada lista si está la obra
+      let encontrada = false;
+
+      const consultas = listas.map(lista =>
+        this.favoritosService.getObrasDeFavorito(lista.id).subscribe({
+          next: (obras) => {
+            if (obras.some(o => o.id === idObra)) {
+              encontrada = true;
+              this.estaEnFavoritos = true; 
+            }
+          }
+        })
+      );
+    },
+    error: () => {
+      console.warn('No se pudieron verificar los favoritos.');
+    }
+  });
+}
+
+
+  /** Recibe del hijo si la obra pertenece a alguna lista */
+  onEstadoFavoritoCambio(esta: boolean): void {
+    this.estaEnFavoritos = esta;
+  }
+  
+  /** Muestra u oculta el popup que contiene las listas de favoritos */
+  mostrarOcultarSelectorFavoritos(event?: MouseEvent): void {
+    event?.stopPropagation();
+    this.mostrarSelectorFavoritos = !this.mostrarSelectorFavoritos;
+    if (this.mostrarSelectorFavoritos) {
+      document.body.classList.add('no-scroll');
+    } else {
+      document.body.classList.remove('no-scroll');
+    }
   }
 
+  /** Se ejecuta cuando el componente hijo avisa que se cerró */
+  onCerradoSelector(): void {
+    this.mostrarSelectorFavoritos = false;
+    document.body.classList.remove('no-scroll');
+  }
+
+  
 
   // Imágenes
 

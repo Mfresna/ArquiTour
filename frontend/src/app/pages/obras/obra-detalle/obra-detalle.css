@@ -79,18 +79,22 @@
   align-items: center;
   justify-content: center;
   width:90%;
+  max-width: 100%;  
   padding: .45rem .75rem;
   border-radius: 999px;
   font-weight: 700;
   font-size: .9rem;
   line-height: 1.2;
   white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   border: 1px solid #dbe3eb;
   background: #f9fafb;
   color: #1e293b;
   text-align: center;
   text-transform: uppercase;
   height: 2.4rem;
+  
 }
 
 .burbuja-link{
@@ -102,6 +106,7 @@
   padding: 0.3rem 0.75rem;
   font-size: 0.9rem;
   font-weight: 700;
+
 }
 
 .burbuja-link:hover{
@@ -350,20 +355,6 @@
   right: 12px;
 }
 
-/* .material-icons {
-  font-size: 26px;
-  line-height: 1;
-  font-variation-settings:
-    'FILL' 1,
-    'wght' 500,
-    'GRAD' 0,
-    'opsz' 24;
-  transition: transform 0.2s ease;
-}
-
-.flecha-carrusel:hover .material-icons {
-  transform: scale(1.1);
-} */
 
 /* ====== Ventana de Imágenes ====== */
 
@@ -513,10 +504,26 @@
 }
 
 /* Hover */
-.icono-fav:hover {
+.icono-fav:hover:not(.activo) {
    color: #e63946;                      
   -webkit-text-stroke: 0px transparent; 
 
 }
+
+.icono-fav.activo {
+  color: #e63946;              
+  -webkit-text-stroke: 0px;     
+}
+
+.icono-fav {
+  caret-color: transparent;  
+  user-select: none;      
+}
+.favorito {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
 
 
