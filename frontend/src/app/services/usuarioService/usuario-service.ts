@@ -46,8 +46,8 @@ export class UsuarioService {
     return this.http.post(`${this.USUARIO_URL}/registrarme`, formData);
   }
 
-  actualizarFotoPerfil(urlImagen: string){
-    return this.http.patch(`${this.USUARIO_URL}/imagenPerfil`, {urlImagen});
+  actualizarFotoPerfil(url: string){
+    return this.http.patch(`${this.USUARIO_URL}/imagenPerfil`, {url});
   }
 
   actualizarPerfil(formulario: UsuarioFormBasicoModel){

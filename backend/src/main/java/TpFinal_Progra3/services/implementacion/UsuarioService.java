@@ -192,11 +192,31 @@ public class UsuarioService implements UsuarioServiceInterface {
         usuario.setApellido(usrDto.getApellido());
         usuario.setFechaNacimiento(usrDto.getFechaNacimiento());
         usuario.setDescripcion(usrDto.getDescripcion());
-        usuario.setImagen(Optional.ofNullable(usrDto.getUrlImagen())
+
+//        usuario.setImagen(Optional.ofNullable(usrDto.getUrlImagen())
+//                .map(imagenService::obtenerImagen)
+//                .orElse(usuario.getImagen()));
+
+        usuario.setImagen(traerImg(request,usuario,usrDto.getUrlImagen())
                 .map(imagenService::obtenerImagen)
-                .orElse(usuario.getImagen()));
+                .orElse(null));
 
         return usuarioMapper.mapResponseDTO(usuarioRepository.save(usuario));
+    }
+
+    private Optional<String> traerImg(HttpServletRequest request,Usuario usr, String urlNueva){
+        if(usr.getImagen().getUrl().equals(urlNueva)){
+            return Optional.of(urlNueva);
+        }
+
+        borrarImagenPerfil(request,usr.getImagen().getUrl());
+
+        if(urlNueva.isEmpty()) {
+            return Optional.empty();
+        }else{
+            return Optional.of(urlNueva);
+        }
+
     }
 
     public UsuarioResponseDTO actualizarImagenPerfil(HttpServletRequest request, String url) {

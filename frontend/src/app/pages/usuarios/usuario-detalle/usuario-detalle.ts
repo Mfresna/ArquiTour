@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, EventEmitter, OnInit, Output, signal, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { catchError, finalize, map, Observable, switchMap, throwError } from 'rxjs';
+import { catchError, finalize, map, Observable, of, switchMap, tap, throwError } from 'rxjs';
 import { PinService } from '../../../auth/services/pinService/pin-service';
 import { fechaNacValidador } from '../../../auth/validadores/fechaValidador';
 import { CamposIguales } from '../../../auth/validadores/igualdadValidador';
@@ -13,6 +13,7 @@ import { UsuarioService } from '../../../services/usuarioService/usuario-service
 import { PinVerificador } from '../../../auth/components/pin/pin-verificador';
 import { EsperandoModal } from '../../../components/esperando-modal/esperando-modal';
 import { DragZoneSimple } from '../../../components/drag-zone-simple/drag-zone-simple';
+import { environment } from '../../../../environments/environment';
 
 
 @Component({
@@ -32,6 +33,7 @@ export class UsuarioDetalle implements OnInit, AfterViewInit{
 
   imagenUrlExistente!: string;
   nuevaImagen: File | null = null;
+  quitadoImg: boolean = false;
 
   editando: boolean = false;
 
@@ -100,9 +102,7 @@ export class UsuarioDetalle implements OnInit, AfterViewInit{
 
     }else{
       //Ya Modifique estoy GUARDANDO
-      this.registrarme();
-
-      this.deshabilitarCampos()
+      this.actualizarme();
     }
 
   }
@@ -111,68 +111,72 @@ export class UsuarioDetalle implements OnInit, AfterViewInit{
     this.router.navigate(['/cambiarpass']);
   }
 
-//========================== PASOS DE REGISTRACION
-  private registrarme(){
+//========================== PASOS DE ACTUALIZACION
+  private actualizarme() {
 
     if (this.perfilForm.invalid) {
-      alert("invalido")
       this.perfilForm.markAllAsTouched();
-    }else{
-      this.verficiarImgNueva();
+      return;
+    }
 
-      this.spinerVisible=true;
-      this.spinerMensaje="Actualizando Usuario..."
+    this.spinerVisible = true;
+    this.spinerMensaje = "Actualizando Usuario...";
 
-      const formularioCompleto = {
-        ...this.perfilForm.getRawValue(),
-        id: this.id                       
-      };
-     
-      this.usuarioService.actualizarPerfil(formularioCompleto).pipe(
-        finalize(() => this.spinerVisible=false)
-      ).subscribe({
-        next: ()=>{
-          alert("Usuario Actualizado Correctamente");
-        },
-        error: (e) => {
-            if(e.status === 400){
-            //BAD_REQUEST
-            alert("Error en los Datos cargados")
-
-            }else if(e.status === 403){
-              //FORBBIDEN
-              alert("El usuario no se puede modificar");
-            }
-        }
+    this.verficiarImgNueva().pipe(
+      switchMap(() => {
+        const formularioCompleto = {
+          ...this.perfilForm.getRawValue(),
+          id: this.id
+        };
+        return this.usuarioService.actualizarPerfil(formularioCompleto);
+      }),
+      finalize(() =>{
+        this.spinerVisible = false;
+        this.editando = false;
       })
+    ).subscribe({
+      next: () => {
+        //Recarga al usuario
+        const idParam = this.route.snapshot.params['id'];
+        idParam ? this.cargarusuario(idParam) : this.cargarMe();
 
-    }      
+        this.deshabilitarCampos()
+        //Recargar Componente
+      }
+      ,
+      error: (e) => {
+        if (e.status === 400) alert("Error en los datos cargados");
+        else if (e.status === 403) alert("El usuario no se puede modificar");
+        else console.error(e);
+      }
+    });
+
   }
 
-  private verficiarImgNueva(){
-    if(this.nuevaImagen){
-        this.actualizarImg().subscribe({
-          next: (url) => {
-            this.perfilForm.get('imagenUrl')?.setValue(url);
-          },
-          error: (e) => {
-            //===========ERRORES DE IMAGEN
-            if(e.status === 400){
-            //BAD_REQUEST
-            alert("Verifique la imagen, su nombre y su extension.")
+  private verficiarImgNueva(): Observable<void> {
 
-            }else if(e.status === 415){
-              //UNSUPPORTED_MEDIA_TYPE
-              alert("El tipo de archivo no es soportado, solo se pueden cargar imagenes");
-            }
-          }
-        });
-      }else{
-        //Seteo la misma foto que tenia
-        alert(this.imagenUrlExistente)
+    if (this.nuevaImagen) {
+      return this.actualizarImg().pipe(
+        tap((url) => {
+          this.perfilForm.get('imagenUrl')?.setValue(url);
+        }),
+        map(() => void 0)
+      );
+
+    } else {
+
+      if (this.quitadoImg){
+        //HABIA IMG Y LA SACARON
+        this.perfilForm.get('imagenUrl')?.setValue(null);
+      } else {
         this.perfilForm.get('imagenUrl')?.setValue(this.imagenUrlExistente);
       }
+
+      return of(void 0);
+    }
+
   }
+
 
   private actualizarImg(): Observable<string> {
 
@@ -184,12 +188,13 @@ export class UsuarioDetalle implements OnInit, AfterViewInit{
         )
       ),
       catchError((err) => {
-        console.error("Error en la Actualizacion de la iamgen", err);
+        console.error("Error en la actualización de la imagen", err);
         return throwError(() => err);
       })
     );
 
   }
+
 
   
 //===================================================
@@ -215,7 +220,8 @@ export class UsuarioDetalle implements OnInit, AfterViewInit{
   }
 
 //===================================================
-  //HABILITAR CAMPOS
+  //CARGAR DATOS
+
   private cargarMe(){
     this.usuarioService.getUsuarioMe().subscribe({
       next: (item) => {
@@ -225,7 +231,7 @@ export class UsuarioDetalle implements OnInit, AfterViewInit{
         this.emailRegistrado = item.email;
         this.nombre = item.nombre;
         this.apellido = item.apellido;
-        this.imagenUrlExistente = item.urlImagen
+        this.imagenUrlExistente = item.urlImagen;
       },
       error: (e) => {
         console.error("No se puede leer el usuario", e);
@@ -242,12 +248,20 @@ export class UsuarioDetalle implements OnInit, AfterViewInit{
         this.emailRegistrado = item.email;
         this.nombre = item.nombre;
         this.apellido = item.apellido;
-        this.imagenUrlExistente = item.urlImagen
+        this.imagenUrlExistente = item.urlImagen;
       },
       error: (e) => {
         console.error("No se puede leer el usuario", e);
       }
     });
+  }
+
+  cargarImg(url: string): string | null{
+    if(url){
+      const path = url.startsWith('/') ? url : `/${url}`;
+      return `${environment.apiUrl}${path}`;
+    }
+    return null;
   }
 
 

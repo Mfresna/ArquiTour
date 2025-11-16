@@ -33,10 +33,13 @@
       <!-- IMAGEN-->
       <div id="area-img">
         <app-drag-zone-simple
+          #campoImagen
           [class.area-img-disable]="!editando"
           label=""
-          [imgExistente]="imagenUrlExistente"
-          (archivoChange)="nuevaImagen = $event">
+          [verBoton]="editando"
+          [imgExistente]="cargarImg(imagenUrlExistente)"
+          (archivoChange)="nuevaImagen = $event"
+          (quitadoImg)="quitadoImg = $event">
         </app-drag-zone-simple>
       </div>
       

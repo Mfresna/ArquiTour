@@ -35,7 +35,7 @@
 
     </div>
 
-    @if (vistasPrevias.length || imgExistente) {
+    @if ((vistasPrevias.length || imgExistente) && verBoton) {
       <div id="botonera-img" (click)="$event.stopPropagation()">
         <button type="button"
                 class="btn-outline"
