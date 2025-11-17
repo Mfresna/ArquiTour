@@ -5,6 +5,7 @@ export const environment = {
   portBack: '8080',
   imgEstudio: 'assets/img/por_defecto/estudioPerfil.png',
   imgObra: 'assets/img/por_defecto/obra.png',
+  imgUsuario: 'assets/img/por_defecto/usuarioPerfil.png',
   imagenesFondo: [
     'assets/img/fondo/bg1.webp',
     'assets/img/fondo/bg2.webp',
