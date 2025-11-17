@@ -1,9 +1,10 @@
 <div id="global">
   <div id="contenedor-usuarios">
-    
+
     <div id="panel-izq">
       <h3 class="titulo">Usuarios</h3>
       <div id="panel-filtros">
+
         <form [formGroup]="filtroForm" (submit)="cargarUsuarios()" class="form-filtros">
 
           <!-- NOMBRE -->
@@ -49,9 +50,9 @@
               id="estado" 
               formControlName="isActivo" 
               (change)="cargarUsuarios()">
-                <option [ngValue]="null">-- Todos --</option>
-                <option [ngValue]="true">-- Activos --</option>
-                <option [ngValue]="false">-- Desactivados --</option>
+                <option value="">-- Todos --</option>
+                <option [ngValue]="true">Activos</option>
+                <option [ngValue]="false">Desactivados</option>
             </select>
           </fieldset>
 
@@ -62,7 +63,7 @@
               id="rol"
               formControlName="rol" 
               (change)="cargarUsuarios()">
-              <option [value]="null">-- Todos --</option>
+              <option value="">-- Todos --</option>
                 @for (r of roles; track r){
                   <option [value]="r">
                     {{ RolModelDescripcion[r] || r }}
@@ -77,7 +78,7 @@
           </div>
           
         </form>
-      
+
       </div>
     </div>
 
@@ -107,7 +108,10 @@
 
                     <!-- botonera de accion -->
                     <div clas="botonera">
-
+                      <div class="btn-tooltip-animated">
+                        <span class="material-icons">help</span>
+                        <div class="tooltip-anim">Ayuda</div>
+                      </div>
 
                     </div>
 

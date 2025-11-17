@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { UsrRequestModel } from '../../auth/models/register/usrRequestModel';
 import { UsrFormModel } from '../../auth/models/register/usrFormModel';
 import { Observable } from 'rxjs';
-import { UsuarioModel } from '../../models/usuarioModels/usuaroModel';
+import { UsuarioModel } from '../../models/usuarioModels/usuarioModel';
 import { UsuarioBasicoModel } from '../../models/usuarioModels/usuarioBasicoModel';
 import { UsuarioFormBasicoModel } from '../../models/usuarioModels/usuarioFormBasicoModel';
 import { RolModel } from '../../models/usuarioModels/RolModel';

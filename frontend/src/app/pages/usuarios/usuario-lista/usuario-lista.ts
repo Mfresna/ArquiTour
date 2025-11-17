@@ -10,7 +10,7 @@ import { ObraService } from '../../../services/obraService/obra-service';
 import { RouterLink } from '@angular/router';
 import { UsuarioService } from '../../../services/usuarioService/usuario-service';
 import { RolModel, RolModelDescripcion, RolPrioridad } from '../../../models/usuarioModels/RolModel';
-import { UsuarioModel } from '../../../models/usuarioModels/usuaroModel';
+import { UsuarioModel } from '../../../models/usuarioModels/usuarioModel';
 
 @Component({
   selector: 'app-usuario-lista',
@@ -37,8 +37,8 @@ export class UsuarioLista implements OnInit {
       nombre: ['',[]],
       apellido: ['',[]],
       email: ['',[]],
-      isActivo: [null,[]],
-      rol: [null,[]],
+      isActivo: ['',[]],
+      rol: ['',[]],
     });
 
     this.cargarUsuarios();
@@ -79,27 +79,30 @@ export class UsuarioLista implements OnInit {
     this.cargarUsuarios();
   }
 
-
-  getDescripcionRol(roles: string[]): string | null {
+  getDescripcionRol(roles: string[]): string {
     if (!roles || roles.length === 0) return 'Error en el Rol';
 
-    const rolMaximo = this.getRolMaximo(roles);
-    if (!rolMaximo) return 'Error en el Rol';
+    const rolesValidos = roles.filter(r =>
+      Object.values(RolModel).includes(r as RolModel)
+    ) as RolModel[];
 
-    return RolModelDescripcion[rolMaximo];
+    //No posee roles validos
+    if (rolesValidos.length === 0) return 'Error en el Rol';
+
+    const descripciones = rolesValidos
+      .filter(r => r !== RolModel.ROLE_USUARIO)
+      .map(r => RolModelDescripcion[r]);
+
+    if (descripciones.length === 0) return 'Basico';
+
+    return descripciones.join(' y ');
   }
 
-  private getRolMaximo(roles: string[]): RolModel | null {
-    if (!roles || roles.length === 0) return null;
 
-    const rolesValidos = roles.filter(r => Object.values(RolModel).includes(r as RolModel)) as RolModel[];
 
-    if (rolesValidos.length === 0) return null;
 
-    return rolesValidos.reduce((max, actual) =>
-      RolPrioridad[actual] > RolPrioridad[max] ? actual : max
-    );
-  }
+
+
 
 
 }
