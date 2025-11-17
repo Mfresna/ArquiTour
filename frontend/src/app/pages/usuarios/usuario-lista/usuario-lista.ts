@@ -10,7 +10,7 @@ import { ObraService } from '../../../services/obraService/obra-service';
 import { RouterLink } from '@angular/router';
 import { UsuarioService } from '../../../services/usuarioService/usuario-service';
 import { RolModel, RolModelDescripcion, RolPrioridad } from '../../../models/usuarioModels/RolModel';
-import { UsuarioModel } from '../../../models/usuarioModels/usuaroModel';
+import { UsuarioModel } from '../../../models/usuarioModels/usuarioModel';
 
 @Component({
   selector: 'app-usuario-lista',
@@ -37,8 +37,8 @@ export class UsuarioLista implements OnInit {
       nombre: ['',[]],
       apellido: ['',[]],
       email: ['',[]],
-      isActivo: [null,[]],
-      rol: [null,[]],
+      isActivo: ['',[]],
+      rol: ['',[]],
     });
 
     this.cargarUsuarios();
@@ -79,7 +79,6 @@ export class UsuarioLista implements OnInit {
     this.cargarUsuarios();
   }
 
-
   getDescripcionRol(roles: string[]): string {
     if (!roles || roles.length === 0) return 'Error en el Rol';
 
@@ -94,11 +93,16 @@ export class UsuarioLista implements OnInit {
       .filter(r => r !== RolModel.ROLE_USUARIO)
       .map(r => RolModelDescripcion[r]);
 
-    // Si solo era usuario común
-    if (descripciones.length === 0) return '';
+    if (descripciones.length === 0) return 'Basico';
 
-    // Si hay más de uno: "Arquitecto y Administrador"
     return descripciones.join(' y ');
   }
+
+
+
+
+
+
+
 
 }
