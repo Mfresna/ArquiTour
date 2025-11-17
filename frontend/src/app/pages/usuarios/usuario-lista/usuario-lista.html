@@ -66,9 +66,11 @@
               (change)="cargarUsuarios()">
               <option value="">-- Todos --</option>
                 @for (r of roles; track r){
-                  <option [value]="r">
-                    {{ RolModelDescripcion[r] || r }}
-                  </option>
+                  @if(r !== 'ROLE_USUARIO'){
+                    <option [value]="r">
+                      {{ RolModelDescripcion[r] || r }}
+                    </option>
+                  }
                 }
             </select>
           </fieldset>
