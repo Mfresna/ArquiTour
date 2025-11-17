@@ -17,7 +17,7 @@
       <!-- ====== Fila 2: imagen + obras ====== -->
       <div class="fila-contenido">
         <!-- Imagen -->
-        <div class="thumb">
+        <div class="imagen">
           <img
             [src]="imgSrc(estudio.imagenUrl)"
             (error)="imagenError($event)"
@@ -27,7 +27,7 @@
         <!-- Obras -->
         <div class="panel panel-obras">
           <div class="encabezado">
-            <h3>Obras vinculadas ({{ obrasVinculadas.length }})</h3>
+            <h3>Obras vinculadas</h3>
           </div>
 
           @if (obrasVinculadas.length) {
@@ -47,14 +47,13 @@
       <!-- ====== Fila 3: arquitectos ====== -->
       <div class="panel panel-arquitectos">
         <div class="encabezado">
-          <h3>Arquitectos vinculados ({{ estudio.arquitectosIds?.length || 0 }})</h3>
+          <h3>Arquitectos vinculados</h3>
         </div>
 
-        @if (estudio.arquitectosIds?.length) {
-          <ul class="chips">
-            @for (aid of estudio.arquitectosIds; track $index) {
-              <li>#{{ aid }}</li>
-              <!-- si tenés helper: {{ nombreArquitecto(aid) }} -->
+        @if (arquitectosVinculados.length) {
+          <ul class="arq-item">
+            @for (arq of arquitectosVinculados; track arq.id) {
+              <li>{{ arq.nombre }}</li>
             }
           </ul>
         } @else {

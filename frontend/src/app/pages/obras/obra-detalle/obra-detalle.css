@@ -45,7 +45,8 @@
   margin: 0;
   font-size: 2.1rem;
   font-weight: 800;
-  color: var(--color-primario);
+  color: var(--colorBoton);
+  text-transform: capitalize;
 }
 
 /* 4 columnas: Estudio | Categoría | Estado | Año */
@@ -96,6 +97,30 @@
   height: 2.4rem;
   
 }
+.burbuja,
+.burbuja-link {
+  display: flex;
+  align-items: center;        
+  justify-content: center;    
+
+  width: 100%;
+  max-width: 100%;
+  padding: .35rem .9rem;
+  border-radius: 999px;
+
+  font-weight: 700;
+  font-size: .9rem;
+  text-align: center;
+
+  height: 2.7rem;             
+  box-sizing: border-box;
+}
+
+.burbuja {
+  border: 1px solid #dbe3eb;
+  background: #f9fafb;
+  color: #1e293b;
+}
 
 .burbuja-link{
   text-decoration: none;
@@ -109,10 +134,19 @@
 
 }
 
-.burbuja-link:hover{
+.burbuja-link:hover {
   background: #0a73c0;
   color: #fff;
   transform: translateY(-1px);
+}
+
+.burbuja-texto {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  line-clamp: 2;
+  -webkit-line-clamp: 2;  
+  overflow: hidden;
+  line-height: 1.2;
 }
 
 .vacio{
@@ -149,10 +183,10 @@
 
 .contenido {
   display: grid;
-  grid-template-columns: 1fr 1fr; /* Izquierda = texto, Derecha = mapa */
+  grid-template-columns: 1fr 1fr; 
   gap: 20px;
   align-items: start;
-  height: 320px; /* 👈 altura fija del bloque */
+  height: 320px; 
 }
 
 .texto {
@@ -179,11 +213,12 @@
 .mapa {
   display: grid;
   place-items: center;
-  height: 100%; /* ocupa toda la altura del bloque */
+  height: 100%; 
 }
+
 .mapa-placeholder {
   width: 100%;
-  height: 100%; /* 👈 ahora mantiene la altura total del contenedor */
+  height: 100%; 
   border-radius: 10px;
   background: repeating-linear-gradient(
     45deg,
@@ -424,16 +459,14 @@
 
 /* Por defecto: flechas visibles */
 .carrusel-container .flecha-carrusel {
-  display: grid; /* o flex, o inline-flex, lo que uses */
+  display: grid; 
 }
 
-
-/* Que sea lo más neutro posible */
 .material-icons {
   line-height: 1;
   display: inline-block;
 }
-/* Tamaño base de las flechas */
+
 .icon-flecha {
   font-size: 26px;
   font-variation-settings:
@@ -444,25 +477,22 @@
   font-weight: 900;
 }
 
-/* Opcional: un poquito de escala solo en hover */
+
 .flecha-carrusel:hover .icon-flecha {
   transform: scale(1.05);
   transition: transform 0.2s ease;
 }
 .icon-cerrar {
-  font-size: 28px;          /* acá cambiás y se nota, no afecta a las flechas */
+  font-size: 28px;          
   font-variation-settings:
     'FILL' 1,
     'wght' 500,
     'GRAD' 0,
     'opsz' 24;
-  transition: transform 0.2s ease;
-  color: #fff;             /* o el color que quieras */
+  transition: transform 0.2s ease;  
   font-weight: 900;
 }
 
-
-/* Efecto cuando pasás por el botón cerrar */
 .v-btn.cerrar:hover .icon-cerrar {
   transform: scale(1.1);
 }
@@ -482,7 +512,7 @@
     display: none;
   }
 }
-/* Encabezado alineado correctamente */
+
 .tit-fav {
   display: flex;
   justify-content: space-between;
@@ -491,8 +521,6 @@
   border-bottom: 2px solid #e5e7eb;
 }
 
-
-/* Icono del corazón */
 .icono-fav {
   font-size: 40px;
   line-height: 1;
@@ -500,14 +528,13 @@
   -webkit-text-stroke: 2px #928787;   
   transition: transform 0.2s ease;
   margin-right: 50px;
+  color: #fff;           
   cursor: pointer;
 }
 
-/* Hover */
 .icono-fav:hover:not(.activo) {
    color: #e63946;                      
   -webkit-text-stroke: 0px transparent; 
-
 }
 
 .icono-fav.activo {

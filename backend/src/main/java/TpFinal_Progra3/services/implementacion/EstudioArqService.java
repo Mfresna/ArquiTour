@@ -100,7 +100,7 @@ public class EstudioArqService implements EstudioArqServiceInterface {
         }
 
         // Validar que tenga el rol de ARQUITECTO
-        if (!arquitecto.getCredencial().tieneRolUsuario(RolUsuario.ROLE_ADMINISTRADOR)){
+        if (!arquitecto.getCredencial().tieneRolUsuario(RolUsuario.ROLE_ARQUITECTO)){
             throw new ProcesoInvalidoException("El usuario no tiene el rol de ARQUITECTO.");
         }
 
@@ -109,6 +109,9 @@ public class EstudioArqService implements EstudioArqServiceInterface {
             estudio.getArquitectos().add(arquitecto);
             estudioArqRepository.save(estudio);
         }
+
+        //Agrega el estudio al usaurio
+        usuarioService.agregarEstudioAUsuario(arquitecto,estudio);
 
         return estudioArqMapper.mapDTO(estudio);
     }
@@ -132,6 +135,9 @@ public class EstudioArqService implements EstudioArqServiceInterface {
         // Eliminar arquitecto
         estudio.getArquitectos().remove(arquitecto);
         estudioArqRepository.save(estudio);
+
+        //Agrega el estudio al usaurio
+        usuarioService.quitarEstudioAUsuario(arquitecto,estudio);
 
         return estudioArqMapper.mapDTO(estudio);
     }
@@ -169,9 +175,34 @@ public class EstudioArqService implements EstudioArqServiceInterface {
                     "El Arquitecto logueado no pertenece al Estudio de Arquitectura ID: " + id);
         }
 
-        estudio.setImagen(imagenService.obtenerImagen(url));
+        //Hay algo para actualizar
+        if(url.equals(estudio.getImagen().getUrl())){
+            //Devuelvo el estudio como estaba
+            return estudioArqMapper.mapDTO(estudio);
+        }
 
-        return estudioArqMapper.mapDTO(estudioArqRepository.save(estudio));
+        String urlBorrar = estudio.getImagen().getUrl();
+
+        if (url.isEmpty()){
+            //sacamos la foto
+            estudio.setImagen(null);
+        } else {
+            //seteamos nueva foto que la obtiene de la BD
+            estudio.setImagen(imagenService.obtenerImagen(url));
+        }
+
+        //Guardo el usuario con la foto null o la nueva foto
+        EstudioArqDTO estudioActualizado = estudioArqMapper.mapDTO(estudioArqRepository.save(estudio));
+
+        if (urlBorrar != null) {
+            eliminarImagen(urlBorrar);
+        }
+
+        return estudioActualizado;
+    }
+
+    private void eliminarImagen (String urlABorrar){
+        imagenService.eliminarImagen(urlABorrar);
     }
 
     private boolean puedeGestionarEstudio(HttpServletRequest request, Long id){

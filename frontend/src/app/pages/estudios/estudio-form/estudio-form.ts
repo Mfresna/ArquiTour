@@ -23,6 +23,8 @@ export class EstudioForm {
   editar = false;
   subiendo = false;  
   archivoSeleccionado: File | null = null;
+  imagenUrlExistente = false;
+  quitadoImg: boolean = false;
 
   constructor(
     private fb: FormBuilder,
@@ -33,7 +35,7 @@ export class EstudioForm {
   ) {}
 
   ngOnInit(): void {
-    // La imagen es opcional; solo validamos el nombre
+    // La imagen es opcional, solo validamos el nombre
     this.formulario = this.fb.group({
       nombre: ['', [Validators.required, Validators.minLength(2)]],
 
@@ -62,9 +64,15 @@ export class EstudioForm {
         if (data.imagenUrl && !this.esImagenPorDefecto(data.imagenUrl)) {
           const path = data.imagenUrl.startsWith('/') ? data.imagenUrl : `/${data.imagenUrl}`;
           this.imagenActualUrl = `${environment.apiUrl}${path}`;
+
+          this.imagenUrlExistente = true;
+          this.quitadoImg = false;
+
         } else {
           // si no tiene propia o es la default -> drag vacío
           this.imagenActualUrl = null;
+          this.imagenUrlExistente = false;
+          this.quitadoImg = false;
         }
       },
       error: () => alert('No se pudo cargar el estudio.'),
@@ -82,10 +90,6 @@ export class EstudioForm {
     return soloPath === defNormalizada;
   }
 
-
-
-
-
   guardar(event?: Event): void {
     event?.preventDefault();
 
@@ -96,7 +100,7 @@ export class EstudioForm {
     }
 
     this.subiendo = true;
-    const archivo = this.archivoSeleccionado; // viene del hijo
+    const archivo = this.archivoSeleccionado; 
 
     //Edición
     if (this.editar && this.id != null) {
@@ -110,6 +114,19 @@ export class EstudioForm {
         ...(arquitectosIds.length ? { arquitectosIds } : {}),
       };
 
+      // CASO 1: Tenía imagen, la quitó y NO subió otra
+      if (this.imagenUrlExistente && this.quitadoImg && !archivo) {
+        this.estudioService.updateImagenPerfil(this.id!, null).pipe(
+          switchMap(() => this.estudioService.updateEstudio(updatePayload)),
+          finalize(() => this.subiendo = false)
+        ).subscribe({
+          next: () => this.router.navigate(['/estudios', this.id]),
+          error: () => alert('No se pudo actualizar.')
+        });
+        return;
+      }
+
+      //CASO2: No tocó la imagen y no hay archivo nuevo
       if (!archivo) {
         this.estudioService.updateEstudio(updatePayload)
           .pipe(finalize(() => this.subiendo = false))
@@ -117,27 +134,28 @@ export class EstudioForm {
             next: () => this.router.navigate(['/estudios', this.id]),
             error: () => alert('No se pudo actualizar.')
           });
-      return;
-    }
+        return;
+      }
 
-    this.imagenService.subirUna(archivo).pipe(
-      take(1),
-      switchMap(rutas => {
-        const imagenUrl = rutas?.[0];
-        if (!imagenUrl) throw new Error('Sin URL');
-        return this.estudioService.updateImagenPerfil(this.id!, imagenUrl);
-      }),
-      switchMap(() => this.estudioService.updateEstudio(updatePayload)),
-      finalize(() => this.subiendo = false)
-    ).subscribe({
-      next: () => {
-        this.archivoSeleccionado = null;
-        this.router.navigate(['/estudios', this.id]);
-      },
-      error: () => alert('No se pudo actualizar.')
-    });
-    return;
-  }
+      //CASO 3: Hay archivo nuevo
+      this.imagenService.subirUna(archivo).pipe(
+        take(1),
+        switchMap(rutas => {
+          const imagenUrl = rutas?.[0];
+          if (!imagenUrl) throw new Error('Sin URL');
+          return this.estudioService.updateImagenPerfil(this.id!, imagenUrl);
+        }),
+        switchMap(() => this.estudioService.updateEstudio(updatePayload)),
+        finalize(() => this.subiendo = false)
+      ).subscribe({
+        next: () => {
+          this.archivoSeleccionado = null;
+          this.router.navigate(['/estudios', this.id]);
+        },
+        error: () => alert('No se pudo actualizar.')
+      });
+     return;
+    }
 
   // Creación
   if (!archivo) {

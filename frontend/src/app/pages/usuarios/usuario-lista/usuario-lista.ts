@@ -80,26 +80,25 @@ export class UsuarioLista implements OnInit {
   }
 
 
-  getDescripcionRol(roles: string[]): string | null {
+  getDescripcionRol(roles: string[]): string {
     if (!roles || roles.length === 0) return 'Error en el Rol';
 
-    const rolMaximo = this.getRolMaximo(roles);
-    if (!rolMaximo) return 'Error en el Rol';
+    const rolesValidos = roles.filter(r =>
+      Object.values(RolModel).includes(r as RolModel)
+    ) as RolModel[];
 
-    return RolModelDescripcion[rolMaximo];
+    //No posee roles validos
+    if (rolesValidos.length === 0) return 'Error en el Rol';
+
+    const descripciones = rolesValidos
+      .filter(r => r !== RolModel.ROLE_USUARIO)
+      .map(r => RolModelDescripcion[r]);
+
+    // Si solo era usuario común
+    if (descripciones.length === 0) return '';
+
+    // Si hay más de uno: "Arquitecto y Administrador"
+    return descripciones.join(' y ');
   }
-
-  private getRolMaximo(roles: string[]): RolModel | null {
-    if (!roles || roles.length === 0) return null;
-
-    const rolesValidos = roles.filter(r => Object.values(RolModel).includes(r as RolModel)) as RolModel[];
-
-    if (rolesValidos.length === 0) return null;
-
-    return rolesValidos.reduce((max, actual) =>
-      RolPrioridad[actual] > RolPrioridad[max] ? actual : max
-    );
-  }
-
 
 }

@@ -7,6 +7,8 @@ import { EstudioService } from '../../../services/estudioService/estudio-service
 import { forkJoin, tap } from 'rxjs';
 import { ObraService } from '../../../services/obraService/obra-service';
 import { ObraModel } from '../../../models/obraModels/obraModel';
+import { UsuarioModel } from '../../../models/usuarioModels/usuaroModel';
+import { UsuarioService } from '../../../services/usuarioService/usuario-service';
 
 @Component({
   selector: 'app-estudio-detalle',
@@ -20,12 +22,15 @@ export class EstudioDetalle {
 
   obrasVinculadas: { id: number; nombre: string }[] = [];
 
+  arquitectosVinculados: { id: number; nombre: string }[] = [];
+
   imagenDefecto = `${environment.imgEstudio}`;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private estudioService: EstudioService,
+    private usuarioService: UsuarioService,
     private obraService: ObraService,
     private tokenSrv: TokenService
   ) {}
@@ -42,8 +47,13 @@ export class EstudioDetalle {
         this.estudio = est;
         this.cargando = false;
 
+        // Obras Vinculadas
         const ids = est.obrasIds ?? [];
         this.cargarObrasVinculadasPorIds(ids);
+
+        // Arquitectos vinculados
+        const idsArquitectos = est.arquitectosIds ?? [];
+        this.cargarArquitectosVinculadosPorIds(idsArquitectos);
       },
       error: () => this.router.navigate(['/estudios']),
     });
@@ -55,15 +65,15 @@ export class EstudioDetalle {
       return;
     }
 
-    // 1) Primer pase: usar cache si hay nombre
+    // Nombre de Obras
     const faltantes: number[] = [];
     this.obrasVinculadas = ids.map(id => {
       const nombre = this.obraService.getNombreById(id);
       if (!nombre) faltantes.push(id);
-      return { id, nombre: nombre ?? `#${id}` }; // placeholder hasta resolver
+      return { id, nombre: nombre ?? `#${id}` }; 
     });
 
-    // 2) Si faltan, pedimos y cacheamos
+    // Si faltan, pedimos y cacheamos
     if (!faltantes.length) return;
 
     forkJoin(
@@ -85,8 +95,60 @@ export class EstudioDetalle {
           nombre: mapa.get(item.id) ?? item.nombre,
         }));
       },
-      error: () => {
-        // si alguna falla, se mantienen los placeholders #id
+      error: (e) => {
+        console.error('No se pudieron obtener algunas obras:', e);
+      },
+    });
+  }
+
+  private cargarArquitectosVinculadosPorIds(ids: number[]): void {
+    if (!ids?.length) {
+      this.arquitectosVinculados = [];
+      return;
+    }
+
+    const faltantes: number[] = [];
+
+    this.arquitectosVinculados = ids.map(id => {
+      const nombreEnCache = this.usuarioService.getNombreById(id);
+
+      if (!nombreEnCache) {
+        faltantes.push(id);
+      }
+
+      return {
+      id,
+      nombre: nombreEnCache ?? `#${id}`,   
+      };
+    });
+
+    // 2) Si ya tengo todos los nombres en cache
+    if (!faltantes.length) return;
+
+    // 3) Pido solo los que faltan
+    forkJoin(
+      faltantes.map(id =>
+        this.usuarioService.getUsuario(String(id)).pipe(
+          tap((u: UsuarioModel) => {
+            const nombreCompleto = `${u.nombre} ${u.apellido}`.trim();
+            this.usuarioService.cachearNombre(u.id!, nombreCompleto);
+          })
+        )
+      )
+    ).subscribe({
+      next: (usuarios: UsuarioModel[]) => {
+        const mapa = new Map<number, string>(
+          usuarios.map(u => [u.id!, `${u.nombre} ${u.apellido}`.trim()])
+        );
+
+        // 4) Reemplazo placeholders #id por el nombre real
+        this.arquitectosVinculados = this.arquitectosVinculados.map(item => ({
+          id: item.id,
+          nombre: mapa.get(item.id) ?? item.nombre, // si alguno falla, queda #id
+        }));
+      },
+      error: (e) => {
+        console.error('No se pudieron obtener algunos arquitectos:', e);
       },
     });
   }

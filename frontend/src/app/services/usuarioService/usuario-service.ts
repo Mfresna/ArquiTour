@@ -16,6 +16,9 @@ export class UsuarioService {
 
   private readonly USUARIO_URL = `${environment.apiUrl}/usuarios`;
 
+  //Para obtener id-nombre de los arquitectos
+  private cacheNombres = new Map<number, string>();
+
 
   constructor(
     private http: HttpClient
@@ -105,10 +108,24 @@ export class UsuarioService {
   }
 
 
-  //NO TOCAR
   cambiarPass(nuevaPassword: string){
     return this.http.patch(`${this.USUARIO_URL}/password`, {nuevaPassword})
   }
+
+  //Para obtener id-nombre de arquitectos
+  getNombreById(id: number): string | undefined {
+    return this.cacheNombres.get(id);
+  }
+
+  cachearNombre(id: number, nombreCompleto: string): void {
+    this.cacheNombres.set(id, nombreCompleto);
+  }
+
+
+
+
+
+
 
 }
 
@@ -123,3 +140,5 @@ function normalizarFecha(valor: string): string {
 
   return fecha.toISOString().split('T')[0]; // 'YYYY-MM-DD'
 }
+
+

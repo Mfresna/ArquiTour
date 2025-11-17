@@ -30,7 +30,8 @@
         <app-drag-zone-simple
           label="Imagen de Perfil:"
           [imgExistente]="editar ? imagenActualUrl : null"
-          (archivoChange)="archivoSeleccionado = $event">
+          (archivoChange)="archivoSeleccionado = $event"
+          (quitadoImg)="quitadoImg = $event">
         </app-drag-zone-simple>
 
 

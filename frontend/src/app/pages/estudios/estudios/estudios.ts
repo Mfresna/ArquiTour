@@ -4,6 +4,7 @@ import { RouterLink } from "@angular/router";
 import { environment } from "../../../../environments/environment";
 import { EstudioModel } from "../../../models/estudioModels/estudioModel";
 import { EstudioService } from "../../../services/estudioService/estudio-service";
+import { TokenService } from "../../../auth/services/tokenService/token-service";
 
 
 @Component({
@@ -15,6 +16,7 @@ import { EstudioService } from "../../../services/estudioService/estudio-service
 export class Estudios implements OnInit {
 
   estudios!: EstudioModel[];
+  
 
   imagenDefecto = `${environment.imgEstudio}`;
 
@@ -22,7 +24,8 @@ export class Estudios implements OnInit {
   
   constructor(
     private fb: FormBuilder,
-    private estudioSrvice: EstudioService
+    private estudioSrvice: EstudioService,
+    private tokenService: TokenService
   ) {}
 
   ngOnInit(): void {
@@ -57,8 +60,16 @@ export class Estudios implements OnInit {
     this.cargarEstudios();
   }
 
+  // Método que valida si el usuario es Arquitecto
+  isArquitecto(): boolean {
+    return this.tokenService.tieneRol('ROLE_ARQUITECTO');
+  }
 
+ 
 }
+
+
+
 
  
 
