@@ -41,7 +41,10 @@
           <span class="etiqueta">Estudio</span>
           @if (obra.estudioId) {
             <a class="burbuja-link" [routerLink]="['/estudios', obra.estudioId]">
-              {{ nombreEstudio }}
+              <span class="burbuja-texto">
+                {{ nombreEstudio }}
+              </span>
+              
             </a>
           } @else {
             <span class="vacio">Sin asignar</span>
@@ -53,7 +56,10 @@
           <span class="etiqueta">Categoría</span>
           @if (obra.categoria) {
             <span class="burbuja">
-              {{ CategoriaObraDescripcion[obra.categoria] || obra.categoria }}
+              <span class="burbuja-texto">
+                {{ CategoriaObraDescripcion[obra.categoria] || obra.categoria }}
+              </span>
+              
             </span>
           } @else { <span class="vacio">—</span> }
         </div>
@@ -63,7 +69,10 @@
           <span class="etiqueta">Estado actual</span>
           @if (obra.estado) {
             <span class="burbuja">
-              {{ EstadoObraDescripcion[obra.estado] || obra.estado }}
+              <span class="burbuja-texto">
+                {{ EstadoObraDescripcion[obra.estado] || obra.estado }}
+              </span>
+              
             </span>
           } @else { <span class="vacio">—</span> }
         </div>
@@ -72,7 +81,11 @@
         <div class="ft-col">
           <span class="etiqueta">Año</span>
           @if (obra.anioEstado) {
-            <span class="burbuja">{{ obra.anioEstado }}</span>
+            <span class="burbuja">
+              <span class="burbuja-teto">
+                 {{ obra.anioEstado }}
+              </span>
+            </span>
           } @else { <span class="vacio">—</span> }
         </div>
       </div>

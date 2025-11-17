@@ -328,5 +328,26 @@ public class UsuarioService implements UsuarioServiceInterface {
         return usuarioRepository.existsByEmailIgnoreCase(email);
     }
 
+        //GESTION DE ESTUDIOS DE UN USUARIO
+
+    public void agregarEstudioAUsuario(Usuario usuario, EstudioArq estudio){
+        if(usuario.getEstudios().contains(estudio)){
+            throw new ProcesoInvalidoException(HttpStatus.CONFLICT,"El usuario ya pertenece al estudio.");
+        }
+
+        usuario.getEstudios().add(estudio);
+        usuarioRepository.save(usuario);
+    }
+
+    public void quitarEstudioAUsuario(Usuario usuario, EstudioArq estudio){
+        if(!usuario.getEstudios().contains(estudio)){
+            throw new ProcesoInvalidoException(HttpStatus.CONFLICT,"El usuario no pertenece al estudio.");
+        }
+
+        usuario.getEstudios().remove(estudio);
+        usuarioRepository.save(usuario);
+    }
+
+
 }
 

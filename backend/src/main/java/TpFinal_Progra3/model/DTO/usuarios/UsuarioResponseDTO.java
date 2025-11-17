@@ -35,6 +35,7 @@ public class UsuarioResponseDTO {
 
     @Schema(description = "URL de la imagen de perfil", example = "https://miapp.com/img/perfil.png")
     private String urlImagen;
+
     private List<Long> idEstudios;
 
     @Schema(description = "Lista de roles del usuario")

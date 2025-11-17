@@ -32,12 +32,11 @@
   font-size: 1.8rem;
   font-weight: 700;
   margin-top: 10px;
-  color: var(--colorTerciario);
+  color: var(--colorBoton);
   flex-shrink: 0;
   text-align: center;
   letter-spacing: 0.5px;
   position: relative;
-  color: var(#0077b6);
 }
 
 #panel-filtros {
@@ -108,7 +107,8 @@
   gap: 0.8rem;
 }
 
-.botones button {
+.botones button,
+.boton-extra {
   padding: 0.7rem 1rem;
   border-radius: 999px;
   border: 1px solid transparent;
@@ -118,25 +118,37 @@
   transition: transform 0.15s, box-shadow 0.2s, background-color 0.2s;
 }
 
-/* Buscar */
-.botones button[type="submit"] {
+/* Botón BUSCAR */
+.buscar {
   background: var(--colorBoton, #0077b6);
   color: #fff;
 }
-.botones button[type="submit"]:hover {
+.buscar:hover {
   transform: translateY(-2px);
   box-shadow: 0 8px 16px rgba(0, 119, 182, 0.25);
 }
 
-/* Limpiar */
-.botones button[type="button"] {
+/* Botón LIMPIAR */
+.limpiar {
   background: #f9fafb;
   color: #1e293b;
   border-color: #dbe3eb;
 }
-.botones button[type="button"]:hover {
+.limpiar:hover {
   background: #eef2f6;
 }
+
+/* Botón "Mis Estudios" */
+.boton-extra {
+  margin-top: 1rem;
+  padding: 5px;  
+  background: var(--colorBoton); 
+  display: block;
+  margin: 1rem auto 0 auto;   
+  width: auto;              
+  padding-inline: 2rem; 
+}
+
 
 /* Responsive botones */
 @media (max-width: 480px) {

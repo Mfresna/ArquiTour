@@ -45,7 +45,7 @@ export class EstudioService {
     return this.http.delete<void>(`${this.ESTUDIOS_URL}/${id}`);
   }
 
-  updateImagenPerfil(idEstudio: number, url: string) {
+  updateImagenPerfil(idEstudio: number, url: string | null) {
     return this.http.patch<EstudioModel>(
       `${this.ESTUDIOS_URL}/${idEstudio}/imagenPerfil`,
       { url },{

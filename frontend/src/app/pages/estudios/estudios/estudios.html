@@ -21,8 +21,8 @@
             </fieldset>
 
             <div class="botones">
-              <button type="submit">BUSCAR</button>
-              <button type="button" (click)="limpiarFiltro()">LIMPIAR</button>
+              <button class="buscar" type="submit">BUSCAR</button>
+              <button class="limpiar" type="button" (click)="limpiarFiltro()">LIMPIAR</button>
             </div>
 
           </form>
@@ -31,6 +31,12 @@
 
 
       </div>
+<!-- 
+      @if (isArquitecto()) {
+        <button class="buscar boton-extra" (click)="cargarMisEstudios()">
+          Mis Estudios
+        </button>
+      } -->
 
 
 
