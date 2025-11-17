@@ -1,0 +1,26 @@
+<div class="detalle-favorito">
+
+  <div class="tit-fav">
+    <h1 class="titulo">{{ nombreLista }}</h1>
+  </div>
+
+  <div class="obras-lista">
+    @for (o of obras; track o?.id ?? $index) {
+      <a class="card" [routerLink]="['/obras', o.id]">
+        <img [src]="imagenUrl(o.urlsImagenes)" (error)="imagenError($event)" />
+        <button type="button"
+            class="btn-quitar"
+            (click)="eliminarObraDeLista(o.id!, $event)">
+            <span class="material-icons">delete</span>
+        </button>
+        <div class="card-body">
+          <h2>{{ o.nombre }}</h2>
+        </div>
+      </a>
+    }
+    @empty {
+      <p class="vacio">No hay obras para mostrar en esta lista.</p>
+    }
+  </div>
+
+</div>

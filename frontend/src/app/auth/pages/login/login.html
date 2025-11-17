@@ -1,0 +1,102 @@
+<div id="contenedor">
+  <section id="botoneraSuperior">
+    <button id="btnVolver" (click)="volver()" type="button">Volver</button>
+  </section>
+
+  <section id="formulario">
+
+    <h3>INICIAR SESION</h3>
+
+    <form id="loginForm" [formGroup]="login" (submit)="loguearse()">
+
+      <fieldset>
+        <label for="email">Email: </label>
+        <input 
+          type="email" 
+          id="email" 
+          formControlName="email" 
+          placeholder="email@correo.com"
+          [class.invalido]="login.get('email')?.invalid && login.get('email')?.touched"
+          autocomplete="email"
+          (focus)="estadoCredencial = estadosLogin.ESPERANDO"
+          (keydown.space)="$event.preventDefault()">
+
+        @if (login.get('email')?.errors?.['required'] && login.get('email')?.touched) {
+          <small>El mail es obligatorio.</small>
+        } @else if (login.get('email')?.errors?.['email'] && login.get('email')?.touched) {
+          <small>El email debe seguir el formato ("correo@email.com").</small>
+        }
+      </fieldset>
+
+      <fieldset>
+        <label for="password">Contraseña: </label>
+
+        <div class="contenedor-pass">
+          <!-- Campo para ingresar Pass -->
+          <input 
+            [type]="mostrarPassword ? 'text' : 'password'"
+            id="password" 
+            formControlName="password" 
+            placeholder="************"
+            [class.invalido]="login.get('password')?.invalid && login.get('password')?.touched"
+            autocomplete="current-password"
+            (focus)="estadoCredencial = estadosLogin.ESPERANDO"
+            (keydown.space)="$event.preventDefault()">
+
+          <!-- Boton de Ver Contraseña -->
+          <button 
+            type="button" 
+            class="ver-password"
+            (click)="mostrarPassword = !mostrarPassword"
+            tabindex="-1">
+
+            <!-- Muestra el icono del ojo importado en index.html de Material Disn -->
+            <span class="material-icons">
+              {{ mostrarPassword ? 'visibility' : 'visibility_off' }}
+            </span>
+
+          </button>
+        </div>
+
+        @if (login.get('password')?.errors?.['required'] && login.get('password')?.touched) {
+        <small>La contraseña es obligatoria.</small>
+        }
+      </fieldset>
+
+
+      @if (this.estadoCredencial === estadosLogin.CUENTA_INACTIVA){
+        <small>Su cuenta se encuentra inactiva, contacte con soporte </small>
+      }@else if (this.estadoCredencial === estadosLogin.CREDENCIALES_INVALIDAS) {
+        <small>Credenciales Invalidas, vuelve a intentar. </small>
+      }
+
+      <div class="forgot-container">
+        <a (click)="recuperarPass()" class="forgot-link">
+          ¿Olvidaste la contraseña?
+        </a>
+      </div>
+
+      <button id="login" type="submit" [disabled]="login.invalid">INGRESAR</button>
+
+    </form>
+  </section>
+</div>
+
+
+<app-esperando-modal 
+  [isVisible]="enviandoPin" 
+  mensaje="Enviando correo de recuperación..."
+/>
+
+
+<app-mensaje-modal
+  [isVisible]="modalVisible"
+  [titulo]="modalTitulo"
+  [mensaje]="modalMensaje" 
+  [conIcon]= "false"
+  tipoContenido="texto" 
+  [mostrarCerrar]="false"
+/>
+
+
+

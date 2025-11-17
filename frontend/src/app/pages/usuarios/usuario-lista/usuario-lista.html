@@ -1,0 +1,146 @@
+<div id="global">
+  <div id="contenedor-usuarios">
+
+    <div id="panel-izq">
+      <h3 class="titulo">Usuarios</h3>
+      <div id="panel-filtros">
+
+        <form [formGroup]="filtroForm" (submit)="cargarUsuarios()" class="form-filtros">
+
+          <!-- NOMBRE -->
+          <fieldset class="campo">
+            <label for="nombre">Nombre</label>
+            <input 
+              id="nombre" 
+              type="text" 
+              formControlName="nombre" 
+              placeholder="Buscar por nombre..." 
+              (blur)="cargarUsuarios()"
+              (keyup.enter)="cargarUsuarios()"/>
+          </fieldset>
+
+          <!-- APELLIDO -->
+          <fieldset class="campo">
+            <label for="apellido">Apellido</label>
+            <input 
+              id="apellido" 
+              type="text" 
+              formControlName="apellido" 
+              placeholder="Buscar por apellido..."
+              (blur)="cargarUsuarios()"
+              (keyup.enter)="cargarUsuarios()"/>
+          </fieldset>
+
+          <!-- EMAIL -->
+          <fieldset class="campo">
+            <label for="email">Email</label>
+            <input 
+              id="email" 
+              type="email" 
+              formControlName="email" 
+              placeholder="Buscar por email..."
+              (blur)="cargarUsuarios()"
+              (keyup.enter)="cargarUsuarios()"/>
+          </fieldset>
+
+          <!-- ESTADO -->
+          <fieldset class="campo">
+            <label for="estado">Estado</label>
+            <select 
+              id="estado" 
+              formControlName="isActivo" 
+              (change)="cargarUsuarios()">
+                <option value="">-- Todos --</option>
+                <option [ngValue]="true">Activos</option>
+                <option [ngValue]="false">Desactivados</option>
+            </select>
+          </fieldset>
+
+          <!-- ROL -->
+          <fieldset class="campo">
+            <label for="rol">Rol</label>
+            <select 
+              id="rol"
+              formControlName="rol" 
+              (change)="cargarUsuarios()">
+              <option value="">-- Todos --</option>
+                @for (r of roles; track r){
+                  <option [value]="r">
+                    {{ RolModelDescripcion[r] || r }}
+                  </option>
+                }
+            </select>
+          </fieldset>
+
+          <div id = "botonera" class="acciones">
+            <button type="submit">Buscar</button>
+            <button type="button" (click)="limpiarFiltros()">Limpiar</button>
+          </div>
+          
+        </form>
+
+      </div>
+    </div>
+
+    <!-- LISTADO DE USUARIOS -->
+
+    <div id="panel-der">
+      <div id="panel-scroll">
+        <!-- ACA -->
+        <div id="contenedor-lista">
+          @if (usuarios) {
+            <ul class="lista-obras" >
+              @for (u of usuarios; track u.id ?? $index) {
+                <li class="obra-card" >
+
+                  <div id="informacion" class="contenido-usuario" [routerLink]="['/usuario/', u.id!]">
+                    <!-- informacion -->
+                    <div class="informacion-usuario">
+                      <div clas="nombre-usuario">
+                        <h4>{{u.nombre + ' ' + u.apellido + ' ' + u.activo}}</h4>
+                      </div>
+                      <div clas="datos-usurio">
+                        <p>{{u.email}}</p>
+                        <p class="rol-usuario">{{getDescripcionRol(u.roles)}}</p>
+                      </div>
+                    </div>
+
+                  </div>
+
+                  <!-- botonera de accion -->
+                  <div clas="botonera">
+
+                    <div id="btn-rol" class="btn-etiqueta-detalle">
+                      <span class="material-symbols-rounded">admin_panel_settings</span>
+                      <div class="etiqueta-detalle">Gestionar Roles</div>
+                    </div>
+
+                    <div id="btn-estado" class="btn-etiqueta-detalle">
+                      <span class="material-symbols-rounded"
+                        [class.inhabilitado]="u.activo"
+                        (click)="CambiarEstadoCuenta(u)">person_off</span>
+
+                      @if(u.activo){
+                        <div class="etiqueta-detalle">inhabilitar</div>
+                      }@else {
+                        <div class="etiqueta-detalle">habilitar</div>
+                      }
+
+                    </div>
+              
+                  </div>
+
+                </li>
+              }
+            </ul>
+          } @else {
+            <p class="vacio">No se encontraron usuarios con los filtros seleccionados.</p>
+          }
+        </div>
+        
+
+      </div>
+    </div>
+  </div>
+
+</div>

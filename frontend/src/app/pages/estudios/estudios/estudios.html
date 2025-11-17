@@ -1,0 +1,71 @@
+<div id="global">
+
+  <div id="contenedor-estudios">
+    <div id="panel-izq">
+      <h3 class="titulo">Estudios</h3>
+      <div id="panel-filtros">
+          <form [formGroup]="filtro" (submit)="cargarEstudios()" class="fila">
+            <fieldset>
+              <label for="filtroNombre">Buscar por nombre:</label>
+              <input
+                id="filtroNombre"
+                type="text"
+                formControlName="nombre"
+                placeholder="Ej: Estudio Sur Arquitectos"
+                [class.invalido]="filtro.get('nombre')?.invalid && filtro.get('nombre')?.touched"
+                autocomplete="off">
+
+              @if (filtro.get('nombre')?.errors?.['minlength'] && filtro.get('nombre')?.touched) {
+                <small>Mínimo 2 caracteres.</small>
+              }
+            </fieldset>
+
+            <div class="botones">
+              <button class="buscar" type="submit">BUSCAR</button>
+              <button class="limpiar" type="button" (click)="limpiarFiltro()">LIMPIAR</button>
+            </div>
+
+          </form>
+
+
+
+
+      </div>
+<!-- 
+      @if (isArquitecto()) {
+        <button class="buscar boton-extra" (click)="cargarMisEstudios()">
+          Mis Estudios
+        </button>
+      } -->
+
+
+
+    </div>
+
+    <div id="panel-der">
+      <div id="panel-scroll">
+        <div class="grid">
+          @for (e of estudios; track e?.id ?? $index) {
+            <a class="card" [routerLink]="['/estudios', e.id]">
+            <img
+              [src]="imagenUrl(e.imagenUrl)"
+              (error)="imagenError($event)"
+              alt="Imagen del estudio" />
+
+            <div class="card-body">
+              <h2>{{ e.nombre }}</h2>
+            </div>
+            </a>
+          }
+          @empty {
+            <p class="vacio">No hay estudios para mostrar.</p>
+          }
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+    
+</div>

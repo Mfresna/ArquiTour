@@ -33,8 +33,13 @@ public class UsuarioDTO {
     @Schema(description = "Apellido del usuario", example = "Pérez")
     @NotBlank(message = "El apellido es obligatorio.")
     @Size(min = 2, max = 50, message = "El apellido debe tener entre 2 y 50 caracteres.")
+<<<<<<< HEAD
     @Pattern(regexp = "^[A-Za-zÁÉÍÓÚáéíóúÑñ]+( [A-Za-zÁÉÍÓÚáéíóúÑñ]+)?$",
             message = "El apelldio solo puede contener letras y un solo espacio entre estas.")
+=======
+    @Pattern(regexp = "^[A-Za-zÁÉÍÓÚáéíóúÑñ]+(?: [A-Za-zÁÉÍÓÚáéíóúÑñ]+){0,3}$",
+            message = "El apelldio solo puede contener letras y un solo espacio entre estas, hasta 4 palabras.")
+>>>>>>> backup
     private String apellido;
 
     @Schema(description = "Fecha de nacimiento", example = "1990-01-01")
@@ -46,8 +51,11 @@ public class UsuarioDTO {
     private String descripcion;
 
     @Schema(description = "URL de imagen de perfil", example = "https://miapp.com/img/perfil.png")
+<<<<<<< HEAD
     @Pattern(
             regexp = "^(https?://).+\\.(jpg|jpeg|png|gif|bmp|webp)$",
             message = "La URL debe comenzar con http o https y terminar en una imagen válida (.jpg, .png, etc.).")
+=======
+>>>>>>> backup
     private String imagenUrl;
 }

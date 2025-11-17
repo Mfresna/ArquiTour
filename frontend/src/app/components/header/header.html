@@ -1,1 +1,104 @@
+<<<<<<< HEAD
 <p>header works!</p>
+=======
+<header>
+  <div id="panel-izquierda">
+    <span class="material-icons">person</span>
+  </div>
+
+  <div id="panel-central">
+    <ul>
+      <li>
+        <div id="panel-obras">
+          @if(!isArq() && !isAdmin()){
+            <a routerLink="/obras" class="boton">OBRAS</a>
+          }@else{
+            <a class="boton" (click)="toggleObrasMenu()">OBRAS</a>
+
+            @if(obrasMenu){
+              <div id="menu-obras" 
+                class="menu-desplegable bordes-radius">
+
+                <a routerLink="/">Ver Obras</a>
+                @if(isArq()){<a routerLink="/estudios">Registrar Obra</a>}
+                @if(isAdmin()){<a routerLink="/estudios">Gestionar Obras</a>}
+
+              </div>
+            }
+
+          }
+            
+        </div>
+      </li>
+
+      <li>
+        <div id="panel-estudios">
+          @if(!isArq() && !isAdmin()){
+            <a routerLink="/estudios" class="boton">ESTUDIOS</a>
+          }@else{
+            <a class="boton" (click)="toggleEstudiosMenu()">ESTUDIOS</a>
+
+            @if(estudiosMenu){
+              <div id="menu-estudios" 
+                class="menu-desplegable bordes-radius">
+
+                <a routerLink="/estudios">Ver Estudios</a>
+                @if(isArq()){<a routerLink="/estudios">Crear Estudio</a>}
+                @if(isAdmin()){<a routerLink="/estudios">Gestionar Estudios</a>}
+
+              </div>
+            }
+
+          }
+            
+        </div>
+      </li> 
+      <li><a class="boton">MAPA</a></li>
+      <li><a class="boton">FAVORITOS</a></li>
+    </ul>
+
+  </div>
+  
+  <div id="panel-derecha">
+    <span
+      id="notifiaciones"
+      class="material-icons deshabilitado"
+      tabindex="0">notifications</span>  
+
+    <span 
+      id="usuario"
+      class="material-icons"
+      (click)="toggleUsuarioMenu()"
+      (keydown.escape)="toggleUsuarioMenu()"
+      tabindex="0">person</span>
+
+    @if(usuarioMenu){
+      <div id="menu-usuario" 
+        class="menu-desplegable bordes-radius-inf borde-sup-izq">
+
+        <a routerLink="/" (click)="cerrarSesion()">Cerrar Sesion
+          <span id="logout" class="material-icons user-icon-trigger">logout</span>
+        </a>
+        <a routerLink="/me">Ver mi Perfil</a>
+
+        @if(isAdmin()){
+          <a routerLink="/gestionar-usuarios">Gestionar Usuarios</a>
+        }
+
+        <hr>
+        <a id="modo-noche" (click)="toggleModoNoche()">Modo Noche
+          <span id="noche-toggle" 
+            class="material-icons user-icon-trigger"
+            [attr.modoNoche]="modoNoche">
+              {{modoNoche ? 'toggle_on' : 'toggle_off' }}
+          </span>
+        </a>
+
+      </div>
+    }
+    
+
+  </div>
+
+</header>
+>>>>>>> backup

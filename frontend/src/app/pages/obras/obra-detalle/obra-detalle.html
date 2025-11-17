@@ -1,0 +1,174 @@
+@if (!cargando && obra) {
+  <div class="detalle-obra">
+
+    <!-- ====== Imagen Principal ====== -->
+    <div class="imgPrinc">
+      <img [src]="imagenPrincipal()" (error)="imagenError($event)" alt="Imagen principal de {{ obra.nombre }}" />
+    </div>
+
+    <!-- ====== Ficha Técnica ====== -->
+    <div class="ficha-tecnica">
+      <div class="tit-fav">
+        <h1 class="titulo">{{ obra.nombre }}</h1>
+        <div class="favorito">
+          <span
+            class="material-icons icono-fav"
+            tabindex="0"
+            (click)="mostrarOcultarSelectorFavoritos($event)"
+            [class.activo]="estaEnFavoritos"
+            > favorite
+          </span>
+
+          @if (mostrarSelectorFavoritos && obra.id) {
+            <app-select-favorito
+              [obraId]="obra.id!"
+              (cerrado)="onCerradoSelector()"
+              (estadoFavoritoCambio)="onEstadoFavoritoCambio($event)"
+            />
+          }
+
+
+        </div>
+
+      
+      </div>
+
+      
+
+      <div class="ft-grid">
+        <!-- Estudio -->
+        <div class="ft-col">
+          <span class="etiqueta">Estudio</span>
+          @if (obra.estudioId) {
+            <a class="burbuja-link" [routerLink]="['/estudios', obra.estudioId]">
+              <span class="burbuja-texto">
+                {{ nombreEstudio }}
+              </span>
+              
+            </a>
+          } @else {
+            <span class="vacio">Sin asignar</span>
+          }
+        </div>
+
+        <!-- Categoría -->
+        <div class="ft-col">
+          <span class="etiqueta">Categoría</span>
+          @if (obra.categoria) {
+            <span class="burbuja">
+              <span class="burbuja-texto">
+                {{ CategoriaObraDescripcion[obra.categoria] || obra.categoria }}
+              </span>
+              
+            </span>
+          } @else { <span class="vacio">—</span> }
+        </div>
+
+        <!-- Estado -->
+        <div class="ft-col">
+          <span class="etiqueta">Estado actual</span>
+          @if (obra.estado) {
+            <span class="burbuja">
+              <span class="burbuja-texto">
+                {{ EstadoObraDescripcion[obra.estado] || obra.estado }}
+              </span>
+              
+            </span>
+          } @else { <span class="vacio">—</span> }
+        </div>
+
+        <!-- Año -->
+        <div class="ft-col">
+          <span class="etiqueta">Año</span>
+          @if (obra.anioEstado) {
+            <span class="burbuja">
+              <span class="burbuja-teto">
+                 {{ obra.anioEstado }}
+              </span>
+            </span>
+          } @else { <span class="vacio">—</span> }
+        </div>
+      </div>
+    </div>
+
+    <!-- ====== Descripción + Mapa ====== -->
+    <div class="descripcion-mapa">
+      <div class="encabezado">
+        <h3>Descripción</h3>
+
+        @if (puedeGestionar()) {
+          <div class="acciones">
+            <button class="btn editar" (click)="editar()">Editar</button>
+            <button class="btn eliminar" (click)="eliminar()">Eliminar</button>
+          </div>
+        }
+      </div>
+
+      <div class="contenido">
+        <div class="texto">
+          @if (obra.descripcion) {
+            <p>{{ obra.descripcion }}</p>
+          } @else {
+            <p class="muted">Sin descripción.</p>
+          }
+        </div>
+
+        <div class="mapa">
+          <div class="mapa-placeholder">Mapa (próximamente)</div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ====== Galería ====== -->
+    <div class="galeria">
+      <h3>Galería de imágenes</h3>
+
+      <div class="carrusel-container">
+        <button class="flecha-carrusel izq" (click)="scrollCarrusel(-1)">
+          <span class="material-icons icon-flecha">chevron_left</span>
+        </button>
+
+        <div class="imagenes" #carruselImagenes>
+          @for (img of imgSrc(); track $index) {
+            <button type="button"
+                    class="imagen"
+                    [class.activa]="selectIndex === $index"
+                    (click)="abrirVentana($index)">
+              <img [src]="img" (error)="imagenError($event)" alt="Miniatura {{ $index + 1 }}" />
+            </button>
+          }
+        </div>
+
+        <button class="flecha-carrusel der" (click)="scrollCarrusel(1)">
+          <span class="material-icons icon-flecha">chevron_right</span>
+        </button>
+      </div>
+
+    </div>
+
+      @if (ventanaAbierta) {
+        <div class="ventana" (click)="cerrarVentana()">
+          <div class="v-contenido" (click)="$event.stopPropagation()">
+            <img class="v-img" [src]="imgSrc()[selectIndex]" (error)="imagenError($event)" alt="Vista ampliada" />
+            <div class="v-controles">
+              <button class="v-btn nav" (click)="mover(1)">
+                <span class="material-icons icon-ventana">chevron_left</span>
+              </button>
+              <button class="v-btn cerrar" (click)="cerrarVentana()">
+                <span class="material-icons icon-cerrar">close</span>
+              </button>
+              <button class="v-btn nav" (click)="mover(+1)">
+                <span class="material-icons icon-ventana">chevron_right</span>
+            
+              </button>
+            </div>
+          </div>
+        </div>
+      }
+  </div>
+} @else if (cargando) {
+    <div class="estado">Cargando obra...</div>
+} @else {
+    <div class="estado">No se encontró la obra.</div>
+}

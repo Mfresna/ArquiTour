@@ -98,7 +98,11 @@ public class AuthController {
         String token = jwtService.generarToken(usuarioService.buscarUsuario(emailDTO.getEmail()));
         emailService.mailResetPass(emailDTO.getEmail(),token);
 
+<<<<<<< HEAD
         return ResponseEntity.ok("Ingrese a su correo electronico y siga los pasos: " + emailDTO.getEmail());
+=======
+        return ResponseEntity.ok().build();
+>>>>>>> backup
     }
 
     @Operation(summary = "Restaurar contraseña", description = "Permite establecer una nueva contraseña utilizando un token de recuperación.")
@@ -108,6 +112,7 @@ public class AuthController {
             @ApiResponse(responseCode = "400", description = "Datos inválidos", content = @Content)
     })
     @PatchMapping("/password/{token}")
+<<<<<<< HEAD
     public ResponseEntity<String> restaurarPassword(
             @Parameter(description = "Token de recuperación enviado por correo") @PathVariable String token,
             @RequestBody @Valid @Parameter(description = "Nueva contraseña") PasswordDTO passDTO){
@@ -118,12 +123,29 @@ public class AuthController {
         Usuario usr = usuarioService.buscarUsuario(jwtService.extractUsername(token));
 
         return ResponseEntity.ok(usuarioService.cambiarPassword(usr,passDTO));
+=======
+    public ResponseEntity<Void> restaurarPassword(
+            @Parameter(description = "Token de recuperación enviado por correo") @PathVariable String token,
+            @RequestBody @Valid @Parameter(description = "Nueva contraseña") PasswordDTO passDTO){
+        if (!jwtService.isTokenValid(token)){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        Usuario usr = usuarioService.buscarUsuario(jwtService.extractUsername(token));
+        usuarioService.cambiarPassword(usr,passDTO);
+
+        return ResponseEntity.ok().build();
+>>>>>>> backup
     }
 
     //---------------REFRESH TOKEN ENDPOINT-----------//
 
     @PostMapping("/refresh")
+<<<<<<< HEAD
     public ResponseEntity<Map<String,String>> refreshToken(HttpServletRequest request) {
+=======
+    public ResponseEntity<AuthResponse> refreshToken(HttpServletRequest request) {
+>>>>>>> backup
         //Arma un arreglo con todas las cookies que recibe en la peticion
         List<Cookie> cookies = Optional.ofNullable(request.getCookies())
                 .map(Arrays::asList)
@@ -146,7 +168,11 @@ public class AuthController {
         String username = jwtService.extractUsername(refreshToken);
         UserDetails user = userDetailsService.loadUserByUsername(username);
 
+<<<<<<< HEAD
         return ResponseEntity.ok(Map.of("accessToken", jwtService.generarToken(user)));
+=======
+        return ResponseEntity.ok(new AuthResponse(jwtService.generarToken(user), false));
+>>>>>>> backup
     }
 
     @PostMapping("/logout")

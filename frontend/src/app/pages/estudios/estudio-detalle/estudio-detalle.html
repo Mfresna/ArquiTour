@@ -1,0 +1,68 @@
+<section class="detalle">
+  @if (!cargando && estudio) {
+    <div class="tarjeta-detalle">
+
+      <!-- ====== Fila 1: nombre + botones ====== -->
+      <div class="cabecera-general">
+        <h1 class="titulo">{{ estudio.nombre }}</h1>
+
+        @if (puedeGestionar()) {
+          <div class="acciones-der">
+            <button type="button" (click)="editar()">Editar</button>
+            <button type="button" class="danger" (click)="eliminar()">Eliminar</button>
+          </div>
+        }
+      </div>
+
+      <!-- ====== Fila 2: imagen + obras ====== -->
+      <div class="fila-contenido">
+        <!-- Imagen -->
+        <div class="imagen">
+          <img
+            [src]="imgSrc(estudio.imagenUrl)"
+            (error)="imagenError($event)"
+            alt="Imagen del estudio" />
+        </div>
+
+        <!-- Obras -->
+        <div class="panel panel-obras">
+          <div class="encabezado">
+            <h3>Obras vinculadas</h3>
+          </div>
+
+          @if (obrasVinculadas.length) {
+            <ul class="obras-scroll">
+              @for (obra of obrasVinculadas; track obra.id) {
+                <li class="obra-item" [routerLink]="['/obras', obra.id]">
+                     {{ obra.nombre }}
+                </li>
+              }
+            </ul>
+          } @else {
+            <p class="muted">Sin obras asociadas.</p>
+          }
+        </div>
+      </div>
+
+      <!-- ====== Fila 3: arquitectos ====== -->
+      <div class="panel panel-arquitectos">
+        <div class="encabezado">
+          <h3>Arquitectos vinculados</h3>
+        </div>
+
+        @if (arquitectosVinculados.length) {
+          <ul class="arq-item">
+            @for (arq of arquitectosVinculados; track arq.id) {
+              <li>{{ arq.nombre }}</li>
+            }
+          </ul>
+        } @else {
+          <p class="muted">Sin arquitectos asociados.</p>
+        }
+      </div>
+
+    </div>
+  } @else {
+    <p>No se encontró el estudio.</p>
+  }
+</section>

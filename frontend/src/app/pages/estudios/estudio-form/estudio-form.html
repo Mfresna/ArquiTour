@@ -1,0 +1,77 @@
+<div id="global">
+
+  <div id="contenedor-form">
+ 
+    <h1 id="titulo">
+      {{ editar ? 'Editar estudio' : 'nuevo estudio' }}
+    </h1>
+
+    <div id="panel-campos">
+      <form [formGroup]="formulario" (submit)="guardar()"  enctype="multipart/form-data" novalidate>
+          <!-- Nombre -->
+        <fieldset class="form-group">
+          <label for="nombre" class="label">Nombre del estudio</label>
+          <input
+            id="nombre"
+            type="text"
+            formControlName="nombre"
+            class="input"
+            placeholder="Ej.: Estudio ArquiTour"
+            aria-describedby="ayuda-nombre"
+          />
+        
+          @if (formulario.get('nombre')?.invalid && formulario.get('nombre')?.touched) {
+            <small class="error" role="alert">Ingrese un nombre válido.</small>
+          }
+        </fieldset>
+
+        <!-- Imagen -->
+
+        <app-drag-zone-simple
+          label="Imagen de Perfil:"
+          [imgExistente]="editar ? imagenActualUrl : null"
+          (archivoChange)="archivoSeleccionado = $event"
+          (quitadoImg)="quitadoImg = $event">
+        </app-drag-zone-simple>
+
+
+        <!-- Arquitectos (solo modo edición) -->
+        <!-- @if (editar) {
+          <div class="form-group">
+            <label class="label">Arquitectos del estudio</label>
+            <div class="chips">
+              @for (id of (formulario.get('arquitectosIds')?.value || []); track id) {
+                <span class="chip">
+                  #{{ id }}
+                  <button
+                    type="button"
+                    class="chip-close"
+                    (click)="quitarArquitecto(id)"
+                    aria-label="Quitar arquitecto">×</button>
+                </span>
+              }
+              @empty {
+                <small class="help">No hay arquitectos asignados.</small>
+              }
+            </div>
+          </div>
+        } -->
+
+        <!-- Botón -->
+        <div class="acciones">
+          <button
+            type="submit"
+            class="btn-primario"
+            [disabled]="formulario.invalid || subiendo">
+            {{ editar ? 'GUARDAR CAMBIOS' : 'INGRESAR ESTUDIO' }}
+          </button>
+        </div>
+
+
+        
+     
+      </form>
+   
+  </div>
+
+</div>

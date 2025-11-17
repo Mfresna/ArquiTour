@@ -1,0 +1,113 @@
+<div id="global">
+  <div id="contenedor-form">
+    <h1 id="titulo">
+      {{ editar ? 'Editar obra' : 'nueva obra de arquitectura' }}
+    </h1>
+
+    <div id="panel-campos">
+      <form [formGroup]="formulario" (submit)="guardar($event)" novalidate>
+        <div id="contenido-scroll">
+
+          <!-- Nombre -->
+          <fieldset class="form-group">
+            <label for="nombre" class="label">Nombre</label>
+            <input id="nombre" type="text" class="input" formControlName="nombre" placeholder="Ej.: Museo de Arte Moderno"/>
+            @if (formulario.get('nombre')?.invalid && formulario.get('nombre')?.touched) {
+              <small class="error">Ingrese un nombre válido (mín. 2).</small>
+            }
+          </fieldset>
+
+          <!-- Categoría -->
+          <fieldset class="form-group">
+            <label for="cat" class="label">Categoría</label>
+            <select id="cat" class="input" formControlName="categoria" required>
+              <option value="" disabled>-- Seleccione una categoría --</option>
+              @for (c of categorias; track c) {
+                <option [value]="c">{{ CategoriaObraDescripcion[c] || c }}</option>
+              }
+            </select>
+            @if (formulario.get('categoria')?.invalid && formulario.get('categoria')?.touched) {
+              <small class="error">Debe seleccionar una categoría.</small>
+            }
+          </fieldset>
+
+          <!-- Estado -->
+          <fieldset class="form-group">
+            <label for="estado" class="label">Estado</label>
+            <select id="estado" class="input" formControlName="estado" required>
+              <option value="" disabled>-- Seleccione un estado --</option>
+              @for (e of estados; track e) {
+                <option [value]="e">{{ EstadoObraDescripcion[e] || e }}</option>
+              }
+            </select>
+            @if (formulario.get('estado')?.invalid && formulario.get('estado')?.touched) {
+              <small class="error">Debe seleccionar un estado.</small>
+            }
+          </fieldset>
+
+          <!-- Estudio -->
+          <fieldset class="form-group">
+            <label for="estudio" class="label">Estudio</label>
+            <select id="estudio" class="input" formControlName="estudioId" required>
+              <option value="" disabled>-- Seleccione un estudio --</option>
+              @for (e of (estudios); track e.id) {
+                <option [value]="e.id">{{ e.nombre }}</option>
+              }
+            </select>
+            @if (formulario.get('estudioId')?.invalid && formulario.get('estudioId')?.touched) {
+              <small class="error">Debe seleccionar un estudio.</small>
+            }
+          </fieldset>
+
+          <!-- Año del estado -->
+          <fieldset class="form-group">
+            <label for="anio" class="label">Año del estado </label>
+            <input id="anio" type="number" class="input" formControlName="anioEstado" placeholder="Ej.: 2020" />
+            @if (formulario.get('anioEstado')?.invalid && formulario.get('anioEstado')?.touched) {
+              <small class="error">Ingrese un año válido.</small>
+            }
+          </fieldset>
+
+          <!-- Latitud / Longitud -->
+          <fieldset class="form-group">
+            <label class="label">Ubicación</label>
+            <div style="display:flex; gap:.6rem;">
+              <input type="number" class="input" formControlName="latitud" placeholder="Latitud (-90 a 90)" step="0.000001"/>
+              <input type="number" class="input" formControlName="longitud" placeholder="Longitud (-180 a 180)" step="0.000001"/>
+            </div>
+            @if ((formulario.get('latitud')?.invalid && formulario.get('latitud')?.touched) ||
+                 (formulario.get('longitud')?.invalid && formulario.get('longitud')?.touched)) {
+              <small class="error">Ingrese coordenadas válidas.</small>
+            }
+          </fieldset>
+
+          <!-- Descripción -->
+          <fieldset class="form-group">
+            <label for="desc" class="label">Descripción</label>
+            <textarea id="desc" class="input" rows="3" formControlName="descripcion" placeholder="Breve descripción de la obra"></textarea>
+            @if (formulario.get('descripcion')?.invalid && formulario.get('descripcion')?.touched) {
+              <small class="error">Ingrese una descripción (mín. 5).</small>
+            }
+          </fieldset>
+
+         <app-drag-zone-multiple
+          label="Imágenes de la obra:"
+          [imagenesExistentes]="imagenesExistentes"
+          (archivosChange)="archivosSeleccionados = $event"
+          (existentesChange)="imagenesExistentes = $event">
+        </app-drag-zone-multiple>
+
+
+
+          <!-- Botón -->
+          <div class="acciones">
+            <button type="submit" class="btn-primario" [disabled]="formulario.invalid || subiendo">
+              {{ editar ? 'GUARDAR CAMBIOS' : 'INGRESAR OBRA' }}
+            </button>
+          </div>
+
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

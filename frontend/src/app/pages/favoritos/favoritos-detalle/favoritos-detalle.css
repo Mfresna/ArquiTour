@@ -1,0 +1,113 @@
+/* ===== CONTENEDOR GENERAL ===== */
+.detalle-favorito {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* ===== TÍTULO ===== */
+.tit-fav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.titulo{
+  margin: 0;
+  font-size: 2.1rem;
+  font-weight: 800;
+  color: var(--colorBoton);
+  caret-color: transparent;  
+  user-select: none;      
+}
+
+
+
+.obras-lista {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+  list-style: none;
+  margin: 0;
+  padding: 10px; 
+}
+
+/* ===== TARJETA ===== */
+.obras-lista .card {
+  background: var(--colorPrincipal);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px var(--sombra);
+  transition: transform 0.2s, box-shadow 0.2s;
+  cursor: pointer;
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  position: relative;
+  caret-color: transparent;  
+  user-select: none;      
+
+}
+
+.obras-lista .card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 16px var(--sombra);
+}
+
+.obras-lista .card img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  background: linear-gradient(135deg, #dfe0e6 0%, #e1e4e7 100%);
+  border-bottom: 1px solid rgb(204, 198, 198);
+}
+
+.obras-lista .card-body {
+  padding: 1rem;
+}
+
+.obras-lista .card-body h2 {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--colorTerciario);
+}
+
+.btn-quitar {
+  position: absolute;
+  top: 8px;      
+  right: 8px;   
+  width: 28px;
+  height: 28px;
+  z-index: 10;   
+  border: none;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.6);
+  color: white;
+  padding: 4px;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.2s ease, visibility 0.2s ease, transform 0.15s ease;
+}
+
+
+.btn-quitar .material-icons {
+  font-size: 18px;
+}
+
+.obras-lista .card:hover .btn-quitar {
+  visibility: visible;
+  opacity: 1;
+  transform: scale(1.06);
+}
+
+
+/* ===== MENSAJE VACÍO ===== */
+.vacio {
+  text-align: center;
+  color: #999;
+  padding: 4rem 2rem;
+  font-size: 1.1rem;
+}
+

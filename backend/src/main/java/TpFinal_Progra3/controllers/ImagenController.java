@@ -55,11 +55,19 @@ public class ImagenController {
     })
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMINISTRADOR')")
+<<<<<<< HEAD
     public ResponseEntity<String> eliminarImagen(
             @Parameter(description = "ID de la imagen a eliminar", required = true)
             @PathVariable @Positive Long id) {
         imagenService.eliminarImagen(id);
         return ResponseEntity.ok("Imagen eliminada correctamente.");
+=======
+    public ResponseEntity<Void> eliminarImagen(
+            @Parameter(description = "ID de la imagen a eliminar", required = true)
+            @PathVariable @Positive Long id) {
+        imagenService.eliminarImagen(id);
+        return ResponseEntity.ok().build();
+>>>>>>> backup
     }
 
     @Operation(

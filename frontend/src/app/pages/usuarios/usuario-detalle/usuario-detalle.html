@@ -1,0 +1,193 @@
+<div id="mi-perfil-cont">
+
+  <div id="contenedor-tarjeta">
+
+    @if(!miPerfil){
+      <section id="botoneraSuperior">
+        <button id="btnVolver" (click)="volver()" type="button">Volver</button>
+      </section>
+    }
+
+    <!-- ====== Fila 1: nombre + botones ====== -->
+    <div id="titulo">
+      <h1>{{titulo}}</h1>
+    </div>
+
+    <div id="info-superior">
+      
+      <h2>{{nombre + ' ' + apellido}}</h2>
+
+      @if(miPerfil){
+        <div id="botonera">
+          <button 
+            id="btn-editar"
+            class="boton" 
+            type="button" 
+            (click) = "accionBoton()">{{editando ? 'GUARDAR' : 'EDITAR'}}</button>
+
+          <button 
+            id="btn-pass"
+            class="boton" 
+            type="button" 
+            (click) = "cambiarPass()">CAMBIAR CONTRASEÑA</button>  
+        </div>
+      }
+
+    </div>
+
+    <!-- ====== Fila 2: imagen + obras ====== -->
+    <div id="contenido">
+
+        
+      <!-- IMAGEN-->
+      <div id="area-img">
+        <app-drag-zone-simple
+          #campoImagen
+          [class.area-img-disable]="!editando"
+          label=""
+          [verBoton]="editando"
+          [imgExistente]="cargarImg(imagenUrlExistente)"
+          (archivoChange)="nuevaImagen = $event"
+          (quitadoImg)="quitadoImg = $event">
+        </app-drag-zone-simple>
+      </div>
+      
+        <!-- DETALLE USUARIO -->
+      <div id="detalle-formulario">
+
+        <form id="mi-perfil" [formGroup]="perfilForm">
+
+        <div id="email-fecha" class="input-conjunto">
+          <!-- EMAIL -->
+          <fieldset>
+            <label for="email">Email: </label>
+            <input 
+              type="email" 
+              id="email" 
+              formControlName="email" 
+              placeholder="email@correo.com"
+              [class.invalido]="perfilForm.get('email')?.invalid && perfilForm.get('email')?.touched"
+              autocomplete="email"
+              (keydown.space)="$event.preventDefault()">
+
+            @if (perfilForm.get('email')?.errors?.['required']) {
+              <small>El mail es obligatorio.</small>
+            } @else if (perfilForm.get('email')?.errors?.['email']) {
+              <small>El email debe seguir el formato ("correo@email.com").</small>
+            }
+          </fieldset>
+          
+          <!-- FECHA NACIMIENTO -->
+          <fieldset>
+            <label for="fecNac">Fecha de Nacimiento: </label>
+            <input 
+              type="date" 
+              id="fecNac" 
+              formControlName="fechaNacimiento" 
+              [class.invalido]="perfilForm.get('fechaNacimiento')?.invalid && (perfilForm.get('fechaNacimiento')?.touched || perfilForm.get('fechaNacimiento')?.dirty)"
+              autocomplete="bday">
+
+            @if (perfilForm.get('fechaNacimiento')?.errors?.['required']) {
+              <small>La fecha de nacimiento es obligatoria.</small>
+            } @else if (perfilForm.get('fechaNacimiento')?.errors?.['formato']) {
+              <small>El formato de la fecha no es correcto, recuerde (dia/mes/año).</small>
+            } @else if (perfilForm.get('fechaNacimiento')?.errors?.['fechaFutura']) {
+              <small>La fecha es invalida, no puede ser fecha futura.</small>
+            } @else if (perfilForm.get('fechaNacimiento')?.errors?.['edadMinima']) {
+              <small>La fecha es muy proxima a hoy.</small>
+            } @else if (perfilForm.get('fechaNacimiento')?.errors?.['fechaLimite']) {
+              <small>La fecha parece ser invalida.</small>
+            }
+      
+          </fieldset>
+
+        </div>
+
+        @if(editando){
+          <div id="nombre-apellido" class="input-conjunto">
+            <!-- NOMBRE -->
+            <fieldset>
+              <label for="nombre">Nombre: </label>
+              <input 
+                type="text" 
+                id="nombre" 
+                formControlName="nombre" 
+                placeholder="nombre"
+                [class.invalido]="perfilForm.get('nombre')?.invalid && perfilForm.get('nombre')?.touched"
+                autocomplete="name">
+
+
+              @if (perfilForm.get('nombre')?.errors?.['required']) {
+                <small>El nombre es obligatorio.</small>
+              }@else if(perfilForm.get('nombre')?.errors?.['minlength']) {
+                <small>Su nombre no parece ser verdadero (min. 2 caraceres)</small>
+              }@else if(perfilForm.get('nombre')?.errors?.['maxlength']) {
+                <small>Su nombre no parece ser verdadero (max. 50 caraceres)</small>
+              }@else if (perfilForm.get('nombre')?.errors?.['espacios']) {
+                <small>Complete su nombre... (No se haga el vivo)</small>
+              }@else if (perfilForm.get('nombre')?.errors?.['formato']) {
+                <small>Formato de nombre invalido (revise espacios)</small>
+              }
+            </fieldset>
+
+            <!-- APELLIDO -->
+            <fieldset>
+              <label for="apellido">Apellido: </label>
+              <input 
+                type="text" 
+                id="apellido" 
+                formControlName="apellido" 
+                placeholder="apellido"
+                [class.invalido]="perfilForm.get('apellido')?.invalid && perfilForm.get('apellido')?.touched"
+                autocomplete="family-name">
+
+              @if (perfilForm.get('apellido')?.errors?.['required'] && perfilForm.get('apellido')?.touched) {
+                <small>El apellido es obligatorio.</small>
+              }@else if(perfilForm.get('apellido')?.errors?.['minlength'] && perfilForm.get('apellido')?.touched) {
+                <small>Su apellido no parece ser verdadero (min. 2 caraceres)</small>
+              }@else if(perfilForm.get('apellido')?.errors?.['maxlength']) {
+                <small>Su apellido no parece ser verdadero (max. 50 caraceres)</small>
+              }@else if (perfilForm.get('apellido')?.errors?.['espacios'] && perfilForm.get('apellido')?.touched) {
+                <small>Complete su apellido... (No se haga el vivo)</small>
+              }@else if (perfilForm.get('apellido')?.errors?.['formato'] && perfilForm.get('apellido')?.touched) {
+                <small>Formato de apellido invalido (revise espacios)</small>
+              }
+            </fieldset>
+
+
+          </div>
+        }
+
+        <!-- DESCRIPCION -->
+        <fieldset>
+          <label for="descripcion">Sobre mi: </label>
+          <textarea 
+            id="descripcion"
+            type="text" 
+            rows="5"
+            maxlength="280"
+            formControlName="descripcion" 
+            [class.invalido]="perfilForm.get('descripcion')?.invalid && (perfilForm.get('descripcion')?.touched && perfilForm.get('descripcion')?.dirty)"
+            (input)="limitarLineas($event,8)"
+            placeholder="Escribí algo sobre vos...">
+          </textarea>
+          
+          @if (perfilForm.get('descripcion')?.errors?.['maxLength'] && perfilForm.get('descripcion')?.dirty) {
+            <small>Caracteres maximos excedidos.</small>
+          } @else if (perfilForm.get('descripcion')?.errors?.['pattern'] && perfilForm.get('descripcion')?.dirty) {
+            <small>Caracter invalido, solo se permiten (- _ ! ¡ &).</small>
+          }
+        </fieldset>
+
+        </form>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<app-esperando-modal 
+  [isVisible]="spinerVisible" 
+  [mensaje]="spinerMensaje"
+/>
+

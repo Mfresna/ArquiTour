@@ -1,0 +1,41 @@
+<div id="contComponentes">
+   <div id="imagenFondo"
+      [style.background-image]="'url(' + imagSeleccionada + ')'">
+      <!-- CONTIENE LA IMAGENDE FONDO -->
+   </div>
+
+   <div id="capaFiltros"
+      [class.blur] = "vistaActual === 'login' || vistaActual === 'registro'">
+      <!-- CAPA TRANSPARENTE PARA APLICAR BLUR -->
+   </div>
+   
+   <div class="content-wrapper">
+      <!-- VISTA: INICIO -->
+      @if (vistaActual === 'inicio') {
+         <div class="inicio-content fade-in">
+            <h1 class="titulo-principal">ArquiTour</h1>
+            <p class="subtitulo">Descubre la arquitectura del mundo</p>
+            
+            <div class="botones-container">
+               <button class="btn btn-primary" (click)="vistaActual = 'login'">Iniciar Sesión</button>
+               <button class="btn btn-secondary" (click)="vistaActual = 'registro'">Registrarse</button>
+            </div>
+         </div>
+      }
+
+      <!-- VISTA: LOGIN -->
+      @if (vistaActual === 'login'){
+         <div class="form-container fade-in">
+            <app-login (volverEmit)="vistaActual = 'inicio'"></app-login>
+         </div>
+      }
+
+      <!-- VISTA: REGISTRO -->
+      @if (vistaActual === 'registro'){
+         <div class="form-container fade-in">
+            <app-register (volverEmit)="vistaActual = 'inicio'"></app-register>
+         </div>
+      }
+   </div>
+
+</div>

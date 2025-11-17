@@ -15,7 +15,12 @@ public class ImagenDTO {
     @Schema(description = "URL de la imagen cargada en Cloudinary", example = "https://res.cloudinary.com/.../imagen.jpg")
     @NotBlank(message = "La URL de la imagen es obligatoria.")
     @Size(max = 2048, message = "La URL no debe superar los 2048 caracteres.")
+<<<<<<< HEAD
     @Pattern(regexp = "^(https?://).+\\.(jpg|jpeg|png|gif|bmp|webp)$",
             message = "La URL debe comenzar con http o https y terminar en una imagen válida (.jpg, .png, etc.).")
+=======
+//    @Pattern(regexp = "^(https?://).+\\.(jpg|jpeg|png|gif|bmp|webp)$",
+//            message = "La URL debe comenzar con http o https y terminar en una imagen válida (.jpg, .png, etc.).")
+>>>>>>> backup
     private String url;
 }

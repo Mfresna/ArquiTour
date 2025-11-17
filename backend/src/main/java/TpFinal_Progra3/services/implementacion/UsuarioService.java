@@ -31,7 +31,13 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+<<<<<<< HEAD
 
+=======
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+>>>>>>> backup
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -51,6 +57,7 @@ public class UsuarioService implements UsuarioServiceInterface {
     @Value("${default.admin.email}")
     private String defaultAdminEmail;
 
+<<<<<<< HEAD
     @Transactional
     public UsuarioResponseDTO registrarUsuario(UsuarioDTO dto) {
         //Validar la existencia de un email
@@ -59,6 +66,58 @@ public class UsuarioService implements UsuarioServiceInterface {
         }
         if(!validacionEmailService.isEmailValidado(dto.getEmail())){
             throw new ProcesoInvalidoException(HttpStatus.BAD_REQUEST, "El email no ha sido verificado.");
+=======
+//    @Transactional
+//    public UsuarioResponseDTO registrarUsuario(UsuarioDTO dto) {
+//        try {
+//            //Validar la existencia de un email
+//            if (usuarioRepository.existsByEmailIgnoreCase(dto.getEmail())) {
+//                throw new ProcesoInvalidoException(HttpStatus.UNPROCESSABLE_ENTITY, "El email ya existe en la base de datos.");
+//            }
+//            if (!validacionEmailService.isEmailValidado(dto.getEmail())) {
+//                throw new ProcesoInvalidoException(HttpStatus.FORBIDDEN, "El email no ha sido verificado.");
+//            }
+//
+//            Usuario usuarioNuevo = usuarioMapper.mapUsuario(dto);
+//
+//            //Agrega la Credencial nueva con el Rol Usuario
+//            usuarioNuevo.setCredencial(Credencial.builder()
+//                    .email(dto.getEmail())
+//                    .usuario(usuarioNuevo)
+//                    .password(passwordEncoder.encode(dto.getPassword()))
+//                    .roles(Set.of(rolRepository.findByRol(RolUsuario.ROLE_USUARIO)
+//                            .orElseThrow(() -> new NotFoundException(HttpStatus.INTERNAL_SERVER_ERROR,
+//                                    "El rol asignado automaticamente no existe en la Base de Datos"))))
+//                    .build());
+//
+//            //Agrega la imagen si existe en el DTO
+//            if (dto.getImagenUrl() != null) {
+//                usuarioNuevo.setImagen(imagenService.obtenerImagen(dto.getImagenUrl()));
+//            }
+//
+//            UsuarioResponseDTO usrNuevo = usuarioMapper.mapResponseDTO(usuarioRepository.save(usuarioNuevo));
+//
+//            validacionEmailService.eliminar(dto.getEmail());
+//
+//            return usrNuevo;
+//        } catch (Exception e) {
+//            //En caso de error borra la imagen si ya fue dada de alta en la BD
+//            if (!dto.getImagenUrl().isEmpty()) {
+//                imagenService.eliminarImagen(dto.getImagenUrl());
+//            }
+//            throw e;
+//        }
+//    }
+
+    @Transactional
+    public UsuarioResponseDTO registrarUsuario(UsuarioDTO dto,MultipartFile imagenPerfil) {
+        //Validar la existencia de un email
+        if (usuarioRepository.existsByEmailIgnoreCase(dto.getEmail())) {
+            throw new ProcesoInvalidoException(HttpStatus.UNPROCESSABLE_ENTITY, "El email ya existe en la base de datos.");
+        }
+        if (!validacionEmailService.isEmailValidado(dto.getEmail())) {
+            throw new ProcesoInvalidoException(HttpStatus.FORBIDDEN, "El email no ha sido verificado.");
+>>>>>>> backup
         }
 
         Usuario usuarioNuevo = usuarioMapper.mapUsuario(dto);
@@ -73,6 +132,7 @@ public class UsuarioService implements UsuarioServiceInterface {
                                 "El rol asignado automaticamente no existe en la Base de Datos"))))
                 .build());
 
+<<<<<<< HEAD
         //Agrega la imagen si existe en el DTO
         if(dto.getImagenUrl() != null) {
             usuarioNuevo.setImagen(imagenService.obtenerImagen(dto.getImagenUrl()));
@@ -85,6 +145,34 @@ public class UsuarioService implements UsuarioServiceInterface {
         return usrNuevo;
     }
 
+=======
+
+        //Carga la img
+        String urlImg = "";
+        if (imagenPerfil != null && !imagenPerfil.isEmpty()) {
+            urlImg = imagenService.subirImagenes(List.of(imagenPerfil)).getFirst();
+            usuarioNuevo.setImagen(imagenService.obtenerImagen(urlImg));
+        }
+
+        try {
+            UsuarioResponseDTO usrNuevo = usuarioMapper.mapResponseDTO(usuarioRepository.save(usuarioNuevo));
+
+            validacionEmailService.eliminar(dto.getEmail());
+
+            return usrNuevo;
+        }catch (Exception e){
+            //La borro de la base de datos
+            if(imagenPerfil != null && !imagenPerfil.isEmpty()){
+                imagenService.eliminarImagen(urlImg);
+            }
+
+            throw e;
+        }
+    }
+
+
+
+>>>>>>> backup
     public Usuario buscarUsuario(Long id) {
         return usuarioRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Usuario no encontrado con ID: " + id));
@@ -130,14 +218,21 @@ public class UsuarioService implements UsuarioServiceInterface {
 
         //Si el usuario no existe lanza excepcion el metodo buscarUsuario
         Usuario usuario = buscarUsuario(id);
+<<<<<<< HEAD
 
+=======
+>>>>>>> backup
         usuario.setNombre(usrDto.getNombre());
         usuario.setApellido(usrDto.getApellido());
         usuario.setFechaNacimiento(usrDto.getFechaNacimiento());
         usuario.setDescripcion(usrDto.getDescripcion());
+<<<<<<< HEAD
         usuario.setImagen(Optional.ofNullable(usrDto.getUrlImagen())
                 .map(imagenService::obtenerImagen)
                 .orElse(usuario.getImagen()));
+=======
+        //NO ACTUALIZO LA IMG ESO SE ENCARGAN OTROS METODOS
+>>>>>>> backup
 
         return usuarioMapper.mapResponseDTO(usuarioRepository.save(usuario));
     }
@@ -150,6 +245,7 @@ public class UsuarioService implements UsuarioServiceInterface {
         return usuarioMapper.mapResponseDTO(usuarioRepository.save(usuario));
     }
 
+<<<<<<< HEAD
     public UsuarioResponseDTO borrarImagenPerfil(HttpServletRequest request, String url) {
         //Usuario Logeado
         Usuario usuario = buscarUsuario(obtenerMiPerfil(request).getId());
@@ -159,6 +255,24 @@ public class UsuarioService implements UsuarioServiceInterface {
     }
 
     public String inhabilitarCuenta(Long id,HttpServletRequest request) {
+=======
+    public UsuarioResponseDTO borrarImagenPerfil(HttpServletRequest request) {
+        //Usuario Logeado
+        Usuario usuario = buscarUsuario(obtenerMiPerfil(request).getId());
+        String urlBorrar = usuario.getImagen().getUrl();
+
+        usuario.setImagen(null);
+
+        UsuarioResponseDTO usuarioActualizado =  usuarioMapper.mapResponseDTO(usuarioRepository.save(usuario));
+
+        //Elimina la imagen de la BD luego de guardar el usuario por las constrains de la BD
+        imagenService.eliminarImagen(urlBorrar);
+
+        return usuarioActualizado;
+    }
+
+    public UsuarioResponseDTO inhabilitarCuenta(Long id,HttpServletRequest request) {
+>>>>>>> backup
         if(obtenerMiPerfil(request).getId().equals(id)){
             throw new ProcesoInvalidoException("El usuario " + id + " no puede inhabilitar su propia cuenta.");
         }
@@ -173,10 +287,17 @@ public class UsuarioService implements UsuarioServiceInterface {
         usr.setIsActivo(false);
         usuarioRepository.save(usr);
 
+<<<<<<< HEAD
         return ("El usuario " + id + ", email "+ usr.getEmail() + " se ha inhabilitado correctamente.");
     }
 
     public String habilitarCuenta(Long id,HttpServletRequest request) {
+=======
+        return (usuarioMapper.mapResponseDTO(usr));
+    }
+
+    public UsuarioResponseDTO habilitarCuenta(Long id,HttpServletRequest request) {
+>>>>>>> backup
         if(obtenerMiPerfil(request).getId().equals(id)){
             throw new ProcesoInvalidoException("El usuario " + id + " no puede habilitar su propia cuenta.");
         }
@@ -188,7 +309,11 @@ public class UsuarioService implements UsuarioServiceInterface {
         usr.setIsActivo(true);
         usuarioRepository.save(usr);
 
+<<<<<<< HEAD
         return ("El usuario " + id + ", email "+ usr.getEmail() + " se ha habilitado correctamente.");
+=======
+        return (usuarioMapper.mapResponseDTO(usr));
+>>>>>>> backup
     }
 
     public UsuarioResponseDTO obtenerMiPerfil(HttpServletRequest request){
@@ -266,5 +391,29 @@ public class UsuarioService implements UsuarioServiceInterface {
         return usuarioRepository.existsByEmailIgnoreCase(email);
     }
 
+<<<<<<< HEAD
+=======
+        //GESTION DE ESTUDIOS DE UN USUARIO
+
+    public void agregarEstudioAUsuario(Usuario usuario, EstudioArq estudio){
+        if(usuario.getEstudios().contains(estudio)){
+            throw new ProcesoInvalidoException(HttpStatus.CONFLICT,"El usuario ya pertenece al estudio.");
+        }
+
+        usuario.getEstudios().add(estudio);
+        usuarioRepository.save(usuario);
+    }
+
+    public void quitarEstudioAUsuario(Usuario usuario, EstudioArq estudio){
+        if(!usuario.getEstudios().contains(estudio)){
+            throw new ProcesoInvalidoException(HttpStatus.CONFLICT,"El usuario no pertenece al estudio.");
+        }
+
+        usuario.getEstudios().remove(estudio);
+        usuarioRepository.save(usuario);
+    }
+
+
+>>>>>>> backup
 }
 

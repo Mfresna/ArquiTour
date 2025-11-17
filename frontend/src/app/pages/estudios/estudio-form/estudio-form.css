@@ -1,0 +1,204 @@
+#global {
+  background-color: var(--colorFondoTarjeta, #fff);
+  color: var(--colorTerciario, #222);
+
+  border-radius: 1rem;
+  box-shadow: 0 4px 12px var(--sombra);
+
+  overflow: hidden;
+  overflow-y: auto;     
+
+  max-height: 70vh;      
+  scrollbar-width: none;  /* Oculta scroll en Firefox */
+  -ms-overflow-style: none; /* Oculta scroll en IE/Edge */
+
+  width: 100%;
+  max-width: 480px;
+  display: flex;
+  flex-direction: column;
+  margin: 1% auto;
+  padding-bottom: 0.5rem;
+}
+
+/* Oculta scroll en Chrome/WebKit */
+#global::-webkit-scrollbar {
+  display: none;
+}
+
+/* ========== CONTENIDO INTERNO ========== */
+#contenedor-form {
+  padding: 1.8rem 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+/* ========== TÍTULO ========== */
+#titulo {
+  text-align: center;
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--colorBoton, #0077b6);
+  margin-bottom: 1.4rem;
+  position: relative;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+#titulo::after {
+  content: "";
+  display: block;
+  width: 50%;
+  height: 3px;
+  border-radius: 3px;
+  background: linear-gradient(90deg, var(--colorBoton, #0077b6), #00b4d8);
+  margin: 0.6rem auto 0;
+  opacity: 0.9;
+}
+
+/* ========== FORMULARIO GENERAL ========== */
+#panel-campos {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ========== FIELDSETS ========== */
+fieldset.form-group {
+  border: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1.2rem;
+}
+
+.label {
+  font-weight: 600;
+  color: #222;
+}
+
+/* ========== INPUTS ========== */
+.input {
+  padding: 0.7rem 1rem;
+  border-radius: 1rem;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+  background-color: #f8f9ff;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.input:focus {
+  border-color: var(--colorBoton, #0077b6);
+  box-shadow: 0 0 6px rgba(0, 119, 182, 0.35);
+  outline: none;
+}
+
+/* ========== TEXTOS DE AYUDA Y ERROR ========== */
+.help {
+  font-size: 0.85rem;
+  color: #6b7280;
+}
+
+.error {
+  font-size: 0.85rem;
+  color: #c62828;
+}
+
+/* ========== DROPZONE ========== */
+.dropzone {
+  background: #f3f7ff;
+  border: 2px dashed #d4e3fb;
+  border-radius: 12px;
+  padding: 18px;
+  text-align: center;
+  cursor: pointer;
+}
+
+.dropzone:hover {
+  border-color: #0a69a8;
+  background: #eef4ff;
+}
+
+/* ========== CHIPS (modo edición) para cuando implementemos arq ========== */
+/* .chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: .35rem;
+  padding: .35rem .6rem;
+  background: #f1f5f9;
+  color: #334155;
+  border-radius: 999px;
+  font-size: .9rem;
+}
+
+.chip-close {
+  border: none;
+  background: transparent;
+  font-size: 1rem;
+  line-height: 1;
+  cursor: pointer;
+  color: #64748b;
+  transition: color 0.2s;
+}
+
+.chip-close:hover { color: #0f172a; } */
+
+/* ========== BOTÓN PRINCIPAL ========== */
+.acciones {
+  display: flex;
+  justify-content: center;
+  margin-top: 1.8rem;
+}
+
+.btn-primario {
+  width: 100%;
+  background-color: var(--colorBoton, #0077b6);
+  color: #fff;
+  border: none;
+  border-radius: 1.5rem;
+  padding: 0.8rem;
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.1s;
+  text-transform: uppercase;
+}
+
+.btn-primario:hover {
+  background-color: #0096c7;
+  transform: scale(1.03);
+}
+
+.btn-primario:disabled {
+  background-color: #a0c4d9;
+  cursor: not-allowed;
+}
+
+/* ========== RESPONSIVE ========== */
+@media (max-width: 480px) {
+  #global {
+    max-width: 90%;
+    max-height: 75vh;
+    padding: 1rem 0.5rem;
+  }
+
+  #titulo {
+    font-size: 1.5rem;
+  }
+
+  .btn-primario {
+    font-size: 0.95rem;
+  }
+}

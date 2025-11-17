@@ -22,6 +22,14 @@
               {
                 "glob": "**/*",
                 "input": "public"
+<<<<<<< HEAD
+=======
+              },
+              {
+                "glob": "**/*",
+                "input": "src/assets",
+                "output": "assets"
+>>>>>>> backup
               }
             ],
             "styles": [

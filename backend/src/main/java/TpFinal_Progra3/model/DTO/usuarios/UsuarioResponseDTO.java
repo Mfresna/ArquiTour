@@ -25,6 +25,11 @@ public class UsuarioResponseDTO {
     private String apellido;
     private List<String> roles;
 
+<<<<<<< HEAD
+=======
+    private boolean isActivo;
+
+>>>>>>> backup
     @Schema(description = "Fecha de nacimiento", example = "1990-01-01")
     private LocalDate fechaNacimiento;
 
@@ -33,6 +38,10 @@ public class UsuarioResponseDTO {
 
     @Schema(description = "URL de la imagen de perfil", example = "https://miapp.com/img/perfil.png")
     private String urlImagen;
+<<<<<<< HEAD
+=======
+
+>>>>>>> backup
     private List<Long> idEstudios;
 
     @Schema(description = "Lista de roles del usuario")

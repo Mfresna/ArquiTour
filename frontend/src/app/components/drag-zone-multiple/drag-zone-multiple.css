@@ -1,0 +1,153 @@
+/* ================= FIELDSET ================== */
+fieldset {
+  border: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+label {
+  font-weight: 500;
+  margin-left: 0.5rem;
+}
+
+/* ================= DROPZONE ================== */
+#dropzone{
+  background: #f9fbff;
+  border: 2px dashed #dce6f7;
+  border-radius: 14px;
+  padding: 0;
+  min-height: 220px;
+  max-height: 340px;
+
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+  overflow: hidden;
+
+  transition: border-color .2s ease, background-color .2s ease, box-shadow .2s ease;
+  box-shadow: 0 6px 16px rgba(0,0,0,.05);
+  color: var(--colorTerciario, #222);
+}
+
+/* Hover */
+#dropzone:hover,
+#dropzone:focus {
+  background: #f3f8ff;
+  border-color: var(--colorBoton, #0077b6);
+  box-shadow: 0 10px 22px rgba(0,0,0,.06);
+}
+
+/* Contenedor interno */
+#contenedor-img {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 16px;
+  overflow: hidden;
+  justify-content: center;
+}
+
+/* ================== MENSAJE ================== */
+#dropzone-msg {
+  text-align: center;
+  padding: 1rem;
+  color: #444;
+  animation: aparecer-msg .3s ease-out;
+}
+
+/* ================== GRID DE IMÁGENES ================== */
+.grid-previas {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  gap: 1rem;
+
+  max-height: 260px;
+  overflow-y: auto;
+  padding-bottom: 10px;
+}
+
+/* Imagen individual */
+.item-previa {
+  position: relative;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  overflow: hidden;
+  background: white;
+  aspect-ratio: 1 / 1;
+}
+
+.item-previa img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Oculto el botón hasta hover */
+.btn-quitar{
+  visibility: hidden;
+}
+
+.item-previa:hover .btn-quitar{
+  visibility: visible;
+}
+
+/* ================== BOTÓN QUITAR (delete icon) ================== */
+.btn-quitar {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  background: rgba(0,0,0,0.35);
+  border: none;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+.btn-quitar .material-icons {
+  font-size: 18px;
+  color: white;
+  pointer-events: none;
+}
+
+/* Hover delete */
+.btn-quitar:hover {
+  background: rgba(0,0,0,0.6);
+}
+
+/* ================== BOTONERA INFERIOR ================== */
+#botonera-img{
+  flex-shrink: 0;
+  background: #f3f6fb;
+  border-top: 1px solid #dce6f7;
+  display: flex;
+  justify-content: center;
+}
+
+#botonera-img .btn-outline{
+  padding: .65rem 1.4rem;
+  width: 100%;
+  border: 0;
+  background: #f9fafb;
+  color: #1e293b;
+  font-weight: 700;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: transform .15s, background-color .2s;
+}
+
+#botonera-img .btn-outline:hover{
+  background: #eef2f6;
+  transform: translateY(-1px);
+}
+
+@media (max-width: 480px){
+  #dropzone{ min-height: 200px; }
+}
+

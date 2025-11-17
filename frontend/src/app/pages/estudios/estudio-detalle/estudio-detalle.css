@@ -1,0 +1,189 @@
+.detalle {
+  display: flex;
+  justify-content: center;
+  padding: 2rem 1rem;
+  background: var(--colorFondo, #f5f6fa);
+  box-sizing: border-box;
+}
+
+/* === Tarjeta general === */
+.tarjeta-detalle {
+  width: 100%;
+  max-width: 1100px;
+  background: var(--colorFondoTarjeta, #fff);
+  border-radius: 1rem;
+  box-shadow: 0 8px 24px rgba(0,0,0,.08);
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+}
+
+/* === Fila 1: título + botones === */
+.cabecera-general {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: .75rem;
+}
+
+.titulo {
+  margin: 0;
+  font-size: 2.1rem;
+  font-weight: 800;
+  color: var(--colorBoton);
+  text-transform: capitalize;
+}
+
+.acciones-der {
+  display: flex;
+  gap: .5rem;
+}
+
+.acciones-der button {
+  padding: .5rem .9rem;
+  border: none;
+  border-radius: .6rem;
+  background: var(--colorBoton);
+  color: #fff;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.acciones-der button:hover {
+  background: #1d4ed8;
+}
+
+.acciones-der .danger {
+  background: #a84436;
+}
+
+.acciones-der .danger:hover {
+  background: #b61919;
+}
+
+/* === Fila 2: imagen + obras === */
+.fila-contenido {
+  display: grid;
+  grid-template-columns: 0.9fr 1.1fr; 
+  gap: 1.25rem;
+  align-items: stretch;
+}
+
+
+.imagen {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;          
+  background: #f8fafc;
+  border-radius: .8rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,.1);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  max-height: 55dvh;
+}
+
+.imagen img {
+  width: 100%;
+  height: 100%;
+  object-fit:contain;             
+  border-radius: .8rem;
+  background: #f2f2f2;
+}
+
+
+.panel {
+  background: var(--colorFondoTarjeta, #fff);
+  border-radius: .8rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,.06);
+  padding: 1rem;
+}
+
+.encabezado h3 {
+  margin: 0 0 .6rem 0;
+  font-size: 1.05rem;
+  font-weight: 600;
+}
+
+
+.panel-obras {
+  max-height: 55vh;
+  display: flex;
+  flex-direction: column;
+}
+
+
+.obras-scroll {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: .75rem;
+}
+
+
+.obra-item {
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  color: #1e293b;
+  padding: 0.7rem 1rem;
+  border-radius: .6rem;
+  box-shadow: 0 1px 3px rgba(0,0,0,.04);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: .5rem;
+  transition: all .2s ease;
+  margin-top: 10px;
+}
+
+.obra-item:hover {
+  background: #f1f5f9;
+  border-color: #cbd5e1;
+  transform: translateY(-1px);
+}
+
+
+.obra-item a {
+  text-decoration: none;
+  color: inherit;
+  font-weight: 500;
+}
+
+.obra-item a:hover {
+  color: #2563eb;
+}
+
+/* === Fila 3: arquitectos === */
+.panel-arquitectos {
+  width: 100%;
+}
+
+.arq-item {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.arq-item li {
+  padding: .35rem .75rem;
+  border-radius: 999px;
+  background: #eef2f7;
+  color: #334155;
+  font-size: .9rem;
+}
+
+/* === Responsive === */
+@media (max-width: 900px) {
+  .fila-contenido {
+    grid-template-columns: 1fr;
+  }
+}
