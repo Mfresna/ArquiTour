@@ -19,10 +19,6 @@ export class UsuarioService {
   //Para obtener id-nombre de los arquitectos
   private cacheNombres = new Map<number, string>();
 
-  //Para obtener id-nombre de los arquitectos
-  private cacheNombres = new Map<number, string>();
-
-
   constructor(
     private http: HttpClient
   ){}
@@ -123,27 +119,6 @@ export class UsuarioService {
   cachearNombre(id: number, nombreCompleto: string): void {
     this.cacheNombres.set(id, nombreCompleto);
   }
-
-
-
-
-
-
-
-  //Para obtener id-nombre de arquitectos
-  getNombreById(id: number): string | undefined {
-    return this.cacheNombres.get(id);
-  }
-
-  cachearNombre(id: number, nombreCompleto: string): void {
-    this.cacheNombres.set(id, nombreCompleto);
-  }
-
-
-
-
-
-
 
   cambiarEstadoCuenta(id: number, estadoActual: boolean): Observable<UsuarioModel>{
     return this.http.patch<UsuarioModel>(`${this.USUARIO_URL}/${id}?habilitacion=${!estadoActual}`, null);
