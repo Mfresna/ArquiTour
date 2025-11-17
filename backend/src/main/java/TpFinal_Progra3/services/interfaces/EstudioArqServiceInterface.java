@@ -1,5 +1,6 @@
 package TpFinal_Progra3.services.interfaces;
 
+import TpFinal_Progra3.model.DTO.ImagenDTO;
 import TpFinal_Progra3.model.DTO.estudios.EstudioArqBasicoDTO;
 import TpFinal_Progra3.model.DTO.estudios.EstudioArqDTO;
 import TpFinal_Progra3.model.DTO.filtros.EstudioArqFiltroDTO;
@@ -15,5 +16,5 @@ public interface EstudioArqServiceInterface {
     EstudioArqDTO agregarArquitectoAEstudio(HttpServletRequest request, Long estudioId, Long arquitectoId);
     EstudioArqDTO eliminarArquitectoDeEstudio(HttpServletRequest request, Long estudioId, Long arquitectoId);
     EstudioArqDTO modificarEstudio(HttpServletRequest request, Long id, EstudioArqDTO dto);
-    EstudioArqDTO actualizarEstudioImagenPerfil(HttpServletRequest request, Long id, String url);
+    EstudioArqDTO actualizarEstudioImagenPerfil(HttpServletRequest request, Long id, ImagenDTO dto);
 }
