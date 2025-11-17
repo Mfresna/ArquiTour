@@ -13,13 +13,14 @@ import { fechaNacValidador } from '../../validadores/fechaValidador';
 import { DragZoneImagenes } from '../../../components/drag-zone-imagenes/drag-zone-imagenes';
 import { ImagenService } from '../../../services/imagenService/imagen-service';
 import { Observable, of, throwError } from 'rxjs';
+import { DragZoneSimple } from "../../../components/drag-zone-simple/drag-zone-simple";
 
 
 type Paso = "email" | "pin" | "registrarme";
 
 @Component({
   selector: 'app-register',
-  imports: [ReactiveFormsModule, PinVerificador, EsperandoModal, DragZoneImagenes],
+  imports: [ReactiveFormsModule, PinVerificador, EsperandoModal, DragZoneSimple],
   templateUrl: './register.html',
   styleUrl: './register.css',
 })

@@ -25,6 +25,8 @@ public class UsuarioResponseDTO {
     private String apellido;
     private List<String> roles;
 
+    private boolean isActivo;
+
     @Schema(description = "Fecha de nacimiento", example = "1990-01-01")
     private LocalDate fechaNacimiento;
 

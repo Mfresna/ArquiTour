@@ -30,8 +30,7 @@ export class Header{
   }
 
   isAdmin(): boolean{
-    //return this.tokenService.isAdmin();
-    return true;
+    return this.tokenService.isAdmin();
   }
 
   isArq(): boolean{

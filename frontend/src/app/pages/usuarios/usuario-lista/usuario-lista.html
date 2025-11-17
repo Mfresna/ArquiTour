@@ -91,14 +91,13 @@
           @if (usuarios) {
             <ul class="lista-obras" >
               @for (u of usuarios; track u.id ?? $index) {
-                <li class="obra-card" [routerLink]="['/usuario/', u.id!]">
+                <li class="obra-card" >
 
-                  <div class="contenido-usuario">
-
+                  <div id="informacion" class="contenido-usuario" [routerLink]="['/usuario/', u.id!]">
                     <!-- informacion -->
                     <div class="informacion-usuario">
                       <div clas="nombre-usuario">
-                        <h4>{{u.nombre + ' ' + u.apellido}}</h4>
+                        <h4>{{u.nombre + ' ' + u.apellido + ' ' + u.activo}}</h4>
                       </div>
                       <div clas="datos-usurio">
                         <p>{{u.email}}</p>
@@ -106,15 +105,29 @@
                       </div>
                     </div>
 
-                    <!-- botonera de accion -->
-                    <div clas="botonera">
-                      <div class="btn-tooltip-animated">
-                        <span class="material-icons">help</span>
-                        <div class="tooltip-anim">Ayuda</div>
-                      </div>
+                  </div>
 
+                  <!-- botonera de accion -->
+                  <div clas="botonera">
+
+                    <div id="btn-rol" class="btn-etiqueta-detalle">
+                      <span class="material-symbols-rounded">admin_panel_settings</span>
+                      <div class="etiqueta-detalle">Gestionar Roles</div>
                     </div>
 
+                    <div id="btn-estado" class="btn-etiqueta-detalle">
+                      <span class="material-symbols-rounded"
+                        [class.inhabilitado]="u.activo"
+                        (click)="CambiarEstadoCuenta(u)">person_off</span>
+
+                      @if(u.activo){
+                        <div class="etiqueta-detalle">inhabilitar</div>
+                      }@else {
+                        <div class="etiqueta-detalle">habilitar</div>
+                      }
+
+                    </div>
+              
                   </div>
 
                 </li>

@@ -104,11 +104,15 @@ export class UsuarioService {
     return this.http.get<UsuarioModel>(`${this.USUARIO_URL}/me`)
   }
 
-
   //NO TOCAR
   cambiarPass(nuevaPassword: string){
     return this.http.patch(`${this.USUARIO_URL}/password`, {nuevaPassword})
   }
+
+  cambiarEstadoCuenta(id: number, estadoActual: boolean): Observable<UsuarioModel>{
+    return this.http.patch<UsuarioModel>(`${this.USUARIO_URL}/${id}?habilitacion=${!estadoActual}`, null);
+  }
+
 
 }
 

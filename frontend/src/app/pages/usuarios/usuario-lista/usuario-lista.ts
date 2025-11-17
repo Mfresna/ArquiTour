@@ -98,11 +98,16 @@ export class UsuarioLista implements OnInit {
     return descripciones.join(' y ');
   }
 
-
-
-
-
-
-
-
+  CambiarEstadoCuenta(usuario: UsuarioModel):void{
+    this.usuarioService.cambiarEstadoCuenta(usuario.id, usuario.activo)
+      .subscribe({
+        next: (resp) => {
+          ///Actualiza dinamicamente el listado
+          usuario.activo = resp.activo;
+        },
+        error: (e) => {
+          console.error('Error cambiando estado', e);
+        }
+      });
+    }
 }

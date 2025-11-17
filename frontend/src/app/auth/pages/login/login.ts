@@ -5,6 +5,7 @@ import { AuthService } from '../../services/authService/auth-service';
 import { EsperandoModal } from '../../../components/esperando-modal/esperando-modal';
 import { MensajeModal } from '../../../components/mensaje-modal/mensaje-modal';
 import { finalize } from 'rxjs/operators';
+import { EstadoLogin } from '../../models/login/EstadoLoginEnum';
 
 
 @Component({
@@ -17,7 +18,9 @@ export class Login implements OnInit {
 
   login!: FormGroup;
   enviandoPin!: boolean;
-  credInvalidas: boolean = false;
+
+  estadoCredencial!: EstadoLogin;
+  estadosLogin = EstadoLogin;
 
   mostrarPassword = false;
 
@@ -49,6 +52,7 @@ export class Login implements OnInit {
       this.authService.login(this.login.value).subscribe({
         next: (res) => {
           if (res.cambiarPass) {
+            this.estadoCredencial = EstadoLogin.CAMBIAR_PASS;
 
             //Parametros del Modal
             this.modalVisible=true;
@@ -59,12 +63,17 @@ export class Login implements OnInit {
 
             this.router.navigate(['/cambiarpass']);
           } else {
+            this.estadoCredencial = EstadoLogin.OK;
             this.router.navigate(['/home']);
           }
         },
         error: (e) => {
           if(e.status === 401 || e.status === 403){
-            this.credInvalidas = true;
+            this.estadoCredencial = EstadoLogin.CREDENCIALES_INVALIDAS;
+
+          }else if(e.status === 423){
+            this.estadoCredencial = EstadoLogin.CUENTA_INACTIVA;
+            
           }else if (e.status >= 500) {
             alert('Error interno del servidor. Intente nuevamente más tarde.');
           }else if (e.status === 0) {

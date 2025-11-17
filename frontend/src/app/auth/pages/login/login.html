@@ -18,7 +18,7 @@
           placeholder="email@correo.com"
           [class.invalido]="login.get('email')?.invalid && login.get('email')?.touched"
           autocomplete="email"
-          (focus)="credInvalidas = false"
+          (focus)="estadoCredencial = estadosLogin.ESPERANDO"
           (keydown.space)="$event.preventDefault()">
 
         @if (login.get('email')?.errors?.['required'] && login.get('email')?.touched) {
@@ -40,7 +40,7 @@
             placeholder="************"
             [class.invalido]="login.get('password')?.invalid && login.get('password')?.touched"
             autocomplete="current-password"
-            (focus)="credInvalidas = false"
+            (focus)="estadoCredencial = estadosLogin.ESPERANDO"
             (keydown.space)="$event.preventDefault()">
 
           <!-- Boton de Ver Contraseña -->
@@ -64,7 +64,9 @@
       </fieldset>
 
 
-      @if (credInvalidas){
+      @if (this.estadoCredencial === estadosLogin.CUENTA_INACTIVA){
+        <small>Su cuenta se encuentra inactiva, contacte con soporte </small>
+      }@else if (this.estadoCredencial === estadosLogin.CREDENCIALES_INVALIDAS) {
         <small>Credenciales Invalidas, vuelve a intentar. </small>
       }
 

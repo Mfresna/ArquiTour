@@ -35,6 +35,8 @@ public class UsuarioMapper {
                 .nombre(usuario.getNombre())
                 .apellido(usuario.getApellido())
 
+                .isActivo(usuario.getIsActivo())
+
                 .fechaNacimiento(usuario.getFechaNacimiento())
                 .descripcion(usuario.getDescripcion())
                 .urlImagen(usuario.getImagen() != null ? usuario.getImagen().getUrl() : null)

@@ -6,6 +6,7 @@ export interface UsuarioModel {
   nombre: string;
   apellido: string;
   roles: string[];
+  activo: boolean;
   fechaNacimiento: string;
   descripcion: string;
   urlImagen: string;
