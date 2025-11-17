@@ -213,5 +213,4 @@ public class EstudioArqService implements EstudioArqServiceInterface {
                 || usr.getEstudios().stream().anyMatch(e -> e.getId().equals(id));
     }
 
-
 }
