@@ -106,6 +106,7 @@ export class UsuarioLista implements OnInit {
           usuario.activo = resp.activo;
         },
         error: (e) => {
+          alert("No podes cambiarle el Estado");
           console.error('Error cambiando estado', e);
         }
       });

@@ -1,6 +1,7 @@
 <div id="global">
   <div id="contenedor-usuarios">
 
+    <!-- AREA DE FILTRADO -->
     <div id="panel-izq">
       <h3 class="titulo">Usuarios</h3>
       <div id="panel-filtros">
@@ -72,9 +73,9 @@
             </select>
           </fieldset>
 
-          <div id = "botonera" class="acciones">
-            <button type="submit">Buscar</button>
-            <button type="button" (click)="limpiarFiltros()">Limpiar</button>
+          <div id = "botonera">
+            <button id="buscar" type="submit">Buscar</button>
+            <button id="limpiar" type="button" (click)="limpiarFiltros()">Limpiar</button>
           </div>
           
         </form>
@@ -83,23 +84,26 @@
     </div>
 
     <!-- LISTADO DE USUARIOS -->
-
     <div id="panel-der">
       <div id="panel-scroll">
         <!-- ACA -->
         <div id="contenedor-lista">
           @if (usuarios) {
-            <ul class="lista-obras" >
+            <ul id="lista-usuarios" >
               @for (u of usuarios; track u.id ?? $index) {
-                <li class="obra-card" >
+                <li>
 
-                  <div id="informacion" class="contenido-usuario" [routerLink]="['/usuario/', u.id!]">
+                  <div id="informacion" 
+                    class="contenido-usuario" 
+                    [routerLink]="['/usuario/', u.id!]"
+                    [class.usr-hab]="u.activo"
+                    [class.usr-deshab]="!u.activo">
                     <!-- informacion -->
                     <div class="informacion-usuario">
-                      <div clas="nombre-usuario">
-                        <h4>{{u.nombre + ' ' + u.apellido + ' ' + u.activo}}</h4>
+                      <div class="nombre-usuario">
+                        <h4>{{u.nombre + ' ' + u.apellido}}</h4>
                       </div>
-                      <div clas="datos-usurio">
+                      <div class="datos-usuario">
                         <p>{{u.email}}</p>
                         <p class="rol-usuario">{{getDescripcionRol(u.roles)}}</p>
                       </div>
@@ -108,22 +112,22 @@
                   </div>
 
                   <!-- botonera de accion -->
-                  <div clas="botonera">
+                  <div class="botonera">
 
                     <div id="btn-rol" class="btn-etiqueta-detalle">
-                      <span class="material-symbols-rounded">admin_panel_settings</span>
+                      <span class="material-symbols-rounded btn-rol">admin_panel_settings</span>
                       <div class="etiqueta-detalle">Gestionar Roles</div>
                     </div>
 
                     <div id="btn-estado" class="btn-etiqueta-detalle">
                       <span class="material-symbols-rounded"
-                        [class.inhabilitado]="u.activo"
+                        [class.inhabilitado]="!u.activo"
                         (click)="CambiarEstadoCuenta(u)">person_off</span>
 
                       @if(u.activo){
-                        <div class="etiqueta-detalle">inhabilitar</div>
+                        <div class="etiqueta-detalle">Deshabilitar</div>
                       }@else {
-                        <div class="etiqueta-detalle">habilitar</div>
+                        <div class="etiqueta-detalle">Habilitar</div>
                       }
 
                     </div>
@@ -131,6 +135,7 @@
                   </div>
 
                 </li>
+                
               }
             </ul>
           } @else {
