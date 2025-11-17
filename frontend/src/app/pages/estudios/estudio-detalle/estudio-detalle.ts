@@ -7,7 +7,7 @@ import { EstudioService } from '../../../services/estudioService/estudio-service
 import { forkJoin, tap } from 'rxjs';
 import { ObraService } from '../../../services/obraService/obra-service';
 import { ObraModel } from '../../../models/obraModels/obraModel';
-import { UsuarioModel } from '../../../models/usuarioModels/usuaroModel';
+import { UsuarioModel } from '../../../models/usuarioModels/usuarioModel';
 import { UsuarioService } from '../../../services/usuarioService/usuario-service';
 
 @Component({
