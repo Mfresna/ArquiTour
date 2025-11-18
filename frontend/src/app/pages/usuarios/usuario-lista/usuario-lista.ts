@@ -10,7 +10,7 @@ import { ObraService } from '../../../services/obraService/obra-service';
 import { RouterLink } from '@angular/router';
 import { UsuarioService } from '../../../services/usuarioService/usuario-service';
 import { Roles } from '../../../models/usuarioModels/RolModelEnum';
-import { RolModelDescripcion } from '../../../models/usuarioModels/RolModels';
+import { RolModelDescripcion } from '../../../models/usuarioModels/rolModels';
 import { UsuarioModel } from '../../../models/usuarioModels/usuarioModel';
 
 @Component({
