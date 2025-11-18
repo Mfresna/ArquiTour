@@ -1,10 +1,7 @@
 <div id="global">
-
   <div id="contenedor-form">
  
-    <h1 id="titulo">
-      {{ editar ? 'Editar estudio' : 'nuevo estudio' }}
-    </h1>
+    <h1 id="titulo">{{ editar ? 'Editar estudio' : 'nuevo estudio' }}</h1>
 
     <div id="panel-campos">
       <form
@@ -20,10 +17,7 @@
             id="nombre"
             type="text"
             formControlName="nombre"
-            class="input"
-            placeholder="Ej.: Estudio ArquiTour"
-            aria-describedby="ayuda-nombre"
-          />
+            placeholder="Ej.: Estudio ArquiTour"/>
         
           @if (formulario.get('nombre')?.invalid && formulario.get('nombre')?.touched) {
             <small class="error" role="alert">Ingrese un nombre válido.</small>
@@ -115,5 +109,4 @@
     </div>
 
   </div>
-
 </div>
