@@ -27,7 +27,7 @@ export class SelectFavorito implements OnInit {
 
   constructor(
     private favoritosService: FavoritosService,
-    private elementRef: ElementRef<HTMLElement> 
+    private elementRef: ElementRef
   ) {}
 
   ngOnInit(): void {
@@ -176,6 +176,24 @@ export class SelectFavorito implements OnInit {
     this.cerrado.emit();
   }
 
+
+     //========== ESCUCHADORES
+  @HostListener('document:keydown.escape', ['$event'])
+  handleKeyboardEvent(event: any) { 
+    this.cerrar();
+  }
+
+  @HostListener('document:click', ['$event'])
+  handleClickOutside(event: MouseEvent): void {
+    // Usamos ElementRef para verificar si el clic fue dentro o fuera de nuestro componente.
+    const clickedInside = this.elementRef.nativeElement.contains(event.target);
+    
+    // Si el clic fue FUERA, cerramos el menú.
+    if (!clickedInside) {
+          this.cerrar();
+    }
+  
+  }
   
 }
 

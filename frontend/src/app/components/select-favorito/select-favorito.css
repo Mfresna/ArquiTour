@@ -136,6 +136,8 @@
   gap: 0.4rem;
 
 
+  overscroll-behavior: contain;   
+
   /* Scrollbar estilizada (opcional) */
   scrollbar-width: none;
   -ms-overflow-style: none;
