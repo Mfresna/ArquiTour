@@ -7,8 +7,13 @@
     </h1>
 
     <div id="panel-campos">
-      <form [formGroup]="formulario" (submit)="guardar()"  enctype="multipart/form-data" novalidate>
-          <!-- Nombre -->
+      <form
+        [formGroup]="formulario"
+        (submit)="guardar()"
+        enctype="multipart/form-data"
+        novalidate>
+
+        <!-- Nombre -->
         <fieldset class="form-group">
           <label for="nombre" class="label">Nombre del estudio</label>
           <input
@@ -26,7 +31,6 @@
         </fieldset>
 
         <!-- Imagen -->
-
         <app-drag-zone-simple
           label="Imagen de Perfil:"
           [imgExistente]="editar ? imagenActualUrl : null"
@@ -38,23 +42,63 @@
         <!-- Arquitectos (solo modo edición) -->
         @if (editar) {
           <div class="form-group">
-            <label class="label">Arquitectos del estudio</label>
-            <div class="chips">
-              @for (id of (formulario.get('arquitectosIds')?.value || []); track id) {
-                <span class="chip">
-                  #{{ id }}
+            <label id="arq-est" class="label">Arquitectos del estudio</label>
+
+            <div class="contenedor_burbujas">
+              @for (arq of arquitectosVinculados; track arq.id) {
+                <span class="burbuja">
+                  {{ arq.nombre }}
                   <button
                     type="button"
-                    class="chip-close"
-                    (click)="quitarArquitecto(id)"
-                    aria-label="Quitar arquitecto">×</button>
+                    class="btn-quitar"
+                    (click)="quitarArquitecto(arq.id)"
+                    aria-label="Quitar arquitecto">
+                    ×
+                  </button>
                 </span>
+
+                
               }
               @empty {
                 <small class="help">No hay arquitectos asignados.</small>
               }
             </div>
           </div>
+
+          <!-- Agregar arquitecto por email -->
+          <fieldset class="form-group">
+            <label for="emailArquitecto" class="label">Agregar arquitecto</label>
+
+            <div class="fila-email">
+              <input
+                id="emailArquitecto"
+                type="email"
+                class="input"
+                formControlName="emailArquitecto"
+                placeholder="ej: arquitecto@correo.com"
+                autocomplete="off"
+              />
+              <button
+                type="button"
+                class="btn-secundario"
+                (click)="agregarArquitectoPorEmail()">
+                Agregar
+              </button>
+            </div>
+
+            @if (
+              formulario.get('emailArquitecto')?.value &&
+              formulario.get('emailArquitecto')?.errors?.['email'] &&
+              (formulario.get('emailArquitecto')?.touched || formulario.get('emailArquitecto')?.dirty)
+            ) {
+              <small class="error" role="alert">Ingrese un email válido.</small>
+            }
+
+
+            @if (mensajeErrorAgregar) {
+              <small class="error" role="alert">{{ mensajeErrorAgregar }}</small>
+            }
+          </fieldset>
         }
 
         <!-- Botón -->
@@ -67,11 +111,9 @@
           </button>
         </div>
 
-
-        
-     
       </form>
-   
+    </div>
+
   </div>
 
 </div>

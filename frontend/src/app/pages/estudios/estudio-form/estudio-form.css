@@ -5,13 +5,6 @@
   border-radius: 1rem;
   box-shadow: 0 4px 12px var(--sombra);
 
-  overflow: hidden;
-  overflow-y: auto;     
-
-  max-height: 70vh;      
-  scrollbar-width: none;  /* Oculta scroll en Firefox */
-  -ms-overflow-style: none; /* Oculta scroll en IE/Edge */
-
   width: 100%;
   max-width: 480px;
   display: flex;
@@ -20,10 +13,6 @@
   padding-bottom: 0.5rem;
 }
 
-/* Oculta scroll en Chrome/WebKit */
-#global::-webkit-scrollbar {
-  display: none;
-}
 
 /* ========== CONTENIDO INTERNO ========== */
 #contenedor-form {
@@ -40,7 +29,6 @@
   font-weight: 700;
   color: var(--colorBoton, #0077b6);
   margin-bottom: 1.4rem;
-  position: relative;
   letter-spacing: 0.5px;
   text-transform: uppercase;
 }
@@ -91,6 +79,7 @@ fieldset.form-group {
   font-size: 1rem;
   background-color: #f8f9ff;
   transition: border-color 0.2s, box-shadow 0.2s;
+
 }
 
 .input:focus {
@@ -125,35 +114,124 @@ fieldset.form-group {
   background: #eef4ff;
 }
 
-/* ========== CHIPS (modo edición) para cuando implementemos arq ========== */
-/* .chips {
-  display: flex;
-  flex-wrap: wrap;
-  gap: .5rem;
+/* ================== BURBUJAS (ARQUITECTOS) ================== */
+
+
+.contenedor_burbujas {
+  margin-bottom: 1rem; 
 }
 
-.chip {
+
+.burbuja {
+  position: relative;
   display: inline-flex;
   align-items: center;
   gap: .35rem;
-  padding: .35rem .6rem;
-  background: #f1f5f9;
-  color: #334155;
+
+  padding: .35rem .9rem;
+  padding-right: 2rem;         
+  background: #eef2f7;
   border-radius: 999px;
+  color: #334155;
   font-size: .9rem;
+  font-weight: 500;
+
+  border: 1px solid #d8dee9;
+  box-shadow: 0 1px 2px rgba(0,0,0,.05);
+
+  margin-top: .5rem;
+  transition: background-color .2s ease;
 }
 
-.chip-close {
-  border: none;
-  background: transparent;
-  font-size: 1rem;
-  line-height: 1;
-  cursor: pointer;
+.burbuja:hover {
+  background: #e2e8f0;
+}
+
+#arq-est {
+  margin-top: 0.75rem;
+  display: block;
+}
+
+/* Botón quitar dentro de la burbuja */
+.btn-quitar {
+  position: absolute;
+  top: 50%;
+  right: 6px;
+  transform: translateY(-50%);
+
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 11px;
+
+  padding: 0;
+
+  border: 1px solid #cbd5e1;
+  background: #f1f5f9;
   color: #64748b;
-  transition: color 0.2s;
+  cursor: pointer;
+
+  opacity: 0;
+  visibility: hidden;
+  
 }
 
-.chip-close:hover { color: #0f172a; } */
+.burbuja:hover .btn-quitar {
+  opacity: 1;
+  visibility: visible;
+}
+
+.btn-quitar:hover {
+  background: #e2e8f0;
+  color: #b91c1c;
+  border-color: #cbd5e1;
+}
+
+
+
+
+
+/*========== FILA PARA AGREGAR ARQUITECTO ========= */
+
+.fila-email {
+  display: flex;
+  align-items: center;
+  gap: .6rem;
+}
+
+.fila-email .input {
+  flex: 1;
+  padding: .65rem 1rem;
+  border-radius: 1rem;
+  border: 1px solid #cbd5e1;
+  background-color: #f8f9ff;
+}
+
+.fila-email .input:focus {
+  border-color: var(--colorBoton, #0077b6);
+  box-shadow: 0 0 6px rgba(0, 119, 182, 0.35);
+  outline: none;
+}
+
+.btn-secundario {
+  padding: .6rem 1rem;
+  border-radius: 1rem;
+  border: none;
+  background: var(--colorBoton, #0077b6);
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.btn-secundario:hover {
+  background: #0096c7;
+}
 
 /* ========== BOTÓN PRINCIPAL ========== */
 .acciones {

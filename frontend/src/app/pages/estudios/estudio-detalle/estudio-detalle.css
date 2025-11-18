@@ -124,6 +124,8 @@
   display: flex;
   flex-direction: column;
   gap: .75rem;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
 
 

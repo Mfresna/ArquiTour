@@ -4,10 +4,11 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ImagenService } from '../../../services/imagenService/imagen-service';
 import { EstudioModel } from '../../../models/estudioModels/estudioModel';
 import { EstudioService } from '../../../services/estudioService/estudio-service';
-import { finalize, switchMap, take } from 'rxjs';
+import { finalize, forkJoin, switchMap, take, tap } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 import { DragZoneSimple } from '../../../components/drag-zone-simple/drag-zone-simple';
 import { UsuarioService } from '../../../services/usuarioService/usuario-service';
+import { UsuarioModel } from '../../../models/usuarioModels/usuarioModel';
 
 @Component({
   selector: 'app-estudio-form',
@@ -25,6 +26,8 @@ export class EstudioForm {
   archivoSeleccionado: File | null = null;
   imagenUrlExistente = false;
   quitadoImg: boolean = false;
+  mensajeErrorAgregar: string | null = null;
+  arquitectosVinculados: { id: number; nombre: string }[] = [];
 
   constructor(
     private fb: FormBuilder,
@@ -55,6 +58,8 @@ export class EstudioForm {
   }
 
   private cargarEstudio(id: number): void {
+    this.mensajeErrorAgregar = null;
+
     this.estudioService.getEstudio(id).pipe(take(1)).subscribe({
       next: (data) => {
         this.formulario.patchValue({ 
@@ -62,6 +67,9 @@ export class EstudioForm {
           obrasIds: data.obrasIds ?? [],
           arquitectosIds: data.arquitectosIds ?? []
         });
+
+        const idsArquitectos = data.arquitectosIds ?? [];
+        this.cargarArquitectosVinculadosPorIds(idsArquitectos);
         
         if (data.imagenUrl && !this.esImagenPorDefecto(data.imagenUrl)) {
           const path = data.imagenUrl.startsWith('/') ? data.imagenUrl : `/${data.imagenUrl}`;
@@ -101,6 +109,7 @@ export class EstudioForm {
       alert('Debe ingresar un nombre válido.');
       return;
     }
+    
 
     this.subiendo = true;
     const archivo = this.archivoSeleccionado;
@@ -243,87 +252,160 @@ export class EstudioForm {
           const actuales = (this.formulario.get('arquitectosIds')?.value ?? []) as number[];
           this.formulario.get('arquitectosIds')?.setValue(actuales.filter(x => x !== arqId));
         }
+        this.arquitectosVinculados = this.arquitectosVinculados.filter(a => a.id !== arqId);
       },
       error: () => alert('No se pudo quitar el arquitecto'),
     });
   }
 
   agregarArquitectoPorEmail(): void {
-  const email = (this.formulario.get('emailArquitecto')?.value ?? '').trim();
+    this.mensajeErrorAgregar = null;
 
-  if (!email) {
-    alert('Debe ingresar un email.');
-    return;
+    const control = this.formulario.get('emailArquitecto');
+    const email = (control?.value ?? '').trim().toLowerCase();
+
+    // 1) Si está vacío → mensaje "Debe ingresar un email"
+    if (!email) {
+      this.mensajeErrorAgregar = 'Debe ingresar un email.';
+      return;
+    }
+
+    // 2) Si el formato es inválido 
+    if (control?.invalid) {
+      control.markAsTouched();      
+      this.mensajeErrorAgregar = null; 
+      return;
+    }
+
+    // 3) Email válido 
+    this.usuarioService
+      .getUsuarios(undefined, undefined, email)
+      .pipe(take(1))
+      .subscribe({
+        next: usuarios => {
+
+          const usuario = usuarios.find(
+            u => u.email?.toLowerCase() === email
+          );
+
+          if (!usuario) {
+            this.mensajeErrorAgregar = 'Usuario no registrado en la base de datos.';
+            return;
+          }
+
+          const arquitectoId = usuario.id;
+          if (!arquitectoId) {
+            this.mensajeErrorAgregar = 'No se pudo obtener el ID del usuario.';
+            return;
+          }
+
+          const actuales: number[] =
+            this.formulario.get('arquitectosIds')?.value ?? [];
+
+          if (actuales.includes(arquitectoId)) {
+            this.mensajeErrorAgregar = 'Este arquitecto ya forma parte del estudio.';
+            return;
+          }
+
+          this.estudioService
+            .agregarArquitecto(this.id!, arquitectoId)
+            .pipe(take(1))
+            .subscribe({
+              next: estudioActualizado => {
+                const nuevosIds = Array.isArray(estudioActualizado?.arquitectosIds)
+                  ? estudioActualizado.arquitectosIds
+                  : [...actuales, arquitectoId];
+
+                this.formulario.get('arquitectosIds')?.setValue(nuevosIds);
+
+                // actualizar lista con nombres 
+                const nombreCompleto = `${usuario.nombre} ${usuario.apellido}`.trim();
+                this.usuarioService.cachearNombre(arquitectoId, nombreCompleto);
+
+                if (!this.arquitectosVinculados.some(a => a.id === arquitectoId)) {
+                  this.arquitectosVinculados = [
+                    ...this.arquitectosVinculados,
+                    { id: arquitectoId, nombre: nombreCompleto || `#${arquitectoId}` }
+                  ];
+                }
+
+                control?.reset();
+                this.mensajeErrorAgregar = null;
+
+              },
+
+              error: (e) => {
+                if (e.status === 404) {
+                  this.mensajeErrorAgregar = 'Usuario no registrado en la base de datos.';
+                } else if (e.status === 409) {
+                  this.mensajeErrorAgregar = 'El usuario existe pero su cuenta está inhabilitada.';
+                } else if (e.status === 422) {
+                  this.mensajeErrorAgregar = 'El usuario no tiene el rol de Arquitecto.';
+                } else if (e.status === 400) {
+                  this.mensajeErrorAgregar = 'Este arquitecto ya forma parte del estudio.';
+                } else {
+                  this.mensajeErrorAgregar = 'No se pudo agregar el arquitecto al estudio.';
+                }
+              },
+            });
+        },
+
+        error: () => {
+          this.mensajeErrorAgregar = 'Error al buscar el usuario por email.';
+        },
+      });
   }
 
 
 
-  this.usuarioService
-    .getUsuarios(undefined, undefined, email) // 👈 solo le paso email
-    .pipe(take(1))
-    .subscribe({
-      next: usuarios => {
-        // 2) Si el back no encuentra nada → usuario no registrado
-        if (!usuarios.length) {
-          alert('Usuario no registrado en la base de datos.');
-          return;
-        }
+  private cargarArquitectosVinculadosPorIds(ids: number[]): void {
+    if (!ids?.length) {
+      this.arquitectosVinculados = [];
+      return;
+    }
 
-        // 3) El back devolvió al menos uno: agarro ese usuario
-        //    (si querés ser más estricta: buscar el que coincida exacto por email)
-        const usuario = usuarios.find(
-          u => u.email?.toLowerCase() === email.toLowerCase()
-        ) ?? usuarios[0];
+    const faltantes: number[] = [];
 
-        const arquitectoId = usuario.id;
-        if (!arquitectoId) {
-          alert('No se pudo obtener el ID del usuario.');
-          return;
-        }
+    this.arquitectosVinculados = ids.map(id => {
+      const nombreEnCache = this.usuarioService.getNombreById(id);
 
-        // 4) Opcional: evitar duplicados en el form
-        const actuales: number[] =
-          this.formulario.get('arquitectosIds')?.value ?? [];
-        if (actuales.includes(arquitectoId)) {
-          alert('Este arquitecto ya está vinculado al estudio.');
-          return;
-        }
+      if (!nombreEnCache) {
+        faltantes.push(id);
+      }
 
-        // 5) Ahora sí: con ese ID llamo al endpoint de AGREGAR ARQUITECTO
-        this.estudioService
-          .agregarArquitecto(this.id!, arquitectoId)
-          .pipe(take(1))
-          .subscribe({
-            next: estudioActualizado => {
-              // Actualizo arquitectosIds con lo que devuelve el back
-              if (
-                estudioActualizado &&
-                Array.isArray(estudioActualizado.arquitectosIds)
-              ) {
-                this.formulario
-                  .get('arquitectosIds')
-                  ?.setValue(estudioActualizado.arquitectosIds);
-              } else {
-                this.formulario
-                  .get('arquitectosIds')
-                  ?.setValue([...actuales, arquitectoId]);
-              }
+      return {
+        id,
+        nombre: nombreEnCache ?? `#${id}`,
+      };
+    });
 
-              // Limpio el input de email
-              this.formulario.get('emailArquitecto')?.reset();
-            },
-            error: () => {
-              alert('No se pudo agregar el arquitecto al estudio.');
-            },
-          });
+    if (!faltantes.length) return;
+
+    forkJoin(
+      faltantes.map(id =>
+        this.usuarioService.getUsuario(String(id)).pipe(
+          tap((u: UsuarioModel) => {
+            const nombreCompleto = `${u.nombre} ${u.apellido}`.trim();
+            this.usuarioService.cachearNombre(u.id!, nombreCompleto);
+          })
+        )
+      )
+    ).subscribe({
+      next: (usuarios: UsuarioModel[]) => {
+        const mapa = new Map<number, string>(
+          usuarios.map(u => [u.id!, `${u.nombre} ${u.apellido}`.trim()])
+        );
+
+        this.arquitectosVinculados = this.arquitectosVinculados.map(item => ({
+          id: item.id,
+          nombre: mapa.get(item.id) ?? item.nombre,
+        }));
       },
-      error: () => {
-        alert('Error al buscar el usuario por email.');
+      error: (e) => {
+        console.error('No se pudieron obtener algunos arquitectos:', e);
       },
     });
   }
-
-
 
 }
   
