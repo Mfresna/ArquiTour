@@ -141,8 +141,6 @@ public class UsuarioService implements UsuarioServiceInterface {
         }
     }
 
-
-
     public Usuario buscarUsuario(Long id) {
         return usuarioRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Usuario no encontrado con ID: " + id));
@@ -293,6 +291,12 @@ public class UsuarioService implements UsuarioServiceInterface {
 
         if(rolesDTO.getRoles().contains(RolUsuario.ROLE_USUARIO)){
             throw new ProcesoInvalidoException(HttpStatus.BAD_REQUEST,"El Rol Usuario no puede ser revocado");
+        }
+
+        //Saco el usuario de los estudios donde esta vinculado
+        if(rolesDTO.getRoles().contains(RolUsuario.ROLE_ARQUITECTO)){
+            //Borra automaticamente la vinculacion en las obras
+            usr.getEstudios().clear();
         }
 
         rolesDTO.getRoles().forEach(rol ->

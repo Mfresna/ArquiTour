@@ -26,6 +26,8 @@ export class SelectRoles implements OnInit {
 
   @Output() cerrado = new EventEmitter<void>();
 
+  advertenciaArq: boolean = false;
+
   constructor(
     private elementRef: ElementRef
   ) {}
@@ -40,11 +42,21 @@ export class SelectRoles implements OnInit {
   }
 
   modificoRoles(rol: RolesEnum){
+    if (rol === RolesEnum.ROLE_ARQUITECTO && this.rolesAnteriores.includes(rol) && this.tieneRol(rol)) {
+      //Tenia rol Arqui y estas solicitando algo 
+      this.advertenciaArq = true;
+    }else if(rol === RolesEnum.ROLE_ARQUITECTO && !this.tieneRol(rol)){
+      //Se lo estas volviendo a agregar
+      this.advertenciaArq = false;
+    }
+
     if(this.tieneRol(rol)){
       this.rolesActuales = this.rolesActuales.filter(r => r !== rol);
     }else{
       this.rolesActuales.push(rol);
     }
+
+    
   }
 
   confirmarCambios(): void {

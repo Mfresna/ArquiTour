@@ -19,10 +19,14 @@
                 </div>
             }
         }
+        @if(advertenciaArq){
+            <small>* Si continua se desvinculará de todos sus estudios, no se puede deshacer!</small>
+        }
     </div>
 
     <!-- Botonera -->
     <div id="botonera" class="crear">
+        
         <button id="cancelar" (click)="cancelar()">CANCELAR</button>
         <button id="aceptar" (click)="aceptar()">ACEPTAR</button>
     </div>

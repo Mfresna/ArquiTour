@@ -117,6 +117,13 @@
   transition: filter 0.15s ease, transform 0.12s ease, box-shadow 0.15s ease;
 }
 
+small {
+  color: #ff3333;
+  font-size: 0.9rem;
+  text-align: left;
+  margin-left: 0.6rem;
+}
+
 /*Btn Aceptar*/
 #aceptar {
   background: var(--colorBoton, #0077b6);
