@@ -5,6 +5,7 @@ import { environment } from "../../../../environments/environment";
 import { EstudioModel } from "../../../models/estudioModels/estudioModel";
 import { EstudioService } from "../../../services/estudioService/estudio-service";
 import { TokenService } from "../../../auth/services/tokenService/token-service";
+import { UsuarioService } from "../../../services/usuarioService/usuario-service";
 
 
 @Component({
@@ -25,7 +26,8 @@ export class Estudios implements OnInit {
   constructor(
     private fb: FormBuilder,
     private estudioSrvice: EstudioService,
-    private tokenService: TokenService
+    private tokenService: TokenService,
+    private usuarioService: UsuarioService
   ) {}
 
   ngOnInit(): void {
@@ -63,6 +65,24 @@ export class Estudios implements OnInit {
   // Método que valida si el usuario es Arquitecto
   isArquitecto(): boolean {
     return this.tokenService.tieneRol('ROLE_ARQUITECTO');
+  }
+
+  misEstudios(): void {
+    if (!this.estudios || !this.estudios.length) return;
+
+    this.usuarioService.getUsuarioMe().subscribe({
+      next: usuario => {
+
+        const idsEstudiosUsuario = usuario.idEstudios ?? [];
+
+        this.estudios = this.estudios.filter(e =>
+          e.id != null && idsEstudiosUsuario.includes(e.id)
+      );
+      },
+      error: () => {
+        alert('No se pudo obtener el usuario logueado');
+      }
+    });
   }
 
  

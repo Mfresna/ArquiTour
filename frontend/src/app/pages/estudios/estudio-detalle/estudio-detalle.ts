@@ -26,6 +26,9 @@ export class EstudioDetalle {
 
   imagenDefecto = `${environment.imgEstudio}`;
 
+
+  private idsEstudiosUsuario: number[] = [];
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -41,7 +44,7 @@ export class EstudioDetalle {
       this.router.navigate(['/']);
       return;
     }
-
+    // Cargar Estudio
     this.estudioService.getEstudio(id).subscribe({
       next: (est: EstudioModel) => {
         this.estudio = est;
@@ -56,6 +59,17 @@ export class EstudioDetalle {
         this.cargarArquitectosVinculadosPorIds(idsArquitectos);
       },
       error: () => this.router.navigate(['/estudios']),
+    });
+
+    // 2) Cargar usuario logueado (para saber sus estudios)
+    this.usuarioService.getUsuarioMe().subscribe({
+      next: usuario => {
+        this.idsEstudiosUsuario = usuario.idEstudios ?? [];
+      },
+      error: () => {
+        console.error('No se pudieron obtener los estudios del usuario logueado');
+        this.idsEstudiosUsuario = [];
+      }
     });
   }
 
@@ -166,10 +180,22 @@ export class EstudioDetalle {
     img.src = `${location.origin}/${this.imagenDefecto.replace(/^\/+/, '')}`;
   }
 
+  
   // Roles
   puedeGestionar(): boolean {
-    return this.tokenSrv.isAdmin() || this.tokenSrv.isArquitecto();
+ 
+    if (!this.estudio?.id) return false;
+
+    // ADMIN siempre puede
+    if (this.tokenSrv.isAdmin()) return true;
+
+    // Si no es arquitecto, no puede
+    if (!this.tokenSrv.isArquitecto()) return false;
+
+    // Arquitecto: solo si este estudio está en sus idEstudios
+    return this.idsEstudiosUsuario.includes(this.estudio.id);
   }
+
 
   editar(): void {
     if (!this.estudio?.id) return;

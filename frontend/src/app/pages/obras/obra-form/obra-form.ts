@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { DragZoneImagenes } from '../../../components/drag-zone-imagenes/drag-zone-imagenes';
 import { ActivatedRoute, Router } from '@angular/router';
 import { take, finalize, switchMap, forkJoin } from 'rxjs';
 import { environment } from '../../../../environments/environment';

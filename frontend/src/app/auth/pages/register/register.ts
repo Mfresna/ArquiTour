@@ -10,7 +10,6 @@ import { caracteresValidador } from '../../validadores/passCaracteresValidador';
 import { CamposIguales } from '../../validadores/igualdadValidador';
 import { apellidoValidador, nombreValidador } from '../../validadores/textoValidador';
 import { fechaNacValidador } from '../../validadores/fechaValidador';
-import { DragZoneImagenes } from '../../../components/drag-zone-imagenes/drag-zone-imagenes';
 import { ImagenService } from '../../../services/imagenService/imagen-service';
 import { Observable, of, throwError } from 'rxjs';
 import { DragZoneSimple } from "../../../components/drag-zone-simple/drag-zone-simple";
@@ -46,7 +45,7 @@ export class Register implements OnInit, AfterViewInit{
   @Output() volverEmit = new EventEmitter<void>();
 
     //COMPONENTE DE IMAGEN
-  @ViewChild('campoImagen') campoImagen!: DragZoneImagenes;
+  @ViewChild('campoImagen') campoImagen!: DragZoneSimple;
 
   constructor(
     private fb: FormBuilder,

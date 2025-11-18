@@ -4,7 +4,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { finalize, map, Observable, switchMap } from 'rxjs';
 import { fechaNacValidador } from '../../../auth/validadores/fechaValidador';
 import { nombreValidador, apellidoValidador } from '../../../auth/validadores/textoValidador';
-import { DragZoneImagenes } from '../../../components/drag-zone-imagenes/drag-zone-imagenes';
 import { ImagenService } from '../../../services/imagenService/imagen-service';
 import { UsuarioService } from '../../../services/usuarioService/usuario-service';
 import { EsperandoModal } from '../../../components/esperando-modal/esperando-modal';
@@ -45,7 +44,7 @@ export class UsuarioDetalle implements OnInit, AfterViewInit{
   @Output() volverEmit = new EventEmitter<void>();
 
     //COMPONENTE DE IMAGEN
-  @ViewChild('campoImagen') campoImagen!: DragZoneImagenes;
+  @ViewChild('campoImagen') campoImagen!: DragZoneSimple;
 
   constructor(
     private fb: FormBuilder,
