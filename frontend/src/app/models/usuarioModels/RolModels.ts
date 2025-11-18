@@ -12,6 +12,6 @@ export const RolPrioridad: Record<Roles, number> = {
   [Roles.ROLE_USUARIO]: 1
 };
 
-export interface RolesDTO {
+export interface RolesRequest {
   roles: Roles[];
 }
