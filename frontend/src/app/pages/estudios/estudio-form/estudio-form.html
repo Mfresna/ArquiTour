@@ -68,14 +68,19 @@
               class="input"
               formControlName="emailArquitecto"
               placeholder="Ej: arquitecto@correo.com"
-              autocomplete="off"/>
+              autocomplete="off"
+              [class.invalido]="formulario.get('emailArquitecto')?.invalid && (formulario.get('emailArquitecto')?.touched || formulario.get('emailArquitecto')?.dirty)"
+              (keydown.space)="$event.preventDefault()"/>
 
             <button id="btn-agregar-arq" type="button" class="btn-secundario"(click)="agregarArquitectoPorEmail()">
               <span id="sumar-arq" class="material-symbols-rounded">add</span>
             </button>
+            
           </div>
 
-          @if (mensajeErrorAgregar) {
+          @if (formulario.get('emailArquitecto')?.errors?.['email'] && formulario.get('emailArquitecto')?.touched) {
+            <small class="error">El email debe seguir el formato ("correo@email.com").</small>
+          }@else if (mensajeErrorAgregar) {
             <small class="error">{{ mensajeErrorAgregar }}</small>
           }
 

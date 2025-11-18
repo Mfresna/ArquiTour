@@ -45,14 +45,19 @@ export class EstudioForm implements TieneCambiosPendientes {
 
   ngOnInit(): void {
     // La imagen es opcional, solo validamos el nombre
-    this.formulario = this.fb.group({
-      nombre: ['', [Validators.required, Validators.minLength(2)]],
+    this.formulario = this.fb.group(
+      {
+        nombre: ['', [
+          Validators.required,
+          Validators.minLength(2),
+          Validators.maxLength(100)]],
 
-      obrasIds: this.fb.control<number[]>([]),
-      arquitectosIds: this.fb.control<number[]>([]),
-      emailArquitecto: ['', [Validators.email]]
-      
-    });
+        obrasIds: this.fb.control<number[]>([]),
+        arquitectosIds: this.fb.control<number[]>([]),
+
+        emailArquitecto: ['', [Validators.email]]
+      }
+    );
 
     const idParam = this.route.snapshot.params['id'];
       if (idParam) {
