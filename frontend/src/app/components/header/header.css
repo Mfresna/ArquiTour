@@ -45,6 +45,26 @@ header {
 
 /*============ PANELES ============*/
     /*PANEL IZQUIERDO*/
+  
+  #logo-container {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  height: 100%;       
+}
+
+#logo {
+  height: 42px;       
+  width: auto;
+  user-select: none;   
+  -webkit-user-drag: none; 
+}
+
+#logo-container:hover #logo {
+  opacity: 0.85;
+  transform: scale(1.02);
+  transition: all 0.15s ease;
+}
 
 
     /*PANEL CENTRAL*/
