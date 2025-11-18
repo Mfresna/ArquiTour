@@ -37,6 +37,10 @@ export class Header{
     return this.tokenService.isArquitecto();
   }
 
+  isLogged(): boolean {
+    return this.tokenService.get() !== null;
+  }
+
 
   //=========== TOGGLE MENUS
   toggleUsuarioMenu(){

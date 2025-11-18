@@ -11,6 +11,7 @@ import { EstudioModel } from '../../../models/estudioModels/estudioModel';
 import { EstudioService } from '../../../services/estudioService/estudio-service';
 import { ObraModel } from '../../../models/obraModels/obraModel';
 import { DragZoneMultiple } from '../../../components/drag-zone-multiple/drag-zone-multiple';
+import { TieneCambiosPendientes } from '../../../guards/salirSinGuardar/salir-sin-guardar-guard';
 
 @Component({
   selector: 'app-obra-form',
@@ -18,7 +19,7 @@ import { DragZoneMultiple } from '../../../components/drag-zone-multiple/drag-zo
   templateUrl: './obra-form.html',
   styleUrl: './obra-form.css',
 })
-export class ObraForm {
+export class ObraForm implements TieneCambiosPendientes{
   formulario!: FormGroup;
   editar = false;
   id?: number;
@@ -49,6 +50,10 @@ export class ObraForm {
     private obraService: ObraService,
     private estudioService: EstudioService,
   ) {}
+
+  tieneCambiosPendientes(): boolean {
+  return this.formulario.dirty;
+  }
 
   ngOnInit(): void {
     this.formulario = this.fb.group({

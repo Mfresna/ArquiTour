@@ -10,6 +10,7 @@ import { EsperandoModal } from '../../../components/esperando-modal/esperando-mo
 import { DragZoneSimple } from '../../../components/drag-zone-simple/drag-zone-simple';
 import { environment } from '../../../../environments/environment';
 import { Location } from '@angular/common';
+import { TieneCambiosPendientes } from '../../../guards/salirSinGuardar/salir-sin-guardar-guard';
 
 
 @Component({
@@ -18,7 +19,7 @@ import { Location } from '@angular/common';
   templateUrl: './usuario-detalle.html',
   styleUrl: './usuario-detalle.css',
 })
-export class UsuarioDetalle implements OnInit, AfterViewInit{
+export class UsuarioDetalle implements OnInit, AfterViewInit, TieneCambiosPendientes{
 
   perfilForm!: FormGroup;
 
@@ -56,6 +57,17 @@ export class UsuarioDetalle implements OnInit, AfterViewInit{
     private route: ActivatedRoute,
     private location: Location   
   ) {}
+
+  tieneCambiosPendientes(): boolean {
+    // Si todavía no existe el form, no hay cambios
+    if (!this.perfilForm) return false;
+
+    // Si no está en modo edición, no sale el cartel
+    if (!this.editando) return false;
+
+    // Si está en edición y el form fue modificado
+    return this.perfilForm.dirty;
+  }
   
   ngOnInit(): void {
     this.perfilForm = this.fb.group(
