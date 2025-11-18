@@ -9,7 +9,8 @@ import { EstudioService } from '../../../services/estudioService/estudio-service
 import { ObraService } from '../../../services/obraService/obra-service';
 import { RouterLink } from '@angular/router';
 import { UsuarioService } from '../../../services/usuarioService/usuario-service';
-import { RolModel, RolModelDescripcion, RolPrioridad } from '../../../models/usuarioModels/RolModel';
+import { RolesEnum } from '../../../models/usuarioModels/rolEnum';
+import { RolModelDescripcion } from '../../../models/usuarioModels/RolModels';
 import { UsuarioModel } from '../../../models/usuarioModels/usuarioModel';
 
 @Component({
@@ -22,7 +23,7 @@ export class UsuarioLista implements OnInit {
 
   filtroForm!: FormGroup;
 
-  roles = Object.values(RolModel);
+  roles = Object.values(RolesEnum);
   RolModelDescripcion = RolModelDescripcion;
 
   usuarios!: UsuarioModel[];
@@ -83,14 +84,14 @@ export class UsuarioLista implements OnInit {
     if (!roles || roles.length === 0) return 'Error en el Rol';
 
     const rolesValidos = roles.filter(r =>
-      Object.values(RolModel).includes(r as RolModel)
-    ) as RolModel[];
+      Object.values(RolesEnum).includes(r as RolesEnum)
+    ) as RolesEnum[];
 
     //No posee roles validos
     if (rolesValidos.length === 0) return 'Error en el Rol';
 
     const descripciones = rolesValidos
-      .filter(r => r !== RolModel.ROLE_USUARIO)
+      .filter(r => r !== RolesEnum.ROLE_USUARIO)
       .map(r => RolModelDescripcion[r]);
 
     if (descripciones.length === 0) return 'Basico';

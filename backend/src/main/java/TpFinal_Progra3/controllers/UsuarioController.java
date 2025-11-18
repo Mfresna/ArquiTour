@@ -168,7 +168,7 @@ public class UsuarioController {
                                                            @PathVariable @Positive Long id,
                                                            @RequestBody @Valid RolesDTO rolesDto) {
         return ResponseEntity.ok(usuarioService.agregarRoles(request, id, rolesDto));
-    }
+    }   
 
     @Operation(summary = "Quitar roles a un usuario", description = "Elimina uno o más roles del usuario.")
     @DeleteMapping("/{id}/roles")
