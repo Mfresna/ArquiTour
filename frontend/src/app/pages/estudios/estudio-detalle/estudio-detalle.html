@@ -7,9 +7,9 @@
         <h1 class="titulo">{{ estudio.nombre }}</h1>
 
         @if (puedeGestionar()) {
-          <div class="acciones-der">
-            <button type="button" (click)="editar()">Editar</button>
-            <button type="button" class="danger" (click)="eliminar()">Eliminar</button>
+          <div id="botonera" class="acciones-der">
+            <button id="btn-editar" type="button" class="boton" (click)="editar()">Editar</button>
+            <button id="btn-eliminar" type="button" class="danger boton" (click)="eliminar()">Eliminar</button>
           </div>
         }
       </div>

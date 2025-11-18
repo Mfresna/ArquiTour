@@ -90,6 +90,7 @@
   width: 100%;
   gap: 1.2rem;
 }
+
   /*CAMPOS DEL FORMULARIO*/
 .campo {
   display: flex;
@@ -187,7 +188,8 @@ select.invalido {
 #limpiar {
   background: #f9fafb;
   color: #1e293b;
-  border-color: #dbe3eb;
+
+  border: 1px solid #dbe3eb;
 }
 
 #limpiar:hover {
