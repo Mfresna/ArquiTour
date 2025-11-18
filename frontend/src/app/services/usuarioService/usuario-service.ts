@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 import { UsuarioModel } from '../../models/usuarioModels/usuarioModel';
 import { UsuarioBasicoModel } from '../../models/usuarioModels/usuarioBasicoModel';
 import { UsuarioFormBasicoModel } from '../../models/usuarioModels/usuarioFormBasicoModel';
-import { Roles } from '../../models/usuarioModels/RolModelEnum';
+import { RolesEnum } from '../../models/usuarioModels/rolEnum';
 
 @Injectable({
   providedIn: 'root',
@@ -76,7 +76,7 @@ export class UsuarioService {
     apellido?: string,
     email?: string,
     isActivo?: boolean,
-    rol?: Roles): Observable<UsuarioModel[]>  {
+    rol?: RolesEnum): Observable<UsuarioModel[]>  {
 
     let url = `${this.USUARIO_URL}/filtrar`;
 
