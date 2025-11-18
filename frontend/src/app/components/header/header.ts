@@ -26,6 +26,7 @@ export class Header{
   ){}
 
   cerrarSesion(){
+    this.cerrarTodosMenus();
     this.authService.logout();
   }
 
@@ -68,13 +69,17 @@ export class Header{
     this.obrasMenu = false
   }
 
+  cerrarTodosMenus(){
+    this.estudiosMenu = false;
+    this.usuarioMenu = false
+    this.obrasMenu = false
+  }
+
   //========== ESCUCHADORES
   @HostListener('document:keydown.escape', ['$event'])
   handleKeyboardEvent(event: any) { 
       
-    this.usuarioMenu = false;
-    this.obrasMenu = false;
-    this.estudiosMenu = false
+    this.cerrarTodosMenus();
 
   }
 
@@ -86,9 +91,7 @@ export class Header{
     
     // Si el clic fue FUERA, cerramos el menú.
     if (!clickedInside) {
-      this.usuarioMenu = false;
-      this.obrasMenu = false;
-      this.estudiosMenu = false
+      this.cerrarTodosMenus();
     }
   
   }

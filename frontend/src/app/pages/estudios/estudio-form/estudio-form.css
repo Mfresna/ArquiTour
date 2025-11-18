@@ -5,46 +5,71 @@
   border-radius: 1rem;
   box-shadow: 0 4px 12px var(--sombra);
 
+  animation: aparecer 0.25s ease-out;
+
   width: 100%;
   max-width: 560px;
+
   display: flex;
   flex-direction: column;
+
   margin: 1% auto;
   padding-bottom: 0.5rem;
+}
+
+@keyframes aparecer {
+  from {
+    transform: translateY(15px) scale(0.97);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
 }
 
 
 /* ========== CONTENIDO INTERNO ========== */
 #contenedor-form {
-  padding: 1.8rem 2rem;
+  padding: 0 2rem 2rem 2rem;
   display: flex;
   flex-direction: column;
-  align-items: stretch;
+  align-items: center;
 }
 
 /* ========== TÍTULO ========== */
-#titulo {
-  text-align: center;
-  font-size: 1.8rem;
-  font-weight: 700;
-  color: var(--colorBoton, #0077b6);
-  margin-bottom: 1.4rem;
-  letter-spacing: 0.5px;
-  text-transform: uppercase;
+#formulario {
+  padding: 0 2rem 2rem 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-#titulo::after {
+#formulario h1 {
+  text-align: center;
+  margin-top: 0.65rem;
+  margin-bottom: 1.5rem;
+  font-size: 1.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--colorBoton, #0077b6);
+  position: relative;
+  letter-spacing: 0.5px;
+}
+    /* linea inferior del titulo */
+#formulario h1::after {
   content: "";
   display: block;
   width: 50%;
   height: 3px;
   border-radius: 3px;
   background: linear-gradient(90deg, var(--colorBoton, #0077b6), #00b4d8);
-  margin: 0.6rem auto 0;
+  margin: 0.80rem auto 0;
   opacity: 0.9;
 }
 
-/* ========== FORMULARIO GENERAL ========== */
+/* ===== Formulario interno ===== */
+
 #panel-campos {
   display: flex;
   flex-direction: column;
@@ -55,228 +80,246 @@ form {
   width: 100%;
   display: flex;
   flex-direction: column;
+  gap: 1.2rem;
 }
 
-/* ========== FIELDSETS ========== */
-fieldset.form-group {
+fieldset {
   border: none;
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-  margin-bottom: 1.2rem;
 }
 
-.label {
-  font-weight: 600;
-  color: #222;
+/* ===== Inputs ===== */
+.campo {
+  display: flex;
+  flex-direction: column;
+
+  border: 0;
+
+  gap: 0.2rem;
 }
 
-/* ========== INPUTS ========== */
-.input {
-  padding: 0.7rem 1rem;
-  border-radius: 1rem;
+ fieldset.campo > label,
+ #arq-est {
+  font-weight: 500;
+  margin-left: 0.5rem;
+  
+  font-size: 0.9rem;
+  color: var(--colorTerciario);
+}
+
+#panel-campos input {
+  width: 100%;
+  height: 42px;
+
+  padding: 0.6rem 0.8rem;
+  margin-top: 7px;
+
+  border-radius: 1.2rem;          
   border: 1px solid #ccc;
-  font-size: 1rem;
-  background-color: #f8f9ff;
-  transition: border-color 0.2s, box-shadow 0.2s;
 
+  font-size: 1rem;
+  
+  background-color: #fff;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-.input:focus {
+#panel-campos input:focus {
+  outline: none;
   border-color: var(--colorBoton, #0077b6);
   box-shadow: 0 0 6px rgba(0, 119, 182, 0.35);
-  outline: none;
 }
 
-/* ========== TEXTOS DE AYUDA Y ERROR ========== */
-.help {
-  font-size: 0.85rem;
-  color: #6b7280;
+/* Estado inválido */
+input.invalido {
+  border: 2px solid #ff5c5c;
+  background: #ffecec;
 }
 
-.error {
-  font-size: 0.85rem;
-  color: #c62828;
+small.comentario {
+  color:#b4b3b3;
+  font-size: 0.9rem;
+  text-align: left;
+  margin-left: 1.2rem;
+  margin-top: 0.6rem;
 }
 
-/* ========== DROPZONE ========== */
-.dropzone {
-  background: #f3f7ff;
-  border: 2px dashed #d4e3fb;
-  border-radius: 12px;
-  padding: 18px;
-  text-align: center;
+/* ===== Botón INGRESAR ===== */
+#btn-ingresar{
+  background-color: var(--colorBoton, #0077b6);
+  color: var(--colorPrincipal, #fff);
+  padding: 0.75rem;
+  border: none;
+  border-radius: 1.35rem;
+  font-weight: 600;
+  font-size: 1.05rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  
+  width: 100%;
+}
+
+#btn-ingresar:hover {
+  background-color: #0096c7;
+  transform: scale(1.03);
+}
+
+#btn-ingresar:disabled {
+  background-color: #a0c4d9;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* ===== Errores ===== */
+small.error {
+  color: #ff3333;
+  font-size: 0.9rem;
+  text-align: left;
+  margin-left: 0.6rem;
+}
+
+/* ================== CARGAR MAIL ARQUI ================== */
+#fila-arq{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  gap: 20px;
+}
+
+#fila-arq .input {
+  flex-grow: 1;
+}
+
+#fila-arq button{
+  aspect-ratio: 1 / 1;
+
+  background-color: var(--colorBoton);
+  color: var(--colorPrincipal, #fff);
+
+  border: none;
+  border-radius: 999px;
+
+  font-size: 25px;
+  font-weight: 700;
+  
   cursor: pointer;
 }
 
-.dropzone:hover {
-  border-color: #0a69a8;
-  background: #eef4ff;
+#sumar-arq{
+  font-size: 25px;
+  font-weight: 700;
 }
 
-/* ================== BURBUJAS (ARQUITECTOS) ================== */
-
-
-.contenedor_burbujas {
-  margin-bottom: 1rem; 
+#sumar-arq:focus{
+  border: none;
 }
 
+#btn-agregar-arq {
+  width: 40px; 
+  height: 40px;
+  padding: 0; 
 
-.burbuja {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  gap: .35rem;
-
-  padding: .35rem .9rem;
-  padding-right: 2rem;         
-  background: #eef2f7;
-  border-radius: 999px;
-  color: #334155;
-  font-size: .9rem;
-  font-weight: 500;
-
-  border: 1px solid #d8dee9;
-  box-shadow: 0 1px 2px rgba(0,0,0,.05);
-
-  margin-top: .5rem;
-  transition: background-color .2s ease;
-}
-
-.burbuja:hover {
-  background: #e2e8f0;
-}
-
-#arq-est {
-  margin-top: 0.75rem;
-  display: block;
-}
-
-/* Botón quitar dentro de la burbuja */
-.btn-quitar {
-  position: absolute;
-  top: 50%;
-  right: 6px;
-  transform: translateY(-50%);
-
-  width: 16px;
-  height: 16px;
   border-radius: 50%;
 
   display: flex;
   align-items: center;
   justify-content: center;
 
-  font-size: 11px;
-
-  padding: 0;
-
-  border: 1px solid #cbd5e1;
-  background: #f1f5f9;
-  color: #64748b;
-  cursor: pointer;
-
-  opacity: 0;
-  visibility: hidden;
-  
+  line-height: 1; 
 }
 
-.burbuja:hover .btn-quitar {
-  opacity: 1;
-  visibility: visible;
-}
-
-.btn-quitar:hover {
-  background: #e2e8f0;
-  color: #b91c1c;
-  border-color: #cbd5e1;
+#btn-agregar-arq:hover{
+  transform: scale(1.05);
 }
 
 
+/* ================== BURBUJAS (ARQUITECTOS) ================== */
 
+/* Contenedor */
+#contenedor-burbujas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 8px 0;
+  user-select: none;
+}
 
+/* Píldora */
+.burbuja {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
 
-/*========== FILA PARA AGREGAR ARQUITECTO ========= */
+  padding: .35rem .9rem .35rem 2.4rem;
+  background: #f2f5f9;
+  border-radius: 999px;
 
-.fila-email {
+  border: 1px solid #d9e1ea;
+  box-shadow: 0 1px 2px rgba(0,0,0,.06);
+
+  color: #334155;
+  font-size: .88rem;
+  font-weight: 500;
+
+  overflow: hidden; /* IMPORTANTE para cortar la punta */
+  transition: background .25s ease;
+}
+
+.burbuja:hover {
+  background: #e9edf3;
+}
+
+/* Texto */
+.nombre {
+  margin: 0;
+  line-height: 1;
+  padding-left: 5px;
+}
+
+/* BOTÓN — centrado perfecto */
+.cont-cruz {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+
+  width: 2.3rem;          /* Punta más ancha y pareja visualmente */
   display: flex;
   align-items: center;
-  gap: .6rem;
-}
-
-.fila-email .input {
-  flex: 1;
-  padding: .65rem 1rem;
-  border-radius: 1rem;
-  border: 1px solid #cbd5e1;
-  background-color: #f8f9ff;
-}
-
-.fila-email .input:focus {
-  border-color: var(--colorBoton, #0077b6);
-  box-shadow: 0 0 6px rgba(0, 119, 182, 0.35);
-  outline: none;
-}
-
-.btn-secundario {
-  padding: .6rem 1rem;
-  border-radius: 1rem;
-  border: none;
-  background: var(--colorBoton, #0077b6);
-  color: white;
-  font-weight: 600;
-  cursor: pointer;
-  transition: 0.2s;
-}
-
-.btn-secundario:hover {
-  background: #0096c7;
-}
-
-/* ========== BOTÓN PRINCIPAL ========== */
-.acciones {
-  display: flex;
   justify-content: center;
-  margin-top: 1.8rem;
-}
 
-.btn-primario {
-  width: 100%;
-  background-color: var(--colorBoton, #0077b6);
-  color: #fff;
+  background: transparent;
   border: none;
-  border-radius: 1.5rem;
-  padding: 0.8rem;
-  font-weight: 700;
-  font-size: 1rem;
   cursor: pointer;
-  transition: background-color 0.2s, transform 0.1s;
-  text-transform: uppercase;
+  outline: none;
+
+  transition: background-color .25s ease, color .25s ease;
 }
 
-.btn-primario:hover {
-  background-color: #0096c7;
-  transform: scale(1.03);
+/* Ícono más chico */
+.cont-cruz .material-icons {
+  font-size: .95rem;
+  font-weight: 600;
+  color: #64748b;
 }
 
-.btn-primario:disabled {
-  background-color: #a0c4d9;
-  cursor: not-allowed;
+/* HOVER — se pinta toda la punta izquierda */
+.cont-cruz:hover {
+  background: rgba(0, 0, 0, 0.12);
 }
 
-/* ========== RESPONSIVE ========== */
-@media (max-width: 480px) {
-  #global {
-    max-width: 90%;
-    max-height: 75vh;
-    padding: 1rem 0.5rem;
-  }
+.cont-cruz:hover .material-icons {
+  color: #1e293b;
+}
 
-  #titulo {
-    font-size: 1.5rem;
-  }
+/* Clic */
+.cont-cruz:active {
+  background: rgba(0,0,0,.18);
+}
 
-  .btn-primario {
-    font-size: 0.95rem;
-  }
+
+#botonera{
+  margin-top: 25px;
 }

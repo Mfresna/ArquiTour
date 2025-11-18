@@ -24,8 +24,8 @@
               <div id="menu-obras" 
                 class="menu-desplegable bordes-radius">
 
-                <a routerLink="/obras">Ver Obras</a>
-                <a routerLink="/formObras">Registrar Obra</a>
+                <a (click)="cerrarTodosMenus()" routerLink="/obras">Ver Obras</a>
+                <a (click)="cerrarTodosMenus()" routerLink="/formObras">Registrar Obra</a>
     
 
               </div>
@@ -39,7 +39,7 @@
       <li>
         <div id="panel-estudios">
           @if(!isArq() && !isAdmin()){
-            <a routerLink="/estudios" class="boton">ESTUDIOS</a>
+            <a (click)="cerrarTodosMenus()" routerLink="/estudios" class="boton">ESTUDIOS</a>
           }@else{
             <a class="boton" (click)="toggleEstudiosMenu()">ESTUDIOS</a>
 
@@ -47,8 +47,8 @@
               <div id="menu-estudios" 
                 class="menu-desplegable bordes-radius">
 
-                <a routerLink="/estudios">Ver Estudios</a>
-                <a routerLink="/formEstudios">Crear Estudio</a>
+                <a (click)="cerrarTodosMenus()" routerLink="/estudios">Ver Estudios</a>
+                <a (click)="cerrarTodosMenus()" routerLink="/formEstudios">Crear Estudio</a>
                 
               </div>
             }
@@ -57,8 +57,8 @@
             
         </div>
       </li> 
-      <li><a class="boton">MAPA</a></li>
-      <li><a class="boton" routerLink="/favoritos">FAVORITOS</a></li>
+      <li><a (click)="cerrarTodosMenus()" class="boton">MAPA</a></li>
+      <li><a (click)="cerrarTodosMenus()" class="boton" routerLink="/favoritos">FAVORITOS</a></li>
     </ul>
 
     </div>
@@ -83,10 +83,10 @@
           <a routerLink="/" (click)="cerrarSesion()">Cerrar Sesion
             <span id="logout" class="material-icons user-icon-trigger">logout</span>
           </a>
-          <a routerLink="/me">Ver mi Perfil</a>
+          <a (click)="cerrarTodosMenus()" routerLink="/me">Ver mi Perfil</a>
 
           @if(isAdmin()){
-            <a routerLink="/gestionar-usuarios">Gestionar Usuarios</a>
+            <a (click)="cerrarTodosMenus()" routerLink="/gestionar-usuarios">Gestionar Usuarios</a>
           }
 
           <hr>
