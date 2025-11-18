@@ -19,6 +19,7 @@ import { authGuard } from './guards/auth/auth-guard';
 import { noAuthGuard } from './guards/noAuth/no-auth-guard';
 import { rolesGuard } from './guards/roles/roles-guard';
 import { salirSinGuardarGuard } from './guards/salirSinGuardar/salir-sin-guardar-guard';
+import { NotFound } from './pages/not-found/not-found';
 
 
 
@@ -64,7 +65,7 @@ export const routes: Routes = [
   { path: 'gestionar-usuarios', component: UsuarioLista, canActivate: [rolesGuard], data: {roles: ['ROLE_ADMINISTRADOR']} },
   
   //Por Defecto
-  { path: '**', redirectTo: '', pathMatch: 'full' }
+  { path: '**', component: NotFound }
 
 
   
