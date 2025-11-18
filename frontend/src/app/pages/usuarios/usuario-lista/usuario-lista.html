@@ -96,8 +96,8 @@
                 <li>
 
                   <div id="informacion" 
-                    class="contenido-usuario" 
-                    [routerLink]="['/usuario/', u.id!]"
+                    class="contenido-usuario"
+                    (click)="irDetalleUsuario(u.id!)"
                     [class.usr-hab]="u.activo"
                     [class.usr-deshab]="!u.activo">
                     <!-- informacion -->
@@ -117,27 +117,40 @@
                   <div class="botonera">
 
                     <div id="btn-rol" class="btn-etiqueta-detalle">
-                      <span class="material-symbols-rounded btn-rol">admin_panel_settings</span>
-                      <div class="etiqueta-detalle">Gestionar Roles</div>
+                      <span 
+                        class="material-symbols-rounded btn-rol" 
+                        (click)="abrirSelectorRoles($event, u)"
+                        [class.zoom]="!mostrarSelectorRoles">admin_panel_settings</span>
+                      
+                        @if(!mostrarSelectorRoles){
+                          <div class="etiqueta-detalle">Gestionar Roles</div>
+                        }
+                      
+                        @if (mostrarSelectorRoles && usuarioSeleccionado?.id === u.id) {
+                          <app-select-roles
+                            [id]="u.id!"
+                            [rolesAnteriores]="getRolesEnumValidos(u.roles)"
+                            (cambiosRoles)="cambiosDeRoles($event)"
+                            (cerrado)="cerrarSelector()">
+                          </app-select-roles>
+                        }
                     </div>
 
                     <div id="btn-estado" class="btn-etiqueta-detalle">
-                      <span class="material-symbols-rounded"
+                      <span class="material-symbols-rounded "
                         [class.inhabilitado]="!u.activo"
+                        [class.zoom]="!mostrarSelectorRoles"
                         (click)="CambiarEstadoCuenta(u)">person_off</span>
 
-                      @if(u.activo){
-                        <div class="etiqueta-detalle">Deshabilitar</div>
-                      }@else {
-                        <div class="etiqueta-detalle">Habilitar</div>
+                      @if(u.activo && !mostrarSelectorRoles){
+                        <div class="etiqueta-detalle">Desactivar</div>
+                      }@else if(!mostrarSelectorRoles) {
+                        <div class="etiqueta-detalle">Activar</div>
                       }
 
                     </div>
-              
                   </div>
-
                 </li>
-                
               }
             </ul>
           } @else {
@@ -151,3 +164,8 @@
   </div>
 
 </div>
+
+<app-esperando-modal 
+  [isVisible]="spinerVisible" 
+  [mensaje]="spinerMensaje"
+/>

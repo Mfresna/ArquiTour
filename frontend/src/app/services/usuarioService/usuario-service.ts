@@ -8,6 +8,7 @@ import { UsuarioModel } from '../../models/usuarioModels/usuarioModel';
 import { UsuarioBasicoModel } from '../../models/usuarioModels/usuarioBasicoModel';
 import { UsuarioFormBasicoModel } from '../../models/usuarioModels/usuarioFormBasicoModel';
 import { RolesEnum } from '../../models/usuarioModels/rolEnum';
+import { RolesRequest } from '../../models/usuarioModels/rolModels';
 
 @Injectable({
   providedIn: 'root',
@@ -122,6 +123,16 @@ export class UsuarioService {
 
   cambiarEstadoCuenta(id: number, estadoActual: boolean): Observable<UsuarioModel>{
     return this.http.patch<UsuarioModel>(`${this.USUARIO_URL}/${id}?habilitacion=${!estadoActual}`, null);
+  }
+
+  //===========MANEJO DE ROLES
+
+  agregarRoles(id: number, dto: RolesRequest): Observable<UsuarioModel> {
+    return this.http.patch<UsuarioModel>(`${this.USUARIO_URL}/${id}/roles`,dto);
+  }
+
+  quitarRoles(id: number, dto: RolesRequest): Observable<UsuarioModel> {
+    return this.http.request<UsuarioModel>('delete',`${this.USUARIO_URL}/${id}/roles`,{body: dto});
   }
 
 

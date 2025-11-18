@@ -70,6 +70,7 @@ export class Header{
       
     this.usuarioMenu = false;
     this.obrasMenu = false;
+    this.estudiosMenu = false
 
   }
 

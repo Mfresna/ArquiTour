@@ -11,7 +11,6 @@ import { CamposIguales } from '../../validadores/igualdadValidador';
 import { apellidoValidador, nombreValidador } from '../../validadores/textoValidador';
 import { fechaNacValidador } from '../../validadores/fechaValidador';
 import { ImagenService } from '../../../services/imagenService/imagen-service';
-import { Observable, of, throwError } from 'rxjs';
 import { DragZoneSimple } from "../../../components/drag-zone-simple/drag-zone-simple";
 
 

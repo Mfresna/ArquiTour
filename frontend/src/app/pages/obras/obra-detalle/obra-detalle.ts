@@ -212,4 +212,14 @@ export class ObraDetalle {
       error: (e) => alert('No se pudo eliminar la obra.')
     });
   }
+
+
+
+  hacerScroll(elemento: HTMLElement) {
+  elemento.scrollIntoView({
+    behavior: 'smooth',
+    block: 'start'   // coloca el elemento en top:0
+  });
+}
+
 }
