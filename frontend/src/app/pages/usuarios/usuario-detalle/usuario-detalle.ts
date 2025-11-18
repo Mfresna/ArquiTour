@@ -40,6 +40,8 @@ export class UsuarioDetalle implements OnInit, AfterViewInit{
   spinerVisible: boolean = false;
   spinerMensaje!: string;
 
+  imagenDefecto = `${environment.imgUsuario}`;
+
     //EMITERS
   @Output() volverEmit = new EventEmitter<void>();
 
@@ -281,6 +283,12 @@ export class UsuarioDetalle implements OnInit, AfterViewInit{
       return `${environment.apiUrl}${path}`;
     }
     return null;
+  }
+
+  imagenError(ev: Event): void {
+    const img = ev.target as HTMLImageElement;
+    if (img.src.includes(this.imagenDefecto)) return;
+    img.src = `${location.origin}/${this.imagenDefecto.replace(/^\/+/, '')}`;
   }
 
   volver(){

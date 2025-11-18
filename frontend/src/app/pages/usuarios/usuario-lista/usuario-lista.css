@@ -219,7 +219,7 @@ select.invalido {
 
   border-radius: 12px;
 
-  background: var(--colorPrincipal);
+  background: var(--colorFondoTarjeta);
   box-shadow: 0 2px 8px var(--sombra);
 
   transition: transform 0.2s, box-shadow 0.2s;
@@ -230,10 +230,17 @@ select.invalido {
   box-shadow: 0 4px 16px var(--sombra);
 }
 
+#informacion{
+  user-select: none;
+  cursor: pointer;
+  width: 100%;
+}
+
   /* Borde segun su estado*/
 .contenido-usuario{
   margin-left: 10px;
   padding-left: 15px;
+  
 }
 
 .contenido-usuario.usr-hab{
