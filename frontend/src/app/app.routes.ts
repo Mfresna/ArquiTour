@@ -15,43 +15,58 @@ import { Obras } from './pages/obras/obras/obras';
 import { UsuarioDetalle } from './pages/usuarios/usuario-detalle/usuario-detalle';
 import { FavoritosDetalle } from './pages/favoritos/favoritos-detalle/favoritos-detalle';
 import { UsuarioLista } from './pages/usuarios/usuario-lista/usuario-lista';
+import { authGuard } from './guards/auth/auth-guard';
+import { noAuthGuard } from './guards/noAuth/no-auth-guard';
+import { rolesGuard } from './guards/roles/roles-guard';
+import { salirSinGuardarGuard } from './guards/salirSinGuardar/salir-sin-guardar-guard';
 
 
 
 
 export const routes: Routes = [
-  
-  { path: '', component: Auth },
-  { path: 'login', component: Auth},
-  { path: 'registro', component: Auth},
-  { path: 'auth/password/:token', component: CambiarPass},  //Caundo recibo el Mail para recuperar la cuenta
-  { path: 'cambiarpass', component: CambiarPass},  //Cuando el ADM maestro debe cambiar la pass
+
+  //======= RUTAS PÚBLICAS =========//
+  { path: '', component: Auth, canActivate: [noAuthGuard] },
+  { path: 'login', component: Auth, canActivate: [noAuthGuard]},
+  { path: 'registro', component: Auth, canActivate: [noAuthGuard]},
+  { path: 'auth/password/:token', component: CambiarPass, canActivate: [noAuthGuard]},  //Caundo recibo el Mail para recuperar la cuenta
+
+
   //======= APLICAR GUARDS =========//
 
-  { path: 'home', component: Estudios},
-  
- { path: 'formulario', component: EstudioForm},
+  { path: 'cambiarpass', component: CambiarPass, canActivate: [authGuard]},  //Cuando el ADM maestro debe cambiar la pass
+  { path: 'home', component: Obras, canActivate: [authGuard]},
 
+  //Estudios
 
-    //Estudios
-  { path: 'estudios', component: Estudios},
-  { path: 'estudios/:id', component: EstudioDetalle},
-  { path: 'estudios/:id/editar', component: EstudioForm},
+  { path: 'formulario', component: EstudioForm, canActivate: [rolesGuard],canDeactivate: [salirSinGuardarGuard],  data: {roles: ['ROLE_ADMINISTRADOR', 'ROLE_ARQUITECTO']}},
+  { path: 'estudios', component: Estudios, canActivate: [authGuard]},
+  { path: 'estudios/:id', component: EstudioDetalle, canActivate: [authGuard]},
+  { path: 'estudios/:id/editar', component: EstudioForm, canActivate: [rolesGuard],canDeactivate: [salirSinGuardarGuard], data: {roles: ['ROLE_ADMINISTRADOR', 'ROLE_ARQUITECTO']}},
 
-  { path: 'obras', component: Obras},
-  { path: 'formularioOb', component: ObraForm},
-  { path: 'obras/:id', component: ObraDetalle},
-  { path: 'obras/:id/editar', component: ObraForm},
-  { path: 'favoritos', component: Favoritos},
-  { path: 'favoritos/:id', component: FavoritosDetalle},
+  //Obras
+
+  { path: 'obras', component: Obras, canActivate: [authGuard]},
+  { path: 'formularioOb', component: ObraForm, canActivate: [rolesGuard],canDeactivate: [salirSinGuardarGuard], data: {roles: ['ROLE_ADMINISTRADOR', 'ROLE_ARQUITECTO']}},
+  { path: 'obras/:id', component: ObraDetalle, canActivate: [authGuard]},
+  { path: 'obras/:id/editar', component: ObraForm, canActivate: [rolesGuard],canDeactivate: [salirSinGuardarGuard], data: {roles: ['ROLE_ADMINISTRADOR', 'ROLE_ARQUITECTO']}},
+
+  //Favoritos
+
+  { path: 'favoritos', component: Favoritos, canActivate: [authGuard]},
+  { path: 'favoritos/:id', component: FavoritosDetalle, canActivate: [authGuard]},
 
   //Ver Perfil Usuario
-  { path: 'me', component: UsuarioDetalle},
-  { path: 'usuario/:id', component: UsuarioDetalle},
+  { path: 'me', component: UsuarioDetalle, canActivate: [authGuard], canDeactivate: [salirSinGuardarGuard]},
+  { path: 'usuario/:id', component: UsuarioDetalle, canActivate: [rolesGuard], data: {roles: ['ROLE_ADMINISTRADOR']}},
 
   //Gestionar Usuarios
-  { path: 'gestionar-usuarios', component: UsuarioLista},
+  { path: 'gestionar-usuarios', component: UsuarioLista, canActivate: [rolesGuard], data: {roles: ['ROLE_ADMINISTRADOR']} },
+  
+  //Por Defecto
+  { path: '**', redirectTo: '', pathMatch: 'full' }
 
 
-  { path: 'prueba', component: Register}
+  
+
 ];  

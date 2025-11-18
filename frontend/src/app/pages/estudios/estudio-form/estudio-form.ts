@@ -9,6 +9,7 @@ import { environment } from '../../../../environments/environment';
 import { DragZoneSimple } from '../../../components/drag-zone-simple/drag-zone-simple';
 import { UsuarioService } from '../../../services/usuarioService/usuario-service';
 import { UsuarioModel } from '../../../models/usuarioModels/usuarioModel';
+import { TieneCambiosPendientes } from '../../../guards/salirSinGuardar/salir-sin-guardar-guard';
 
 @Component({
   selector: 'app-estudio-form',
@@ -16,7 +17,7 @@ import { UsuarioModel } from '../../../models/usuarioModels/usuarioModel';
   templateUrl: './estudio-form.html',
   styleUrl: './estudio-form.css',
 })
-export class EstudioForm {
+export class EstudioForm implements TieneCambiosPendientes {
   formulario!: FormGroup;
   id?: number;
   imagenActualUrl: string | null = null;
@@ -37,6 +38,10 @@ export class EstudioForm {
     private estudioService: EstudioService,
     private usuarioService: UsuarioService
   ) {}
+
+  tieneCambiosPendientes(): boolean {
+    return this.formulario.dirty;
+  }
 
   ngOnInit(): void {
     // La imagen es opcional, solo validamos el nombre
