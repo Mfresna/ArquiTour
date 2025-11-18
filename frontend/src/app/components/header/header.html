@@ -16,9 +16,9 @@
               <div id="menu-obras" 
                 class="menu-desplegable bordes-radius">
 
-                <a routerLink="/">Ver Obras</a>
-                @if(isArq()){<a routerLink="/estudios">Registrar Obra</a>}
-                @if(isAdmin()){<a routerLink="/estudios">Gestionar Obras</a>}
+                <a routerLink="/obras">Ver Obras</a>
+                <a routerLink="/formObras">Registrar Obra</a>
+    
 
               </div>
             }
@@ -40,9 +40,8 @@
                 class="menu-desplegable bordes-radius">
 
                 <a routerLink="/estudios">Ver Estudios</a>
-                @if(isArq()){<a routerLink="/estudios">Crear Estudio</a>}
-                @if(isAdmin()){<a routerLink="/estudios">Gestionar Estudios</a>}
-
+                <a routerLink="/formEstudio">Crear Estudio</a>
+                
               </div>
             }
 
@@ -51,7 +50,7 @@
         </div>
       </li> 
       <li><a class="boton">MAPA</a></li>
-      <li><a class="boton" routerLink="/formulario">FAVORITOS</a></li>
+      <li><a class="boton" routerLink="/favoritos">FAVORITOS</a></li>
     </ul>
 
   </div>

@@ -39,7 +39,7 @@ export const routes: Routes = [
 
   //Estudios
 
-  { path: 'formulario', component: EstudioForm, canActivate: [rolesGuard],canDeactivate: [salirSinGuardarGuard],  data: {roles: ['ROLE_ADMINISTRADOR', 'ROLE_ARQUITECTO']}},
+  { path: 'formEstudios', component: EstudioForm, canActivate: [rolesGuard],canDeactivate: [salirSinGuardarGuard],  data: {roles: ['ROLE_ADMINISTRADOR', 'ROLE_ARQUITECTO']}},
   { path: 'estudios', component: Estudios, canActivate: [authGuard]},
   { path: 'estudios/:id', component: EstudioDetalle, canActivate: [authGuard]},
   { path: 'estudios/:id/editar', component: EstudioForm, canActivate: [rolesGuard],canDeactivate: [salirSinGuardarGuard], data: {roles: ['ROLE_ADMINISTRADOR', 'ROLE_ARQUITECTO']}},
@@ -47,7 +47,7 @@ export const routes: Routes = [
   //Obras
 
   { path: 'obras', component: Obras, canActivate: [authGuard]},
-  { path: 'formularioOb', component: ObraForm, canActivate: [rolesGuard],canDeactivate: [salirSinGuardarGuard], data: {roles: ['ROLE_ADMINISTRADOR', 'ROLE_ARQUITECTO']}},
+  { path: 'formObras', component: ObraForm, canActivate: [rolesGuard],canDeactivate: [salirSinGuardarGuard], data: {roles: ['ROLE_ADMINISTRADOR', 'ROLE_ARQUITECTO']}},
   { path: 'obras/:id', component: ObraDetalle, canActivate: [authGuard]},
   { path: 'obras/:id/editar', component: ObraForm, canActivate: [rolesGuard],canDeactivate: [salirSinGuardarGuard], data: {roles: ['ROLE_ADMINISTRADOR', 'ROLE_ARQUITECTO']}},
 
