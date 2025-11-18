@@ -6,21 +6,17 @@
     @for (lista of listas; track lista.id) {
 
       <div class="item-lista" (click)="estadoLista(lista.id)">
-
         <span class="nombre">{{ lista.nombre }}</span>
-
         @if (estaEnLista(lista.id)) {
           <span class="material-icons icon-check activo">check_circle</span>
         } @else {
           <span class="material-icons icon-check">radio_button_unchecked</span>
         }
-
       </div>
 
     }
 
   </div>
-
 
   <div class="crear">
     <input

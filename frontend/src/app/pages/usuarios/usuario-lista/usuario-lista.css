@@ -73,7 +73,7 @@
   letter-spacing: 0.5px;
 
   margin-top: 10px;
-  margin-bottom: 25px;
+  margin-bottom: 10px;
   
   color: var(--colorBoton, #0077b6);
 }
@@ -212,7 +212,7 @@ select.invalido {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  overflow: hidden;
+  overflow: visible;
 
   padding: .65rem .85rem;
   min-height: 110px;
@@ -293,7 +293,11 @@ select.invalido {
   transition: transform 0.25s ease;
 }
 
-.botonera span:hover {
+/* .botonera span:hover {
+  transform: scale(1.2);
+} */
+
+.botonera .zoom:hover{
   transform: scale(1.2);
 }
 

@@ -7,15 +7,18 @@ import { EstadoObraModel, EstadoObraDescripcion } from '../../../models/obraMode
 import { ObraModel } from '../../../models/obraModels/obraModel';
 import { EstudioService } from '../../../services/estudioService/estudio-service';
 import { ObraService } from '../../../services/obraService/obra-service';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { UsuarioService } from '../../../services/usuarioService/usuario-service';
 import { RolesEnum } from '../../../models/usuarioModels/rolEnum';
-import { RolModelDescripcion } from '../../../models/usuarioModels/RolModels';
 import { UsuarioModel } from '../../../models/usuarioModels/usuarioModel';
+import { RolModelDescripcion } from '../../../models/usuarioModels/rolModels';
+import { SelectRoles } from "../../../components/select-roles/select-roles";
+import { finalize, tap } from 'rxjs';
+import { EsperandoModal } from '../../../components/esperando-modal/esperando-modal';
 
 @Component({
   selector: 'app-usuario-lista',
-  imports: [ReactiveFormsModule, RouterLink],
+  imports: [ReactiveFormsModule, SelectRoles, EsperandoModal],
   templateUrl: './usuario-lista.html',
   styleUrl: './usuario-lista.css',
 })
@@ -28,9 +31,16 @@ export class UsuarioLista implements OnInit {
 
   usuarios!: UsuarioModel[];
 
+  mostrarSelectorRoles = false;
+  usuarioSeleccionado: UsuarioModel | null = null;
+
+  spinerVisible: boolean = false;
+  spinerMensaje!: string;
+
   constructor(
     private fb: FormBuilder,
-    private usuarioService: UsuarioService
+    private usuarioService: UsuarioService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -99,6 +109,22 @@ export class UsuarioLista implements OnInit {
     return descripciones.join(' y ');
   }
 
+  irDetalleUsuario(id: number):void{
+    if(!this.mostrarSelectorRoles){
+      //Solo redirigime si no estoy mostrando el selector
+      this.router.navigate(['/usuario', id]);
+    }
+  }
+
+  getRolesEnumValidos(roles: string[]): RolesEnum[] {
+    if (!roles || roles.length === 0) return [];
+
+    return roles
+      .filter(r => Object.values(RolesEnum).includes(r as RolesEnum))
+      .map(r => r as RolesEnum);
+  }
+
+
   CambiarEstadoCuenta(usuario: UsuarioModel):void{
     this.usuarioService.cambiarEstadoCuenta(usuario.id, usuario.activo)
       .subscribe({
@@ -111,5 +137,101 @@ export class UsuarioLista implements OnInit {
           console.error('Error cambiando estado', e);
         }
       });
+  }
+
+  abrirSelectorRoles(event: MouseEvent, usuario: UsuarioModel): void {
+      //previene propagacion
+    event.stopPropagation();
+    event.preventDefault();
+
+    this.usuarioSeleccionado = usuario;
+    this.mostrarSelectorRoles = true;
+  }
+
+
+  //===================================================================
+
+  cambiosDeRoles(event: { 
+      id: number; 
+      rolesAgregar: RolesEnum[]; 
+      rolesBorrar: RolesEnum[]; }): void {
+
+      this.spinerMensaje="Actualizando Roles"
+
+      //convierte lo recibido por le hijo
+    const { id, rolesAgregar, rolesBorrar } = event;
+
+    if (rolesAgregar.length) {
+      this.usuarioService.agregarRoles(id, { roles: rolesAgregar }).pipe(
+        tap(()=>{this.spinerVisible=true;}),
+        finalize(()=>{this.spinerVisible=false})
+      ).subscribe({
+        next: (usrActualizado) => {
+          this.actualizarUsuarioEnLista(usrActualizado);
+        },
+        error: (e)=>{
+          console.error(e);
+
+          if(e.status === 409){
+            alert("No se puede auto asignar roles. Contacte con otro administrador");
+          }else if(e.status === 403){
+            alert("No se le puede cambiar los roles a un usurio desactivado");
+          }else{
+            alert("Su solicitud no pudo ser procesada.");
+          }
+        }
+      });
     }
+
+    if (rolesBorrar.length) {
+      this.usuarioService.quitarRoles(id, { roles: rolesBorrar }).pipe(
+        tap(()=>{this.spinerVisible=true;}),
+        finalize(()=>{this.spinerVisible=false})
+      ).subscribe({
+        next: usrActualizado => {
+          this.actualizarUsuarioEnLista(usrActualizado);
+        },
+        error: (e)=>{
+          console.error(e);
+
+          if(e.status === 409){
+            alert("No se puede auto-revocar roles. Contacte con otro administrador");
+          }else if(e.status === 403){
+            alert("No se le puede cambiar los roles a un usurio desactivado");
+          }else if(e.status === 400){
+            //no deberia ejecutarse porque esta capeado por front pero evita request interception
+            alert("El Rol Usuario no puede ser Revocado");
+          }else if(e.status === 422){
+            alert("Al usuario maestro no se le pueden revocar los permisos");
+          }else{
+            alert("Su solicitud no pudo ser procesada.");
+          }
+        }
+      });
+    }
+
+    //  Apago el Spiner por las duras
+    this.spinerVisible=false
+
+    // Cerrar el selector
+    this.mostrarSelectorRoles = false;
+    this.usuarioSeleccionado = null;
+  }
+
+  private actualizarUsuarioEnLista(usrActualizado: UsuarioModel): void {
+    const idx = this.usuarios.findIndex(u => u.id === usrActualizado.id);
+    if (idx !== -1) {
+      this.usuarios[idx] = usrActualizado;
+    }
+  }
+
+  cerrarSelector(){
+    //Solo cierra el elemento de recibir los cambios y subirlos 
+    // se encarga otro metodo
+    this.mostrarSelectorRoles = false;
+    this.usuarioSeleccionado = null;
+  }
+
+
+
 }

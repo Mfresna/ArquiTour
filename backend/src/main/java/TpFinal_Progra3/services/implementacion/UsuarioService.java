@@ -264,7 +264,7 @@ public class UsuarioService implements UsuarioServiceInterface {
 
         Usuario usr = buscarUsuario(id);
         if(!usr.getIsActivo()){
-            throw new ProcesoInvalidoException("No se permite modificar los roles de un usuario inhabilitado");
+            throw new ProcesoInvalidoException(HttpStatus.FORBIDDEN,"No se permite modificar los roles de un usuario inhabilitado");
         }
 
         rolesDTO.getRoles().forEach(rol ->
@@ -284,11 +284,11 @@ public class UsuarioService implements UsuarioServiceInterface {
 
         Usuario usr = buscarUsuario(id);
         if(!usr.getIsActivo()){
-            throw new ProcesoInvalidoException("No se permite modificar los roles de un usuario inhabilitado");
+            throw new ProcesoInvalidoException(HttpStatus.FORBIDDEN,"No se permite modificar los roles de un usuario inhabilitado");
         }
 
         if(usr.getEmail().equals(defaultAdminEmail)){
-            throw new ProcesoInvalidoException("Al usuario " + id + " no se le puede quitar roles.");
+            throw new ProcesoInvalidoException(HttpStatus.UNPROCESSABLE_ENTITY,"Al usuario " + id + " no se le puede quitar roles.");
         }
 
         if(rolesDTO.getRoles().contains(RolUsuario.ROLE_USUARIO)){
