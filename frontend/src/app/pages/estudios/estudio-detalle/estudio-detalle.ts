@@ -127,6 +127,7 @@ export class EstudioDetalle {
     this.modalVisible = false;
   }
 
+  //======OBRAS===================
   private cargarObrasVinculadasPorIds(ids: number[]): void {
     if (!ids?.length) {
       this.obrasVinculadas = [];
@@ -169,6 +170,7 @@ export class EstudioDetalle {
     });
   }
 
+  //=====ARQUITECTOS===================
   private cargarArquitectosVinculadosPorIds(ids: number[]): void {
     if (!ids?.length) {
       this.arquitectosVinculados = [];
@@ -221,6 +223,7 @@ export class EstudioDetalle {
     });
   }
 
+  //===============IMAGEN====================
   imgSrc(nombre?: string): string {
     if (!nombre) return this.imagenDefecto;
 
@@ -235,7 +238,7 @@ export class EstudioDetalle {
   }
 
   
-  // Roles
+  //=========ROLES====================
   puedeGestionar(): boolean {
  
     if (!this.estudio?.id) return false;
@@ -280,11 +283,23 @@ export class EstudioDetalle {
           );
         }else if(e.status === 404){
           //UNSUPPORTED_MEDIA_TYPE
-          alert("Estudio no encontrado");
+          this.mostrarModal(
+            'Estudio no encontrado',
+            'El estudio ya no existe.',
+            'warning'
+          );
         }else if(e.status >= 500){
-          alert("Error de Servidor.")
+          this.mostrarModal(
+            'Error del servidor',
+            'Ocurrió un error al intentar eliminar el estudio.',
+            'error'
+          );
         }else{
-          alert("Proceso de eliminacion del estudio fallo. Error desocnocido.")
+          this.mostrarModal(
+            'Error inesperado',
+            'El proceso de eliminación falló por un motivo desconocido.',
+            'error'
+          );
         }
 
       }

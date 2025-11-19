@@ -11,10 +11,11 @@ import { SelectFavorito } from '../../../components/select-favorito/select-favor
 import { FavoritosService } from '../../../services/favoritosService/favoritos-service';
 import { EsperandoModal } from '../../../components/esperando-modal/esperando-modal';
 import { finalize } from 'rxjs';
+import { MensajeModal, MessageType } from '../../../components/mensaje-modal/mensaje-modal';
 
 @Component({
   selector: 'app-obra-detalle',
-  imports: [RouterLink, SelectFavorito, EsperandoModal],
+  imports: [RouterLink, SelectFavorito, EsperandoModal, MensajeModal],
   templateUrl: './obra-detalle.html',
   styleUrl: './obra-detalle.css',
 })
@@ -46,6 +47,13 @@ export class ObraDetalle {
   ventanaAbierta = false;
 
   spinerVisible: boolean = false;
+
+  // ===== MODAL =====
+  modalVisible = false;
+  modalTitulo = '';
+  modalMensaje = '';
+  modalTipo: MessageType = 'info';
+  redirigirAObras = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -89,9 +97,17 @@ export class ObraDetalle {
                 if(e.status === 404){
                   alert("estudio no encontrado");
                 }else if(e.status >= 500){
-                  alert("Error del Servidor");
+                    this.mostrarModal(
+                    'Error del servidor',
+                    'Ocurrió un error al cargar el estudio asociado.',
+                    'error'
+                  );
                 }else{
-                  alert("Error Inesperado");
+                   this.mostrarModal(
+                    'Error inesperado',
+                    'No se pudo cargar la información del estudio asociado.',
+                    'error'
+                  );
                 }
     
               } 
@@ -99,10 +115,65 @@ export class ObraDetalle {
           }
         }
       },
-      error: () => this.router.navigate(['/obras']),
+      error: (e) => {
+        console.error(e);
+
+        if (e.status === 404) {
+          this.mostrarModal(
+            'Obra no encontrada',
+            'La obra solicitada no existe o fue eliminada.',
+            'warning',
+            true
+          );
+        } else if (e.status >= 500) {
+          this.mostrarModal(
+            'Error del servidor',
+            'Ocurrió un error al cargar la obra. Intente nuevamente más tarde.',
+            'error',
+            true
+          );
+        } else {
+          this.mostrarModal(
+            'Error inesperado',
+            'No se pudo cargar la obra.',
+            'error',
+            true
+          );
+        }
+      },
     });
 
     this.verificarSiEstaEnFavoritos(id);
+  }
+
+  // ============= MODAL =============
+
+  private mostrarModal(
+    titulo: string,
+    mensaje: string,
+    tipo: MessageType = 'info',
+    redirigir: boolean = false
+  ): void {
+    this.modalTitulo = titulo;
+    this.modalMensaje = mensaje;
+    this.modalTipo = tipo;
+    this.modalVisible = true;
+    this.redirigirAObras = redirigir;
+  }
+
+  onModalAceptar(): void {
+    this.modalVisible = false;
+
+    if (this.redirigirAObras) {
+      this.router.navigate(['/obras']);
+    }
+
+    this.redirigirAObras = false;
+  }
+
+  onModalCerrado(): void {
+    this.modalVisible = false;
+    this.redirigirAObras = false;
   }
   
 
@@ -231,16 +302,33 @@ export class ObraDetalle {
       finalize(() => this.spinerVisible = false)
     ).subscribe({
       next: () => {
-        alert('Obra eliminada correctamente.');
-        this.router.navigate(['/obras']);
+        this.mostrarModal(
+          'Obra eliminada',
+          'La obra fue eliminada correctamente.',
+          'success',
+          true
+        );
       },
       error: (e) =>{
         if(e.status === 404){
-          alert("Obra no encontrada");
+          this.mostrarModal(
+            'Obra no encontrada',
+            'La obra ya no existe.',
+            'warning',
+            true
+          );
         }else if(e.status === 401){
-           alert("Un arquitecto no puede eliminar obras que le pertenezcan"); 
+           this.mostrarModal(
+            'Sin permisos',
+            'Un arquitecto no puede eliminar obras que no pertenecen a sus estudios.',
+            'error'
+          ); 
         }else{
-          alert("No se pudo eliminar la obra.");
+          this.mostrarModal(
+            'Error al eliminar',
+            'No se pudo eliminar la obra.',
+            'error'
+          );
         }
       } 
     });

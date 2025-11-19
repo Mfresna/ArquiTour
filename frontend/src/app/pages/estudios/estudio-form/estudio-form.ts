@@ -11,10 +11,11 @@ import { UsuarioService } from '../../../services/usuarioService/usuario-service
 import { UsuarioModel } from '../../../models/usuarioModels/usuarioModel';
 import { TieneCambiosPendientes } from '../../../guards/salirSinGuardar/salir-sin-guardar-guard';
 import { estudioNombreValidador, obraNombreValidador } from '../../../validadores/nombresValidador';
+import { MensajeModal, MessageType } from '../../../components/mensaje-modal/mensaje-modal';
 
 @Component({
   selector: 'app-estudio-form',
-  imports: [ReactiveFormsModule, DragZoneSimple],
+  imports: [ReactiveFormsModule, DragZoneSimple, MensajeModal],
   templateUrl: './estudio-form.html',
   styleUrl: './estudio-form.css',
 })
@@ -32,6 +33,14 @@ export class EstudioForm implements TieneCambiosPendientes {
   arquitectosVinculados: { id: number; nombre: string }[] = [];
 
   omitirGuard = false;
+
+   // ===== MODAL =====
+  modalVisible = false;
+  modalTitulo = '';
+  modalMensaje = '';
+  modalTipo: MessageType = 'info';
+  // en este form siempre redirigimos a /estudios en los casos que corresponde
+  redirigirADestudios = false;
 
   constructor(
     private fb: FormBuilder,
@@ -76,6 +85,47 @@ export class EstudioForm implements TieneCambiosPendientes {
       }
   }
 
+   // ================== MODAL ==================
+  private mostrarModal(
+    titulo: string,
+    mensaje: string,
+    tipo: MessageType = 'info',
+    redirigirDespues: boolean = false
+  ): void {
+    this.modalTitulo = titulo;
+    this.modalMensaje = mensaje;
+    this.modalTipo = tipo;
+    this.modalVisible = true;
+    this.redirigirADestudios = redirigirDespues;
+  }
+
+  onModalAceptar(): void {
+  this.modalVisible = false;
+
+  if (this.redirigirADestudios) {
+    // navegación sin preguntar el guard
+    this.omitirGuard = true;
+
+    if (this.editar && this.id != null) {
+      // MODO EDICIÓN → voy al detalle del estudio
+      this.router.navigate(['/estudios', this.id]);
+    } else {
+      // MODO CREACIÓN → vuelvo al listado
+      this.router.navigate(['/estudios']);
+    }
+  }
+
+  this.redirigirADestudios = false;
+}
+
+
+  onModalCerrado(): void {
+    this.modalVisible = false;
+    this.redirigirADestudios = false;
+  }
+
+  //==========CARGAR ESTUDIOS===============
+
   private cargarEstudio(id: number): void {
     this.mensajeErrorAgregar = null;
 
@@ -108,9 +158,19 @@ export class EstudioForm implements TieneCambiosPendientes {
         console.error(e);
 
         if(e.status === 404){
-          alert("Estudio no hallado");
+         this.mostrarModal(
+            'Estudio no hallado',
+            'El estudio que intenta editar no existe o fue eliminado.',
+            'warning',
+            true
+          );
         }else{
-          alert('No se pudo cargar el estudio.')
+          this.mostrarModal(
+            'Error al cargar',
+            'No se pudo cargar el estudio.',
+            'error',
+            true
+          );
         }
 
       }
@@ -129,12 +189,18 @@ export class EstudioForm implements TieneCambiosPendientes {
   }
 
 
+  //==================GUARDAR===================
+
   guardar(event?: Event): void {
     event?.preventDefault();
 
     const nombre = (this.formulario.get('nombre')?.value ?? '').trim();
     if (!nombre) {
-      alert('Debe ingresar un nombre válido.');
+      this.mostrarModal(
+        'Nombre requerido',
+        'Debe ingresar un nombre válido para el estudio.',
+        'warning'
+      );
       return;
     }
     
@@ -216,11 +282,20 @@ export class EstudioForm implements TieneCambiosPendientes {
     // aviso que esta navegación es por un guardado exitoso
     this.omitirGuard = true;
 
-    this.router.navigate(['/estudios', this.id]);
+   this.mostrarModal(
+      'Estudio actualizado',
+      'Los datos del estudio se guardaron correctamente.',
+      'success',
+      true
+    );
   }
 
   private onUpdateError(): void {
-    alert('No se pudo actualizar.');
+    this.mostrarModal(
+      'Error al actualizar',
+      'No se pudo actualizar el estudio.',
+      'error'
+    );
   }
 
   /* ===================== CREACIÓN ===================== */
@@ -234,7 +309,11 @@ export class EstudioForm implements TieneCambiosPendientes {
         next: () => this.onCreateSuccess(),
         error: (e) =>{
           console.error(e);
-          alert('No se pudo crear el estudio.');
+          this.mostrarModal(
+            'Error al crear',
+            'No se pudo crear el estudio.',
+            'error'
+          );
         } 
       });
       return;
@@ -255,7 +334,11 @@ export class EstudioForm implements TieneCambiosPendientes {
       next: () => this.onCreateSuccess(),
       error: (e) =>{
           console.error(e);
-          alert('No se pudo crear el estudio.');
+            this.mostrarModal(
+            'Error al crear',
+            'No se pudo crear el estudio.',
+            'error'
+          );
         }
     });
   }
@@ -266,8 +349,12 @@ export class EstudioForm implements TieneCambiosPendientes {
 
     this.formulario.reset();
     this.archivoSeleccionado = null;
-    alert('Estudio creado');
-    this.router.navigate(['/estudios']);
+    this.mostrarModal(
+      'Estudio creado',
+      'El estudio fue creado correctamente.',
+      'success',
+      true
+    );
   }
 
   /* ===================== OTROS MÉTODOS ===================== */
@@ -294,18 +381,41 @@ export class EstudioForm implements TieneCambiosPendientes {
           this.formulario.get('arquitectosIds')?.setValue(actuales.filter(x => x !== arqId));
         }
         this.arquitectosVinculados = this.arquitectosVinculados.filter(a => a.id !== arqId);
+        this.mostrarModal(
+          'Arquitecto quitado',
+          'El arquitecto fue desvinculado del estudio correctamente.',
+          'success',  
+          false      
+        );
       },
       error: (e) => {
         console.error(e);
 
         if(e.status === 404){
-          alert("Estudio no encontrado")
+          this.mostrarModal(
+            'Estudio no encontrado',
+            'El estudio no existe o ya fue eliminado.',
+            'warning',
+            true
+          );
         }else if(e.status === 401){
-          alert("El arquitecto no puede agregar a otros en este estudio");
+          this.mostrarModal(
+            'Sin permisos',
+            'El arquitecto logueado no puede gestionar otros arquitectos en este estudio.',
+            'error'
+          );
         }else if(e.status === 409){
-          alert("El arqui a eliminar no pertenece al estudio");
+          this.mostrarModal(
+            'No pertenece al estudio',
+            'El arquitecto que intenta quitar no forma parte del estudio.',
+            'warning'
+          );
         }else{
-          alert('No se pudo quitar el arquitecto')
+          this.mostrarModal(
+            'Error',
+            'No se pudo quitar el arquitecto del estudio.',
+            'error'
+          );
         }
 
         
@@ -409,6 +519,8 @@ export class EstudioForm implements TieneCambiosPendientes {
           this.mensajeErrorAgregar = 'Error al buscar el usuario por email.';
         },
       });
+
+    this.formulario.get('emailArquitecto')?.setValue(null);
   }
 
 

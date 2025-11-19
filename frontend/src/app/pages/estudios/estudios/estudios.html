@@ -70,3 +70,17 @@
 <app-esperando-modal 
   [isVisible]="spinerVisible" 
 />
+<app-mensaje-modal
+  [isVisible]="modalVisible"
+  [titulo]="modalTitulo"
+  [mensaje]="modalMensaje"
+  [conIcon]="true"
+  [tipo]="modalTipo"
+  tipoContenido="texto"
+  [mostrarCerrar]="true"
+  [mostrarBotonAceptar]="true"
+  [mostrarBotonCancelar]="false"
+  textoBotonAceptar="Aceptar"
+  (aceptar)="onModalAceptar()"
+  (cerrado)="onModalCerrado()"
+></app-mensaje-modal>

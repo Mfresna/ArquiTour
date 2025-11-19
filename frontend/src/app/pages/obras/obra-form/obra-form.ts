@@ -15,10 +15,11 @@ import { TieneCambiosPendientes } from '../../../guards/salirSinGuardar/salir-si
 import { estudioNombreValidador, obraNombreValidador } from '../../../validadores/nombresValidador';
 import { noBlancoEspacios } from '../../../validadores/sinEspacioValidador';
 import { anioEstadoObra } from '../../../auth/validadores/fechaValidador';
+import { MensajeModal, MessageType } from '../../../components/mensaje-modal/mensaje-modal';
 
 @Component({
   selector: 'app-obra-form',
-  imports: [ReactiveFormsModule, DragZoneMultiple],
+  imports: [ReactiveFormsModule, DragZoneMultiple, MensajeModal],
   templateUrl: './obra-form.html',
   styleUrl: './obra-form.css',
 })
@@ -46,6 +47,13 @@ export class ObraForm implements TieneCambiosPendientes{
   EstadoObraDescripcion    = EstadoObraDescripcion;
 
   estudios: EstudioModel[] = [];
+
+  // ===== MODAL =====
+  modalVisible = false;
+  modalTitulo = '';
+  modalMensaje = '';
+  modalTipo: MessageType = 'info';
+  redirigirDespues = false;
 
   constructor(
     private fb: FormBuilder,
@@ -109,6 +117,42 @@ export class ObraForm implements TieneCambiosPendientes{
     }
   }
 
+  // ============ MODAL ============
+  private mostrarModal(
+    titulo: string,
+    mensaje: string,
+    tipo: MessageType = 'info',
+    redirigir: boolean = false
+  ): void {
+    this.modalTitulo = titulo;
+    this.modalMensaje = mensaje;
+    this.modalTipo = tipo;
+    this.modalVisible = true;
+    this.redirigirDespues = redirigir;
+  }
+
+  onModalAceptar(): void {
+    this.modalVisible = false;
+
+    if (this.redirigirDespues) {
+      // navegación sin preguntar el guard
+      this.omitirGuard = true;
+
+      if (this.editar && this.id != null) {
+        this.router.navigate(['/obras', this.id]);
+      } else {
+        this.router.navigate(['/obras']);
+      }
+    }
+
+    this.redirigirDespues = false;
+  }
+
+  onModalCerrado(): void {
+    this.modalVisible = false;
+    this.redirigirDespues = false;
+  }
+
   // ==================== AUXILIARES ====================
 
   // Trae estudios para mostrar en el select
@@ -124,7 +168,7 @@ export class ObraForm implements TieneCambiosPendientes{
           }
         }
       },
-      error: () => alert('No se pudieron cargar los estudios'),
+      error: () => alert('No se pudieron cargar los estudios'),//VVERRRRRR
     });
   }
 
@@ -175,7 +219,7 @@ export class ObraForm implements TieneCambiosPendientes{
             return `${environment.apiUrl}${path}`;
           });
 
-          // (Opcional) primera como "portada"
+          // Primera como "portada"
           const img = obra.urlsImagenes[0];
           const path = img.startsWith('/') ? img : `/${img}`;
           this.imagenActualUrl = `${environment.apiUrl}${path}`;
@@ -190,15 +234,35 @@ export class ObraForm implements TieneCambiosPendientes{
         console.error(e);
 
         if(e.status === 404){
-          alert("Estudio No encontrado");
+          this.mostrarModal(
+            'Obra no encontrada',
+            'La obra que intenta editar no existe o fue eliminada.',
+            'warning',
+            true
+          );
         }else if(e.status ===  401){
-          alert("El arquitecto no puede crear una obra para un estudio del cual no forma parte");
+          this.mostrarModal(
+            'Sin permisos',
+            'No puede gestionar obras de estudios a los que no pertenece.',
+            'error',
+            true
+          );
         }else if(e.status === 406){
-          alert("Ya existe una obra con el mismo nombre en el mismo estudio");
+          this.mostrarModal(
+            'Error del servidor',
+            'Ocurrió un error al cargar la obra. Intente nuevamente más tarde.',
+            'error',
+            true
+          );
         }else if(e.status >= 500){
           alert("Error de servidor")
         }else{
-          alert('No se pudo cargar la obra.')
+           this.mostrarModal(
+            'Error al cargar',
+            'No se pudo cargar la obra.',
+            'error',
+            true
+          );
         }
 
       }
@@ -250,7 +314,11 @@ export class ObraForm implements TieneCambiosPendientes{
           // si no quedaron imágenes, no permitimos guardar
         if (urlsExistentesRel.length === 0) {
           this.subiendo = false;
-          alert('La obra debe tener al menos una imagen.');
+          this.mostrarModal(
+            'Imagen requerida',
+            'La obra debe tener al menos una imagen.',
+            'warning'
+          );
           return;
         }
     
@@ -262,16 +330,29 @@ export class ObraForm implements TieneCambiosPendientes{
           .subscribe({
             next: () => {
               this.omitirGuard = true;   
-              this.router.navigate(['/obras', this.id]);
+              this.mostrarModal(
+                'Obra actualizada',
+                'Los datos de la obra se guardaron correctamente.',
+                'success',
+                true
+              );
             },
             error: (e) =>{
 
               console.error(e);
 
               if(e.status === 404){
-                alert("Obra No encontrada");
+                this.mostrarModal(
+                  'Error al actualizar',
+                  'No se pudo actualizar la obra.',
+                  'error'
+                  );
               }else{
-                alert('No se pudo actualizar la obra.')
+                  this.mostrarModal(
+                    'Error al actualizar',
+                    'No se pudo actualizar la obra.',
+                    'error'
+                  );
               }
 
             }
@@ -306,9 +387,21 @@ export class ObraForm implements TieneCambiosPendientes{
         next: () => {
           this.archivosSeleccionados = [];
           this.omitirGuard = true;
-          this.router.navigate(['/obras', this.id!]);
+          this.mostrarModal(
+            'Obra actualizada',
+            'Los datos de la obra se guardaron correctamente.',
+            'success',
+            true
+          );
         },
-        error: () => alert('No se pudo actualizar la obra.')
+        error: (e) => {
+          console.error(e);
+          this.mostrarModal(
+            'Error al actualizar',
+            'No se pudo actualizar la obra.',
+            'error'
+          );
+        }
       });
 
       return;
@@ -328,7 +421,11 @@ export class ObraForm implements TieneCambiosPendientes{
 
     if (!archivos.length) {
       this.subiendo = false;
-      alert('Debe cargar al menos una imagen para la obra.');
+      this.mostrarModal(
+        'Imagen requerida',
+        'Debe cargar al menos una imagen para la obra.',
+        'warning'
+      );
       return;
     }
 
@@ -344,7 +441,11 @@ export class ObraForm implements TieneCambiosPendientes{
 
         if (!urls.length) {
           this.subiendo = false;
-          alert('Sin URLs de imágenes');
+          this.mostrarModal(
+            'Error de imágenes',
+            'No se pudieron obtener las URLs de las imágenes.',
+            'error'
+          );
           return;
         }
 
@@ -356,31 +457,60 @@ export class ObraForm implements TieneCambiosPendientes{
               this.formulario.reset();
               this.archivosSeleccionados = [];
               this.imagenesExistentes = [];
-              alert('Obra creada');
-              this.router.navigate(['/obras']);
+               this.mostrarModal(
+                'Obra creada',
+                'La obra fue creada correctamente.',
+                'success',
+                true
+              );
             },
             error: (e) => {
     
               console.error(e);
 
               if(e.status === 404){
-                alert("Estudio No encontrado");
+                this.mostrarModal(
+                  'Estudio no encontrado',
+                  'El estudio seleccionado no existe.',
+                  'warning'
+                );
               }else if(e.status ===  401){
-                alert("El arquitecto no puede crear una obra para un estudio del cual no forma parte");
+                 this.mostrarModal(
+                  'Sin permisos',
+                  'No puede crear una obra para un estudio al que no pertenece.',
+                  'error'
+                );
               }else if(e.status === 406){
-                alert("Ya existe una obra con el mismo nombre en el mismo estudio");
+                  this.mostrarModal(
+                  'Obra duplicada',
+                  'Ya existe una obra con el mismo nombre en el mismo estudio.',
+                  'warning'
+                );
               }else if(e.status >= 500){
-                alert("Error de servidor")
+                 this.mostrarModal(
+                  'Error del servidor',
+                  'Ocurrió un error al crear la obra. Intente más tarde.',
+                  'error'
+                );
               }else{
-                alert('No se pudo cargar la obra.')
+                this.mostrarModal(
+                  'Error al crear',
+                  'No se pudo crear la obra.',
+                  'error'
+                );
               }
 
             }
           });
       },
-      error: () => {
+      error: (e) => {
+        console.error(e);
         this.subiendo = false;
-        alert('No se pudieron subir las imágenes.');
+        this.mostrarModal(
+          'Error al subir imágenes',
+          'No se pudieron subir las imágenes de la obra.',
+          'error'
+        );
       }
     });
   }
