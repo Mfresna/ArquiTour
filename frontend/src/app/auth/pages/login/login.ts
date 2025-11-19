@@ -24,9 +24,10 @@ export class Login implements OnInit {
 
   mostrarPassword = false;
 
-  modalVisible!: boolean;
-  modalTitulo!: string;
-  modalMensaje!: string;
+  // ========= MODAL =========
+  modalVisible: boolean = false;
+  modalTitulo: string = '';
+  modalMensaje: string = '';
 
   //EMITERS
   @Output() volverEmit = new EventEmitter<void>();
@@ -45,6 +46,14 @@ export class Login implements OnInit {
     });
   }
 
+
+  // MÉTODO SIMPLE PARA MOSTRAR MODAL
+  mostrarModal(titulo: string, mensaje: string): void {
+    this.modalTitulo = titulo;
+    this.modalMensaje = mensaje;
+    this.modalVisible = true;
+  }
+
   loguearse(): void {
     if (this.login.invalid) {
       this.login.markAllAsTouched();
@@ -54,14 +63,11 @@ export class Login implements OnInit {
           if (res.cambiarPass) {
             this.estadoCredencial = EstadoLogin.CAMBIAR_PASS;
 
-            //Parametros del Modal
-            this.modalVisible=true;
-            this.modalTitulo="CONTRASEÑA POR DEFECTO"
-            this.modalMensaje="Usted posee la contraseña por defecto, debe cambiarla por seguridad"
-            
-            alert("Debe cambiar la Contraseña")
-
-            this.router.navigate(['/cambiarpass']);
+            this.mostrarModal(
+              "CONTRASEÑA POR DEFECTO",
+              "Usted posee la contraseña por defecto, debe cambiarla por seguridad."
+            );  
+                      
           } else {
             this.estadoCredencial = EstadoLogin.OK;
             this.router.navigate(['/home']);
@@ -75,12 +81,12 @@ export class Login implements OnInit {
             this.estadoCredencial = EstadoLogin.CUENTA_INACTIVA;
             
           }else if (e.status >= 500) {
-            alert('Error interno del servidor. Intente nuevamente más tarde.');
+            this.mostrarModal("Error del servidor", "Intente nuevamente más tarde.");
           }else if (e.status === 0) {
             // Error de red o servidor caído
-            alert('No se pudo conectar con el servidor. Verifique su conexión.');
+            this.mostrarModal("Sin conexión", "No se pudo conectar al servidor.");
           }else{
-            alert('Ocurrió un error inesperado.');
+            this.mostrarModal("Error inesperado", "Ocurrió un error inesperado.");
           }
         }
       });
@@ -91,7 +97,10 @@ export class Login implements OnInit {
     const emailValidacion = this.login.get('email');  //Control de Validacion de email
 
     if (emailValidacion != null && emailValidacion.invalid) {
-      alert("Ingrese un correo valido a recuperar");
+      this.mostrarModal(
+        "Email inválido",
+        "Ingrese un correo válido para recuperar su contraseña."
+      );
       emailValidacion.markAsTouched();
     }else{
       let email = this.login.get('email')?.value.trim().toLowerCase();
@@ -103,13 +112,23 @@ export class Login implements OnInit {
         finalize(() => this.enviandoPin = false) 
       ).subscribe({
         next: (res) => {
-        },
+          this.mostrarModal(
+            "Correo enviado",
+            "Te enviamos un correo con las instrucciones para recuperar la contraseña."
+          );
+        },  
         error: (e) => {
           if (e.status >= 400 || e.status <= 499) {
-            alert("Error en el envio del correo de recuperacion");
+             this.mostrarModal(
+            "Error al enviar correo",
+            "No se pudo enviar el correo de recuperación. Verifique el email ingresado."
+          );
             console.error("Error en el envio del correo de recuperacion a: " + email);
           } else {
-            alert("Ocurrio un error inesperado");
+             this.mostrarModal(
+            "Error inesperado",
+            "Ocurrió un error inesperado. Intente nuevamente más tarde."
+             ),
             console.error("Ocurrio un error inesperado");
           }
         }
@@ -121,6 +140,11 @@ export class Login implements OnInit {
   volver(): void {
     //Emite que se apreto el boton, sirve en el authPage para saber que mostrar
     this.volverEmit.emit();
+  }
+
+  irACambiarPass(): void {
+    this.modalVisible = false;
+    this.router.navigate(['/cambiarpass']);
   }
 
 }

@@ -12,13 +12,14 @@ import { apellidoValidador, nombreValidador } from '../../validadores/textoValid
 import { fechaNacValidador } from '../../validadores/fechaValidador';
 import { ImagenService } from '../../../services/imagenService/imagen-service';
 import { DragZoneSimple } from "../../../components/drag-zone-simple/drag-zone-simple";
+import { MensajeModal } from '../../../components/mensaje-modal/mensaje-modal';
 
 
 type Paso = "email" | "pin" | "registrarme";
 
 @Component({
   selector: 'app-register',
-  imports: [ReactiveFormsModule, PinVerificador, EsperandoModal, DragZoneSimple],
+  imports: [ReactiveFormsModule, PinVerificador, EsperandoModal, DragZoneSimple, MensajeModal],
   templateUrl: './register.html',
   styleUrl: './register.css',
 })
@@ -45,6 +46,11 @@ export class Register implements OnInit, AfterViewInit{
 
     //COMPONENTE DE IMAGEN
   @ViewChild('campoImagen') campoImagen!: DragZoneSimple;
+
+  //MODAL
+  modalVisible = false;
+  modalTitulo = '';
+  modalMensaje = '';
 
   constructor(
     private fb: FormBuilder,

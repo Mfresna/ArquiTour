@@ -9,10 +9,12 @@ import { CategoriaObraDescripcion } from '../../../models/obraModels/categoriaOb
 import { EstadoObraDescripcion } from '../../../models/obraModels/estadoObraModel';
 import { SelectFavorito } from '../../../components/select-favorito/select-favorito';
 import { FavoritosService } from '../../../services/favoritosService/favoritos-service';
+import { EsperandoModal } from '../../../components/esperando-modal/esperando-modal';
+import { finalize } from 'rxjs';
 
 @Component({
   selector: 'app-obra-detalle',
-  imports: [RouterLink, SelectFavorito],
+  imports: [RouterLink, SelectFavorito, EsperandoModal],
   templateUrl: './obra-detalle.html',
   styleUrl: './obra-detalle.css',
 })
@@ -43,6 +45,8 @@ export class ObraDetalle {
   //Ventana de imagen
   ventanaAbierta = false;
 
+  spinerVisible: boolean = false;
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -59,7 +63,11 @@ export class ObraDetalle {
       return; 
     }
 
-    this.obraSrvice.getObra(id).subscribe({
+    this.spinerVisible = true;
+
+    this.obraSrvice.getObra(id).pipe(
+      finalize(() => this.spinerVisible = false)
+    ).subscribe({
       next: (data) => {
         this.obra = data;
         this.cargando = false;
@@ -203,8 +211,12 @@ export class ObraDetalle {
   eliminar(): void {
     if (!this.obra?.id) return;
     if (!confirm('¿Eliminar esta obra?')) return;
+
+    this.spinerVisible = true;
     
-    this.obraSrvice.deleteObra(this.obra.id).subscribe({
+    this.obraSrvice.deleteObra(this.obra.id).pipe(
+      finalize(() => this.spinerVisible = false)
+    ).subscribe({
       next: () => {
         alert('Obra eliminada correctamente.');
         this.router.navigate(['/obras']);

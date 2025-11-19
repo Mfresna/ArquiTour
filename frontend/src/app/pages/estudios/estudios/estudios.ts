@@ -6,11 +6,13 @@ import { EstudioModel } from "../../../models/estudioModels/estudioModel";
 import { EstudioService } from "../../../services/estudioService/estudio-service";
 import { TokenService } from "../../../auth/services/tokenService/token-service";
 import { UsuarioService } from "../../../services/usuarioService/usuario-service";
+import { finalize } from "rxjs";
+import { EsperandoModal } from "../../../components/esperando-modal/esperando-modal";
 
 
 @Component({
   selector: 'app-estudios',
-  imports: [ReactiveFormsModule, RouterLink],
+  imports: [ReactiveFormsModule, RouterLink, EsperandoModal],
   templateUrl: './estudios.html',
   styleUrl: './estudios.css',
 })
@@ -22,6 +24,8 @@ export class Estudios implements OnInit {
   imagenDefecto = `${environment.imgEstudio}`;
 
   filtro!: FormGroup;    
+
+  spinerVisible: boolean = false;
   
   constructor(
     private fb: FormBuilder,
@@ -51,7 +55,12 @@ export class Estudios implements OnInit {
 
   cargarEstudios(): void {
     const nombre = (this.filtro.value.nombre ?? '').trim() || undefined;
-    this.estudioSrvice.getFiltrarEstudios(nombre).subscribe({
+
+    this.spinerVisible = true; 
+
+    this.estudioSrvice.getFiltrarEstudios(nombre).pipe(
+      finalize(() => this.spinerVisible = false)
+    ).subscribe({
       next: lista => this.estudios = lista,
       error: (e) => alert('No se pudo cargar la lista de estudios')
     });
@@ -70,7 +79,11 @@ export class Estudios implements OnInit {
   misEstudios(): void {
     if (!this.estudios || !this.estudios.length) return;
 
-    this.usuarioService.getUsuarioMe().subscribe({
+    this.spinerVisible = true; 
+
+    this.usuarioService.getUsuarioMe().pipe(
+      finalize(() => this.spinerVisible = false)
+    ).subscribe({
       next: usuario => {
 
         const idsEstudiosUsuario = usuario.idEstudios ?? [];

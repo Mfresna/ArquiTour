@@ -32,7 +32,6 @@ export class Obras implements OnInit {
   estudios: EstudioModel[] = [];
 
   spinerVisible: boolean = false;
-  spinerMensaje!: string;
 
   modalErrorVisible: boolean = false;
   modalErrorMensaje: string = '';
