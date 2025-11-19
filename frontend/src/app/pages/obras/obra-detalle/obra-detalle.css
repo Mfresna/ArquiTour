@@ -154,7 +154,7 @@
 }
 
 /* ====== DESCRIPCIÓN + MAPA ====== */
-.descripcion-mapa {
+#descripcion-mapa {
   background: #fff;
   border-radius: 12px;
   box-shadow: 0 6px 16px rgba(0,0,0,.06);
@@ -164,14 +164,14 @@
   gap: 10px;
 }
 
-.encabezado {
+#encabezado-tarjeta {
   display: flex;
   justify-content: space-between;
   padding-bottom: 6px;
   align-items: baseline;
 }
 
-.encabezado h3 {
+#encabezado-tarjeta h3 {
   font-size: .8rem;
   text-transform: uppercase;
   font-weight: 600;
@@ -181,15 +181,28 @@
   padding-bottom: 6px;
 }
 
-.contenido {
+/*================================================*/
+/* .contenido {
   display: grid;
   grid-template-columns: 1fr 1fr; 
   gap: 20px;
   align-items: start;
   height: 320px; 
+} */
+
+#contenido {
+  display: flex;
+  flex-direction: row;
+
+  gap: 20px;
+  
+  height: 320px; 
+
+  padding-bottom: 8px;
 }
 
-.texto {
+#desc-texto {
+  flex: 1; /*divide a la mitad*/
   overflow-y: auto;         
   padding-right: 12px;      
   max-height: 100%;         
@@ -197,12 +210,13 @@
   scrollbar-color: #cbd5e1 transparent;
 }
 
-.texto p {
+#desc-texto p {
   margin: 0;
   color: #374151;
   line-height: 1.6;
   font-size: 0.95rem;
   text-align: justify;
+  max-width: 20%;
 }
 
 .muted {
@@ -210,12 +224,26 @@
 }
 
 /* Mapa */
-.mapa {
-  display: grid;
-  place-items: center;
-  height: 100%; 
+#mapa-contenedor {
+  flex: 1; /*divide a la mitad*/
+  height: 100%;
+  border-radius: 18px;
+  box-shadow: 6px 4px 8px rgba(0, 0, 0, 0.05);
+  margin-bottom: 25px;
 }
 
+
+.fondo-trambolico{
+  background: repeating-linear-gradient(
+    45deg,
+    #f0f3f6,
+    #f0f3f6 8px,
+    #e7ebf0 8px,
+    #e7ebf0 16px
+  );
+}
+
+/*============================================*/
 .mapa-placeholder {
   width: 100%;
   height: 100%; 
@@ -551,6 +579,3 @@
   display: flex;
   align-items: center;
 }
-
-
-
