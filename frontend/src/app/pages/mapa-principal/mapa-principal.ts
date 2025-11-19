@@ -20,9 +20,17 @@ import { finalize } from 'rxjs/operators';
 export class MapaPrincipal implements AfterViewInit, OnDestroy {
 
   private zoomInicial:number = 12;
+  private zoomAobra:number = 18;
 
   private map!: L.Map;
   private markersLayer!: L.LayerGroup;
+
+  private primeraCarga = true;
+  
+  private coordsUsuario: { latitud: number; longitud: number } | null = null;
+
+  private markerObras = new Map<number, L.Marker>();
+
 
   obras: ObraMapaModel[] = [];
   obrasFiltradas: ObraMapaModel[] = [];
@@ -58,25 +66,15 @@ export class MapaPrincipal implements AfterViewInit, OnDestroy {
     //Si son nulas las obtiene de la IP si puede
     const coordsBack = ubicacion ? { latitud: ubicacion.lat, longitud: ubicacion.lon } : undefined;
 
+    this.coordsUsuario = coordsBack ?? null;
+
     if (ubicacion) {
       this.map.setView([ubicacion.lat, ubicacion.lon], this.zoomInicial);
-
-      L.marker([ubicacion.lat, ubicacion.lon], {
-
-          icon: L.icon({
-            iconUrl: `${environment.iconoMapaPrincipal}`,
-            iconSize: [28, 28],
-            iconAnchor: [14, 14]
-          })
-
-      }).addTo(this.map)
-        .bindPopup('Estás aquí')
-        .openPopup();
     } else {
       console.warn('No se pudo obtener ubicación, se usará IP en el backend.');
     }
 
-    this.cargarObrasCercanas(coordsBack);
+    this.cargarObrasCercanas(this.coordsUsuario ?? undefined);
   }
 
   ngOnDestroy(): void {
@@ -91,11 +89,13 @@ export class MapaPrincipal implements AfterViewInit, OnDestroy {
       zoom: 2
     });
 
+    //'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
+    //https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png
     //Sete la informacion contextual atribution es el copyright de abajo a la derecha
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
       maxZoom: 19,
       attribution:
-        '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+        '&copy; <a href="https://carto.com/attributions">CARTO</a>'
     }).addTo(this.map);
 
     this.markersLayer = L.layerGroup().addTo(this.map);
@@ -157,7 +157,7 @@ export class MapaPrincipal implements AfterViewInit, OnDestroy {
   //el usr modifica los filtros
   onCambioFiltros(): void {
     this.aplicarFiltros();
-    this.dibujarMarcadores(null);
+    this.dibujarMarcadores(this.coordsUsuario);
   }
 
   onDistanciaChange(valor: string | number): void {
@@ -166,73 +166,43 @@ export class MapaPrincipal implements AfterViewInit, OnDestroy {
 
     if (!isNaN(num)) {
       this.distanciaKm = num;
-      this.cargarObrasCercanas();
+      this.cargarObrasCercanas(this.coordsUsuario ?? undefined);
     }
   }
 
   aplicarFiltros(): void {
     this.obrasFiltradas = this.obras.filter(o => {
+      const coincideEstado = this.estadoFiltro
+        ? o.estado === this.estadoFiltro
+        : true;
 
-      const coincideEstado = this.estadoFiltro ? o.estado === this.estadoFiltro : true;
-      const coincideCategoria = this.categoriaFiltro ? o.categoria === this.categoriaFiltro : true;
+      const coincideCategoria = this.categoriaFiltro
+        ? o.categoria === this.categoriaFiltro
+        : true;
 
-      return coincideEstado && coincideCategoria;
+      let coincideDistancia = true;
+
+      // Si tengo ubicación del usuario y la obra tiene lat/lon, filtro por radio real
+      if (this.coordsUsuario && o.latitud != null && o.longitud != null) {
+        const d = this.distanciaEnKm(
+          this.coordsUsuario.latitud,
+          this.coordsUsuario.longitud,
+          o.latitud,
+          o.longitud
+        );
+        coincideDistancia = d <= this.distanciaKm;
+      }
+
+      return coincideEstado && coincideCategoria && coincideDistancia;
     });
   }
 
+
   // ============================================DIBUJAR OBRAS EN EL MAPA
-
-
-    //   private dibujarMarcadores(coordsBack: { latitud: number; longitud: number } | null): void {
-    //     this.markersLayer.clearLayers();
-
-    //     if (coordsBack) {
-    //       L.marker([coordsBack.latitud, coordsBack.longitud], {
-    //         icon: L.icon({
-    //           iconUrl: `${environment.iconoMapaPrincipalUsuario}`,
-    //           iconSize: [28, 28],
-    //           iconAnchor: [14, 14]
-    //         })
-    //       }).addTo(this.markersLayer)
-    //         .bindPopup('Su arquitour cominza aca');
-    //     }
-
-    //     // marcadores de obras FILTRADAS
-    //     this.obrasFiltradas.forEach(obra => {
-    //       if (obra.latitud != null && obra.longitud != null) {
-    //         const marker = L.marker([obra.latitud, obra.longitud]);
-
-    //         marker
-    //           .addTo(this.markersLayer)
-    //           .bindPopup(`<strong>${obra.nombre}</strong>`);
-
-    //         marker.on('click', () => {
-    //           this.router.navigate(['/obras', obra.id]); // ajustá ruta si hace falta
-    //         });
-    //       }
-    //     });
-
-    //     // Ajustar mapa a todo
-    //     const bounds = L.latLngBounds([]);
-
-    //     if (coordsBack) {
-    //       bounds.extend([coordsBack.latitud, coordsBack.longitud]);
-    //     }
-
-    //     this.obrasFiltradas.forEach(o => {
-    //       if (o.latitud != null && o.longitud != null) {
-    //         bounds.extend([o.latitud, o.longitud]);
-    //       }
-    //     });
-
-    //     if (bounds.isValid()) {
-    //       this.map.fitBounds(bounds, { padding: [40, 40] });
-    //     }
-    //   }
-
 
   private dibujarMarcadores(coordsBack: { latitud: number; longitud: number } | null): void {
     this.markersLayer.clearLayers();
+    this.markerObras.clear()
 
     const bounds = L.latLngBounds([]);
 
@@ -253,7 +223,16 @@ export class MapaPrincipal implements AfterViewInit, OnDestroy {
     this.obrasFiltradas
       ?.filter(o => o.latitud != null && o.longitud != null)
       .forEach(obra => {
-        const marker = L.marker([obra.latitud!, obra.longitud!]);
+        const marker = L.marker(
+          [obra.latitud!, obra.longitud!],
+          {
+            icon: L.icon({
+              iconUrl: `${environment.iconoMapaPrincipal}`,
+              iconSize: [36, 36],
+              iconAnchor: [18, 36]
+            })
+          }
+        );
 
         marker
           .addTo(this.markersLayer)
@@ -263,20 +242,74 @@ export class MapaPrincipal implements AfterViewInit, OnDestroy {
           this.router.navigate(['/obras', obra.id]);
         });
 
+
+        //Guardo la obra
+        if (obra.id != null) {
+          this.markerObras.set(obra.id, marker);
+        }
+
         bounds.extend([obra.latitud!, obra.longitud!]);
       });
 
     if (bounds.isValid()) {
-      this.map.fitBounds(bounds, {
-        padding: [40, 40],
-        maxZoom: 16
-      });
+      if (this.primeraCarga) {
+        this.map.fitBounds(bounds, {
+          padding: [40, 40],
+          maxZoom: 16
+        });
+        this.primeraCarga = false;
+      }
     }
   }
 
 
+
+  centrarEnObra(obra: ObraMapaModel): void {
+
+    if (!obra.latitud || !obra.longitud) return;
+
+    const marker = obra.id != null ? this.markerObras.get(obra.id) : undefined;
+
+    if (marker) {
+      const latLng = marker.getLatLng();
+      this.map.setView(latLng, this.zoomAobra, { animate: true });
+      marker.openPopup();
+    } else {
+      // fallback por si no se encontró el marker
+      this.map.setView([obra.latitud, obra.longitud], 16, { animate: true });
+    }
+  }
+
+
+  //Deprecated
   irAobra(o: ObraMapaModel){
     this.router.navigate(['/obras', o.id])
   }
   
+
+  private distanciaEnKm(
+    lat1: number,
+    lon1: number,
+    lat2: number,
+    lon2: number): number {
+
+    const R = 6371;
+    const dLat = this.toRad(lat2 - lat1);
+    const dLon = this.toRad(lon2 - lon1);
+    const a =
+      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos(this.toRad(lat1)) *
+        Math.cos(this.toRad(lat2)) *
+        Math.sin(dLon / 2) *
+        Math.sin(dLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    return R * c;
+  }
+
+  private toRad(grados: number): number {
+    return (grados * Math.PI) / 180;
+  }
+
 }
+
+

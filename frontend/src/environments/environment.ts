@@ -18,4 +18,5 @@ export const environment = {
   ],
   iconoMapaPrincipal: 'assets/icons/pin-obra.svg',
   iconoMapaPrincipalUsuario: 'assets/icons/pin-user.svg',
+
 };
