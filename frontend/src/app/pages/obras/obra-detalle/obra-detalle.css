@@ -74,64 +74,38 @@
   letter-spacing: .04em;
 }
 
-.burbuja,
-.burbuja-link{
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width:90%;
-  max-width: 100%;  
-  padding: .45rem .75rem;
-  border-radius: 999px;
-  font-weight: 700;
-  font-size: .9rem;
-  line-height: 1.2;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  border: 1px solid #dbe3eb;
-  background: #f9fafb;
-  color: #1e293b;
-  text-align: center;
-  text-transform: uppercase;
-  height: 2.4rem;
-  
-}
+/* BASE PARA burbuja y burbuja-link */
 .burbuja,
 .burbuja-link {
   display: flex;
-  align-items: center;        
-  justify-content: center;    
+  align-items: center;
+  justify-content: center;
 
+  /* el resto de tu estética igual */
   width: 100%;
   max-width: 100%;
-  padding: .35rem .9rem;
+  padding: .4rem .8rem;
   border-radius: 999px;
-
   font-weight: 700;
   font-size: .9rem;
-  text-align: center;
-
-  height: 2.7rem;             
+  text-transform: uppercase;
+  height: 2.6rem;
   box-sizing: border-box;
 }
 
+/* BURBUJA COMÚN */
 .burbuja {
   border: 1px solid #dbe3eb;
   background: #f9fafb;
   color: #1e293b;
 }
 
-.burbuja-link{
+/* BURBUJA / LINK */
+.burbuja-link {
   text-decoration: none;
   background: #f0f4ff;
   color: #1a3e78;
   border: 1px solid #c9dcff;
-  border-radius: 999px;
-  padding: 0.3rem 0.75rem;
-  font-size: 0.9rem;
-  font-weight: 700;
-
 }
 
 .burbuja-link:hover {
@@ -140,18 +114,23 @@
   transform: translateY(-1px);
 }
 
+/* TEXTOS LARGOS */
 .burbuja-texto {
   display: -webkit-box;
   -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
   line-clamp: 2;
-  -webkit-line-clamp: 2;  
   overflow: hidden;
   line-height: 1.2;
 }
 
-.vacio{
-   color:#94a3b8; 
+
+
+/* CLASE VACÍA */
+.vacio {
+  color: #94a3b8;
 }
+
 
 /* ====== DESCRIPCIÓN + MAPA ====== */
 #descripcion-mapa {

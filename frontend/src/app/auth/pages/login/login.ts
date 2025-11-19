@@ -29,6 +29,8 @@ export class Login implements OnInit {
   modalTitulo: string = '';
   modalMensaje: string = '';
   modalTipo: MessageType = 'info'; 
+  mostrarCruz: boolean = false;
+  private cierrePorAceptar: boolean = false;
 
 
   //EMITERS
@@ -50,12 +52,30 @@ export class Login implements OnInit {
 
 
   // MÉTODO SIMPLE PARA MOSTRAR MODAL
-  mostrarModal(titulo: string,  mensaje: string, tipo: MessageType = 'info'): void {
-    this.modalTitulo = titulo;
-    this.modalMensaje = mensaje;
-    this.modalTipo = tipo;
-    this.modalVisible = true;
+  mostrarModal(titulo: string, mensaje: string, tipo: MessageType = 'info', mostrarCruz: boolean = false 
+  ): void {
+  this.modalTitulo = titulo;
+  this.modalMensaje = mensaje;
+  this.modalTipo = tipo;
+  this.modalVisible = true;
+  this.mostrarCruz = mostrarCruz;
   }
+
+onModalCerrado(): void {
+  this.modalVisible = false;
+
+  if (this.cierrePorAceptar) {
+    this.cierrePorAceptar = false;
+    this.mostrarCruz = false;
+    return;              
+  }
+  if (this.mostrarCruz && this.estadoCredencial === EstadoLogin.CAMBIAR_PASS) {
+    this.mostrarCruz = false;
+    this.router.navigate(['/home']);
+    return;
+  }
+  this.mostrarCruz = false;
+}
 
   loguearse(): void {
     if (this.login.invalid) {
@@ -69,7 +89,8 @@ export class Login implements OnInit {
             this.mostrarModal(
               "CONTRASEÑA POR DEFECTO",
               "Usted posee la contraseña por defecto, debe cambiarla por seguridad.",
-              "warning"
+              "warning",
+              true
             );  
                       
           } else {
@@ -153,7 +174,7 @@ export class Login implements OnInit {
   }
 
   irACambiarPass(): void {
-    this.modalVisible = false;
+    this.cierrePorAceptar = true;
     this.router.navigate(['/cambiarpass']);
   }
 

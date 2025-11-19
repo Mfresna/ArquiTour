@@ -93,9 +93,7 @@
                 type="button" 
                 class="btn-secundario"
                 (click)="agregarArquitectoPorEmail()"
-                [disabled]="(formulario.get('emailArquitecto')?.errors?.['email'] && 
-                            !formulario.get('emailArquitecto')?.touched) ||
-                            formulario.get('emailArquitecto')?.value === ''">
+                [disabled]="formulario.get('emailArquitecto')?.errors?.['email'] && !formulario.get('emailArquitecto')?.touched">
                 <span id="sumar-arq" class="material-symbols-rounded">add</span>
               </button>
 
@@ -113,9 +111,7 @@
         <!-- Botón -->
         <div id="botonera" class="acciones">
           <button id="btn-ingresar" type="submit"
-            [disabled]="formulario.invalid || 
-              subiendo || 
-              formulario.get('emailArquitecto')?.value != null"> {{ editar ? 'GUARDAR CAMBIOS' : 'INGRESAR ESTUDIO' }}
+            [disabled]="formulario.invalid || subiendo"> {{ editar ? 'GUARDAR CAMBIOS' : 'INGRESAR ESTUDIO' }}
           </button>
         </div>
 

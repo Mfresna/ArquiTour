@@ -164,6 +164,7 @@
   transition: transform 0.2s, box-shadow 0.2s;
   text-decoration: none;
   color: inherit;
+  text-transform: capitalize;
 }
 
 .card:hover {

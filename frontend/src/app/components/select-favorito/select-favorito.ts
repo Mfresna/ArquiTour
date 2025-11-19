@@ -210,13 +210,6 @@ export class SelectFavorito implements OnInit {
           // borro el mensaje de error si todo salió bien
           this.mensajeErrorCreacion = null;
 
-          //Manejo de exito
-          if(resp.status === 200){
-            alert("Creada Exitosamente");
-          }else if(resp.status === 201){
-            alert("Actualizada Exitosamente");
-          }
-
         },
         error: (e) => {
           this.mensajeErrorCreacion = 'No se pudo crear la lista.';
