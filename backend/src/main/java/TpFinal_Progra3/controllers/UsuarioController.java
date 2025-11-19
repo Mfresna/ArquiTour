@@ -9,7 +9,10 @@ import TpFinal_Progra3.model.entities.Usuario;
 import TpFinal_Progra3.security.model.DTO.PasswordDTO;
 import TpFinal_Progra3.security.model.DTO.RolesDTO;
 import TpFinal_Progra3.security.model.enums.RolUsuario;
+<<<<<<< HEAD
+=======
 import TpFinal_Progra3.services.implementacion.ImagenService;
+>>>>>>> backup
 import TpFinal_Progra3.services.implementacion.UsuarioService;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import jakarta.servlet.http.HttpServletRequest;
@@ -31,7 +34,10 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
+<<<<<<< HEAD
+=======
 import org.springframework.web.multipart.MultipartFile;
+>>>>>>> backup
 
 import java.util.List;
 
@@ -58,7 +64,11 @@ public class UsuarioController {
                     content = @Content(mediaType = "application/json", schema = @Schema(implementation = UsuarioResponseDTO.class))),
             @ApiResponse(responseCode = "400", description = "Datos inválidos o email ya registrado", content = @Content),
     })
+<<<<<<< HEAD
+    @PostMapping
+=======
     @PostMapping("/registrarme")
+>>>>>>> backup
     public ResponseEntity<UsuarioResponseDTO> registrarUsuario(
             @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     description = "Datos para registrar un nuevo usuario",
@@ -76,6 +86,13 @@ public class UsuarioController {
                       "descripcion": "Arquitecto especializado en viviendas sustentables",
                       "imagenUrl": "https://miapp.com/img/perfil.png"
                     }
+<<<<<<< HEAD
+                """)
+                    )
+            )
+            @RequestBody @Valid UsuarioDTO dto) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(usuarioService.registrarUsuario(dto));
+=======
                     """)
                     )
             )
@@ -86,6 +103,7 @@ public class UsuarioController {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(usuarioService.registrarUsuario(datosUsuario, imagenPerfil));
         
+>>>>>>> backup
     }
 
     @Operation(summary = "Obtener usuario por ID", description = "Devuelve los datos públicos de un usuario según su ID.")
@@ -133,10 +151,17 @@ public class UsuarioController {
             @ApiResponse(responseCode = "404", description = "Imagen no encontrada")
     })
     @DeleteMapping("/imagenPerfil")
+<<<<<<< HEAD
+    public ResponseEntity<UsuarioResponseDTO> borrarImagenPerfil(HttpServletRequest request,
+                                                                     @RequestBody @Valid ImagenDTO imgDTO){
+        //Borrar solo la imagen de perfil del usuario
+        return ResponseEntity.ok(usuarioService.borrarImagenPerfil(request, imgDTO.getUrl()));
+=======
     public ResponseEntity<UsuarioResponseDTO> borrarImagenPerfil(HttpServletRequest request){
 
         //Borrar solo la imagen de perfil del usuario
         return ResponseEntity.ok(usuarioService.borrarImagenPerfil(request));
+>>>>>>> backup
     }
 
     @Operation(summary = "Habilitar o inhabilitar cuenta", description = "Cambia el estado activo de la cuenta del usuario.")
@@ -146,7 +171,11 @@ public class UsuarioController {
     })
     @PatchMapping("/{id}")
     @PreAuthorize("hasRole('ADMINISTRADOR')")
+<<<<<<< HEAD
+    public ResponseEntity<String> cambiarEstadoDeCuenta(
+=======
     public ResponseEntity<UsuarioResponseDTO> cambiarEstadoDeCuenta(
+>>>>>>> backup
             HttpServletRequest request,
             @Parameter(description = "ID del usuario") @PathVariable @Positive Long id,
             @Parameter(description = "True para habilitar, False para inhabilitar") @RequestParam Boolean habilitacion) {
@@ -221,11 +250,18 @@ public class UsuarioController {
     })
     @PatchMapping("/password")
     @PreAuthorize("isAuthenticated()")
+<<<<<<< HEAD
+    public ResponseEntity<String> cambiarPassword(HttpServletRequest request,
+                                                  @RequestBody @Valid PasswordDTO passDTO) {
+        Usuario usr = usuarioService.buscarUsuario(usuarioService.obtenerMiPerfil(request).getId());
+        return ResponseEntity.ok(usuarioService.cambiarPassword(usr, passDTO));
+=======
     public ResponseEntity<Void> cambiarPassword(HttpServletRequest request,
                                                   @RequestBody @Valid PasswordDTO passDTO) {
         Usuario usr = usuarioService.buscarUsuario(usuarioService.obtenerMiPerfil(request).getId());
         usuarioService.cambiarPassword(usr, passDTO);
         return ResponseEntity.ok().build();
+>>>>>>> backup
     }
 
 }

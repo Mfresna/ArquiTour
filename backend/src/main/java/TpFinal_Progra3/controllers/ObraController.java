@@ -1,6 +1,9 @@
 package TpFinal_Progra3.controllers;
 
+<<<<<<< HEAD
+=======
 import TpFinal_Progra3.model.DTO.CoordenadasDTO;
+>>>>>>> backup
 import TpFinal_Progra3.model.DTO.obras.ObraDTO;
 import TpFinal_Progra3.model.DTO.obras.ObraResponseDTO;
 import TpFinal_Progra3.model.DTO.filtros.ObraFiltroDTO;
@@ -89,11 +92,19 @@ public class ObraController {
     @Operation(summary = "Eliminar una obra")
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMINISTRADOR') or hasRole('ARQUITECTO')")
+<<<<<<< HEAD
+    public ResponseEntity<String> eliminarObra(
+            HttpServletRequest request,
+            @Parameter(description = "ID de la obra a eliminar") @PathVariable @Positive Long id) {
+        obraService.eliminarObra(request, id);
+        return ResponseEntity.ok("Obra eliminada correctamente.");
+=======
     public ResponseEntity<Void> eliminarObra(
             HttpServletRequest request,
             @Parameter(description = "ID de la obra a eliminar") @PathVariable @Positive Long id) {
         obraService.eliminarObra(request, id);
         return ResponseEntity.ok().build();
+>>>>>>> backup
     }
 
     @Operation(summary = "Obtener URL de visualización de obra en mapa")
@@ -113,6 +124,14 @@ public class ObraController {
     }
 
     //Key: X-Forwarded-For - Value: mi ip publica
+<<<<<<< HEAD
+    @Operation(summary = "Listar obras cercanas al usuario")
+    @GetMapping("/cercanas")
+    public ResponseEntity<List<ObraResponseDTO>> obrasPorDistancia(
+            HttpServletRequest request,
+            @Parameter(description = "Distancia máxima en km") @RequestParam(defaultValue = "25") @Positive Double distanciaKm){
+        return ResponseEntity.ok(obraService.obrasPorDistancia(request, distanciaKm));
+=======
 
     //GET http://localhost:8080/api/obras/cercanas?distanciaKm=25  &lat=-34.6037&lon=-58.3816  (Opcionales)
     @Operation(summary = "Listar obras cercanas al usuario")
@@ -123,11 +142,17 @@ public class ObraController {
             @RequestBody(required = false) @Valid CoordenadasDTO coordenadasNavegador){
 
         return ResponseEntity.ok(obraService.obrasPorDistancia(request, distanciaKm, coordenadasNavegador));
+>>>>>>> backup
     }
 
     @Operation(summary = "Filtrar obras por categoría, estado y estudio")
     @GetMapping("/filtrar")
     public ResponseEntity<List<ObraResponseDTO>> filtrarObras(
+<<<<<<< HEAD
+            @Parameter(description = "Categoría de la obra") @RequestParam(required = false) CategoriaObra categoria,
+            @Parameter(description = "Estado de la obra") @RequestParam(required = false) EstadoObra estado,
+            @Parameter(description = "ID del estudio") @RequestParam(required = false) @Positive Long estudioId) {
+=======
             @Parameter(description = "Categoría de la obra")
             @RequestParam(required = false) CategoriaObra categoria,
             @Parameter(description = "Estado de la obra")
@@ -136,12 +161,16 @@ public class ObraController {
             @RequestParam(required = false) @Positive Long estudioId,
             @Parameter(description = "Nombre de la obra (parcial o completo)")
             @RequestParam(required = false) String nombre) {
+>>>>>>> backup
 
         ObraFiltroDTO filtro = new ObraFiltroDTO();
         filtro.setCategoria(categoria);
         filtro.setEstado(estado);
         filtro.setEstudioId(estudioId);
+<<<<<<< HEAD
+=======
         filtro.setNombre(nombre);
+>>>>>>> backup
 
         return ResponseEntity.ok(obraService.filtrarObras(filtro));
     }
@@ -168,12 +197,20 @@ public class ObraController {
     @Operation(summary = "Eliminar imágenes de una obra")
     @DeleteMapping("/{id}/imagenes")
     @PreAuthorize("hasRole('ADMINISTRADOR') or hasRole('ARQUITECTO')")
+<<<<<<< HEAD
+    public ResponseEntity<String> eliminarImagenes(
+=======
     public ResponseEntity<Void> eliminarImagenes(
+>>>>>>> backup
             HttpServletRequest request,
             @Parameter(description = "ID de la obra") @PathVariable @Positive Long id,
             @RequestBody List<@Pattern(regexp = "^(https?://).+\\.(jpg|jpeg|png|gif|bmp|webp)$") String> urlBorrar) {
         obraService.eliminarImagenes(request, id,urlBorrar);
+<<<<<<< HEAD
+        return ResponseEntity.ok("Imagenes Eliminadas Existosamente");
+=======
         return ResponseEntity.ok().build();
+>>>>>>> backup
     }
 
     @Operation(summary = "Agregar imágenes a una obra")
@@ -182,7 +219,11 @@ public class ObraController {
     public ResponseEntity<ObraResponseDTO> agregarImagenes(
             HttpServletRequest request,
             @Parameter(description = "ID de la obra") @PathVariable @Positive Long id,
+<<<<<<< HEAD
+            @RequestBody List<@Pattern(regexp = "^(https?://).+\\.(jpg|jpeg|png|gif|bmp|webp)$") String> urlAgregar) {
+=======
             @RequestBody List< String> urlAgregar) {
+>>>>>>> backup
         return ResponseEntity.ok(obraService.agregarImagenes(request, id, urlAgregar));
     }
 

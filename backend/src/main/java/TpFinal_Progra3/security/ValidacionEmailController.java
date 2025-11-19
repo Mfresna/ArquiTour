@@ -24,9 +24,16 @@ public class ValidacionEmailController {
     private final ValidacionEmailService validacionEmailService;
 
     @PostMapping("/enviarPin")
+<<<<<<< HEAD
+    public ResponseEntity<String> enviarPIN(@RequestBody @Valid PinRequestDTO dto){
+        validacionEmailService.enviarPIN(dto);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body("Se envió un PIN de verificación al correo " + dto.email().trim().toLowerCase());
+=======
     public ResponseEntity<Void> enviarPIN(@RequestBody @Valid PinRequestDTO dto){
         validacionEmailService.enviarPIN(dto);
         return ResponseEntity.status(HttpStatus.CREATED).build();
+>>>>>>> backup
 
     }
 

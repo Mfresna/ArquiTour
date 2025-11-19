@@ -13,7 +13,14 @@ public record AuthRequest(
         @Email(message = "El email debe tener un formato válido")
         String username,
 
+<<<<<<< HEAD
+        @Pattern(
+                regexp = "^(?=.*[A-ZÁÉÍÓÚÑ])(?=.*\\d)[A-Za-záéíóúÁÉÍÓÚñÑ\\d@._!+\\-]+$",
+                message = "La contraseña debe contener al menos una mayúscula, un número y solo puede incluir letras, números y los símbolos seguros: @ . _ - ! +"
+        )
+=======
         @NotBlank(message = "La Contraseña no puede estar vacia")
+>>>>>>> backup
         String password
 
 ) {}

@@ -141,6 +141,7 @@ public class UsuarioService implements UsuarioServiceInterface {
         }
     }
 
+
     public Usuario buscarUsuario(Long id) {
         return usuarioRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Usuario no encontrado con ID: " + id));

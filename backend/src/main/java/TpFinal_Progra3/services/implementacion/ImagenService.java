@@ -38,6 +38,8 @@ public class ImagenService implements ImagenServiceInterface {
                 .orElseThrow(() -> new NotFoundException("Imagen no encontrada con URL: " + url));
     }
 
+<<<<<<< HEAD
+=======
     public List<Imagen> obtenerImagenes(List<String> urls) {
 
         return urls.stream()
@@ -47,6 +49,7 @@ public class ImagenService implements ImagenServiceInterface {
                 .toList();
     }
 
+>>>>>>> backup
     public void eliminarImagen(Long id) {
         if (!imagenRepository.existsById(id)) {
             throw new NotFoundException("Imagen no encontrada.");
@@ -54,10 +57,13 @@ public class ImagenService implements ImagenServiceInterface {
         imagenRepository.deleteById(id);
     }
 
+<<<<<<< HEAD
+=======
     public void eliminarImagen(String url){
         imagenRepository.findByUrl(url).ifPresent(imagenRepository::delete);
     }
 
+>>>>>>> backup
     public List<String> subirImagenes(List<MultipartFile> archivos){
         //Sube las imagenes y las guarda en la base de datos
         List<String> urls = almacImagenSerive.subirImagenes(archivos);

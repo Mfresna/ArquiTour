@@ -176,8 +176,11 @@ public class EstudioArqService implements EstudioArqServiceInterface {
                     "El Arquitecto logueado no pertenece al Estudio de Arquitectura ID: " + id);
         }
 
-        String urlBorrar = (estudio.getImagen() != null) ? estudio.getImagen().getUrl() : null;
-        String urlNueva = imgDTO != null ? imgDTO.getUrl() : null;
+        //Hay algo para actualizar
+        if(url.equals(estudio.getImagen().getUrl())){
+            //Devuelvo el estudio como estaba
+            return estudioArqMapper.mapDTO(estudio);
+        }
 
         //Se fija si la img cambio
         boolean imagenCambio = !Objects.equals(urlBorrar, urlNueva);
@@ -204,6 +207,7 @@ public class EstudioArqService implements EstudioArqServiceInterface {
 
     private void eliminarImagen (String urlABorrar){
         imagenService.eliminarImagen(urlABorrar);
+
     }
 
     private boolean puedeGestionarEstudio(HttpServletRequest request, Long id){

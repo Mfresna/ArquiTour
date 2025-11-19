@@ -66,7 +66,12 @@ public class ObraDTO {
     @Schema(description = "Listado de URLs de imágenes asociadas a la obra",
             example = "[\"https://cdn.miapp.com/img1.jpg\", \"https://cdn.miapp.com/img2.jpg\"]")
     private List<@Size(max = 2048, message = "La URL no debe superar los 2048 caracteres.")
+<<<<<<< HEAD
+                @Pattern(regexp = "^(https?://).+\\.(jpg|jpeg|png|gif|bmp|webp)$",
+                        message = "La URL debe comenzar con http o https y terminar en una imagen válida (.jpg, .png, etc.).")
+=======
                 // @Pattern(regexp = "^(https?://).+\\.(jpg|jpeg|png|gif|bmp|webp)$",
                 //         message = "La URL debe comenzar con http o https y terminar en una imagen válida (.jpg, .png, etc.).")
+>>>>>>> backup
             String> urlsImagenes;
 }

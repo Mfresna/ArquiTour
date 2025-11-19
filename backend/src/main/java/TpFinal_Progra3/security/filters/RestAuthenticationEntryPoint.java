@@ -14,6 +14,8 @@ import java.io.IOException;
 /**
  * Es un Manejador de errores de Autenticacion
  */
+<<<<<<< HEAD
+=======
 //public class RestAuthenticationEntryPoint implements AuthenticationEntryPoint {
 //
 //    @Override
@@ -50,6 +52,7 @@ import java.io.IOException;
 //    }
 //
 //}
+>>>>>>> backup
 
 @Component
 @RequiredArgsConstructor
@@ -59,6 +62,32 @@ public class RestAuthenticationEntryPoint implements AuthenticationEntryPoint {
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException {
 
         response.setContentType("application/json");
+<<<<<<< HEAD
+        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+
+        String errorMessage = switch (authException) {
+            case BadCredentialsException badCredentialsException ->
+                    "Credenciales inválidas";
+            case DisabledException disabledException ->
+                    "Cuenta deshabilitada";
+            case LockedException lockedException ->
+                    "Cuenta bloqueada";
+            case AccountExpiredException accountExpiredException ->
+                    "Cuenta expirada";
+            case CredentialsExpiredException credentialsExpiredException ->
+                    "Credenciales expiradas";
+            case InsufficientAuthenticationException insufficientAuthenticationException ->
+                    "Autenticación insuficiente";
+            case AuthenticationServiceException authenticationServiceException ->
+                    "Error en el servicio de autenticación";
+            default -> "Error de autenticación: " + authException.getMessage();
+        };
+
+        String respuestaJson = String.format("{\"error\": \"%s\", \"status\": %d, \"path\": \"%s\"}",
+                errorMessage,
+                HttpServletResponse.SC_UNAUTHORIZED,
+                request.getRequestURI());
+=======
 
         String errorMessage;
         int statusCode;
@@ -106,9 +135,14 @@ public class RestAuthenticationEntryPoint implements AuthenticationEntryPoint {
                 statusCode,
                 request.getRequestURI()
         );
+>>>>>>> backup
 
         response.getWriter().write(respuestaJson);
         response.getWriter().flush();
     }
 
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> backup

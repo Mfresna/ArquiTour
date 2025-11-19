@@ -3,9 +3,13 @@ package TpFinal_Progra3.services.implementacion;
 import TpFinal_Progra3.exceptions.IPLocationException;
 import TpFinal_Progra3.exceptions.NotFoundException;
 import TpFinal_Progra3.exceptions.ProcesoInvalidoException;
+<<<<<<< HEAD
+import TpFinal_Progra3.model.DTO.IPLocationDTO;
+=======
 import TpFinal_Progra3.model.DTO.CoordenadasDTO;
 import TpFinal_Progra3.model.DTO.IPLocationDTO;
 import TpFinal_Progra3.model.DTO.ImagenDTO;
+>>>>>>> backup
 import TpFinal_Progra3.model.DTO.obras.ObraDTO;
 import TpFinal_Progra3.model.DTO.obras.ObraResponseDTO;
 import TpFinal_Progra3.model.DTO.usuarios.UsuarioResponseDTO;
@@ -26,6 +30,13 @@ import TpFinal_Progra3.utils.CoordenadasUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
+<<<<<<< HEAD
+import org.springframework.http.HttpStatus;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Service;
+import java.util.List;
+import java.util.Map;
+=======
 import org.hibernate.mapping.Set;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -36,6 +47,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+>>>>>>> backup
 
 @Service
 @RequiredArgsConstructor
@@ -57,11 +69,14 @@ public class ObraService implements ObraServiceInterface{
             throw new ProcesoInvalidoException(HttpStatus.UNAUTHORIZED,"El Arquitecto no puede crear obras para un estudio que no forma parte.");
         }
 
+<<<<<<< HEAD
+=======
         //Modificacion 10-11
         if(!obraRepository.findByNombreIgnoreCase(dto.getNombre()).isEmpty()){
             throw new ProcesoInvalidoException(HttpStatus.NOT_ACCEPTABLE,"No se puede crear una obra que contenta ese nombre.");
         }
 
+>>>>>>> backup
         List<Imagen> imagenesObra = dto.getUrlsImagenes().stream()
                 .map(imagenService::obtenerImagen)
                 .toList();
@@ -107,6 +122,13 @@ public class ObraService implements ObraServiceInterface{
                 .toList();
     }
 
+<<<<<<< HEAD
+    public List<ObraResponseDTO> obrasPorDistancia(HttpServletRequest request, Double distancia){
+
+        IPLocationDTO ipLocationUsuario =
+                ipLocationService.obtenerUbicacion(ipLocationService.obtenerIpCliente(request))
+                        .orElseThrow(() -> new IPLocationException(HttpStatus.CONFLICT,"No se puede obtener la Localizacion por IP"));
+=======
     public List<ObraResponseDTO> obrasPorDistancia(HttpServletRequest request, Double distancia, CoordenadasDTO coordNavegador){
 
         IPLocationDTO ipLocationUsuario;
@@ -122,6 +144,7 @@ public class ObraService implements ObraServiceInterface{
                     ipLocationService.obtenerUbicacion(ipLocationService.obtenerIpCliente(request))
                             .orElseThrow(() -> new IPLocationException(HttpStatus.CONFLICT,"No se puede obtener la Localizacion por IP"));
         }
+>>>>>>> backup
 
         Map<String,Double> coordenadas = CoordenadasUtils.areaDeBusqueda(ipLocationUsuario, distancia);
 
@@ -159,8 +182,13 @@ public class ObraService implements ObraServiceInterface{
         EstudioArq estudio = estudioArqRepository.findById(obraDTO.getEstudioId())
                 .orElseThrow(() -> new NotFoundException("Estudio de arquitectura no encontrado con ID: " + obraDTO.getEstudioId()));
 
+<<<<<<< HEAD
+        if(!puedeGestionarObra(request,id)) {
+            throw new ProcesoInvalidoException(HttpStatus.UNAUTHORIZED,"El Arquitecto no puede modificar obras para un estudio que no forma parte.");
+=======
         if (!puedeGestionarObra(request, id)) {
             throw new ProcesoInvalidoException(HttpStatus.UNAUTHORIZED, "El Arquitecto no puede modificar obras para un estudio que no forma parte.");
+>>>>>>> backup
         }
 
         obra.setNombre(obraDTO.getNombre());
@@ -172,6 +200,9 @@ public class ObraService implements ObraServiceInterface{
         obra.setCategoria(obraDTO.getCategoria());
         obra.setEstudio(estudio);
 
+<<<<<<< HEAD
+        Obra obraActualizada = obraRepository.save(obra);
+=======
         //Primero Actualizo la obra si no me da error, actualizo las imagenes
 
         Obra obraActualizada = obraRepository.save(obra);
@@ -179,6 +210,7 @@ public class ObraService implements ObraServiceInterface{
         List<String> urlExistentes = obra.getImagenes().stream().map(Imagen::getUrl).toList();
         actualizarImagenesObra(request,id,urlExistentes,obraDTO.getUrlsImagenes());
 
+>>>>>>> backup
         return obraMapper.mapResponseDTO(obraActualizada);
     }
 
@@ -234,6 +266,8 @@ public class ObraService implements ObraServiceInterface{
         return usr.getCredencial().tieneRolUsuario(RolUsuario.ROLE_ADMINISTRADOR)
                 || usr.getEstudios().stream().anyMatch(e -> e.getId().equals(id));
     }
+<<<<<<< HEAD
+=======
 
     private void actualizarImagenesObra(HttpServletRequest request,
                                         Long id,
@@ -254,4 +288,5 @@ public class ObraService implements ObraServiceInterface{
         eliminarImagenes(request, id, urlsBorrar);
     }
 
+>>>>>>> backup
 }

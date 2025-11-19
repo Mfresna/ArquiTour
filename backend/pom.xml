@@ -118,6 +118,8 @@
 			<version>1.37.0</version>
 		</dependency>
 
+<<<<<<< HEAD
+=======
 		<dependency>
 			<groupId>com.twelvemonkeys.imageio</groupId>
 			<artifactId>imageio-webp</artifactId>
@@ -125,6 +127,7 @@
 		</dependency>
 
 
+>>>>>>> backup
 	</dependencies>
 
 	<build>

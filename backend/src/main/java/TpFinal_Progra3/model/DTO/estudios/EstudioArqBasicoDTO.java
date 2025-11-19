@@ -31,7 +31,12 @@ public class EstudioArqBasicoDTO {
             maxLength = 2048
     )
     @Size(max = 2048, message = "La URL no debe superar los 2048 caracteres.")
+<<<<<<< HEAD
+    @Pattern(regexp = "^(https?://).+\\.(jpg|jpeg|png|gif|bmp|webp)$",
+            message = "La URL debe comenzar con http o https y terminar en una imagen válida (.jpg, .png, etc.).")
+=======
 //    @Pattern(regexp = "^(https?://).+\\.(jpg|jpeg|png|gif|bmp|webp)$",
 //            message = "La URL debe comenzar con http o https y terminar en una imagen válida (.jpg, .png, etc.).")
+>>>>>>> backup
     private String imagenUrl; // URL de la imagen asociada
 }

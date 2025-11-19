@@ -22,9 +22,12 @@ public class ObraSpecification {
             if (filtro.getEstudioId() != null) {
                 predicate = cb.and(predicate, cb.equal(root.get("estudio").get("id"), filtro.getEstudioId()));
             }
+<<<<<<< HEAD
+=======
             if (filtro.getNombre() != null && !filtro.getNombre().isBlank()) {
                 predicate = cb.and(predicate, cb.like(cb.lower(root.get("nombre")), "%" + filtro.getNombre().toLowerCase() + "%"));
             }
+>>>>>>> backup
 
             return predicate;
         };

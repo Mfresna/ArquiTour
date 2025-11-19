@@ -68,6 +68,5 @@ export const routes: Routes = [
   { path: '**', component: NotFound }
 
 
-  
-
+  { path: 'prueba', component: Register}
 ];  

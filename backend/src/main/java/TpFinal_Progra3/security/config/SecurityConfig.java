@@ -16,11 +16,14 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+<<<<<<< HEAD
+=======
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.List;
+>>>>>>> backup
 
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
@@ -55,11 +58,17 @@ public class SecurityConfig {
                         .requestMatchers("/v3/api-docs/**", "/swagger-ui.html", "/swagger-ui/**").permitAll()
                         //autenticacion sin restriccion
                         .requestMatchers("/auth/**").permitAll()
+<<<<<<< HEAD
+                        .requestMatchers("/imagen/**").permitAll()
+                        .requestMatchers("/validacion/**").permitAll()
+                        .requestMatchers(HttpMethod.POST,"/usuarios").permitAll()
+=======
                         .requestMatchers("/validacion/**").permitAll()
                         .requestMatchers("/imagen/**").permitAll()
 
                         .requestMatchers(HttpMethod.POST,"/usuarios/registrarme").permitAll()
 
+>>>>>>> backup
                         // Otros EndPoints deben estar autenticados
                         .anyRequest().authenticated())
 
@@ -67,7 +76,11 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin))
                 .sessionManagement(manager -> manager.sessionCreationPolicy(STATELESS))
+<<<<<<< HEAD
+                //Esto Ejecuta mei filtro personalizado para login y pass que va a retornar si es valido
+=======
                 //Esto Ejecuta mi filtro personalizado para login y pass que va a retornar si es valido
+>>>>>>> backup
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 //Establece la clase encargada de manejar las excepciones que sean lanzadas.
                 .exceptionHandling(e -> e.authenticationEntryPoint(restAuthenticationEntryPoint));
@@ -75,6 +88,8 @@ public class SecurityConfig {
         // Devuelve la cadena de filtros de seguridad
         return http.build();
     }
+<<<<<<< HEAD
+=======
 
     //-------------- CORS ------------------//
 
@@ -100,4 +115,5 @@ public class SecurityConfig {
 
 
 
+>>>>>>> backup
 }

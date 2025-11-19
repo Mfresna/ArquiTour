@@ -3,7 +3,10 @@ package TpFinal_Progra3.services;
 import TpFinal_Progra3.exceptions.EmailNoEnviadoException;
 import jakarta.mail.internet.MimeMessage;
 import org.springframework.beans.factory.annotation.Autowired;
+<<<<<<< HEAD
+=======
 import org.springframework.beans.factory.annotation.Value;
+>>>>>>> backup
 import org.springframework.http.HttpStatus;
 import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -16,9 +19,12 @@ public class EmailService {
     @Autowired
     private JavaMailSender mailSender;
 
+<<<<<<< HEAD
+=======
     @Value("${url.front}")
     private String urlFront;
 
+>>>>>>> backup
     public void mailResetPass(String emailUsuario, String token) throws EmailNoEnviadoException {
         try {
             MimeMessage mensajePersonalizado = mailSender.createMimeMessage();
@@ -47,8 +53,12 @@ public class EmailService {
 
     private String generarCuerpo (String token){
         System.out.println(token);
+<<<<<<< HEAD
+        String urlReset = "http://localhost:8080/auth/password/" + token;
+=======
 
         String urlReset = urlFront + "/auth/password/" + token;
+>>>>>>> backup
 
         return "<html>" +
                 "<body style='font-family: Arial, sans-serif; text-align: center; background-color: #f9f9f9; padding: 20px;'>" +
@@ -60,7 +70,10 @@ public class EmailService {
                 "background-color: #2E86C1; color: white; font-weight: bold; border-radius: 5px;'>Restaurar Contraseña</a>" +
                 "</div>" +
                 "<p style='color: #999;'>Este enlace expirará en 24 horas.</p>" +
+<<<<<<< HEAD
+=======
                 "<p>" + urlReset + "</p>" +
+>>>>>>> backup
                 "</body>" +
                 "</html>";
     }
@@ -99,6 +112,9 @@ public class EmailService {
                 + "</body></html>";
     }
 
+<<<<<<< HEAD
+=======
 
 
+>>>>>>> backup
 }
