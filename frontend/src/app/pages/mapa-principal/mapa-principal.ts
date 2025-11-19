@@ -86,13 +86,14 @@ export class MapaPrincipal implements AfterViewInit, OnDestroy {
   private inicializarMapa(): void {
     this.map = L.map('mapa-obras', {
       center: [0, 0],
-      zoom: 2
+      zoom: 3,
+      minZoom: 3
     });
 
     //'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
     //https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png
     //Sete la informacion contextual atribution es el copyright de abajo a la derecha
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
+    L.tileLayer(`${environment.templateMapa}`, {
       maxZoom: 19,
       attribution:
         '&copy; <a href="https://carto.com/attributions">CARTO</a>'
@@ -236,7 +237,7 @@ export class MapaPrincipal implements AfterViewInit, OnDestroy {
 
         marker
           .addTo(this.markersLayer)
-          .bindPopup(`<strong>${obra.nombre}</strong>`);
+          //.bindPopup(`<strong>${obra.nombre}</strong>`);
 
         marker.on('click', () => {
           this.router.navigate(['/obras', obra.id]);

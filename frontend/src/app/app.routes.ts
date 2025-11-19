@@ -21,11 +21,13 @@ import { rolesGuard } from './guards/roles/roles-guard';
 import { salirSinGuardarGuard } from './guards/salirSinGuardar/salir-sin-guardar-guard';
 import { NotFound } from './pages/not-found/not-found';
 import { MapaPrincipal } from './pages/mapa-principal/mapa-principal';
+import { MapaCompleto } from './pages/mapa-completo/mapa-completo';
 
 
 
 
 export const routes: Routes = [
+  {path:'mapa2', component:MapaCompleto},
 
   {path:'mapa', component: MapaPrincipal},
 
