@@ -347,7 +347,7 @@ export class ObraForm implements TieneCambiosPendientes{
           alert('Sin URLs de imágenes');
           return;
         }
-
+ 
         this.obraService.postObra({ ...crearObra, urlsImagenes: urls })
           .pipe(finalize(() => this.subiendo = false))
           .subscribe({
