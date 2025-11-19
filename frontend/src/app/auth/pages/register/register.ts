@@ -17,6 +17,7 @@ import { MensajeModal } from '../../../components/mensaje-modal/mensaje-modal';
 
 type Paso = "email" | "pin" | "registrarme";
 type DestinoRedireccion = 'login' | 'inicio' | null;
+type MessageType = 'success' | 'error' | 'warning' | 'info';
 
 @Component({
   selector: 'app-register',
@@ -53,6 +54,7 @@ export class Register implements OnInit, AfterViewInit{
   modalTitulo = '';
   modalMensaje = '';
   redirigirDestino: DestinoRedireccion = null; //para saber si el botón Aceptar debe ir al login
+  modalTipo: MessageType = 'info'; 
 
   constructor(
     private fb: FormBuilder,
@@ -117,11 +119,13 @@ export class Register implements OnInit, AfterViewInit{
 
 // ============================== MODAL 
 
-  private mostrarModal(titulo: string, mensaje: string, destino: DestinoRedireccion = null): void {
+   private mostrarModal(titulo: string, mensaje: string, destino: DestinoRedireccion = null, tipo: MessageType = 'info'     
+  ): void {
     this.modalTitulo = titulo;
     this.modalMensaje = mensaje;
     this.modalVisible = true;
     this.redirigirDestino = destino;
+    this.modalTipo = tipo;
   }
 
   onModalAceptar(): void {
@@ -184,21 +188,26 @@ export class Register implements OnInit, AfterViewInit{
           this.mostrarModal(
             "Email registrado",
             "El mail ya se encuentra registrado en la base de datos.",
-            "login"
+            "login",
+            "warning"
           );
           console.warn(e);
 
         } else if(e.status === 423) {
           this.mostrarModal(
             "Demasiadas solicitudes",
-            "Aguarde un momento antes de enviar un nuevo PIN."
+            "Aguarde un momento antes de enviar un nuevo PIN.",
+            null,
+            "error"
           );
           console.warn(e);
 
         }else if(e.status >= 500){
           this.mostrarModal(
             "Error del servicio",
-            "ERROR del Servicio, intente más tarde."
+            "ERROR del Servicio, intente más tarde.",
+            null,
+            "error"
           );
           console.warn(e);
 
@@ -234,7 +243,9 @@ export class Register implements OnInit, AfterViewInit{
           //CONFLICT
           this.mostrarModal(
             "PIN caducado",
-            "El PIN caducó. Debe generar uno nuevo."
+            "El PIN caducó. Debe generar uno nuevo.",
+            null,
+            "warning"
           );
           this.anteriorPaso();
 
@@ -244,7 +255,9 @@ export class Register implements OnInit, AfterViewInit{
           //GONE
           this.mostrarModal(
             "Demasiados intentos",
-            "Espere para volver a generar un PIN."
+            "Espere para volver a generar un PIN.",
+            null,
+            "warning"
           );
           this.anteriorPaso();
           console.warn(e);
@@ -254,7 +267,8 @@ export class Register implements OnInit, AfterViewInit{
           this.mostrarModal(
             "Solicitud inválida",
             "Error en la solicitud. Será redirigido al inicio.",
-            "inicio"
+            "inicio",
+            "error"
           );
           console.warn(e);
 
@@ -266,14 +280,18 @@ export class Register implements OnInit, AfterViewInit{
         }else if(e.status >= 500){
           this.mostrarModal(
             "Error del servicio",
-            "Intente más tarde."
+            "Intente más tarde.",
+            null,
+            "error"
           );
           console.warn(e);
 
         } else{
           this.mostrarModal(
             "Error inesperado",
-            "Ocurrió un error inesperado."
+            "Ocurrió un error inesperado.",
+            null,
+            "error"
           );
           console.warn(e);
         }
@@ -307,7 +325,8 @@ export class Register implements OnInit, AfterViewInit{
           this.mostrarModal(
             "Registro exitoso",
             "REGISTRADO EXITOSAMENTE",
-            "login"
+            "login",
+            "success"
           );
           this.registerForm.reset();
         },
@@ -317,13 +336,17 @@ export class Register implements OnInit, AfterViewInit{
             //BAD_REQUEST
             this.mostrarModal(
               "Imagen inválida",
-              "Verifique la imagen, su nombre y su extensión."
+              "Verifique la imagen, su nombre y su extensión.",
+              null,
+              "warning"
             );
           }else if(e.status === 415){
             //UNSUPPORTED_MEDIA_TYPE
              this.mostrarModal(
               "Tipo de archivo no soportado",
-              "El tipo de archivo no es soportado, solo se pueden cargar imágenes."
+              "El tipo de archivo no es soportado, solo se pueden cargar imágenes.",
+              null,
+              "warning"
             );
           }
           
@@ -335,7 +358,8 @@ export class Register implements OnInit, AfterViewInit{
             this.mostrarModal(
               "Email ya registrado",
               "El email ya existe en el sistema.",
-              'inicio'
+              'inicio',
+              "error"
             );
 
           } else if(e.status === 403) {
@@ -343,7 +367,9 @@ export class Register implements OnInit, AfterViewInit{
             console.warn(e);
             this.mostrarModal(
               "Email no verificado",
-              "El email no ha sido verificado."
+              "El email no ha sido verificado.",
+              null,
+              "warning"
             );
 
             this.origenPaso();
@@ -353,7 +379,8 @@ export class Register implements OnInit, AfterViewInit{
             this.mostrarModal(
               "Error del servicio",
               "ERROR del Servicio, intente más tarde.",
-              "inicio"
+              "inicio",
+              "error"
             );
             console.warn(e);
 

@@ -9,10 +9,11 @@ import { ObraService } from '../../../services/obraService/obra-service';
 import { ObraModel } from '../../../models/obraModels/obraModel';
 import { UsuarioModel } from '../../../models/usuarioModels/usuarioModel';
 import { UsuarioService } from '../../../services/usuarioService/usuario-service';
+import { MensajeModal, MessageType } from '../../../components/mensaje-modal/mensaje-modal';
 
 @Component({
   selector: 'app-estudio-detalle',
-  imports: [RouterLink],
+  imports: [RouterLink, MensajeModal],
   templateUrl: './estudio-detalle.html',
   styleUrl: './estudio-detalle.css',
 })
@@ -28,6 +29,13 @@ export class EstudioDetalle {
 
 
   private idsEstudiosUsuario: number[] = [];
+
+  
+  // ===== MODAL =====
+  modalVisible = false;
+  modalTitulo = '';
+  modalMensaje = '';
+  modalTipo: MessageType = 'info';
 
   constructor(
     private route: ActivatedRoute,
@@ -63,14 +71,24 @@ export class EstudioDetalle {
         console.error(e);
 
         if(e.status === 404){
-          alert("estudio no encontrado");
+          this.mostrarModal(
+            "Estudio no encontrado",
+            "El estudio solicitado no existe.",
+            "warning"
+          );
         }else if(e.status >= 500){
-          alert("Error del Servidor");
+          this.mostrarModal(
+            "Error del servidor",
+            "Ocurrió un error al cargar el estudio.",
+            "error"
+          );
         }else{
-          alert("Error Inesperado");
+          this.mostrarModal(
+            "Error inesperado",
+            "No se pudo cargar el estudio.",
+            "error"
+          );
         }
-
-        this.router.navigate(['/estudios']);
       }
     });
 
@@ -81,10 +99,32 @@ export class EstudioDetalle {
       },
       error: (e) => {
         console.error("No se puede leer el usuario", e);
-        alert("No se pueden cargar los datos de perfil");
+        this.mostrarModal(
+          "Error:",
+          "No se pudieron cargar los datos del sus estudios.",
+          "warning"
+        );
         this.idsEstudiosUsuario = [];
       }
     });
+  }
+
+  private mostrarModal(titulo: string, mensaje: string, tipo: MessageType = 'info'
+  ): void {
+    this.modalTitulo = titulo;
+    this.modalMensaje = mensaje;
+    this.modalTipo = tipo;
+    this.modalVisible = true;
+  }
+
+  
+  onModalAceptar(): void {
+    this.modalVisible = false;
+    this.router.navigate(['/estudios']);
+  }
+
+  onModalCerrado(): void {
+    this.modalVisible = false;
   }
 
   private cargarObrasVinculadasPorIds(ids: number[]): void {
@@ -222,15 +262,22 @@ export class EstudioDetalle {
 
     this.estudioService.deleteEstudio(this.estudio.id).subscribe({
       next: () => {
-        alert('Estudio eliminado correctamente.');
-        this.router.navigate(['/estudios']);
+        this.mostrarModal(
+          'Estudio eliminado',
+          'El estudio fue eliminado correctamente.',
+          'success'
+        );
       },
       error: (e) =>{
         console.error(e);
 
         if(e.status === 409){
           //BAD_REQUEST
-          alert("El estudio tiene obras asociadas, primero eliminelas!")
+          this.mostrarModal(
+            'No se puede eliminar',
+            'El estudio tiene obras asociadas. Debe eliminarlas primero.',
+            'warning'
+          );
         }else if(e.status === 404){
           //UNSUPPORTED_MEDIA_TYPE
           alert("Estudio no encontrado");

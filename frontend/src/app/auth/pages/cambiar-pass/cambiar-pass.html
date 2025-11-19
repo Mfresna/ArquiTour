@@ -109,4 +109,17 @@
   [isVisible]="spinerVisible" 
   mensaje="Cambiando contraseña ..."
 />
-
+<app-mensaje-modal
+  [isVisible]="modalVisible"
+  [titulo]="modalTitulo"
+  [mensaje]="modalMensaje"
+  [conIcon]="true"
+  [tipo]="modalTipo"
+  tipoContenido="texto"
+  [mostrarCerrar]="true"
+  [mostrarBotonAceptar]="true"
+  [mostrarBotonCancelar]="false"
+  textoBotonAceptar="Aceptar"
+  (aceptar)="onModalAceptar()"
+  (cerrado)="onModalCerrado()"
+/>

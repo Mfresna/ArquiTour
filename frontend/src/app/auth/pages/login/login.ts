@@ -3,7 +3,7 @@ import { FormGroup, FormBuilder, Validators, ReactiveFormsModule } from '@angula
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '../../services/authService/auth-service';
 import { EsperandoModal } from '../../../components/esperando-modal/esperando-modal';
-import { MensajeModal } from '../../../components/mensaje-modal/mensaje-modal';
+import { MensajeModal, MessageType } from '../../../components/mensaje-modal/mensaje-modal';
 import { finalize } from 'rxjs/operators';
 import { EstadoLogin } from '../../models/login/EstadoLoginEnum';
 
@@ -28,6 +28,8 @@ export class Login implements OnInit {
   modalVisible: boolean = false;
   modalTitulo: string = '';
   modalMensaje: string = '';
+  modalTipo: MessageType = 'info'; 
+
 
   //EMITERS
   @Output() volverEmit = new EventEmitter<void>();
@@ -48,9 +50,10 @@ export class Login implements OnInit {
 
 
   // MÉTODO SIMPLE PARA MOSTRAR MODAL
-  mostrarModal(titulo: string, mensaje: string): void {
+  mostrarModal(titulo: string,  mensaje: string, tipo: MessageType = 'info'): void {
     this.modalTitulo = titulo;
     this.modalMensaje = mensaje;
+    this.modalTipo = tipo;
     this.modalVisible = true;
   }
 
@@ -65,7 +68,8 @@ export class Login implements OnInit {
 
             this.mostrarModal(
               "CONTRASEÑA POR DEFECTO",
-              "Usted posee la contraseña por defecto, debe cambiarla por seguridad."
+              "Usted posee la contraseña por defecto, debe cambiarla por seguridad.",
+              "warning"
             );  
                       
           } else {
@@ -81,12 +85,18 @@ export class Login implements OnInit {
             this.estadoCredencial = EstadoLogin.CUENTA_INACTIVA;
             
           }else if (e.status >= 500) {
-            this.mostrarModal("Error del servidor", "Intente nuevamente más tarde.");
+            this.mostrarModal("Error del servidor", 
+              "Intente nuevamente más tarde.",
+              "error");
           }else if (e.status === 0) {
             // Error de red o servidor caído
-            this.mostrarModal("Sin conexión", "No se pudo conectar al servidor.");
+            this.mostrarModal("Sin conexión", 
+              "No se pudo conectar al servidor.",
+              "error");
           }else{
-            this.mostrarModal("Error inesperado", "Ocurrió un error inesperado.");
+            this.mostrarModal("Error inesperado", 
+              "Ocurrió un error inesperado.",
+              "error");
           }
         }
       });
@@ -99,7 +109,8 @@ export class Login implements OnInit {
     if (emailValidacion != null && emailValidacion.invalid) {
       this.mostrarModal(
         "Email inválido",
-        "Ingrese un correo válido para recuperar su contraseña."
+        "Ingrese un correo válido para recuperar su contraseña.",
+        "warning"
       );
       emailValidacion.markAsTouched();
     }else{
@@ -112,22 +123,21 @@ export class Login implements OnInit {
         finalize(() => this.enviandoPin = false) 
       ).subscribe({
         next: (res) => {
-          this.mostrarModal(
-            "Correo enviado",
-            "Te enviamos un correo con las instrucciones para recuperar la contraseña."
-          );
+          alert("Le enviamos un correo para reestablecer su contraseña");
         },  
         error: (e) => {
           if (e.status >= 400 || e.status <= 499) {
              this.mostrarModal(
             "Error al enviar correo",
-            "No se pudo enviar el correo de recuperación. Verifique el email ingresado."
+            "No se pudo enviar el correo de recuperación. Verifique el email ingresado.",
+            "error"
           );
             console.error("Error en el envio del correo de recuperacion a: " + email);
           } else {
              this.mostrarModal(
             "Error inesperado",
-            "Ocurrió un error inesperado. Intente nuevamente más tarde."
+            "Ocurrió un error inesperado. Intente nuevamente más tarde.",
+            "error"
              ),
             console.error("Ocurrio un error inesperado");
           }
