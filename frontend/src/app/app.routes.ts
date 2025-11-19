@@ -20,11 +20,14 @@ import { noAuthGuard } from './guards/noAuth/no-auth-guard';
 import { rolesGuard } from './guards/roles/roles-guard';
 import { salirSinGuardarGuard } from './guards/salirSinGuardar/salir-sin-guardar-guard';
 import { NotFound } from './pages/not-found/not-found';
+import { MapaPrincipal } from './pages/mapa-principal/mapa-principal';
 
 
 
 
 export const routes: Routes = [
+
+  {path:'mapa', component: MapaPrincipal},
 
   //======= RUTAS PÚBLICAS =========//
   { path: '', component: Auth, canActivate: [noAuthGuard] },

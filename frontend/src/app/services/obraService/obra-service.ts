@@ -4,6 +4,8 @@ import { environment } from "../../../environments/environment";
 import { CategoriaObraModel } from "../../models/obraModels/categoriaObraModel";
 import { EstadoObraModel } from "../../models/obraModels/estadoObraModel";
 import { ObraModel } from "../../models/obraModels/obraModel";
+import { CoordenadasNavegador } from "../../models/mapaModels/coordenadasModel";
+import { ObraMapaModel } from "../../models/mapaModels/obraMapaModel";
 
 
 @Injectable({
@@ -62,6 +64,17 @@ export class ObraService {
   }
   getNombreById(id: number): string | undefined {
     return this.nombrePorId.get(id);
+  }
+
+  
+  getObrasCercanas(distanciaKm: number = 25, coords?: CoordenadasNavegador | null) {
+    return this.http.post<ObraMapaModel[]>(`${this.OBRAS_URL}/cercanas`, coords || {},
+      {
+        params: {
+          distanciaKm: distanciaKm.toString()
+        }
+      }
+    );
   }
   
 }
