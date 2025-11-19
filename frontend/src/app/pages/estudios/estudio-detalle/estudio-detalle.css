@@ -186,6 +186,8 @@
   transition: all .2s ease;
   margin-top: 10px;
   margin-right: 10px;
+  cursor: pointer;
+  user-select: none;
 }
 
 .obra-item:hover {

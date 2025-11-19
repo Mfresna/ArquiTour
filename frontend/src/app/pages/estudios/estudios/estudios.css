@@ -216,6 +216,7 @@ input.invalido {
   text-decoration: none;
   color: inherit;
   cursor: pointer;
+  text-transform: capitalize;
 }
 
 .card:hover {

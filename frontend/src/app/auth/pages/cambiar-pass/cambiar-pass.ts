@@ -184,7 +184,7 @@ private mostrarModal(titulo: string, mensaje: string, destino: 'login' | 'inicio
         this.mostrarModal(
           "Contraseña actualizada",
           "¡Contraseña actualizada correctamente!",
-          "home",
+          "login",
           "success"
         );
 

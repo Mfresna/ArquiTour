@@ -50,7 +50,15 @@
                   <h2>{{ l.nombre }}</h2>
 
                   <div class="fila-inferior">
-                    <p class="contador">{{ l.cantidadObras }} obras</p>
+                    <p class="contador">
+                      {{
+                        l.cantidadObras === 0
+                          ? 'Sin obras'
+                          : l.cantidadObras === 1
+                            ? '1 obra'
+                            : l.cantidadObras + ' obras'
+                      }}
+                    </p>
 
                     <div class="acciones-inferiores">
                       <button
