@@ -11,11 +11,12 @@ import { DragZoneSimple } from '../../../components/drag-zone-simple/drag-zone-s
 import { environment } from '../../../../environments/environment';
 import { Location } from '@angular/common';
 import { TieneCambiosPendientes } from '../../../guards/salirSinGuardar/salir-sin-guardar-guard';
+import { MensajeModal, MessageType } from '../../../components/mensaje-modal/mensaje-modal';
 
 
 @Component({
   selector: 'app-usuario-detalle',
-  imports: [ReactiveFormsModule, DragZoneSimple,EsperandoModal],
+  imports: [ReactiveFormsModule, DragZoneSimple,EsperandoModal, MensajeModal],
   templateUrl: './usuario-detalle.html',
   styleUrl: './usuario-detalle.css',
 })
@@ -49,6 +50,13 @@ export class UsuarioDetalle implements OnInit, AfterViewInit, TieneCambiosPendie
     //COMPONENTE DE IMAGEN
   @ViewChild('campoImagen') campoImagen!: DragZoneSimple;
 
+  // MODAL
+  modalVisible = false;
+  modalTitulo = '';
+  modalMensaje = '';
+  modalTipo: MessageType = 'info';
+  redirigirDespues: string | null = null;
+
   constructor(
     private fb: FormBuilder,
     private usuarioService: UsuarioService,
@@ -57,6 +65,35 @@ export class UsuarioDetalle implements OnInit, AfterViewInit, TieneCambiosPendie
     private route: ActivatedRoute,
     private location: Location   
   ) {}
+
+   // ---------------- MODAL ----------------
+
+  private mostrarModal(
+    titulo: string,
+    mensaje: string,
+    tipo: MessageType = 'info',
+    redirigirA: string | null = null
+  ) {
+    this.modalTitulo = titulo;
+    this.modalMensaje = mensaje;
+    this.modalTipo = tipo;
+    this.modalVisible = true;
+    this.redirigirDespues = redirigirA;
+  }
+
+  onModalAceptar() {
+    this.modalVisible = false;
+
+    if (this.redirigirDespues) {
+      this.router.navigate([this.redirigirDespues]);
+    }
+
+    this.redirigirDespues = null;
+  }
+
+  onModalCerrado() {
+    this.modalVisible = false;
+  }
 
   tieneCambiosPendientes(): boolean {
     // Si todavía no existe el form, no hay cambios
@@ -155,14 +192,22 @@ export class UsuarioDetalle implements OnInit, AfterViewInit, TieneCambiosPendie
         //Recarga las Variables
         const idParam = this.route.snapshot.params['id'];
         idParam ? this.cargarusuario(idParam) : this.cargarMe();
+
+        this.mostrarModal(
+          "Perfil actualizado",
+          "Los datos se han actualizado correctamente.",
+          "success"
+        );
       },
       error: (e) => {
         if(e.status === 400){
           //BAD_REQUEST
-          alert("Error en los Datos cargados")
+          this.mostrarModal("Datos inválidos", "Revisá los campos cargados.", "warning");
         }else if(e.status === 403){
           //FORBBIDEN
-          alert("El usuario no se puede modificar");
+          this.mostrarModal("Acceso denegado", "No tenés permiso para modificar este usuario.", "error", "/");
+        }else {
+          this.mostrarModal("Error inesperado", "No se pudo actualizar el perfil.", "error");
         }
       }
     });
@@ -193,12 +238,12 @@ export class UsuarioDetalle implements OnInit, AfterViewInit, TieneCambiosPendie
         console.error(e)
         if(e.status === 400){
           //BAD_REQUEST
-          alert("Verifique la imagen, su nombre y su extension.")
+          this.mostrarModal("Imagen inválida", "Verificá el archivo cargado.", "warning");
         }else if(e.status === 415){
           //UNSUPPORTED_MEDIA_TYPE
-          alert("El tipo de archivo no es soportado, solo se pueden cargar imagenes");
+           this.mostrarModal("Formato no válido", "Sólo se permiten imágenes JPG/PNG/WEBP.", "error");
         }else{
-          alert("El proceso de subir la Imagen Fallo.")
+            this.mostrarModal("Error al subir imagen", "No se pudo actualizar la imagen.", "error");
         }
       }
     });
@@ -213,7 +258,9 @@ export class UsuarioDetalle implements OnInit, AfterViewInit, TieneCambiosPendie
   private borrarImg(){
     this.usuarioService.borrarFotoPerfil().subscribe({
       next: () =>{console.log("Img Borrada Exitosamente")},
-      error: (e) => {console.error("ERROR al borrar la img", e)}
+      error: () => {
+        this.mostrarModal("Error", "No se pudo borrar la imagen.", "error");
+      }
     })
   }
   
@@ -263,8 +310,12 @@ export class UsuarioDetalle implements OnInit, AfterViewInit, TieneCambiosPendie
 
       },
       error: (e) => {
-        alert("No se pueden cargar los datos de perfil");
-        console.error("No se puede leer el usuario", e);
+        this.mostrarModal(
+          "Error al cargar",
+          "No se pudieron cargar los datos de tu perfil.",
+          "error",
+          "/"
+        );
 
       }
     });
@@ -286,7 +337,12 @@ export class UsuarioDetalle implements OnInit, AfterViewInit, TieneCambiosPendie
 
       },
       error: (e) => {
-        console.error("No se puede leer el usuario", e);
+       this.mostrarModal(
+          "Usuario no encontrado",
+          "El usuario solicitado no existe.",
+          "warning",
+          "/usuarios"
+        );
       }
     });
   }
