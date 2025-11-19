@@ -27,9 +27,7 @@ import { MapaCompleto } from './pages/mapa-completo/mapa-completo';
 
 
 export const routes: Routes = [
-  {path:'mapa2', component:MapaCompleto},
-
-  {path:'mapa', component: MapaPrincipal},
+  
 
   //======= RUTAS PÚBLICAS =========//
   { path: '', component: Auth, canActivate: [noAuthGuard] },
@@ -42,8 +40,8 @@ export const routes: Routes = [
 
   { path: 'cambiarpass', component: CambiarPass, canActivate: [authGuard]},  //Cuando el ADM maestro debe cambiar la pass
   { path: 'home', component: Obras, canActivate: [authGuard]},
-  {path:'mapa', component: MapaPrincipal, canActivate: [authGuard]},
-  
+  { path:'obras-cercanas', component: MapaPrincipal, canActivate: [authGuard]},
+  { path:'mapa', component:MapaCompleto, canActivate: [authGuard] },
 
   //Estudios
 
