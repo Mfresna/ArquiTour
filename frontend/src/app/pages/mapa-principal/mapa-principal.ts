@@ -20,6 +20,7 @@ import { finalize } from 'rxjs/operators';
 export class MapaPrincipal implements AfterViewInit, OnDestroy {
 
   private zoomInicial:number = 12;
+  private zoomAobra:number = 18;
 
   private map!: L.Map;
   private markersLayer!: L.LayerGroup;
@@ -88,11 +89,13 @@ export class MapaPrincipal implements AfterViewInit, OnDestroy {
       zoom: 2
     });
 
+    //'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
+    //https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png
     //Sete la informacion contextual atribution es el copyright de abajo a la derecha
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
       maxZoom: 19,
       attribution:
-        '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+        '&copy; <a href="https://carto.com/attributions">CARTO</a>'
     }).addTo(this.map);
 
     this.markersLayer = L.layerGroup().addTo(this.map);
@@ -269,7 +272,7 @@ export class MapaPrincipal implements AfterViewInit, OnDestroy {
 
     if (marker) {
       const latLng = marker.getLatLng();
-      this.map.setView(latLng, 16, { animate: true });
+      this.map.setView(latLng, this.zoomAobra, { animate: true });
       marker.openPopup();
     } else {
       // fallback por si no se encontró el marker
