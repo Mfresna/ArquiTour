@@ -105,7 +105,11 @@ export class ObraForm implements TieneCambiosPendientes{
           noBlancoEspacios
         ]],
       }
+      
     );
+
+    this.normalizarComaEnControl('latitud');
+    this.normalizarComaEnControl('longitud');
 
     this.cargarEstudios();
 
@@ -116,6 +120,26 @@ export class ObraForm implements TieneCambiosPendientes{
       this.cargarObra(this.id);
     }
   }
+
+  private normalizarComaEnControl(nombreControl: string): void {
+  const control = this.formulario.get(nombreControl);
+  if (!control) return;
+
+  control.valueChanges.subscribe(rawValue => {
+    if (rawValue === null || rawValue === undefined) return;
+
+    const str = String(rawValue);
+    if (!str.includes(',')) return;
+
+    const normalizado = str.replace(/,/g, '.');
+    const num = Number(normalizado);
+
+    control.setValue(
+      isNaN(num) ? normalizado : num,
+      { emitEvent: false } 
+    );
+  });
+}
 
   // ============ MODAL ============
   private mostrarModal(

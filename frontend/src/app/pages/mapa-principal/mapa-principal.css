@@ -188,6 +188,8 @@
   flex-grow: 1;
   overflow-y: auto;
   height: 0;
+  margin-top: 20px;
+
 
   padding-right: 6px;
   scrollbar-width: thin;
@@ -207,7 +209,7 @@
 
 /* Lista de obras */
 .listado-obras {
-  margin-top: 1.8rem;
+  margin-top: 1rem;
   font-size: 0.9rem;
 }
 
@@ -225,6 +227,7 @@
   
   cursor: pointer;
   transition: background-color 0.15s, transform 0.1s;
+  text-transform: capitalize;
 }
 
 .listado-obras li:hover {
