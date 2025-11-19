@@ -46,3 +46,26 @@ export const fechaNacValidador = (edadMinima: number): ValidatorFn => {
     return Object.keys(errores).length ? errores : null;
   };
 };
+
+export const anioEstadoObra: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
+
+  const raw = control.value;
+
+  if (raw === null || raw === undefined || raw === '') {
+    return null;
+  }
+
+  const value = Number(raw);
+  const errors: ValidationErrors = {};
+  
+  if (value === 0) {
+    errors['anioCero'] = true;
+  }
+
+  const currentYear = new Date().getFullYear();
+  if (value > currentYear) {
+    errors['fechaFutura'] = true;
+  }
+
+  return Object.keys(errors).length ? errors : null;
+};

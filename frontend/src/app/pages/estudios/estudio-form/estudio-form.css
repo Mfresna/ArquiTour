@@ -105,7 +105,6 @@ fieldset {
   font-weight: 500;
   margin-left: 0.5rem;
   
-  font-size: 0.9rem;
   color: var(--colorTerciario);
 }
 
@@ -133,8 +132,8 @@ fieldset {
 
 /* Estado inválido */
 input.invalido {
-  border: 2px solid #ff5c5c;
-  background: #ffecec;
+  border: 2px solid #ff5c5c !important;
+  background: #ffecec !important;
 }
 
 small.comentario {
@@ -215,6 +214,13 @@ small.error {
 #sumar-arq:focus{
   border: none;
 }
+
+#btn-agregar-arq:disabled {
+  background-color: #a0c4d9 !important;
+  cursor: not-allowed !important;
+  transform: none !important;
+}
+
 
 #btn-agregar-arq {
   width: 40px; 

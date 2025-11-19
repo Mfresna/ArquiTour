@@ -17,11 +17,27 @@
             id="nombre"
             type="text"
             formControlName="nombre"
-            placeholder="Ej.: Estudio ArquiTour"/>
+            placeholder="Ej.: Estudio ArquiTour"
+            [class.invalido]="formulario.get('nombre')?.invalid && (formulario.get('nombre')?.touched || formulario.get('nombre')?.dirty)"
+            autocomplete="off">
         
-          @if (formulario.get('nombre')?.invalid && formulario.get('nombre')?.touched) {
-            <small class="error">Ingrese un nombre válido.</small>
+          @if (formulario.get('nombre')?.errors?.['required'] && formulario.get('nombre')?.touched) {
+            <small class="error">El nombre del estudio es obligatorio.</small>
+          }@else if(formulario.get('nombre')?.errors?.['minlength'] && formulario.get('nombre')?.touched) {
+            <small class="error">El nombre es demasiado corto (min. 2 caraceres).</small>
+          }@else if(formulario.get('nombre')?.errors?.['maxlength']) {
+            <small class="error">El nombre excede los limites (max. 100 caraceres).</small>
+          }@else if (formulario.get('nombre')?.errors?.['espacios'] && formulario.get('nombre')?.touched) {
+            <small class="error">El nombre del estudio es obligatorio.</small>
+          }@else {
+            @if (formulario.get('nombre')?.errors?.['sinLetras'] && formulario.get('nombre')?.touched) {
+            <small class="error">Formato invalido, debe contener una letra.</small>
+            }
+            @if (formulario.get('nombre')?.errors?.['formato']) {
+              <small class="error">Simbolos permitidos (- : . , ¡ ? ( ) /).</small>
+            }
           }
+
         </fieldset>
 
         <!-- Imagen -->
@@ -68,14 +84,19 @@
               class="input"
               formControlName="emailArquitecto"
               placeholder="Ej: arquitecto@correo.com"
-              autocomplete="off"
-              [class.invalido]="formulario.get('emailArquitecto')?.invalid && (formulario.get('emailArquitecto')?.touched || formulario.get('emailArquitecto')?.dirty)"
-              (keydown.space)="$event.preventDefault()"/>
+              [class.invalido]="mensajeErrorAgregar || formulario.get('emailArquitecto')?.invalid && (formulario.get('emailArquitecto')?.touched || formulario.get('emailArquitecto')?.dirty)"
+              (keydown.space)="$event.preventDefault()"
+              autocomplete="off">
 
-            <button id="btn-agregar-arq" type="button" class="btn-secundario"(click)="agregarArquitectoPorEmail()">
+            <button 
+              id="btn-agregar-arq" 
+              type="button" 
+              class="btn-secundario"
+              (click)="agregarArquitectoPorEmail()"
+              [disabled]="formulario.get('emailArquitecto')?.errors?.['email'] || !formulario.get('emailArquitecto')?.touched">
               <span id="sumar-arq" class="material-symbols-rounded">add</span>
             </button>
-            
+
           </div>
 
           @if (formulario.get('emailArquitecto')?.errors?.['email'] && formulario.get('emailArquitecto')?.touched) {

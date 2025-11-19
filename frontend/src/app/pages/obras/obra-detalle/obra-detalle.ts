@@ -213,13 +213,11 @@ export class ObraDetalle {
     });
   }
 
-
-
   hacerScroll(elemento: HTMLElement) {
-  elemento.scrollIntoView({
-    behavior: 'smooth',
-    block: 'start'   // coloca el elemento en top:0
-  });
-}
+    elemento.scrollIntoView({
+      behavior: 'smooth',
+      block: 'start'   // coloca el elemento en top:0
+    });
+  }
 
 }

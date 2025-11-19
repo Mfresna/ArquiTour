@@ -17,7 +17,8 @@ public class ObraDTO {
             example = "Casa Palafito")
     @NotBlank(message = "El nombre es obligatorio.")
     @Size(min = 2, max = 100, message = "El nombre debe tener entre 2 y 100 caracteres.")
-    @Pattern(regexp = "^[A-Za-zÁÉÍÓÚáéíóúÑñ0-9\\s\\-\\:\\.,¡\\?()/]+$", message = "El nombre contiene caracteres inválidos.")
+    @Pattern(regexp = "^(?=.*[A-Za-zÁÉÍÓÚáéíóúÑñ])[A-Za-zÁÉÍÓÚáéíóúÑñ0-9\\s\\-\\:\\.,¡\\?()\\/]+$"
+            , message = "El nombre contiene caracteres inválidos.")
     private String nombre;
 
 

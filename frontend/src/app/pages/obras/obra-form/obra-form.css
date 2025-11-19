@@ -81,7 +81,6 @@ textarea.input {
   min-height: 80px;
 }
 
-
 .error {
   color: #ff3333;
   font-size: 0.9rem;
@@ -128,6 +127,12 @@ app-drag-zone-multiple {
 
 .btn-primario:hover:not(:disabled) {
   background: #1d4ed8;
+}
+
+/* Estado inválido */
+.invalido{
+  border: 2px solid #ff5c5c !important;
+  background: #ffecec !important;
 }
 
 /* ===== Responsive ===== */

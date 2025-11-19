@@ -230,10 +230,11 @@
           </textarea>
           
           @if (registerForm.get('descripcion')?.errors?.['maxLength'] && registerForm.get('descripcion')?.dirty) {
-            <small>Caracteres maximos excedidos.</small>
+            <small>Caracteres maximos excedidos. (max. 280)</small>
           } @else if (registerForm.get('descripcion')?.errors?.['pattern'] && registerForm.get('descripcion')?.dirty) {
             <small>Caracter invalido, solo se permiten (- _ ! ¡ &).</small>
           }
+
         </fieldset>
 
         <!-- IMAGEN-->

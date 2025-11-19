@@ -12,6 +12,9 @@ import { EstudioService } from '../../../services/estudioService/estudio-service
 import { ObraModel } from '../../../models/obraModels/obraModel';
 import { DragZoneMultiple } from '../../../components/drag-zone-multiple/drag-zone-multiple';
 import { TieneCambiosPendientes } from '../../../guards/salirSinGuardar/salir-sin-guardar-guard';
+import { estudioNombreValidador, obraNombreValidador } from '../../../validadores/nombresValidador';
+import { noBlancoEspacios } from '../../../validadores/sinEspacioValidador';
+import { anioEstadoObra } from '../../../auth/validadores/fechaValidador';
 
 @Component({
   selector: 'app-obra-form',
@@ -56,16 +59,39 @@ export class ObraForm implements TieneCambiosPendientes{
   }
 
   ngOnInit(): void {
-    this.formulario = this.fb.group({
-      nombre: ['', [Validators.required, Validators.minLength(2)]],
-      categoria: ['', [Validators.required]],
-      estado:    ['', [Validators.required]],
-      estudioId: ['', [Validators.required]],
-      anioEstado: ['', [Validators.required, Validators.min(1800), Validators.max(new Date().getFullYear())]],
-      latitud: ['', [Validators.required, Validators.min(-90), Validators.max(90)]],
-      longitud: ['', [Validators.required, Validators.min(-180), Validators.max(180)]],
-      descripcion: ['', [Validators.required, Validators.minLength(5)]],
-    });
+    this.formulario = this.fb.group(
+      {
+        nombre: ['', [
+          Validators.required, 
+          Validators.minLength(2),
+          Validators.maxLength(100),
+          obraNombreValidador
+        ]],
+        categoria: ['', [Validators.required]],
+        estado:    ['', [Validators.required]],
+        estudioId: ['', [Validators.required]],
+        anioEstado: ['', [
+          Validators.required,
+          anioEstadoObra
+        ]],
+        latitud: ['', [
+          Validators.required,
+          Validators.min(-90),
+          Validators.max(90)
+        ]],
+        longitud: ['', [
+          Validators.required,
+          Validators.min(-180),
+          Validators.max(180)
+        ]],
+        descripcion: ['', [
+          Validators.required,
+          Validators.minLength(5),
+          Validators.pattern(/^[A-Za-zÁÉÍÓÚáéíóúÑñ0-9\-_\!¡¿&=\+\"\?\s\.,]+$/),
+          noBlancoEspacios
+        ]],
+      }
+    );
 
     this.cargarEstudios();
 
@@ -304,6 +330,28 @@ export class ObraForm implements TieneCambiosPendientes{
         alert('No se pudieron subir las imágenes.');
       }
     });
+  }
+
+
+  esNegativo(): string{
+
+    if(this.formulario.get('anioEstado')?.invalid){
+      return '';
+    }else{
+      let edad = Number(this.formulario.get('anioEstado')?.value ?? NaN);
+
+      if(edad >= 0){
+        return '(d.C.)';
+      }else if(edad < 0){
+        return '(a.C.)';
+      }else{
+        return '';
+      }
+    }
+
+    
+    
+    
   }
 }
 

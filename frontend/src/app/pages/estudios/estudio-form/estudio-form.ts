@@ -10,6 +10,7 @@ import { DragZoneSimple } from '../../../components/drag-zone-simple/drag-zone-s
 import { UsuarioService } from '../../../services/usuarioService/usuario-service';
 import { UsuarioModel } from '../../../models/usuarioModels/usuarioModel';
 import { TieneCambiosPendientes } from '../../../guards/salirSinGuardar/salir-sin-guardar-guard';
+import { estudioNombreValidador, obraNombreValidador } from '../../../validadores/nombresValidador';
 
 @Component({
   selector: 'app-estudio-form',
@@ -50,7 +51,8 @@ export class EstudioForm implements TieneCambiosPendientes {
         nombre: ['', [
           Validators.required,
           Validators.minLength(2),
-          Validators.maxLength(100)]],
+          Validators.maxLength(100),
+          estudioNombreValidador]],
 
         obrasIds: this.fb.control<number[]>([]),
         arquitectosIds: this.fb.control<number[]>([]),
