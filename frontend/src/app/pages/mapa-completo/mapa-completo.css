@@ -8,7 +8,7 @@
 /*IMPORTANTISIMO PORQUE SINO NO CARGA EL MAPA*/
 
 #contenedor-mapa-obras {
-
+  position: relative;
   overflow: hidden;
 
   height: 100%;
@@ -30,4 +30,34 @@
     transform: translateY(0) scale(1);
     opacity: 1;
   }
+}
+
+#contenedor-mapa-obras {
+  position: relative;   /* clave */
+  width: 100%;
+  height: 100%;
+}
+
+/* El mapa ocupa todo */
+#mapa-obras {
+  width: 100%;
+  height: 100%;
+}
+
+/* Burbuja flotante */
+#burbuja {
+  position: absolute;       
+  top: 25px;                
+  right: 25px;              
+  background: rgba(0, 0, 0, 0.582);
+  color: #fff;
+  padding: 10px 16px;
+  border-radius: 35px;
+  font-size: 1rem;
+
+  z-index: 9999;            /* sobre el mapa */
+  backdrop-filter: blur(4px);
+  box-shadow: 0 4px 10px rgba(0,0,0,.25);
+  user-select: none;
+  cursor: pointer;
 }

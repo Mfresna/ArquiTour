@@ -22,6 +22,7 @@ export class MapaCompleto implements AfterViewInit, OnDestroy {
   private markerObras = new Map<number, L.Marker>();
 
   obras: ObraModel[] = [];
+  obraSeleccionada!: ObraModel
   cargando = false;
   error?: string;
 
@@ -109,6 +110,7 @@ export class MapaCompleto implements AfterViewInit, OnDestroy {
 
         marker.on('click', () => {
           this.centrarEnObra(obra);
+          this.obraSeleccionada = obra;
         });
 
 
