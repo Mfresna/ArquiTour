@@ -16,10 +16,11 @@ import { estudioNombreValidador, obraNombreValidador } from '../../../validadore
 import { noBlancoEspacios } from '../../../validadores/sinEspacioValidador';
 import { anioEstadoObra } from '../../../auth/validadores/fechaValidador';
 import { MensajeModal, MessageType } from '../../../components/mensaje-modal/mensaje-modal';
+import { MapaSelector } from "../../../components/mapa-selector/mapa-selector";
 
 @Component({
   selector: 'app-obra-form',
-  imports: [ReactiveFormsModule, DragZoneMultiple, MensajeModal],
+  imports: [ReactiveFormsModule, DragZoneMultiple, MensajeModal, MapaSelector],
   templateUrl: './obra-form.html',
   styleUrl: './obra-form.css',
 })
@@ -28,6 +29,9 @@ export class ObraForm implements TieneCambiosPendientes{
   editar = false;
   id?: number;
 
+  lat: number = -38.0004;
+  long: number = -57.5562
+  
   omitirGuard = false;
 
   imagenActualUrl: string | null = null;
@@ -555,10 +559,13 @@ export class ObraForm implements TieneCambiosPendientes{
         return '';
       }
     }
+  }
 
-    
-    
-    
+  onCoordenadasSeleccionadas(event: { latitud: number; longitud: number }) {
+    this.formulario.patchValue({
+      latitud: event.latitud,
+      longitud: event.longitud,
+    });
   }
 }
 

@@ -142,3 +142,13 @@ app-drag-zone-multiple {
     max-width: 95%;
   }
 }
+
+#mapa{
+  min-height: 420px;
+  border: none;
+}
+
+#mapa > small{
+  padding-left: 20px;
+  margin-top: 15px;
+}

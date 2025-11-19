@@ -160,9 +160,26 @@
                 <small class="error">La longitud está fuera del rango, verifique signo (-90 a 90)</small>
               }
             </div>
-            
+          </fieldset> 
 
-          </fieldset>
+
+            <!-- sadasd -->
+            <fieldset id="mapa" class="campo">
+              <app-mapa-selector
+                [latitud]="formulario.get('latitud')?.value ?  formulario.get('latitud')?.value : lat"
+                [longitud]="formulario.get('longitud')?.value ?  formulario.get('longitud')?.value : long"
+                [zoom]="4"
+                (coordenadasSeleccionadas)="onCoordenadasSeleccionadas($event)">
+              </app-mapa-selector>
+
+            </fieldset>
+
+
+            <!-- sdasdasd -->
+
+          
+
+
 
           <!-- DESCRIPCION -->
           <fieldset class="form-group">
