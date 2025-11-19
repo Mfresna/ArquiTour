@@ -8,11 +8,12 @@ import { TokenService } from "../../../auth/services/tokenService/token-service"
 import { UsuarioService } from "../../../services/usuarioService/usuario-service";
 import { finalize } from "rxjs";
 import { EsperandoModal } from "../../../components/esperando-modal/esperando-modal";
+import { MensajeModal, MessageType } from "../../../components/mensaje-modal/mensaje-modal";
 
 
 @Component({
   selector: 'app-estudios',
-  imports: [ReactiveFormsModule, RouterLink, EsperandoModal],
+  imports: [ReactiveFormsModule, RouterLink, EsperandoModal, MensajeModal],
   templateUrl: './estudios.html',
   styleUrl: './estudios.css',
 })
@@ -26,6 +27,13 @@ export class Estudios implements OnInit {
   filtro!: FormGroup;    
 
   spinerVisible: boolean = false;
+
+    // ===== MODAL =====
+  modalVisible = false;
+  modalTitulo = '';
+  modalMensaje = '';
+  modalTipo: MessageType = 'info';
+  accionPostModal: 'recargarTodo' | null = null;
   
   constructor(
     private fb: FormBuilder,
@@ -39,6 +47,34 @@ export class Estudios implements OnInit {
       nombre: ['', [Validators.minLength(2)]],
     });
     this.cargarEstudios();
+  }
+
+  // ================= MODAL =================
+
+  private mostrarModal(
+    titulo: string,
+    mensaje: string,
+    tipo: MessageType = 'info'
+  ): void {
+    this.modalTitulo = titulo;
+    this.modalMensaje = mensaje;
+    this.modalTipo = tipo;
+    this.modalVisible = true;
+  }
+
+  onModalAceptar(): void {
+    this.modalVisible = false;
+
+    if (this.accionPostModal === 'recargarTodo') {
+      this.filtro.reset({ nombre: '' });
+      this.cargarEstudios();
+    }
+
+    this.accionPostModal = null;
+  }
+
+  onModalCerrado(): void {
+    this.modalVisible = false;
   }
 
   imagenUrl(uuidImagen?: string): string {
@@ -64,9 +100,17 @@ export class Estudios implements OnInit {
       next: lista => this.estudios = lista,
       error: (e) =>{
         if(e.status === 404){
-          alert("Estudios Inexistentes con esos datos");
+          this.mostrarModal(
+            'Sin resultados',
+            'No se encontraron estudios con esos datos.',
+            'info'
+          );
         }else{
-          alert("No se pudo cargar la lista de estudios");
+          this.mostrarModal(
+            'Error al cargar',
+            'No se pudo cargar la lista de estudios.',
+            'error'
+          );
         }
       } 
     });
@@ -97,10 +141,22 @@ export class Estudios implements OnInit {
         this.estudios = this.estudios.filter(e =>
           e.id != null && idsEstudiosUsuario.includes(e.id)
       );
+        if (!this.estudios.length) {
+          this.mostrarModal(
+            'Sin estudios propios',
+            'No se encontraron estudios asociados a tu usuario.',
+            'info'
+          );
+          this.accionPostModal = 'recargarTodo'; 
+        }
       },
       error: (e) => {
-        alert('No se pudo obtener el usuario logueado');
         console.error("No se puede leer el usuario", e);
+        this.mostrarModal(
+          'Error de usuario',
+          'No se pudo obtener la información del usuario logueado.',
+          'error'
+        );
       }
     });
   }

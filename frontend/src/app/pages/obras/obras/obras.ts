@@ -10,7 +10,7 @@ import { EstudioModel } from '../../../models/estudioModels/estudioModel';
 import { EstudioService } from '../../../services/estudioService/estudio-service';
 import { EsperandoModal } from "../../../components/esperando-modal/esperando-modal";
 import { finalize } from 'rxjs';
-import { MensajeModal } from '../../../components/mensaje-modal/mensaje-modal';
+import { MensajeModal, MessageType } from '../../../components/mensaje-modal/mensaje-modal';
 
 @Component({
   selector: 'app-obras',
@@ -38,7 +38,12 @@ export class Obras implements OnInit {
 
   errorEstudios: string | null = null;
 
-
+  // ===== MODAL =====
+  modalVisible = false;
+  modalTitulo = '';
+  modalMensaje = '';
+  modalTipo: MessageType = 'info';
+  
   constructor(
     private fb: FormBuilder,
     private obraService: ObraService,
@@ -60,6 +65,24 @@ export class Obras implements OnInit {
   private mostrarError(msg: string): void {
     this.modalErrorMensaje = msg;
     this.modalErrorVisible = true;
+  }
+
+   // ================= MODAL =================
+
+  private mostrarModal(titulo: string, mensaje: string, tipo: MessageType = 'info'
+  ): void {
+    this.modalTitulo  = titulo;
+    this.modalMensaje = mensaje;
+    this.modalTipo    = tipo;
+    this.modalVisible = true;
+  }
+
+  onModalAceptar(): void {
+    this.modalVisible = false;
+  }
+
+  onModalCerrado(): void {
+    this.modalVisible = false;
   }
 
   /** Trae estudios para mostrar en el filtro y cachea nombres */
@@ -96,10 +119,17 @@ export class Obras implements OnInit {
       finalize(() => this.spinerVisible = false)  
     )
     .subscribe({
-      next: (lista: ObraModel[]) => this.obras = lista,
+      next: (lista: ObraModel[]) => {
+        this.obras = lista;
+
+      },
       error: () => {
         this.spinerVisible = false;
-        this.mostrarError('No se pudieron cargar las obras');
+        this.mostrarModal(
+          'Error al cargar obras',
+          'No se pudieron cargar las obras. Intente nuevamente más tarde.',
+          'error'
+        );
       }
     });
   }

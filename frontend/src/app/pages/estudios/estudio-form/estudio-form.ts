@@ -381,6 +381,12 @@ export class EstudioForm implements TieneCambiosPendientes {
           this.formulario.get('arquitectosIds')?.setValue(actuales.filter(x => x !== arqId));
         }
         this.arquitectosVinculados = this.arquitectosVinculados.filter(a => a.id !== arqId);
+        this.mostrarModal(
+          'Arquitecto quitado',
+          'El arquitecto fue desvinculado del estudio correctamente.',
+          'success',  
+          false      
+        );
       },
       error: (e) => {
         console.error(e);
@@ -513,6 +519,8 @@ export class EstudioForm implements TieneCambiosPendientes {
           this.mensajeErrorAgregar = 'Error al buscar el usuario por email.';
         },
       });
+
+    this.formulario.get('emailArquitecto')?.setValue(null);
   }
 
 

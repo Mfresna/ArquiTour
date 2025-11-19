@@ -52,7 +52,7 @@
       <div id="panel-scroll">
         <!-- ACA -->
         <div id="contenedor-lista">
-          @if (obras) {
+          @if (obras.length) {
             <ul class="lista-obras" >
             @for (o of obras; track o.id ?? $index) {
               <li 
@@ -68,8 +68,8 @@
               </li>
             }
             </ul>
-          } @else {
-            <p class="vacio">No se encontraron obras con los filtros seleccionados.</p>
+          } @else if (!spinerVisible) {
+               <p class="vacio">No se encontraron obras con los filtros seleccionados.</p>
           }
         </div>
         
@@ -85,13 +85,16 @@
 />
 
 <app-mensaje-modal
-  [isVisible]="modalErrorVisible"
-  [titulo]="'Error'"
-  [mensaje]="modalErrorMensaje"
-  tipo="error"
+  [isVisible]="modalVisible"
+  [titulo]="modalTitulo"
+  [mensaje]="modalMensaje"
   [conIcon]="true"
+  [tipo]="modalTipo"
+  tipoContenido="texto"
+  [mostrarCerrar]="true"
   [mostrarBotonAceptar]="true"
   [mostrarBotonCancelar]="false"
-  (aceptar)="modalErrorVisible = false"
-  (cerrado)="modalErrorVisible = false">
-</app-mensaje-modal>
+  textoBotonAceptar="Aceptar"
+  (aceptar)="onModalAceptar()"
+  (cerrado)="onModalCerrado()"
+/>
