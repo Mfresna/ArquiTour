@@ -27,6 +27,8 @@ export class ObraForm implements TieneCambiosPendientes{
   editar = false;
   id?: number;
 
+  omitirGuard = false;
+
   imagenActualUrl: string | null = null;
   imagenDefecto = `${environment.imgObra}`;
 
@@ -55,8 +57,12 @@ export class ObraForm implements TieneCambiosPendientes{
   ) {}
 
   tieneCambiosPendientes(): boolean {
-  return this.formulario.dirty;
+    if (this.omitirGuard) {
+      return false;
   }
+
+  return this.formulario?.dirty ?? false;
+}
 
   ngOnInit(): void {
     this.formulario = this.fb.group(
@@ -254,7 +260,10 @@ export class ObraForm implements TieneCambiosPendientes{
         })
           .pipe(finalize(() => this.subiendo = false))
           .subscribe({
-            next: () => this.router.navigate(['/obras', this.id]),
+            next: () => {
+              this.omitirGuard = true;   
+              this.router.navigate(['/obras', this.id]);
+            },
             error: (e) =>{
 
               console.error(e);
@@ -296,6 +305,7 @@ export class ObraForm implements TieneCambiosPendientes{
       ).subscribe({
         next: () => {
           this.archivosSeleccionados = [];
+          this.omitirGuard = true;
           this.router.navigate(['/obras', this.id!]);
         },
         error: () => alert('No se pudo actualizar la obra.')
@@ -342,6 +352,7 @@ export class ObraForm implements TieneCambiosPendientes{
           .pipe(finalize(() => this.subiendo = false))
           .subscribe({
             next: () => {
+              this.omitirGuard = true;
               this.formulario.reset();
               this.archivosSeleccionados = [];
               this.imagenesExistentes = [];

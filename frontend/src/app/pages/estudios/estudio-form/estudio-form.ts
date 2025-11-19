@@ -31,6 +31,8 @@ export class EstudioForm implements TieneCambiosPendientes {
   mensajeErrorAgregar: string | null = null;
   arquitectosVinculados: { id: number; nombre: string }[] = [];
 
+  omitirGuard = false;
+
   constructor(
     private fb: FormBuilder,
     private router: Router,
@@ -41,6 +43,11 @@ export class EstudioForm implements TieneCambiosPendientes {
   ) {}
 
   tieneCambiosPendientes(): boolean {
+    // Si vengo de un guardado exitoso, el guard NO debe preguntar nada
+    if (this.omitirGuard) {
+    return false;
+  }
+    
     return this.formulario.dirty;
   }
 
@@ -205,6 +212,10 @@ export class EstudioForm implements TieneCambiosPendientes {
     if (resetArchivo) {
       this.archivoSeleccionado = null;
     }
+
+    // aviso que esta navegación es por un guardado exitoso
+    this.omitirGuard = true;
+
     this.router.navigate(['/estudios', this.id]);
   }
 
@@ -250,6 +261,9 @@ export class EstudioForm implements TieneCambiosPendientes {
   }
 
   private onCreateSuccess(): void {
+    //navegación por guardado exitoso
+    this.omitirGuard = true;
+
     this.formulario.reset();
     this.archivoSeleccionado = null;
     alert('Estudio creado');
