@@ -68,7 +68,7 @@
                     } @else {
                         <ul>
                             @for (o of obrasFiltradas; track o.id) {
-                                <li (click)="irAobra(o)">
+                                <li (click)="centrarEnObra(o)">
                                     <strong>{{ o.nombre }}</strong>
                                     @if (o.anioEstado) {
                                         <span> · {{ o.anioEstado }}</span>

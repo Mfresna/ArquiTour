@@ -28,6 +28,9 @@ export class MapaPrincipal implements AfterViewInit, OnDestroy {
   
   private coordsUsuario: { latitud: number; longitud: number } | null = null;
 
+  private markerObras = new Map<number, L.Marker>();
+
+
   obras: ObraMapaModel[] = [];
   obrasFiltradas: ObraMapaModel[] = [];
 
@@ -196,6 +199,7 @@ export class MapaPrincipal implements AfterViewInit, OnDestroy {
 
   private dibujarMarcadores(coordsBack: { latitud: number; longitud: number } | null): void {
     this.markersLayer.clearLayers();
+    this.markerObras.clear()
 
     const bounds = L.latLngBounds([]);
 
@@ -235,6 +239,12 @@ export class MapaPrincipal implements AfterViewInit, OnDestroy {
           this.router.navigate(['/obras', obra.id]);
         });
 
+
+        //Guardo la obra
+        if (obra.id != null) {
+          this.markerObras.set(obra.id, marker);
+        }
+
         bounds.extend([obra.latitud!, obra.longitud!]);
       });
 
@@ -250,6 +260,25 @@ export class MapaPrincipal implements AfterViewInit, OnDestroy {
   }
 
 
+
+  centrarEnObra(obra: ObraMapaModel): void {
+
+    if (!obra.latitud || !obra.longitud) return;
+
+    const marker = obra.id != null ? this.markerObras.get(obra.id) : undefined;
+
+    if (marker) {
+      const latLng = marker.getLatLng();
+      this.map.setView(latLng, 16, { animate: true });
+      marker.openPopup();
+    } else {
+      // fallback por si no se encontró el marker
+      this.map.setView([obra.latitud, obra.longitud], 16, { animate: true });
+    }
+  }
+
+
+  //Deprecated
   irAobra(o: ObraMapaModel){
     this.router.navigate(['/obras', o.id])
   }
