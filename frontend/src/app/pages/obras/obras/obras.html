@@ -30,6 +30,9 @@
               @for (e of (estudios); track e.id) {
               <option [value]="e.id">{{ e.nombre }}</option>}
             </select>
+            @if (errorEstudios) {
+              <small class="error-estudios">{{ errorEstudios }}</small>
+            }
           </fieldset>
 
           <fieldset class="campo">
@@ -76,3 +79,20 @@
   </div>
 
 </div>
+
+<app-esperando-modal 
+  [isVisible]="spinerVisible" 
+  [mensaje]="spinerMensaje"
+/>
+
+<app-mensaje-modal
+  [isVisible]="modalErrorVisible"
+  [titulo]="'Error'"
+  [mensaje]="modalErrorMensaje"
+  tipo="error"
+  [conIcon]="true"
+  [mostrarBotonAceptar]="true"
+  [mostrarBotonCancelar]="false"
+  (aceptar)="modalErrorVisible = false"
+  (cerrado)="modalErrorVisible = false">
+</app-mensaje-modal>

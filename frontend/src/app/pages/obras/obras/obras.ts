@@ -8,10 +8,13 @@ import { CategoriaObraDescripcion, CategoriaObraModel } from '../../../models/ob
 import { EstadoObraDescripcion, EstadoObraModel } from '../../../models/obraModels/estadoObraModel';
 import { EstudioModel } from '../../../models/estudioModels/estudioModel';
 import { EstudioService } from '../../../services/estudioService/estudio-service';
+import { EsperandoModal } from "../../../components/esperando-modal/esperando-modal";
+import { finalize } from 'rxjs';
+import { MensajeModal } from '../../../components/mensaje-modal/mensaje-modal';
 
 @Component({
   selector: 'app-obras',
-  imports: [ReactiveFormsModule, RouterLink],
+  imports: [ReactiveFormsModule, RouterLink, EsperandoModal, MensajeModal],
   templateUrl: './obras.html',
   styleUrl: './obras.css',
 })
@@ -27,6 +30,15 @@ export class Obras implements OnInit {
   EstadoObraDescripcion    = EstadoObraDescripcion;
 
   estudios: EstudioModel[] = [];
+
+  spinerVisible: boolean = false;
+  spinerMensaje!: string;
+
+  modalErrorVisible: boolean = false;
+  modalErrorMensaje: string = '';
+
+  errorEstudios: string | null = null;
+
 
   constructor(
     private fb: FormBuilder,
@@ -46,6 +58,11 @@ export class Obras implements OnInit {
     this.cargarObras();
   }
 
+  private mostrarError(msg: string): void {
+    this.modalErrorMensaje = msg;
+    this.modalErrorVisible = true;
+  }
+
   /** Trae estudios para mostrar en el filtro y cachea nombres */
   private cargarEstudiosFiltro(): void {
     this.estudioService.getFiltrarEstudios().subscribe({
@@ -58,12 +75,16 @@ export class Obras implements OnInit {
           }
         }
       },
-      error: () => alert('No se pudieron cargar los estudios'),
+      error: () => {
+         this.errorEstudios = 'No se pudieron cargar los estudios. Recargue la página.';
+      }
     });
   }
 
   cargarObras(): void {
     const obra = this.filtro.value;
+
+    this.spinerVisible = true;
 
     this.obraService.getFiltrarObras(
       obra.categoria || undefined,
@@ -71,11 +92,19 @@ export class Obras implements OnInit {
       obra.estudioId ? Number(obra.estudioId) : undefined,
       obra.nombre?.trim() || undefined
     )
+    .pipe(
+      finalize(() => this.spinerVisible = false)  
+    )
     .subscribe({
       next: (lista: ObraModel[]) => this.obras = lista,
-      error: () => alert('No se pudo cargar la lista de obras'),
+      error: () => {
+        this.spinerVisible = false;
+        this.mostrarError('No se pudieron cargar las obras');
+      }
     });
   }
+
+
 
   limpiarFiltro(): void {
     this.filtro.reset({
@@ -104,4 +133,7 @@ export class Obras implements OnInit {
     if (img.src.includes(this.imagenDefecto)) return;
     img.src = this.imagenDefecto;
   }
+
+ 
+
 }
