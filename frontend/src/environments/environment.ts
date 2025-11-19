@@ -15,5 +15,7 @@ export const environment = {
     'assets/img/fondo/bg6.webp',
     'assets/img/fondo/bg7.webp',
     'assets/img/fondo/bg8.webp'
-  ]
+  ],
+  iconoMapaPrincipal: 'assets/icons/pin-obra.svg',
+  iconoMapaPrincipalUsuario: 'assets/icons/pin-user.svg',
 };

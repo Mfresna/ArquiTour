@@ -1,0 +1,233 @@
+#mapa-obras {
+  width: 100%;
+  height: 100%;
+  border-radius: 1rem;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.15);
+}
+/*IMPORTANTISIMO PORQUE SINO NO CARGA EL MAPA*/
+
+#contenedor-mapa-obras {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  flex-grow: 1;
+  flex: 1; 
+  overflow: hidden;
+
+  height: 100%;
+  min-height: 0;
+
+  width: 100%;
+  gap: 10px;
+
+  padding: 18px; 
+  animation: aparecer 0.25s ease-out;
+}
+
+/* Animacion cada vez que se carga el contenedor */
+@keyframes aparecer {
+  from {
+    transform: translateY(15px) scale(0.97);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+}
+
+/*====================== PANEL FILTRO ===================*/
+#panel-filtros {
+  display: flex;
+  flex-direction: column;
+
+  height: 100%;
+  min-width: 400px;
+
+  padding: 0.8rem 2rem;
+
+  border-radius: 12px;
+  flex-shrink: 0;
+}
+
+#panel-filtros .titulo {
+  position: relative;
+  flex-shrink: 0;
+
+  font-size: 1.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  text-align: center;
+  letter-spacing: 0.5px;
+
+  margin-top: 10px;
+  margin-bottom: 15px;
+  
+  color: var(--colorBoton, #0077b6);
+}
+
+.form-filtros {
+  display: flex;
+  flex-direction: column;
+
+  width: 100%;
+  gap: 1.2rem;
+}
+
+/*====================== CAMPOS ===================*/
+
+.campo {
+  display: flex;
+  flex-direction: column;
+
+  border: 0;
+
+  gap: 0.2rem;
+}
+
+ fieldset.campo > label {
+  font-weight: 500;
+  margin-left: 0.5rem;
+  
+  font-size: 0.9rem;
+  color: var(--colorTerciario);
+}
+
+#panel-filtros input {
+  width: 100%;
+  height: 42px;
+
+  padding: 0.6rem 0.8rem;
+
+  border-radius: 1.2rem;          
+  border: 1px solid #ccc;
+
+  font-size: 1rem;
+
+  background-color: #fff;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+#panel-filtros .form-filtros input:focus {
+  outline: none;
+  border-color: var(--colorBoton, #0077b6);
+  box-shadow: 0 0 6px rgba(0, 119, 182, 0.35);
+}
+
+#panel-filtros .form-filtros fieldset.campo {
+  border: 0;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+#panel-filtros .form-filtros fieldset.campo > label {
+  font-weight: 500;
+  margin-left: 0.5rem;
+  font-size: 0.9rem;
+  color: var(--colorTerciario);
+}
+
+#panel-filtros .form-filtros fieldset.campo > :first-child {
+  margin-top: 0;
+}
+
+#panel-filtros .form-filtros fieldset.campo > :last-child {
+  margin-bottom: 0;
+}
+
+#panel-filtros .form-filtros select,
+#panel-filtros .form-filtros input[type="text"] {
+  width: 100%;
+  padding: 0.6rem 0.8rem;
+  border-radius: 1.2rem;          
+  border: 1px solid #ccc;
+  font-family: var(--fuenteBase, "Segoe UI", Roboto, sans-serif);
+  font-size: 1rem;
+  background-color: #fff;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  height: 42px;
+  box-sizing: border-box;
+}
+
+/* FOCUS igual que .input */
+#panel-filtros .form-filtros select:focus,
+#panel-filtros .form-filtros input[type="text"]:focus {
+  outline: none;
+  border-color: var(--colorBoton, #0077b6);
+  box-shadow: 0 0 6px rgba(0, 119, 182, 0.35);
+}
+
+#panel-filtros .form-filtros select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  padding-right: 2.2rem; 
+  background-image:
+    linear-gradient(45deg, transparent 50%, #666 50%),
+    linear-gradient(135deg, #666 50%, transparent 50%);
+  background-position:
+    calc(100% - 18px) 52%,
+    calc(100% - 12px) 52%;
+  background-size: 6px 6px;
+  background-repeat: no-repeat;
+}
+
+/* Estado inválido */
+.form-filtros input.invalido,
+.form-filtros select.invalido {
+  border: 2px solid #ff5c5c;
+  background: #ffecec;
+}
+
+/*================================= LISTA OBRAS */
+
+#panel-scroll {
+  flex-grow: 1;
+  overflow-y: auto;
+  height: 0;
+
+  padding-right: 6px;
+  scrollbar-width: thin;
+}
+
+#panel-scroll::-webkit-scrollbar {
+  width: 8px;
+}
+#panel-scroll::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+}
+#panel-scroll::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.3);
+}
+
+
+/* Lista de obras */
+.listado-obras {
+  margin-top: 1.8rem;
+  font-size: 0.9rem;
+}
+
+.listado-obras ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  gap: 0.9rem;
+}
+
+.listado-obras li {
+  padding: 0.4rem 0.3rem;
+  border-radius: 0.5rem;
+  margin-bottom: 5px;
+  
+  cursor: pointer;
+  transition: background-color 0.15s, transform 0.1s;
+}
+
+.listado-obras li:hover {
+  background-color: rgba(148, 163, 184, 0.15);
+  transform: translateX(2px);
+}
