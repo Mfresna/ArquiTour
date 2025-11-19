@@ -228,7 +228,7 @@ public class UsuarioService implements UsuarioServiceInterface {
         if(!usr.getIsActivo()){
             throw new ProcesoInvalidoException("El usuario " + id + " ya se encontraba inhabilitado.");
         } else if (usr.getEmail().equals(defaultAdminEmail)) {
-            throw new ProcesoInvalidoException("El usuario " + id + " no se puede inhabilitar.");
+            throw new ProcesoInvalidoException(HttpStatus.BAD_REQUEST ,"El usuario " + id + " no se puede inhabilitar.");
         }
         usr.setIsActivo(false);
         usuarioRepository.save(usr);

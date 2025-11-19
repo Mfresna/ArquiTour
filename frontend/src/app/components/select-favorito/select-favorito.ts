@@ -45,9 +45,19 @@ export class SelectFavorito implements OnInit {
         this.cargando = false;
         this.verificarObraEnListas();
       },
-      error: () => {
+      error: (e) => {
         this.cargando = false;
-        alert("No se pudieron cargar tus listas.");
+
+        console.error(e);
+
+        if(e.status === 404){
+          alert("No se encontraron los Datos de Usuario");
+        }else if(e.status >= 500){
+          alert("Error del Servidor");
+        }else{
+          alert("Error Inesperado");
+        }
+        
       }
     });
   }
@@ -65,6 +75,19 @@ export class SelectFavorito implements OnInit {
             this.listasConObra.add(lista.id);
           }
           this.emitirEstadoGlobal();
+        },
+        error: (e) =>{
+
+          console.error(e);
+
+          if(e.status === 404){
+            alert("No se encontraron los Datos de Usuario");
+          }else if(e.status >= 500){
+            alert("Error del Servidor");
+          }else{
+            alert("Error Inesperado");
+          }
+
         }
       });
     });
@@ -94,7 +117,21 @@ export class SelectFavorito implements OnInit {
         this.listasConObra.add(idLista);
         this.emitirEstadoGlobal();
       },
-      error: () => alert("No se pudo agregar.")
+      error: (e) => {
+
+        alert("No se pudo agregar la obra")
+
+        console.error(e);
+
+        if(e.status === 404){
+          alert("No se encontraron los Datos de Usuario");
+        }else if(e.status >= 500){
+          alert("Error del Servidor");
+        }else{
+          alert("Error Inesperado");
+        }
+
+      }
     });
   }
 
@@ -107,7 +144,21 @@ export class SelectFavorito implements OnInit {
         this.listasConObra.delete(idLista);
         this.emitirEstadoGlobal();
       },
-      error: () => alert("No se pudo remover.")
+      error: (e) => {
+
+        alert("No se pudo remover la obra")
+
+        console.error(e);
+
+        if(e.status === 404){
+        alert("No se encontraron los Datos de Usuario");
+        }else if(e.status >= 500){
+          alert("Error del Servidor");
+        }else{
+          alert("Error Inesperado");
+        }
+
+      }
     });
   }
 
@@ -141,7 +192,7 @@ export class SelectFavorito implements OnInit {
     this.favoritosService
       .crearOActualizarFavorito(limpio, [this.obraId])
       .subscribe({
-        next: () => {
+        next: (resp) => {
           // recargo listas para ver la nueva
           this.cargarListas();
 
@@ -158,9 +209,19 @@ export class SelectFavorito implements OnInit {
 
           // borro el mensaje de error si todo salió bien
           this.mensajeErrorCreacion = null;
+
+          //Manejo de exito
+          if(resp.status === 200){
+            alert("Creada Exitosamente");
+          }else if(resp.status === 201){
+            alert("Actualizada Exitosamente");
+          }
+
         },
-        error: () => {
+        error: (e) => {
           this.mensajeErrorCreacion = 'No se pudo crear la lista.';
+          
+          console.error(e);
         }
       });
   }

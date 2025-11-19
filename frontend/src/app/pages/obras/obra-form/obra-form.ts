@@ -179,7 +179,23 @@ export class ObraForm implements TieneCambiosPendientes{
         }
 
       },
-      error: () => alert('No se pudo cargar la obra.'),
+      error: (e) => {
+    
+        console.error(e);
+
+        if(e.status === 404){
+          alert("Estudio No encontrado");
+        }else if(e.status ===  401){
+          alert("El arquitecto no puede crear una obra para un estudio del cual no forma parte");
+        }else if(e.status === 406){
+          alert("Ya existe una obra con el mismo nombre en el mismo estudio");
+        }else if(e.status >= 500){
+          alert("Error de servidor")
+        }else{
+          alert('No se pudo cargar la obra.')
+        }
+
+      }
     });
   }
 
@@ -239,7 +255,17 @@ export class ObraForm implements TieneCambiosPendientes{
           .pipe(finalize(() => this.subiendo = false))
           .subscribe({
             next: () => this.router.navigate(['/obras', this.id]),
-            error: () => alert('No se pudo actualizar la obra.')
+            error: (e) =>{
+
+              console.error(e);
+
+              if(e.status === 404){
+                alert("Obra No encontrada");
+              }else{
+                alert('No se pudo actualizar la obra.')
+              }
+
+            }
           });
         return;
       }
@@ -322,7 +348,23 @@ export class ObraForm implements TieneCambiosPendientes{
               alert('Obra creada');
               this.router.navigate(['/obras']);
             },
-            error: () => alert('No se pudo crear la obra.')
+            error: (e) => {
+    
+              console.error(e);
+
+              if(e.status === 404){
+                alert("Estudio No encontrado");
+              }else if(e.status ===  401){
+                alert("El arquitecto no puede crear una obra para un estudio del cual no forma parte");
+              }else if(e.status === 406){
+                alert("Ya existe una obra con el mismo nombre en el mismo estudio");
+              }else if(e.status >= 500){
+                alert("Error de servidor")
+              }else{
+                alert('No se pudo cargar la obra.')
+              }
+
+            }
           });
       },
       error: () => {

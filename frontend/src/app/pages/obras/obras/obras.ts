@@ -75,8 +75,9 @@ export class Obras implements OnInit {
           }
         }
       },
-      error: () => {
-         this.errorEstudios = 'No se pudieron cargar los estudios. Recargue la página.';
+      error: (e) => {
+        console.error(e);
+        this.errorEstudios = 'No se pudieron cargar los estudios. Recargue la página.';
       }
     });
   }

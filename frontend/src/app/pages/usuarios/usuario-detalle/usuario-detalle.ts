@@ -263,7 +263,9 @@ export class UsuarioDetalle implements OnInit, AfterViewInit, TieneCambiosPendie
 
       },
       error: (e) => {
+        alert("No se pueden cargar los datos de perfil");
         console.error("No se puede leer el usuario", e);
+
       }
     });
   }

@@ -133,7 +133,12 @@ export class UsuarioLista implements OnInit {
           usuario.activo = resp.activo;
         },
         error: (e) => {
-          alert("No podes cambiarle el Estado");
+          if(e.status === 409){
+            alert("El usuario no puede cambiarse el mismo el estado de la cuenta")
+          }else if(e.status === 400){
+            alert("El administrador maestro no puede inhabilitarse")
+          }
+          
           console.error('Error cambiando estado', e);
         }
       });
