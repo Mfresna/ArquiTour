@@ -206,11 +206,12 @@ public class EstudioArqService implements EstudioArqServiceInterface {
         imagenService.eliminarImagen(urlABorrar);
     }
 
-    private boolean puedeGestionarEstudio(HttpServletRequest request, Long id){
+    public boolean puedeGestionarEstudio(HttpServletRequest request, Long id){
         Usuario usr = usuarioService.buscarUsuario(request);
 
         return usr.getCredencial().tieneRolUsuario(RolUsuario.ROLE_ADMINISTRADOR)
                 || usr.getEstudios().stream().anyMatch(e -> e.getId().equals(id));
+
     }
 
 }
