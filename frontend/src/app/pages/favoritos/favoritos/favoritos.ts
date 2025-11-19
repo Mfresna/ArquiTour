@@ -3,10 +3,13 @@ import { FormGroup, FormBuilder, Validators, ReactiveFormsModule, FormControl } 
 import { FavoritoBasicoModel } from '../../../models/favoritosModels/favoritoBasicoModel';
 import { FavoritosService } from '../../../services/favoritosService/favoritos-service';
 import { RouterLink } from '@angular/router';
+import { EsperandoModal } from '../../../components/esperando-modal/esperando-modal';
+import { MensajeModal, MessageType } from '../../../components/mensaje-modal/mensaje-modal';
+import { finalize } from 'rxjs';
 
 @Component({
   selector: 'app-favoritos',
-  imports: [RouterLink,ReactiveFormsModule],
+  imports: [RouterLink,ReactiveFormsModule, EsperandoModal, MensajeModal],
   templateUrl: './favoritos.html',
   styleUrl: './favoritos.css',
 })
@@ -21,6 +24,16 @@ export class Favoritos {
 
   cargando = false;
 
+   // ===== SPINNER =====
+  spinerVisible = false;
+  spinerMensaje = '';
+
+  // ===== MODAL =====
+  modalVisible = false;
+  modalTitulo = '';
+  modalMensaje = '';
+  modalTipo: MessageType = 'info';
+
   constructor(
     private fb: FormBuilder,
     private favoritosService: FavoritosService
@@ -31,6 +44,24 @@ export class Favoritos {
     this.cargarListas(); 
   }
 
+  // ========== MODAL REUTILIZABLE ========
+
+  private mostrarModal(
+    titulo: string, mensaje: string, tipo: MessageType = 'info'
+  ): void {
+    this.modalTitulo = titulo;
+    this.modalMensaje = mensaje;
+    this.modalTipo = tipo;
+    this.modalVisible = true;
+  }
+
+  onModalAceptar(): void {
+    this.modalVisible = false;
+  }
+  onModalCerrado(): void {
+    this.modalVisible = false;
+  }
+
   private inicializarFormulario(): void {
     this.filtro = this.fb.group({
       nombre: ['', [Validators.minLength(2)]]
@@ -38,11 +69,19 @@ export class Favoritos {
   }
 
   cargarListas(): void {
+    this.spinerVisible = true;
+    this.spinerMensaje = 'Cargando listas de favoritos...';
     this.cargando = true;
 
     const nombreFiltro: string = this.filtro.get('nombre')?.value?.trim() ?? '';
 
-    this.favoritosService.getFavoritosDelUsuario().subscribe({
+    this.favoritosService.getFavoritosDelUsuario().pipe(
+      finalize(()=> {
+        this.spinerVisible = false;
+        this.spinerMensaje = '';
+        this.cargando = false;
+      })
+    ).subscribe({
       next: (listas) => {
 
         // Filtro por nombre
@@ -73,9 +112,17 @@ export class Favoritos {
         console.error('Error al cargar listas', e);
 
         if(e.status === 404){
-          alert("Lista no encontrada");
+         this.mostrarModal(
+            'Sin listas',
+            'No se encontraron listas de favoritos.',
+            'info'
+          );
         }else{
-          alert("error desonocido");
+           this.mostrarModal(
+            'Error al cargar listas',
+            'No se pudieron cargar tus listas de favoritos.',
+            'error'
+          );
         }
 
         this.listas = [];
@@ -93,13 +140,29 @@ export class Favoritos {
   eliminarLista(id: number): void {
     if (!confirm('¿Eliminar esta lista de favoritos?')) return;
 
-    this.favoritosService.deleteFavorito(id).subscribe({
+    this.spinerVisible = true;
+    this.spinerMensaje = 'Eliminando lista...';
+
+    this.favoritosService.deleteFavorito(id).pipe(
+      finalize(()=>{
+        this.spinerVisible = false;
+        this.spinerMensaje = '';
+      })
+    ).subscribe({
       next: () => {
         this.listas = this.listas.filter(l => l.id !== id);
-        alert('Lista eliminada correctamente.');
+          this.mostrarModal(
+            'Lista eliminada',
+            'La lista fue eliminada correctamente.',
+            'success'
+          );
       },
       error: () => {
-        alert('No se pudo eliminar la lista.');
+         this.mostrarModal(
+          'Error al eliminar',
+          'No se pudo eliminar la lista.',
+          'error'
+        );
       }
     });
   }
@@ -134,14 +197,29 @@ export class Favoritos {
           }
 
           this.cancelarEdicion();
+
+          this.spinerVisible = false;
+          this.mostrarModal(
+            'Nombre actualizado',
+            'La lista se renombró correctamente',
+            'success'
+          );
         },
         error: (e) =>{
           console.error(e);
 
           if(e.status === 409){
-            alert("existe una lista con el mismo nombre!");
+             this.mostrarModal(
+              'Nombre repetido',
+              'Ya existe una lista con ese nombre.',
+              'warning'
+            );
           }else{
-            alert('No se pudo renombrar la lista.');
+            this.mostrarModal(
+              'Error al renombrar',
+              'No se pudo completar la acción.',
+              'error'
+            );
           }
 
         } 

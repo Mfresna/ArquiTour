@@ -15,10 +15,11 @@ import { RolModelDescripcion } from '../../../models/usuarioModels/rolModels';
 import { SelectRoles } from "../../../components/select-roles/select-roles";
 import { finalize, tap } from 'rxjs';
 import { EsperandoModal } from '../../../components/esperando-modal/esperando-modal';
+import { MensajeModal, MessageType } from '../../../components/mensaje-modal/mensaje-modal';
 
 @Component({
   selector: 'app-usuario-lista',
-  imports: [ReactiveFormsModule, SelectRoles, EsperandoModal],
+  imports: [ReactiveFormsModule, SelectRoles, EsperandoModal, MensajeModal],
   templateUrl: './usuario-lista.html',
   styleUrl: './usuario-lista.css',
 })
@@ -36,6 +37,12 @@ export class UsuarioLista implements OnInit {
 
   spinerVisible: boolean = false;
   spinerMensaje!: string;
+
+  // ===== MODAL =====
+  modalVisible = false;
+  modalTitulo = '';
+  modalMensaje = '';
+  modalTipo: MessageType = 'info';
 
   constructor(
     private fb: FormBuilder,
@@ -55,6 +62,27 @@ export class UsuarioLista implements OnInit {
     this.cargarUsuarios();
   }
 
+  // ================= MODAL =================
+  private mostrarModal(
+    titulo: string,
+    mensaje: string,
+    tipo: MessageType = 'info'
+  ): void {
+    this.modalTitulo = titulo;
+    this.modalMensaje = mensaje;
+    this.modalTipo = tipo;
+    this.modalVisible = true;
+  }
+
+  onModalAceptar(): void {
+    this.modalVisible = false;
+  }
+
+  onModalCerrado(): void {
+    this.modalVisible = false;
+  }
+
+
 
   cargarUsuarios() {
 
@@ -73,7 +101,11 @@ export class UsuarioLista implements OnInit {
       }, 
       error: (e) => {
         console.warn(e)
-        alert('No se pudo cargar la lista de usurios');
+        this.mostrarModal(
+          'Error al cargar usuarios',
+          'No se pudo cargar la lista de usuarios. Intente nuevamente más tarde.',
+          'error'
+        );
       }
     });
   }
@@ -134,12 +166,26 @@ export class UsuarioLista implements OnInit {
         },
         error: (e) => {
           if(e.status === 409){
-            alert("El usuario no puede cambiarse el mismo el estado de la cuenta")
+           this.mostrarModal(
+              'Acción no permitida',
+              'No podés cambiar tu propio estado de cuenta. Contactá a otro administrador.',
+              'warning'
+            );
           }else if(e.status === 400){
-            alert("El administrador maestro no puede inhabilitarse")
+             this.mostrarModal(
+              'Administrador maestro',
+              'El administrador maestro no puede ser inhabilitado.',
+              'warning'
+            );
+          }else{
+            this.mostrarModal(
+              'Error inesperado',
+              'No se pudo cambiar el estado de la cuenta.',
+              'error'
+            );
           }
           
-          console.error('Error cambiando estado', e);
+         
         }
       });
   }
@@ -178,11 +224,23 @@ export class UsuarioLista implements OnInit {
           console.error(e);
 
           if(e.status === 409){
-            alert("No se puede auto asignar roles. Contacte con otro administrador");
+           this.mostrarModal(
+              'Acción no permitida',
+              'No podés autoasignarte roles. Contactá con otro administrador.',
+              'warning'
+            );
           }else if(e.status === 403){
-            alert("No se le puede cambiar los roles a un usurio desactivado");
+           this.mostrarModal(
+              'Cuenta desactivada',
+              'No se le pueden cambiar los roles a un usuario desactivado.',
+              'warning'
+            );
           }else{
-            alert("Su solicitud no pudo ser procesada.");
+             this.mostrarModal(
+              'Error inesperado',
+              'La solicitud de agregar roles no pudo ser procesada.',
+              'error'
+            );
           }
         }
       });
@@ -200,16 +258,36 @@ export class UsuarioLista implements OnInit {
           console.error(e);
 
           if(e.status === 409){
-            alert("No se puede auto-revocar roles. Contacte con otro administrador");
+           this.mostrarModal(
+              'Acción no permitida',
+              'No podés autorrevocarte roles. Contactá con otro administrador.',
+              'warning'
+            );
           }else if(e.status === 403){
-            alert("No se le puede cambiar los roles a un usurio desactivado");
+            this.mostrarModal(
+              'Cuenta desactivada',
+              'No se le pueden cambiar los roles a un usuario desactivado.',
+              'warning'
+            );
           }else if(e.status === 400){
             //no deberia ejecutarse porque esta capeado por front pero evita request interception
-            alert("El Rol Usuario no puede ser Revocado");
+             this.mostrarModal(
+              'Rol obligatorio',
+              'El rol USUARIO no puede ser revocado.',
+              'warning'
+            );
           }else if(e.status === 422){
-            alert("Al usuario maestro no se le pueden revocar los permisos");
+             this.mostrarModal(
+              'Usuario maestro',
+              'Al usuario maestro no se le pueden revocar los permisos.',
+              'warning'
+            );
           }else{
-            alert("Su solicitud no pudo ser procesada.");
+            this.mostrarModal(
+              'Error inesperado',
+              'La solicitud de quitar roles no pudo ser procesada.',
+              'error'
+            );
           }
         }
       });
