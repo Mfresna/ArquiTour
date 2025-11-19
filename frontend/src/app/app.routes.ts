@@ -42,6 +42,8 @@ export const routes: Routes = [
 
   { path: 'cambiarpass', component: CambiarPass, canActivate: [authGuard]},  //Cuando el ADM maestro debe cambiar la pass
   { path: 'home', component: Obras, canActivate: [authGuard]},
+  {path:'mapa', component: MapaPrincipal, canActivate: [authGuard]},
+  
 
   //Estudios
 
