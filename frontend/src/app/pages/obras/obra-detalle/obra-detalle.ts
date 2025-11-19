@@ -12,10 +12,11 @@ import { FavoritosService } from '../../../services/favoritosService/favoritos-s
 import { EsperandoModal } from '../../../components/esperando-modal/esperando-modal';
 import { finalize } from 'rxjs';
 import { MensajeModal, MessageType } from '../../../components/mensaje-modal/mensaje-modal';
+import { MapaObra } from "../../../components/mapa-obra/mapa-obra";
 
 @Component({
   selector: 'app-obra-detalle',
-  imports: [RouterLink, SelectFavorito, EsperandoModal, MensajeModal],
+  imports: [RouterLink, SelectFavorito, EsperandoModal, MensajeModal, MapaObra],
   templateUrl: './obra-detalle.html',
   styleUrl: './obra-detalle.css',
 })
@@ -37,7 +38,6 @@ export class ObraDetalle {
   //Carrusel miniaturas
   @ViewChild('carruselImagenes') carruselImagenes!: ElementRef;
 
-  
 
   //Para mostrar el nombre prolijo de estado y categoria
   CategoriaObraDescripcion = CategoriaObraDescripcion;

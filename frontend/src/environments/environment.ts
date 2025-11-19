@@ -18,5 +18,5 @@ export const environment = {
   ],
   iconoMapaPrincipal: 'assets/icons/pin-obra.svg',
   iconoMapaPrincipalUsuario: 'assets/icons/pin-user.svg',
-
+  templateMapa: 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png',
 };
