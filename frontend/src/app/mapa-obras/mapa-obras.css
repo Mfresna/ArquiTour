@@ -1,0 +1,150 @@
+#contenedor-mapa {
+  width: 100%;
+  height: calc(100vh - 80px); /* ajustá según tu header/nav */
+  padding: 1rem;
+  box-sizing: border-box;
+}
+
+#mapa-obras {
+  width: 100%;
+  height: 100%;
+  border-radius: 1rem;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.15);
+}
+
+
+
+
+#contenedor-mapa-obras {
+  display: grid;
+  grid-template-columns: minmax(260px, 320px) 1fr;
+  gap: 1rem;
+  height: calc(100vh - 80px); /* ajustá según tu header */
+  padding: 1rem;
+  box-sizing: border-box;
+}
+
+/* PANEL LATERAL */
+#panel-filtros {
+  background-color: var(--colorFondoTarjeta, #ffffff);
+  color: var(--colorTerciario, #111827);
+
+  border-radius: 1rem;
+  box-shadow: 0 4px 12px var(--sombra, rgba(15, 23, 42, 0.15));
+
+  padding: 1rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+
+  overflow-y: auto;
+}
+
+#panel-filtros h2 {
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+}
+
+.campo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  font-size: 0.9rem;
+}
+
+.campo label {
+  font-weight: 600;
+}
+
+.campo select {
+  border-radius: 999px;
+  border: 1px solid #d1d5db;
+  padding: 0.35rem 0.7rem;
+  font-size: 0.9rem;
+  outline: none;
+}
+
+.campo select:focus {
+  border-color: var(--colorBoton, #0077b6);
+  box-shadow: 0 0 0 2px rgba(0, 119, 182, 0.2);
+}
+
+/* Distancia */
+.distancia-control {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.distancia-control input[type="range"] {
+  flex: 1;
+}
+
+.badge-distancia {
+  padding: 0.15rem 0.6rem;
+  border-radius: 999px;
+  background: var(--colorBoton, #0077b6);
+  color: #fff;
+  font-size: 0.75rem;
+}
+
+/* estados */
+.estado {
+  font-size: 0.85rem;
+  color: #374151;
+}
+
+.estado.error {
+  color: #b91c1c;
+}
+
+/* Lista de obras */
+.listado-obras {
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.listado-obras ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.listado-obras li {
+  padding: 0.4rem 0.3rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: background-color 0.15s, transform 0.1s;
+}
+
+.listado-obras li:hover {
+  background-color: rgba(148, 163, 184, 0.15);
+  transform: translateX(2px);
+}
+
+/* MAPA */
+#mapa-obras {
+  width: 100%;
+  height: 100%;
+  border-radius: 1rem;
+  overflow: hidden;
+  box-shadow: 0 4px 12px var(--sombra, rgba(15, 23, 42, 0.15));
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  #contenedor-mapa-obras {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr;
+    height: calc(100vh - 64px);
+  }
+
+  #panel-filtros {
+    order: 1;
+  }
+
+  #mapa-obras {
+    order: 2;
+  }
+}

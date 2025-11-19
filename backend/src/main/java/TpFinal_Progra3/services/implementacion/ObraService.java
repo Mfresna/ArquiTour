@@ -128,6 +128,8 @@ public class ObraService implements ObraServiceInterface{
 
         Map<String,Double> coordenadas = CoordenadasUtils.areaDeBusqueda(ipLocationUsuario, distancia);
 
+        System.out.println(coordenadas.toString());
+
         return obraRepository.findByLatitudBetweenAndLongitudBetween(
                         coordenadas.get("latMin"),
                         coordenadas.get("latMax"),

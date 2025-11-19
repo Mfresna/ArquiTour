@@ -4,6 +4,14 @@ import { environment } from "../../../environments/environment";
 import { CategoriaObraModel } from "../../models/obraModels/categoriaObraModel";
 import { EstadoObraModel } from "../../models/obraModels/estadoObraModel";
 import { ObraModel } from "../../models/obraModels/obraModel";
+import { Observable } from "rxjs";
+import { ObraMapaModel } from "../../models/obraMapaModels/obraMapaModels";
+
+
+export interface CoordenadasNavegador {
+  latitud: number;
+  longitud: number;
+}
 
 
 @Injectable({
@@ -64,4 +72,21 @@ export class ObraService {
     return this.nombrePorId.get(id);
   }
   
+
+
+  getObrasCercanas(distanciaKm: number = 25, coords?: CoordenadasNavegador | null) {
+    return this.http.post<ObraMapaModel[]>(`${this.OBRAS_URL}/cercanas`, coords || {},
+      {
+        params: {
+          distanciaKm: distanciaKm.toString()
+        }
+      }
+    );
+  }
+
+
+
+
+
+
 }

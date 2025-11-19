@@ -1,0 +1,79 @@
+<div id="contenedor-mapa-obras">
+
+  <!-- PANEL LATERAL -->
+  <aside id="panel-filtros">
+    <h2>Obras cercanas</h2>
+
+    <!-- Distancia -->
+    <div class="campo">
+      <label for="distancia">Radio de búsqueda</label>
+      <div class="distancia-control">
+        <<input
+  type="range"
+  min="5"
+  max="100"
+  step="5"
+  [value]="distanciaKm"
+  (input)="onDistanciaChange($event)"
+>
+
+
+        <span class="badge-distancia">
+          {{ distanciaKm }} km
+        </span>
+      </div>
+    </div>
+
+    <!-- Estado -->
+    <div class="campo">
+      <label for="estado">Estado</label>
+      <select
+        id="estado"
+        [(ngModel)]="estadoFiltro"
+        (change)="onCambioFiltros()">
+        <option value="">-- Todos --</option>
+        <option *ngFor="let e of estadosDisponibles" [value]="e">
+          {{ e }}
+        </option>
+      </select>
+    </div>
+
+    <!-- Categoría -->
+    <div class="campo">
+      <label for="categoria">Categoría</label>
+      <select
+        id="categoria"
+        [(ngModel)]="categoriaFiltro"
+        (change)="onCambioFiltros()">
+        <option value="">-- Todas --</option>
+        <option *ngFor="let c of categoriasDisponibles" [value]="c">
+          {{ c }}
+        </option>
+      </select>
+    </div>
+
+    <!-- Estado de carga -->
+    <div class="estado" *ngIf="cargando">Buscando obras...</div>
+    <div class="estado error" *ngIf="error">{{ error }}</div>
+
+    <!-- Lista de obras filtradas -->
+    <div class="listado-obras" *ngIf="!cargando && !error">
+      <p *ngIf="!obrasFiltradas.length">
+        No se encontraron obras con los filtros actuales.
+      </p>
+
+      <ul *ngIf="obrasFiltradas.length">
+        <li
+          *ngFor="let o of obrasFiltradas"
+          (click)="router.navigate(['/obras', o.id])">
+          <strong>{{ o.nombre }}</strong>
+          <span *ngIf="o.anioEstado"> · {{ o.anioEstado }}</span>
+          <span *ngIf="o.estado"> · {{ o.estado }}</span>
+        </li>
+      </ul>
+    </div>
+  </aside>
+
+  <!-- MAPA -->
+  <div id="mapa-obras"></div>
+</div>

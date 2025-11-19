@@ -55,6 +55,8 @@ export class Obras implements OnInit {
 
     this.cargarEstudiosFiltro();
     this.cargarObras();
+
+
   }
 
   private mostrarError(msg: string): void {
