@@ -260,6 +260,40 @@ a:hover #logout{
   border-radius: 5px;
 }
 
+      /*MENU MAPA*/
+#panel-mapas{
+  /*Le Sirve al menu desplegable*/
+  position: relative;
+}
+
+#menu-mapas{
+  right: 0;
+  min-width: 190px;
+  z-index: 10000;
+
+  left: 50%;
+  transform: translateX(-50%);
+}
+ 
+#menu-mapas a {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+
+  text-decoration: none;
+  text-align: center;
+  color: #333;
+
+  margin: 2px 0px;
+  padding: 8px 15px;
+  
+  cursor: pointer;
+  user-select: none;
+  width: 100%; 
+
+  border-radius: 5px;
+}
+
 /*============ CLASES BORDES============*/
 /*TODOS LOS BORDES*/
 .borde-sup-der{

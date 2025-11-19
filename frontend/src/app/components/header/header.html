@@ -57,7 +57,21 @@
             
         </div>
       </li> 
-      <li><a (click)="cerrarTodosMenus()" class="boton" routerLink="/mapa">MAPA</a></li>
+      <li>
+        <div id="panel-mapas">
+            <a class="boton" (click)="toggleMapaMenu()">MAPA</a>
+
+            @if(mapaMenu){
+              <div id="menu-mapas" 
+                class="menu-desplegable bordes-radius">
+
+                <a (click)="cerrarTodosMenus()" routerLink="/mapa">Ver Mapa</a>
+                <a (click)="cerrarTodosMenus()" routerLink="/obras-cercanas">Ver Obras Cercanas</a>
+                
+              </div>
+            }            
+        </div>      
+      </li>
       <li><a (click)="cerrarTodosMenus()" class="boton" routerLink="/favoritos">FAVORITOS</a></li>
     </ul>
 

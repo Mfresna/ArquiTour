@@ -19,6 +19,8 @@ export class Header{
 
   estudiosMenu: boolean = false;
 
+  mapaMenu: boolean = false;
+
   constructor(
     private authService: AuthService,
     private tokenService: TokenService,
@@ -58,21 +60,34 @@ export class Header{
   toggleObrasMenu(){
     this.obrasMenu = !this.obrasMenu;
 
-    this.usuarioMenu = false
-    this.estudiosMenu = false
+    this.usuarioMenu = false;
+    this.estudiosMenu = false;
+    this.mapaMenu=false;
+
   }
 
   toggleEstudiosMenu(){
     this.estudiosMenu = !this.estudiosMenu;
 
     this.usuarioMenu = false
-    this.obrasMenu = false
+    this.obrasMenu = false;
+    this.mapaMenu=false;
+  }
+
+  toggleMapaMenu(){
+    this.mapaMenu = !this.mapaMenu;
+
+    this.usuarioMenu = false;
+    this.obrasMenu = false;
+    this.estudiosMenu = false;
   }
 
   cerrarTodosMenus(){
     this.estudiosMenu = false;
-    this.usuarioMenu = false
-    this.obrasMenu = false
+    this.usuarioMenu = false;
+    this.obrasMenu = false;
+    this.mapaMenu=false;
+
   }
 
   //========== ESCUCHADORES
