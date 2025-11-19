@@ -88,7 +88,7 @@ export class EstudioDetalle {
             "No se pudo cargar el estudio.",
             "error"
           );
-        }
+        } 
       }
     });
 
