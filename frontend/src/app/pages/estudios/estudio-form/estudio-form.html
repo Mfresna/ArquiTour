@@ -48,64 +48,65 @@
           (quitadoImg)="quitadoImg = $event">
         </app-drag-zone-simple>
 
+        @if(editar){
+          <!-- Arquitectos Burbujas -->
+          <div class="campo">
+            <label id="arq-est" class="label">Arquitectos del estudio</label>
 
-        <!-- Arquitectos Burbujas -->
-        <div class="campo">
-          <label id="arq-est" class="label">Arquitectos del estudio</label>
+            <div id="contenedor-burbujas">
 
-          <div id="contenedor-burbujas">
+              @for (arq of arquitectosVinculados; track arq.id) {
+                <div class="burbuja">
 
-            @for (arq of arquitectosVinculados; track arq.id) {
-              <div class="burbuja">
+                  <button class="cont-cruz" (click)="quitarArquitecto(arq.id)">
+                    <span class="material-icons">close</span>
+                  </button>
 
-                <button class="cont-cruz" (click)="quitarArquitecto(arq.id)">
-                  <span class="material-icons">close</span>
-                </button>
+                  <p class="nombre">{{ arq.nombre }}</p>
 
-                <p class="nombre">{{ arq.nombre }}</p>
+                </div>
+              } @empty {
+                <small class="comentario">No hay arquitectos asignados.</small>
+              }
 
-              </div>
-            } @empty {
-              <small class="comentario">No hay arquitectos asignados.</small>
+            </div>
+
+          </div>
+
+            <!-- Agregar arquitecto por email -->
+          <fieldset class="campo">
+            <label for="emailArquitecto" class="label">Agregar arquitecto</label>
+
+            <div id="fila-arq">
+              <input
+                id="emailArquitecto"
+                type="email"
+                class="input"
+                formControlName="emailArquitecto"
+                placeholder="Ej: arquitecto@correo.com"
+                [class.invalido]="mensajeErrorAgregar || formulario.get('emailArquitecto')?.invalid && formulario.get('emailArquitecto')?.touched"
+                (keydown.space)="$event.preventDefault()"
+                autocomplete="off">
+
+              <button 
+                id="btn-agregar-arq" 
+                type="button" 
+                class="btn-secundario"
+                (click)="agregarArquitectoPorEmail()"
+                [disabled]="formulario.get('emailArquitecto')?.errors?.['email'] || !formulario.get('emailArquitecto')?.touched">
+                <span id="sumar-arq" class="material-symbols-rounded">add</span>
+              </button>
+
+            </div>
+
+            @if (formulario.get('emailArquitecto')?.errors?.['email'] && formulario.get('emailArquitecto')?.touched) {
+              <small class="error">El email debe seguir el formato ("correo@email.com").</small>
+            }@else if (mensajeErrorAgregar) {
+              <small class="error">{{ mensajeErrorAgregar }}</small>
             }
-
-          </div>
-
-        </div>
-
-          <!-- Agregar arquitecto por email -->
-        <fieldset class="campo">
-          <label for="emailArquitecto" class="label">Agregar arquitecto</label>
-
-          <div id="fila-arq">
-            <input
-              id="emailArquitecto"
-              type="email"
-              class="input"
-              formControlName="emailArquitecto"
-              placeholder="Ej: arquitecto@correo.com"
-              [class.invalido]="mensajeErrorAgregar || formulario.get('emailArquitecto')?.invalid && (formulario.get('emailArquitecto')?.touched || formulario.get('emailArquitecto')?.dirty)"
-              (keydown.space)="$event.preventDefault()"
-              autocomplete="off">
-
-            <button 
-              id="btn-agregar-arq" 
-              type="button" 
-              class="btn-secundario"
-              (click)="agregarArquitectoPorEmail()"
-              [disabled]="formulario.get('emailArquitecto')?.errors?.['email'] || !formulario.get('emailArquitecto')?.touched">
-              <span id="sumar-arq" class="material-symbols-rounded">add</span>
-            </button>
-
-          </div>
-
-          @if (formulario.get('emailArquitecto')?.errors?.['email'] && formulario.get('emailArquitecto')?.touched) {
-            <small class="error">El email debe seguir el formato ("correo@email.com").</small>
-          }@else if (mensajeErrorAgregar) {
-            <small class="error">{{ mensajeErrorAgregar }}</small>
-          }
-
-        </fieldset>
+            
+          </fieldset>
+        }
 
         <!-- Botón -->
         <div id="botonera" class="acciones">
