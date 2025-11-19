@@ -81,7 +81,20 @@ export class ObraDetalle {
                 this.nombreEstudio = est.nombre;
                 this.estudioSrvice.cachearNombre(est.id!, est.nombre);
               },
-              error: () => this.nombreEstudio = 'Estudio desconocido',
+              error: (e) =>{
+                console.error(e);
+
+                this.nombreEstudio = 'Estudio desconocido';
+                
+                if(e.status === 404){
+                  alert("estudio no encontrado");
+                }else if(e.status >= 500){
+                  alert("Error del Servidor");
+                }else{
+                  alert("Error Inesperado");
+                }
+    
+              } 
             });
           }
         }
@@ -221,7 +234,15 @@ export class ObraDetalle {
         alert('Obra eliminada correctamente.');
         this.router.navigate(['/obras']);
       },
-      error: (e) => alert('No se pudo eliminar la obra.')
+      error: (e) =>{
+        if(e.status === 404){
+          alert("Obra no encontrada");
+        }else if(e.status === 401){
+           alert("Un arquitecto no puede eliminar obras que le pertenezcan"); 
+        }else{
+          alert("No se pudo eliminar la obra.");
+        }
+      } 
     });
   }
 

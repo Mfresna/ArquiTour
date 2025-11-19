@@ -104,7 +104,16 @@ export class EstudioForm implements TieneCambiosPendientes {
           this.quitadoImg = false;
         }
       },
-      error: () => alert('No se pudo cargar el estudio.'),
+      error: (e) => {
+        console.error(e);
+
+        if(e.status === 404){
+          alert("Estudio no hallado");
+        }else{
+          alert('No se pudo cargar el estudio.')
+        }
+
+      }
     });
   }
 
@@ -223,7 +232,10 @@ export class EstudioForm implements TieneCambiosPendientes {
         finalize(() => this.subiendo = false)
       ).subscribe({
         next: () => this.onCreateSuccess(),
-        error: () => alert('No se pudo crear el estudio.')
+        error: (e) =>{
+          console.error(e);
+          alert('No se pudo crear el estudio.');
+        } 
       });
       return;
     }
@@ -241,7 +253,10 @@ export class EstudioForm implements TieneCambiosPendientes {
       finalize(() => this.subiendo = false)
     ).subscribe({
       next: () => this.onCreateSuccess(),
-      error: () => alert('No se pudo crear el estudio.')
+      error: (e) =>{
+          console.error(e);
+          alert('No se pudo crear el estudio.');
+        }
     });
   }
 
@@ -280,7 +295,21 @@ export class EstudioForm implements TieneCambiosPendientes {
         }
         this.arquitectosVinculados = this.arquitectosVinculados.filter(a => a.id !== arqId);
       },
-      error: () => alert('No se pudo quitar el arquitecto'),
+      error: (e) => {
+        console.error(e);
+
+        if(e.status === 404){
+          alert("Estudio no encontrado")
+        }else if(e.status === 401){
+          alert("El arquitecto no puede agregar a otros en este estudio");
+        }else if(e.status === 409){
+          alert("El arqui a eliminar no pertenece al estudio");
+        }else{
+          alert('No se pudo quitar el arquitecto')
+        }
+
+        
+      } 
     });
   }
 

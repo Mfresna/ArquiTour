@@ -44,6 +44,7 @@ export class EstudioDetalle {
       this.router.navigate(['/']);
       return;
     }
+
     // Cargar Estudio
     this.estudioService.getEstudio(id).subscribe({
       next: (est: EstudioModel) => {
@@ -58,7 +59,19 @@ export class EstudioDetalle {
         const idsArquitectos = est.arquitectosIds ?? [];
         this.cargarArquitectosVinculadosPorIds(idsArquitectos);
       },
-      error: () => this.router.navigate(['/estudios']),
+      error: (e) => {
+        console.error(e);
+
+        if(e.status === 404){
+          alert("estudio no encontrado");
+        }else if(e.status >= 500){
+          alert("Error del Servidor");
+        }else{
+          alert("Error Inesperado");
+        }
+
+        this.router.navigate(['/estudios']);
+      }
     });
 
     // 2) Cargar usuario logueado (para saber sus estudios)
@@ -66,8 +79,9 @@ export class EstudioDetalle {
       next: usuario => {
         this.idsEstudiosUsuario = usuario.idEstudios ?? [];
       },
-      error: () => {
-        console.error('No se pudieron obtener los estudios del usuario logueado');
+      error: (e) => {
+        console.error("No se puede leer el usuario", e);
+        alert("No se pueden cargar los datos de perfil");
         this.idsEstudiosUsuario = [];
       }
     });
@@ -211,7 +225,22 @@ export class EstudioDetalle {
         alert('Estudio eliminado correctamente.');
         this.router.navigate(['/estudios']);
       },
-      error: () => alert('No se pudo eliminar el estudio'),
+      error: (e) =>{
+        console.error(e);
+
+        if(e.status === 409){
+          //BAD_REQUEST
+          alert("El estudio tiene obras asociadas, primero eliminelas!")
+        }else if(e.status === 404){
+          //UNSUPPORTED_MEDIA_TYPE
+          alert("Estudio no encontrado");
+        }else if(e.status >= 500){
+          alert("Error de Servidor.")
+        }else{
+          alert("Proceso de eliminacion del estudio fallo. Error desocnocido.")
+        }
+
+      }
     });
   }
 }

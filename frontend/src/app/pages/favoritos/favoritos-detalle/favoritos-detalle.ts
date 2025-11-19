@@ -75,11 +75,22 @@ export class FavoritosDetalle implements OnInit {
     if (!confirm('¿Quitar esta obra de la lista?')) return;
 
     this.favoritosService.deleteObraDeFavorito(this.idLista, obraId).subscribe({
-      next: () => {
+      next: (resp) => {
         this.obras = this.obras.filter(o => o.id !== obraId);
+
+        if(resp.status === 204){
+          alert("Se elimino favorito pq es la utlima obra")
+        }
+
       },
-      error: () => {
-        alert('No se pudo quitar la obra de la lista.');
+      error: (e) => {
+        
+        if(e.status === 204){
+          alert("Se elimino favorito pq es la utlima obra")
+        }else{
+          alert('No se pudo quitar la obra de la lista.')
+        }
+        
       }
     });
   } 

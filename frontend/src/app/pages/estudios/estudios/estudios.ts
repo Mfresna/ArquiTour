@@ -62,7 +62,13 @@ export class Estudios implements OnInit {
       finalize(() => this.spinerVisible = false)
     ).subscribe({
       next: lista => this.estudios = lista,
-      error: (e) => alert('No se pudo cargar la lista de estudios')
+      error: (e) =>{
+        if(e.status === 404){
+          alert("Estudios Inexistentes con esos datos");
+        }else{
+          alert("No se pudo cargar la lista de estudios");
+        }
+      } 
     });
   }
 
@@ -92,8 +98,9 @@ export class Estudios implements OnInit {
           e.id != null && idsEstudiosUsuario.includes(e.id)
       );
       },
-      error: () => {
+      error: (e) => {
         alert('No se pudo obtener el usuario logueado');
+        console.error("No se puede leer el usuario", e);
       }
     });
   }

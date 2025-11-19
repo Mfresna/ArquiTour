@@ -69,8 +69,15 @@ export class Favoritos {
 
       this.cargando = false;
     },
-      error: (err) => {
-        console.error('Error al cargar listas', err);
+      error: (e) => {
+        console.error('Error al cargar listas', e);
+
+        if(e.status === 404){
+          alert("Lista no encontrada");
+        }else{
+          alert("error desonocido");
+        }
+
         this.listas = [];
         this.cargando = false;
       }
@@ -128,7 +135,16 @@ export class Favoritos {
 
           this.cancelarEdicion();
         },
-        error: () => alert('No se pudo renombrar la lista.')
+        error: (e) =>{
+          console.error(e);
+
+          if(e.status === 409){
+            alert("existe una lista con el mismo nombre!");
+          }else{
+            alert('No se pudo renombrar la lista.');
+          }
+
+        } 
       });
   }
 
