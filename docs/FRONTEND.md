@@ -53,7 +53,11 @@ Antes de ejecutar el proyecto, asegurate de tener instalado:
 3. **Instalá las dependencias:** Solo la primera vez
    ```bash
    npm install
-4. **Ejecutá el servidor:**
+4. **Instalá librerias de Leaflet:** Solo la primera vez
+   ```bash
+   npm install leaflet
+   npm install --save-dev @types/leaflet
+5. **Ejecutá el servidor:**
    ```bash
    npm start
     ```
