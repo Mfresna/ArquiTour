@@ -101,11 +101,7 @@ public class EstudioArqService implements EstudioArqServiceInterface {
         }
 
         // Validar que tenga el rol de ARQUITECTO
-<<<<<<< HEAD
-        if (!arquitecto.getCredencial().tieneRolUsuario(RolUsuario.ROLE_ADMINISTRADOR)){
-=======
         if (!arquitecto.getCredencial().tieneRolUsuario(RolUsuario.ROLE_ARQUITECTO)){
->>>>>>> backup
             throw new ProcesoInvalidoException("El usuario no tiene el rol de ARQUITECTO.");
         }
 
@@ -115,12 +111,9 @@ public class EstudioArqService implements EstudioArqServiceInterface {
             estudioArqRepository.save(estudio);
         }
 
-<<<<<<< HEAD
-=======
         //Agrega el estudio al usaurio
         usuarioService.agregarEstudioAUsuario(arquitecto,estudio);
 
->>>>>>> backup
         return estudioArqMapper.mapDTO(estudio);
     }
 

@@ -31,13 +31,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-<<<<<<< HEAD
-
-=======
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
->>>>>>> backup
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -57,16 +53,6 @@ public class UsuarioService implements UsuarioServiceInterface {
     @Value("${default.admin.email}")
     private String defaultAdminEmail;
 
-<<<<<<< HEAD
-    @Transactional
-    public UsuarioResponseDTO registrarUsuario(UsuarioDTO dto) {
-        //Validar la existencia de un email
-        if(usuarioRepository.existsByEmailIgnoreCase(dto.getEmail())){
-            throw new ProcesoInvalidoException(HttpStatus.BAD_REQUEST, "El email ya existe en la base de datos.");
-        }
-        if(!validacionEmailService.isEmailValidado(dto.getEmail())){
-            throw new ProcesoInvalidoException(HttpStatus.BAD_REQUEST, "El email no ha sido verificado.");
-=======
 //    @Transactional
 //    public UsuarioResponseDTO registrarUsuario(UsuarioDTO dto) {
 //        try {
@@ -117,7 +103,6 @@ public class UsuarioService implements UsuarioServiceInterface {
         }
         if (!validacionEmailService.isEmailValidado(dto.getEmail())) {
             throw new ProcesoInvalidoException(HttpStatus.FORBIDDEN, "El email no ha sido verificado.");
->>>>>>> backup
         }
 
         Usuario usuarioNuevo = usuarioMapper.mapUsuario(dto);
