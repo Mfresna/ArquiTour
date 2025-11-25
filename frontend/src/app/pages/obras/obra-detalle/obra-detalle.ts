@@ -9,10 +9,14 @@ import { CategoriaObraDescripcion } from '../../../models/obraModels/categoriaOb
 import { EstadoObraDescripcion } from '../../../models/obraModels/estadoObraModel';
 import { SelectFavorito } from '../../../components/select-favorito/select-favorito';
 import { FavoritosService } from '../../../services/favoritosService/favoritos-service';
+import { EsperandoModal } from '../../../components/esperando-modal/esperando-modal';
+import { finalize } from 'rxjs';
+import { MensajeModal, MessageType } from '../../../components/mensaje-modal/mensaje-modal';
+import { MapaObra } from "../../../components/mapa-obra/mapa-obra";
 
 @Component({
   selector: 'app-obra-detalle',
-  imports: [RouterLink, SelectFavorito],
+  imports: [RouterLink, SelectFavorito, EsperandoModal, MensajeModal, MapaObra],
   templateUrl: './obra-detalle.html',
   styleUrl: './obra-detalle.css',
 })
@@ -34,7 +38,6 @@ export class ObraDetalle {
   //Carrusel miniaturas
   @ViewChild('carruselImagenes') carruselImagenes!: ElementRef;
 
-  
 
   //Para mostrar el nombre prolijo de estado y categoria
   CategoriaObraDescripcion = CategoriaObraDescripcion;
@@ -42,6 +45,15 @@ export class ObraDetalle {
 
   //Ventana de imagen
   ventanaAbierta = false;
+
+  spinerVisible: boolean = false;
+
+  // ===== MODAL =====
+  modalVisible = false;
+  modalTitulo = '';
+  modalMensaje = '';
+  modalTipo: MessageType = 'info';
+  redirigirAObras = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -59,7 +71,11 @@ export class ObraDetalle {
       return; 
     }
 
-    this.obraSrvice.getObra(id).subscribe({
+    this.spinerVisible = true;
+
+    this.obraSrvice.getObra(id).pipe(
+      finalize(() => this.spinerVisible = false)
+    ).subscribe({
       next: (data) => {
         this.obra = data;
         this.cargando = false;
@@ -73,15 +89,91 @@ export class ObraDetalle {
                 this.nombreEstudio = est.nombre;
                 this.estudioSrvice.cachearNombre(est.id!, est.nombre);
               },
-              error: () => this.nombreEstudio = 'Estudio desconocido',
+              error: (e) =>{
+                console.error(e);
+
+                this.nombreEstudio = 'Estudio desconocido';
+                
+                if(e.status === 404){
+                  alert("estudio no encontrado");
+                }else if(e.status >= 500){
+                    this.mostrarModal(
+                    'Error del servidor',
+                    'Ocurrió un error al cargar el estudio asociado.',
+                    'error'
+                  );
+                }else{
+                   this.mostrarModal(
+                    'Error inesperado',
+                    'No se pudo cargar la información del estudio asociado.',
+                    'error'
+                  );
+                }
+    
+              } 
             });
           }
         }
       },
-      error: () => this.router.navigate(['/obras']),
+      error: (e) => {
+        console.error(e);
+
+        if (e.status === 404) {
+          this.mostrarModal(
+            'Obra no encontrada',
+            'La obra solicitada no existe o fue eliminada.',
+            'warning',
+            true
+          );
+        } else if (e.status >= 500) {
+          this.mostrarModal(
+            'Error del servidor',
+            'Ocurrió un error al cargar la obra. Intente nuevamente más tarde.',
+            'error',
+            true
+          );
+        } else {
+          this.mostrarModal(
+            'Error inesperado',
+            'No se pudo cargar la obra.',
+            'error',
+            true
+          );
+        }
+      },
     });
 
     this.verificarSiEstaEnFavoritos(id);
+  }
+
+  // ============= MODAL =============
+
+  private mostrarModal(
+    titulo: string,
+    mensaje: string,
+    tipo: MessageType = 'info',
+    redirigir: boolean = false
+  ): void {
+    this.modalTitulo = titulo;
+    this.modalMensaje = mensaje;
+    this.modalTipo = tipo;
+    this.modalVisible = true;
+    this.redirigirAObras = redirigir;
+  }
+
+  onModalAceptar(): void {
+    this.modalVisible = false;
+
+    if (this.redirigirAObras) {
+      this.router.navigate(['/obras']);
+    }
+
+    this.redirigirAObras = false;
+  }
+
+  onModalCerrado(): void {
+    this.modalVisible = false;
+    this.redirigirAObras = false;
   }
   
 
@@ -203,13 +295,50 @@ export class ObraDetalle {
   eliminar(): void {
     if (!this.obra?.id) return;
     if (!confirm('¿Eliminar esta obra?')) return;
+
+    this.spinerVisible = true;
     
-    this.obraSrvice.deleteObra(this.obra.id).subscribe({
+    this.obraSrvice.deleteObra(this.obra.id).pipe(
+      finalize(() => this.spinerVisible = false)
+    ).subscribe({
       next: () => {
-        alert('Obra eliminada correctamente.');
-        this.router.navigate(['/obras']);
+        this.mostrarModal(
+          'Obra eliminada',
+          'La obra fue eliminada correctamente.',
+          'success',
+          true
+        );
       },
-      error: (e) => alert('No se pudo eliminar la obra.')
+      error: (e) =>{
+        if(e.status === 404){
+          this.mostrarModal(
+            'Obra no encontrada',
+            'La obra ya no existe.',
+            'warning',
+            true
+          );
+        }else if(e.status === 401){
+           this.mostrarModal(
+            'Sin permisos',
+            'Un arquitecto no puede eliminar obras que no pertenecen a sus estudios.',
+            'error'
+          ); 
+        }else{
+          this.mostrarModal(
+            'Error al eliminar',
+            'No se pudo eliminar la obra.',
+            'error'
+          );
+        }
+      } 
     });
   }
+
+  hacerScroll(elemento: HTMLElement) {
+    elemento.scrollIntoView({
+      behavior: 'smooth',
+      block: 'start'   // coloca el elemento en top:0
+    });
+  }
+
 }

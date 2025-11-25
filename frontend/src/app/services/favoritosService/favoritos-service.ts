@@ -16,7 +16,7 @@ export class FavoritosService {
 
   crearOActualizarFavorito(nombreLista: string, idObras: number[]) {
     const body = { nombreLista, idObras };
-    return this.http.post<FavoritosModel>(this.FAVORITOS_URL, body);
+    return this.http.post<FavoritosModel>(this.FAVORITOS_URL, body, {observe: 'response'});
   }
 
   getFavoritosDelUsuario() {
@@ -35,7 +35,7 @@ export class FavoritosService {
 
   deleteObraDeFavorito(idFavorito: number, obraId: number) {
     const url = `${this.FAVORITOS_URL}/${idFavorito}/obras/${obraId}`;
-    return this.http.delete<FavoritosModel>(url);
+    return this.http.delete<FavoritosModel>(url,{observe: 'response'});
   }
 
   renombrarFavorito(idFavorito: number, nuevoNombre: string) {

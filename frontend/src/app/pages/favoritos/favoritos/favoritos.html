@@ -1,110 +1,148 @@
 <div id="global">
 
   <div id="contenedor-favoritos">
+
+    <!-- PANEL IZQUIERDO -->
     <div id="panel-izq">
       <h3 class="titulo">Favoritos</h3>
+
       <div id="panel-filtros">
-          <form [formGroup]="filtro" (submit)="cargarListas()" class="fila">
-            <fieldset>
-              <label for="filtroNombre">Buscar por nombre:</label>
-              <input
-                id="filtroNombre"
-                type="text"
-                formControlName="nombre"
-                placeholder="Ej: Edificios Residenciales"
-                [class.invalido]="filtro.get('nombre')?.invalid && filtro.get('nombre')?.touched"
-                autocomplete="off">
+        <form [formGroup]="filtro" (submit)="cargarListas()" class="fila">
+          <fieldset>
+            <label for="filtroNombre">Buscar por nombre:</label>
+            <input
+              id="filtroNombre"
+              type="text"
+              formControlName="nombre"
+              placeholder="Ej: Edificios Residenciales"
+              [class.invalido]="filtro.get('nombre')?.invalid && filtro.get('nombre')?.touched"
+              autocomplete="off">
 
-              @if (filtro.get('nombre')?.errors?.['minlength'] && filtro.get('nombre')?.touched) {
-                <small>Mínimo 2 caracteres.</small>
-              }
-            </fieldset>
+            @if (filtro.get('nombre')?.errors?.['minlength'] && filtro.get('nombre')?.touched) {
+              <small>Mínimo 2 caracteres.</small>
+            }
+          </fieldset>
 
-            <div class="botones">
-              <button type="submit">BUSCAR</button>
-              <button type="button" (click)="limpiarFiltro()">LIMPIAR</button>
-            </div>
-
-          </form>
-
-
+          <div class="botones">
+            <button type="submit">BUSCAR</button>
+            <button type="button" (click)="limpiarFiltro()">LIMPIAR</button>
+          </div>
+        </form>
       </div>
-
     </div>
 
+    <!-- PANEL DERECHO -->
     <div id="panel-der">
       <div id="panel-scroll">
         <div class="grid">
-          @for (l of listas; track l?.id ?? $index) {
-            <div class="card" 
-                 [class.editando]="editandoId === l.id"
-                [routerLink]="['/favoritos', l.id]"
-                >
-            <div class="card-body">
 
-             
-                
+          @for (l of listas; track l?.id ?? $index) {
+
+            <!-- Card clickeable solo si NO está en modo edición -->
+            <div class="card"
+                 [class.editando]="editandoId === l.id"
+                 [routerLink]="editandoId === l.id ? null : ['/favoritos', l.id]">
+
+              <div class="card-body">
 
                 <!-- MODO NORMAL -->
                 @if (editandoId !== l.id) {
                   <h2>{{ l.nombre }}</h2>
 
                   <div class="fila-inferior">
-                    <p class="contador">{{ l.cantidadObras }} obras</p>
+                    <p class="contador">
+                      {{
+                        l.cantidadObras === 0
+                          ? 'Sin obras'
+                          : l.cantidadObras === 1
+                            ? '1 obra'
+                            : l.cantidadObras + ' obras'
+                      }}
+                    </p>
 
                     <div class="acciones-inferiores">
-                      <button class="btn-editar" (click)="activarEdicion(l)">
+                      <button
+                        type="button"
+                        class="btn-editar"
+                        (click)="activarEdicion(l); $event.stopPropagation(); $event.preventDefault()">
                         <span class="material-icons">edit</span>
                       </button>
 
-                      <button class="btn-eliminar" (click)="eliminarLista(l.id)">
+                      <button
+                        type="button"
+                        class="btn-eliminar"
+                        (click)="eliminarLista(l.id); $event.stopPropagation(); $event.preventDefault()">
                         <span class="material-icons">delete</span>
                       </button>
                     </div>
                   </div>
                 }
 
-
                 <!-- MODO EDICIÓN -->
                 @if (editandoId === l.id) {
-                  <label for="nombre" class="label">Nombre de la Lista</label>
-                  <input
-                    id="nombre"
-                    type="text"
-                    [formControl]="controlEdicion"
-                    class="input-edicion"
-                  />
+                  <!-- Bloque de edición, evita burbujas por las dudas -->
+                  <div (click)="$event.stopPropagation()">
+                    <label for="nombre-{{l.id}}" class="label">Nombre de la Lista</label>
+                    <input
+                      id="nombre-{{l.id}}"
+                      type="text"
+                      [formControl]="controlEdicion"
+                      class="input-edicion" />
 
-                  @if (controlEdicion.invalid && controlEdicion.touched) {
-                    <small class="error">Mínimo 2 caracteres.</small>
-                  }
+                    @if (controlEdicion.invalid && controlEdicion.touched) {
+                      <small class="error">Mínimo 2 caracteres.</small>
+                    }
 
-                  <div class="acciones-edicion">
-                    <button class="btn-guardar" (click)="guardarEdicion(l.id)" [disabled]="controlEdicion.invalid">
-                      Guardar
-                    </button>
-                    <button class="btn-cancelar" (click)="cancelarEdicion()">
-                      Cancelar
-                    </button>
+                    <div class="acciones-edicion">
+                      <button
+                        type="button"
+                        class="btn-guardar"
+                        (click)="guardarEdicion(l.id); $event.stopPropagation(); $event.preventDefault()"
+                        [disabled]="controlEdicion.invalid">
+                        Guardar
+                      </button>
+
+                      <button
+                        type="button"
+                        class="btn-cancelar"
+                        (click)="cancelarEdicion(); $event.stopPropagation(); $event.preventDefault()">
+                        Cancelar
+                      </button>
+                    </div>
                   </div>
                 }
 
-                
-
               </div>
-
             </div>
           }
 
           @empty {
-            <p class="vacio">No hay listas para para mostrar.</p>
+            <p class="vacio">No hay listas para mostrar.</p>
           }
         </div>
-
       </div>
-
     </div>
 
   </div>
-    
+
 </div>
+<app-esperando-modal 
+  [isVisible]="spinerVisible"
+  [mensaje]="spinerMensaje">
+</app-esperando-modal>
+
+<app-mensaje-modal
+  [isVisible]="modalVisible"
+  [titulo]="modalTitulo"
+  [mensaje]="modalMensaje"
+  [tipo]="modalTipo"
+  [conIcon]="true"
+  tipoContenido="texto"
+  [mostrarCerrar]="true"
+  [mostrarBotonAceptar]="true"
+  [mostrarBotonCancelar]="false"
+  textoBotonAceptar="Aceptar"
+  (aceptar)="onModalAceptar()"
+  (cerrado)="onModalCerrado()"
+></app-mensaje-modal>
+

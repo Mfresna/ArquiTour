@@ -4,7 +4,7 @@
   top: 110%;          /* se apoya debajo del corazón */
   right: 0;
 
-  z-index: 30;
+  z-index: 99999999;
   min-width: 260px;
   max-width: 320px;
 
@@ -135,6 +135,8 @@
   flex-direction: column;
   gap: 0.4rem;
 
+
+  overscroll-behavior: contain;   
 
   /* Scrollbar estilizada (opcional) */
   scrollbar-width: none;

@@ -2,7 +2,6 @@
   display: flex;
   justify-content: center;
   padding: 2rem 1rem;
-  background: var(--colorFondo, #f5f6fa);
   box-sizing: border-box;
 }
 
@@ -36,32 +35,6 @@
   text-transform: capitalize;
 }
 
-.acciones-der {
-  display: flex;
-  gap: .5rem;
-}
-
-.acciones-der button {
-  padding: .5rem .9rem;
-  border: none;
-  border-radius: .6rem;
-  background: var(--colorBoton);
-  color: #fff;
-  font-weight: 500;
-  cursor: pointer;
-}
-
-.acciones-der button:hover {
-  background: #1d4ed8;
-}
-
-.acciones-der .danger {
-  background: #a84436;
-}
-
-.acciones-der .danger:hover {
-  background: #b61919;
-}
 
 /* === Fila 2: imagen + obras === */
 .fila-contenido {
@@ -71,6 +44,76 @@
   align-items: stretch;
 }
 
+/*BOTONES*/
+#botonera{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  gap: 1.15rem;
+  
+}
+
+.boton{
+  display: flex;
+  align-items: center;
+  justify-content: center;     
+
+  padding: 0.4rem 1rem;
+  min-width: 100px;
+
+  border: none;
+  border-radius: 1.3rem;
+  
+  font-weight: 500;  
+  font-size: 0.85rem;
+
+  text-transform: uppercase; 
+  text-align: center;  
+  color: var(--colorPrincipal, #fff);
+  
+  cursor: pointer;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+
+  transition: transform 0.2s, box-shadow 0.3s, background-color 0.3s ease; 
+}
+
+  /*Boton Editar*/
+#btn-editar {
+  background-color: #0096c7;
+  transform: scale(1.03);
+}
+
+#btn-editar:hover {
+  background-color: #005b8d;  
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);  
+  transform: translateY(-2px);  
+}
+
+#btn-editar:disabled {
+  background-color: #a0c4d9;
+  cursor: not-allowed;
+  transform: none;
+}
+
+  /*Boton Cambiar Pass*/
+#btn-eliminar {
+  background-color: #d32424;
+  transform: scale(1.03);
+}
+
+#btn-eliminar:hover {
+  background-color: #a51b1b; 
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);  
+  transform: translateY(-2px);  
+}
+
+#btn-eliminar:disabled {
+  background-color: #ce7171;
+  cursor: not-allowed;
+  transform: none;
+}
+/*===============================*/
 
 .imagen {
   position: relative;
@@ -124,6 +167,8 @@
   display: flex;
   flex-direction: column;
   gap: .75rem;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
 
 
@@ -140,6 +185,9 @@
   gap: .5rem;
   transition: all .2s ease;
   margin-top: 10px;
+  margin-right: 10px;
+  cursor: pointer;
+  user-select: none;
 }
 
 .obra-item:hover {
@@ -161,6 +209,7 @@
 
 /* === Fila 3: arquitectos === */
 .panel-arquitectos {
+  padding: 1rem;
   width: 100%;
 }
 

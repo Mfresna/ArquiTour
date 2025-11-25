@@ -132,7 +132,7 @@ public class EstudioArqController {
             )
             @RequestBody @Valid ImagenDTO imgDTO){
         //Actualiza solo la imagen de perfil del estudio al que el usuario pertenece
-        return ResponseEntity.ok(estudioArqService.actualizarEstudioImagenPerfil(request, idEstudio, imgDTO.getUrl()));
+        return ResponseEntity.ok(estudioArqService.actualizarEstudioImagenPerfil(request, idEstudio, imgDTO));
     }
 
     // 5. Agregar arquitecto al estudio

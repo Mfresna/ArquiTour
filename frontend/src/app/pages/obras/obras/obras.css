@@ -172,11 +172,13 @@
   font-size: 1.1rem;
   font-weight: 600;
   color: var(--colorTerciario);
+  text-transform: capitalize;
 }
 
 .obra-estudio {
   color: #666;
   font-size: 0.85rem;
+  text-transform: capitalize;
 }
 
 /* Mensaje lista vacía */

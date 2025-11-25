@@ -10,17 +10,18 @@ import { caracteresValidador } from '../../validadores/passCaracteresValidador';
 import { CamposIguales } from '../../validadores/igualdadValidador';
 import { apellidoValidador, nombreValidador } from '../../validadores/textoValidador';
 import { fechaNacValidador } from '../../validadores/fechaValidador';
-import { DragZoneImagenes } from '../../../components/drag-zone-imagenes/drag-zone-imagenes';
 import { ImagenService } from '../../../services/imagenService/imagen-service';
-import { Observable, of, throwError } from 'rxjs';
 import { DragZoneSimple } from "../../../components/drag-zone-simple/drag-zone-simple";
+import { MensajeModal } from '../../../components/mensaje-modal/mensaje-modal';
 
 
 type Paso = "email" | "pin" | "registrarme";
+type DestinoRedireccion = 'login' | 'inicio' | null;
+type MessageType = 'success' | 'error' | 'warning' | 'info';
 
 @Component({
   selector: 'app-register',
-  imports: [ReactiveFormsModule, PinVerificador, EsperandoModal, DragZoneSimple],
+  imports: [ReactiveFormsModule, PinVerificador, EsperandoModal, DragZoneSimple, MensajeModal],
   templateUrl: './register.html',
   styleUrl: './register.css',
 })
@@ -46,7 +47,14 @@ export class Register implements OnInit, AfterViewInit{
   @Output() volverEmit = new EventEmitter<void>();
 
     //COMPONENTE DE IMAGEN
-  @ViewChild('campoImagen') campoImagen!: DragZoneImagenes;
+  @ViewChild('campoImagen') campoImagen!: DragZoneSimple;
+
+  //MODAL
+  modalVisible = false;
+  modalTitulo = '';
+  modalMensaje = '';
+  redirigirDestino: DestinoRedireccion = null; //para saber si el botón Aceptar debe ir al login
+  modalTipo: MessageType = 'info'; 
 
   constructor(
     private fb: FormBuilder,
@@ -109,6 +117,34 @@ export class Register implements OnInit, AfterViewInit{
     this.volverEmit.emit();
   }
 
+// ============================== MODAL 
+
+   private mostrarModal(titulo: string, mensaje: string, destino: DestinoRedireccion = null, tipo: MessageType = 'info'     
+  ): void {
+    this.modalTitulo = titulo;
+    this.modalMensaje = mensaje;
+    this.modalVisible = true;
+    this.redirigirDestino = destino;
+    this.modalTipo = tipo;
+  }
+
+  onModalAceptar(): void {
+    this.modalVisible = false;
+
+    if (this.redirigirDestino === 'login') {
+      this.router.navigate(['/login']);
+    } else if (this.redirigirDestino === 'inicio') {
+      this.router.navigate(['']);
+    }
+
+    this.redirigirDestino = null;
+  }
+
+  onModalCerrado(): void {
+    this.modalVisible = false;
+    this.redirigirDestino = null;
+  }
+
 //========================== REGISTRO EN EL FORMULARIO
 
   accionBoton(){
@@ -149,20 +185,37 @@ export class Register implements OnInit, AfterViewInit{
       },
       error: (e) => {
         if (e.status === 409) {
-          alert("El mail ya se encuentra registrado en la base de datos.");
-          this.router.navigate(['/login']);
+          this.mostrarModal(
+            "Email registrado",
+            "El mail ya se encuentra registrado en la base de datos.",
+            "login",
+            "warning"
+          );
           console.warn(e);
 
         } else if(e.status === 423) {
-          alert("Aguarde para enviar un nuevo PIN.");
+          this.mostrarModal(
+            "Demasiadas solicitudes",
+            "Aguarde un momento antes de enviar un nuevo PIN.",
+            null,
+            "error"
+          );
           console.warn(e);
 
         }else if(e.status >= 500){
-          alert("ERROR del Servicio, intente mas tarde.");
+          this.mostrarModal(
+            "Error del servicio",
+            "ERROR del Servicio, intente más tarde.",
+            null,
+            "error"
+          );
           console.warn(e);
 
         } else{
-          alert("ERROR INESPERADO.");
+          this.mostrarModal(
+            "Error inesperado",
+            "Ocurrió un error inesperado."
+          );
           console.warn(e);
         }
       }
@@ -188,21 +241,35 @@ export class Register implements OnInit, AfterViewInit{
       error: (e) => {
         if (e.status === 409) {
           //CONFLICT
-          alert("El PIN caducó.");
+          this.mostrarModal(
+            "PIN caducado",
+            "El PIN caducó. Debe generar uno nuevo.",
+            null,
+            "warning"
+          );
           this.anteriorPaso();
 
           console.warn(e);
 
         } else if(e.status === 410) {
           //GONE
-          alert("Demasiados Intentos vuelva a generar un PIN");
+          this.mostrarModal(
+            "Demasiados intentos",
+            "Espere para volver a generar un PIN.",
+            null,
+            "warning"
+          );
           this.anteriorPaso();
           console.warn(e);
 
         }else if(e.status === 403) {
           //FORBBIDEN
-          alert("Error en la solicitud");
-          this.router.navigate(['']);
+          this.mostrarModal(
+            "Solicitud inválida",
+            "Error en la solicitud. Será redirigido al inicio.",
+            "inicio",
+            "error"
+          );
           console.warn(e);
 
         } else if(e.status === 406) {
@@ -211,11 +278,21 @@ export class Register implements OnInit, AfterViewInit{
           console.warn(e);
 
         }else if(e.status >= 500){
-          alert("ERROR del Servicio, intente mas tarde.");
+          this.mostrarModal(
+            "Error del servicio",
+            "Intente más tarde.",
+            null,
+            "error"
+          );
           console.warn(e);
 
         } else{
-          alert("ERROR INESPERADO.");
+          this.mostrarModal(
+            "Error inesperado",
+            "Ocurrió un error inesperado.",
+            null,
+            "error"
+          );
           console.warn(e);
         }
       }
@@ -245,20 +322,32 @@ export class Register implements OnInit, AfterViewInit{
         })
       ).subscribe({
         next: () => {
-          alert("REGISTRADO EXITOSAMENTE");
+          this.mostrarModal(
+            "Registro exitoso",
+            "REGISTRADO EXITOSAMENTE",
+            "login",
+            "success"
+          );
           this.registerForm.reset();
-
-          this.router.navigate(['/login']);
         },
         error: (e) =>{
           //============== ERRORES DE SUBIR IMAGEN
           if(e.status === 400){
             //BAD_REQUEST
-            alert("Verifique la imagen, su nombre y su extension.")
-
+            this.mostrarModal(
+              "Imagen inválida",
+              "Verifique la imagen, su nombre y su extensión.",
+              null,
+              "warning"
+            );
           }else if(e.status === 415){
             //UNSUPPORTED_MEDIA_TYPE
-            alert("El tipo de archivo no es soportado, solo se pueden cargar imagenes");
+             this.mostrarModal(
+              "Tipo de archivo no soportado",
+              "El tipo de archivo no es soportado, solo se pueden cargar imágenes.",
+              null,
+              "warning"
+            );
           }
           
           //============= ERRORES DE REGISTRAR USUARIOS
@@ -266,29 +355,47 @@ export class Register implements OnInit, AfterViewInit{
             //UNPROCESSABLE ENTITY
             console.error("El Email ya existe. Peticion imposible de resolver", e);
 
-            this.router.navigate(['']);
+            this.mostrarModal(
+              "Email ya registrado",
+              "El email ya existe en el sistema.",
+              'inicio',
+              "error"
+            );
 
           } else if(e.status === 403) {
             //FORBBIDEN
             console.warn(e);
-            alert("El email no ha sido verificado.");
+            this.mostrarModal(
+              "Email no verificado",
+              "El email no ha sido verificado.",
+              null,
+              "warning"
+            );
 
             this.origenPaso();
             this.registerForm.get('email')?.setValue(this.emailVerificado);
 
           }else if(e.status >= 500){
-            alert("ERROR del Servicio, intente mas tarde.");
+            this.mostrarModal(
+              "Error del servicio",
+              "ERROR del Servicio, intente más tarde.",
+              "inicio",
+              "error"
+            );
             console.warn(e);
 
-            this.router.navigate(['']);
+         
 
           } else{
-            alert("ERROR INESPERADO.");
+             this.mostrarModal(
+              "Error",
+              "ERROR INESPERADO.",
+              "inicio"
+            );
             console.warn(e);
             
             this.origenPaso();
 
-            this.router.navigate(['']);
           }
         }
       });      
@@ -410,6 +517,7 @@ export class Register implements OnInit, AfterViewInit{
       this.registerForm.get('descripcion')?.setValue(textarea.value);
     }
   }
+
   
 }
 

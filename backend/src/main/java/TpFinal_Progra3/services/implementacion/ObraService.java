@@ -60,19 +60,21 @@ public class ObraService implements ObraServiceInterface{
     private final IPLocationService ipLocationService;
     private final ImagenService imagenService;
     private final UsuarioService usuarioService;
+    private final EstudioArqService estudioArqService;
 
     public ObraResponseDTO crearObra(HttpServletRequest request, ObraDTO dto) {
         EstudioArq estudio = estudioArqRepository.findById(dto.getEstudioId())
                 .orElseThrow(() -> new NotFoundException("Estudio no encontrado"));
 
-        if(!puedeGestionarObra(request, dto.getEstudioId())) {
-            throw new ProcesoInvalidoException(HttpStatus.UNAUTHORIZED,"El Arquitecto no puede crear obras para un estudio que no forma parte.");
+        if(!estudioArqService.puedeGestionarEstudio(request, dto.getEstudioId())) {
+            throw new ProcesoInvalidoException(HttpStatus.UNAUTHORIZED, "El Arquitecto no puede crear obras para un estudio que no forma parte.");
         }
 
 <<<<<<< HEAD
 =======
         //Modificacion 10-11
-        if(!obraRepository.findByNombreIgnoreCase(dto.getNombre()).isEmpty()){
+        if(!obraRepository.findByNombreEqualsIgnoreCaseAndEstudioId(dto.getNombre(), dto.getEstudioId()).isEmpty()){
+            //Busca dentro del mismo estudio el nombre del DTO si existe obra con mismo ombre y estudio lanza 406
             throw new ProcesoInvalidoException(HttpStatus.NOT_ACCEPTABLE,"No se puede crear una obra que contenta ese nombre.");
         }
 
@@ -99,6 +101,7 @@ public class ObraService implements ObraServiceInterface{
             throw new ProcesoInvalidoException(HttpStatus.UNAUTHORIZED,"El Arquitecto no puede eliminar obras para un estudio que no forma parte.");
         }
 
+        obraRepository.eliminarVinculosPorObra(id);
         obraRepository.deleteById(id);
     }
 
@@ -264,7 +267,10 @@ public class ObraService implements ObraServiceInterface{
         Usuario usr = usuarioService.buscarUsuario(request);
 
         return usr.getCredencial().tieneRolUsuario(RolUsuario.ROLE_ADMINISTRADOR)
-                || usr.getEstudios().stream().anyMatch(e -> e.getId().equals(id));
+                || usr.getEstudios().stream().anyMatch(e -> {
+                    return e.getObras().stream().anyMatch(obra -> obra.getId().equals(id));
+                });
+
     }
 <<<<<<< HEAD
 =======

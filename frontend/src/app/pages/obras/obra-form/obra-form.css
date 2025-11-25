@@ -81,7 +81,6 @@ textarea.input {
   min-height: 80px;
 }
 
-
 .error {
   color: #ff3333;
   font-size: 0.9rem;
@@ -130,10 +129,26 @@ app-drag-zone-multiple {
   background: #1d4ed8;
 }
 
+/* Estado inválido */
+.invalido{
+  border: 2px solid #ff5c5c !important;
+  background: #ffecec !important;
+}
+
 /* ===== Responsive ===== */
 
 @media (max-width: 480px) {
   #contenedor-form {
     max-width: 95%;
   }
+}
+
+#mapa{
+  min-height: 420px;
+  border: none;
+}
+
+#mapa > small{
+  padding-left: 20px;
+  margin-top: 15px;
 }

@@ -1,4 +1,5 @@
 @if (!cargando && obra) {
+
   <div class="detalle-obra">
 
     <!-- ====== Imagen Principal ====== -->
@@ -8,8 +9,11 @@
 
     <!-- ====== Ficha Técnica ====== -->
     <div class="ficha-tecnica">
+
       <div class="tit-fav">
+
         <h1 class="titulo">{{ obra.nombre }}</h1>
+
         <div class="favorito">
           <span
             class="material-icons icono-fav"
@@ -27,13 +31,9 @@
             />
           }
 
-
         </div>
 
-      
       </div>
-
-      
 
       <div class="ft-grid">
         <!-- Estudio -->
@@ -82,18 +82,20 @@
           <span class="etiqueta">Año</span>
           @if (obra.anioEstado) {
             <span class="burbuja">
-              <span class="burbuja-teto">
+              <span class="burbuja-texto">
                  {{ obra.anioEstado }}
               </span>
             </span>
           } @else { <span class="vacio">—</span> }
         </div>
       </div>
+
     </div>
 
     <!-- ====== Descripción + Mapa ====== -->
-    <div class="descripcion-mapa">
-      <div class="encabezado">
+    <div id="descripcion-mapa">
+
+      <div id="encabezado-tarjeta">
         <h3>Descripción</h3>
 
         @if (puedeGestionar()) {
@@ -104,8 +106,9 @@
         }
       </div>
 
-      <div class="contenido">
-        <div class="texto">
+      <div id="contenido">
+
+        <div id="desc-texto">
           @if (obra.descripcion) {
             <p>{{ obra.descripcion }}</p>
           } @else {
@@ -113,8 +116,17 @@
           }
         </div>
 
-        <div class="mapa">
-          <div class="mapa-placeholder">Mapa (próximamente)</div>
+        <div id="mapa-contenedor" class="fondo-trambolico">
+          @if(obra.latitud != null && obra.longitud != null ){
+            <app-mapa-obra
+                [latitud]="obra.latitud"
+                [longitud]="obra.longitud"
+                [zoom]="17">
+            </app-mapa-obra>
+          } @else {
+            <small class="comentario">Mapa (próximamente).</small>
+          }
+            
         </div>
       </div>
     </div>
@@ -172,3 +184,26 @@
 } @else {
     <div class="estado">No se encontró la obra.</div>
 }
+<app-esperando-modal 
+  [isVisible]="spinerVisible" 
+/>
+<app-esperando-modal 
+  [isVisible]="spinerVisible">
+</app-esperando-modal>
+
+<app-mensaje-modal
+  [isVisible]="modalVisible"
+  [titulo]="modalTitulo"
+  [mensaje]="modalMensaje"
+  [conIcon]="true"
+  [tipo]="modalTipo"
+  tipoContenido="texto"
+  [mostrarCerrar]="true"
+  [mostrarBotonAceptar]="true"
+  [mostrarBotonCancelar]="false"
+  textoBotonAceptar="Aceptar"
+  (aceptar)="onModalAceptar()"
+  (cerrado)="onModalCerrado()"
+></app-mensaje-modal>
+
+

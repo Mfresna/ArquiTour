@@ -7,12 +7,13 @@ import { caracteresValidador } from '../../validadores/passCaracteresValidador';
 import { UsuarioService } from '../../../services/usuarioService/usuario-service';
 import { EsperandoModal } from '../../../components/esperando-modal/esperando-modal';
 import { finalize } from 'rxjs';
+import { MensajeModal } from "../../../components/mensaje-modal/mensaje-modal";
 
 
 @Component({
   selector: 'app-recuperar-pass',
   standalone: true,
-  imports: [ReactiveFormsModule, EsperandoModal],
+  imports: [ReactiveFormsModule, EsperandoModal, MensajeModal],
   templateUrl: './cambiar-pass.html',
   styleUrl: './cambiar-pass.css',
 })
@@ -25,6 +26,13 @@ export class CambiarPass implements OnInit {
   mostrarConfirmPassword = false;
 
   spinerVisible: boolean = false;
+
+  //MODAL
+  modalVisible = false;
+  modalTitulo = '';
+  modalMensaje = '';
+  redirigirADestino: 'login' | 'inicio' | 'home' | null = null;
+  modalTipo: 'success' | 'error' | 'warning' | 'info' = 'info';
 
   constructor(
     private fb: FormBuilder,
@@ -54,6 +62,39 @@ export class CambiarPass implements OnInit {
     );
 
   }
+  //METODOS PARA EL MODAL
+
+private mostrarModal(titulo: string, mensaje: string, destino: 'login' | 'inicio' | 'home' | null = null,
+  tipo: 'success' | 'error' | 'warning' | 'info' = 'info'
+) {
+  this.modalTitulo = titulo;
+  this.modalMensaje = mensaje;
+  this.modalVisible = true;
+  this.redirigirADestino = destino;
+  this.modalTipo = tipo;
+}
+
+  // Botón aceptar del modal
+  onModalAceptar() {
+    this.modalVisible = false;
+
+    if (this.redirigirADestino === 'login') {
+      this.router.navigate(['/login']);
+    } else if (this.redirigirADestino === 'home') {
+      this.router.navigate(['/home']);
+    } else if (this.redirigirADestino === 'inicio') {
+      this.router.navigate(['']);
+    }
+
+    this.redirigirADestino = null;
+  }
+
+
+  onModalCerrado() {
+    this.modalVisible = false;
+    this.redirigirADestino = null;
+  }
+  /*==============================================*/
 
   enviarFormulario(): void { 
     const pass = this.passForm.get('nuevaPass')?.value
@@ -70,11 +111,20 @@ export class CambiarPass implements OnInit {
 
       }else{
         console.warn("Error en el proces de cambio de contraseña");
-        alert ("Error en el proceso")
+        this.mostrarModal(
+          "Error en el proceso",
+          "Ocurrió un error en el proceso de cambio de contraseña.",
+          null,
+          "error"
+        );
       }
       
     }else{
-      alert("Ingrese una pass valida.");
+      this.mostrarModal("Datos inválidos", 
+        "Ingrese una contraseña válida.",
+        null,
+        "warning");
+
       this.passForm.markAllAsTouched();
     }
   }
@@ -89,22 +139,34 @@ export class CambiarPass implements OnInit {
       })
     ).subscribe({
       next: () => {
-        alert('¡Contraseña actualizada correctamente!');
-        this.passForm.reset;
+        this.mostrarModal(
+          "Contraseña actualizada",
+          "¡Contraseña actualizada correctamente!",
+          "login",
+          "success"
+        );
 
-        //Vuelve al login para loguearse
-        this.router.navigate(['/login']);
+        this.passForm.reset();
+
       },
       error: (e) => {
         if (e.status === 401) {
-          alert("El link recibido en el Email expiro, vuelva a intentarlo");
+          this.mostrarModal(
+            "Link expirado",
+            "El link recibido en el email expiró. Vuelva a intentarlo.",
+            "inicio",
+            "warning"
+          );
         } else {
-          alert("Ocurrió un error inesperado al intentar restaurar la contraseña.");
+          this.mostrarModal(
+            "Error inesperado",
+            "Ocurrió un error al intentar restaurar la contraseña.",
+            "inicio",
+            "error"
+          );
         }
-        this.passForm.reset;
+        this.passForm.reset();
 
-        //Vuelve a auth
-        this.router.navigate(['']);
       }
     })
   }
@@ -119,20 +181,25 @@ export class CambiarPass implements OnInit {
       })
     ).subscribe({
       next: () => {
-        alert('¡Contraseña actualizada correctamente!');
-
-        this.router.navigate(['/home']);
+        this.mostrarModal(
+          "Contraseña actualizada",
+          "¡Contraseña actualizada correctamente!",
+          "login",
+          "success"
+        );
 
       },
       error: (e) => {
         console.error(e);
 
-        alert("Ocurrió un error inesperado al cambiar la contraseña.");
+        this.mostrarModal(
+          "Error inesperado",
+          "Ocurrió un error al cambiar la contraseña.",
+          "home",
+          "error"
+        );
 
-        this.passForm.reset;
-
-        //Vuelve a home y si no estas logueado te tira afuera
-        this.router.navigate(['/home']);
+        this.passForm.reset();
       }
     })
   }

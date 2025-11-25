@@ -11,44 +11,85 @@
           <!-- Nombre -->
           <fieldset class="form-group">
             <label for="nombre" class="label">Nombre</label>
-            <input id="nombre" type="text" class="input" formControlName="nombre" placeholder="Ej.: Museo de Arte Moderno"/>
-            @if (formulario.get('nombre')?.invalid && formulario.get('nombre')?.touched) {
-              <small class="error">Ingrese un nombre válido (mín. 2).</small>
+            <input 
+              id="nombre"
+              type="text" 
+              class="input" 
+              formControlName="nombre" 
+              placeholder="Ej.: Museo de Arte Moderno"
+              [class.invalido]="formulario.get('nombre')?.invalid && (formulario.get('nombre')?.touched || formulario.get('nombre')?.dirty)"
+              autocomplete="off">
+            
+            @if (formulario.get('nombre')?.errors?.['required'] && formulario.get('nombre')?.touched) {
+              <small class="error">El nombre de la obra es obligatorio.</small>
+            }@else if(formulario.get('nombre')?.errors?.['minlength'] && formulario.get('nombre')?.touched) {
+              <small class="error">El nombre es demasiado corto (min. 2 caraceres)</small>
+            }@else if(formulario.get('nombre')?.errors?.['maxlength']) {
+              <small class="error">El nombre es demasiado largo (max. 100 caraceres)</small>
+            }@else if (formulario.get('nombre')?.errors?.['espacios'] && formulario.get('nombre')?.touched) {
+              <small class="error">El nombre ni puede estar vacio.</small>
+            }@else {
+              @if (formulario.get('nombre')?.errors?.['sinLetras'] && formulario.get('nombre')?.touched) {
+              <small class="error">Formato invalido, debe contener al menos una letra.</small>
+              }@else if (formulario.get('nombre')?.errors?.['formato']) {
+                <small class="error">Simbolos permitidos (- : . , ¡ ? ( ) /).</small>
+              }
             }
           </fieldset>
 
           <!-- Categoría -->
           <fieldset class="form-group">
             <label for="cat" class="label">Categoría</label>
-            <select id="cat" class="input" formControlName="categoria" required>
+            <select 
+              id="cat" 
+              class="input" 
+              formControlName="categoria"
+              [class.invalido]="formulario.get('categoria')?.invalid && formulario.get('categoria')?.touched"
+              required>
               <option value="" disabled>-- Seleccione una categoría --</option>
               @for (c of categorias; track c) {
                 <option [value]="c">{{ CategoriaObraDescripcion[c] || c }}</option>
               }
             </select>
+
             @if (formulario.get('categoria')?.invalid && formulario.get('categoria')?.touched) {
               <small class="error">Debe seleccionar una categoría.</small>
             }
+
           </fieldset>
 
           <!-- Estado -->
           <fieldset class="form-group">
             <label for="estado" class="label">Estado</label>
-            <select id="estado" class="input" formControlName="estado" required>
+            <select 
+              id="estado" 
+              class="input" 
+              formControlName="estado"
+              [class.invalido]="formulario.get('estado')?.invalid && formulario.get('estado')?.touched" 
+              required>
+
               <option value="" disabled>-- Seleccione un estado --</option>
               @for (e of estados; track e) {
                 <option [value]="e">{{ EstadoObraDescripcion[e] || e }}</option>
               }
             </select>
+
             @if (formulario.get('estado')?.invalid && formulario.get('estado')?.touched) {
               <small class="error">Debe seleccionar un estado.</small>
             }
+
           </fieldset>
 
           <!-- Estudio -->
           <fieldset class="form-group">
             <label for="estudio" class="label">Estudio</label>
-            <select id="estudio" class="input" formControlName="estudioId" required>
+            <select 
+              id="estudio"
+              class="input" 
+              formControlName="estudioId"
+              [class.invalido]="formulario.get('estudioId')?.invalid && formulario.get('estudioId')?.touched" 
+              required>
+
               <option value="" disabled>-- Seleccione un estudio --</option>
               @for (e of (estudios); track e.id) {
                 <option [value]="e.id">{{ e.nombre }}</option>
@@ -61,33 +102,108 @@
 
           <!-- Año del estado -->
           <fieldset class="form-group">
-            <label for="anio" class="label">Año del estado </label>
-            <input id="anio" type="number" class="input" formControlName="anioEstado" placeholder="Ej.: 2020" />
-            @if (formulario.get('anioEstado')?.invalid && formulario.get('anioEstado')?.touched) {
-              <small class="error">Ingrese un año válido.</small>
+            <label for="anio" class="label">Año del estado {{esNegativo()}}</label>
+            <input 
+              id="anio" 
+              type="number" 
+              class="input" 
+              formControlName="anioEstado"
+              [class.invalido]="formulario.get('anioEstado')?.invalid && (formulario.get('anioEstado')?.touched || formulario.get('anioEstado')?.dirty)" 
+              placeholder="Ej.: 2020">
+            
+
+
+            @if(formulario.get('anioEstado')?.errors?.['fechaFutura']) {
+              <small class="error">El año no puede ser posterior al actual</small>
+            }@else if(formulario.get('anioEstado')?.errors?.['anioCero']) {
+              <small class="error">El año 0 (cero) no existe (1 a.C. - 1 d.C.)</small>
+            }@else if (formulario.get('anioEstado')?.errors?.['required'] && formulario.get('anioEstado')?.touched) {
+              <small class="error">El año es obligatorio.</small>
             }
+
           </fieldset>
 
           <!-- Latitud / Longitud -->
           <fieldset class="form-group">
             <label class="label">Ubicación</label>
             <div style="display:flex; gap:.6rem;">
-              <input type="number" class="input" formControlName="latitud" placeholder="Latitud (-90 a 90)" step="0.000001"/>
-              <input type="number" class="input" formControlName="longitud" placeholder="Longitud (-180 a 180)" step="0.000001"/>
+            
+              <input 
+                type="number"
+                class="input" 
+                formControlName="latitud" 
+                placeholder="Latitud (-90 a 90)" 
+                step="0.000001"
+                [class.invalido]="formulario.get('latitud')?.invalid && (formulario.get('latitud')?.touched || formulario.get('latitud')?.dirty)" >
+              
+              <input 
+                type="number" 
+                class="input" 
+                formControlName="longitud" 
+                placeholder="Longitud (-180 a 180)" 
+                step="0.000001"
+                [class.invalido]="formulario.get('longitud')?.invalid && (formulario.get('longitud')?.touched || formulario.get('longitud')?.dirty)" >
             </div>
-            @if ((formulario.get('latitud')?.invalid && formulario.get('latitud')?.touched) ||
-                 (formulario.get('longitud')?.invalid && formulario.get('longitud')?.touched)) {
-              <small class="error">Ingrese coordenadas válidas.</small>
-            }
-          </fieldset>
 
-          <!-- Descripción -->
+            <div id="mensaje-coordenadas">
+                <!-- Validaciones Latitud -->
+              @if (formulario.get('latitud')?.errors?.['required'] && formulario.get('latitud')?.touched) {
+                <small class="error">La latitud es obligatoria.</small>
+              }@else if(formulario.get('latitud')?.errors?.['min'] || formulario.get('latitud')?.errors?.['max']) {
+                <small class="error">La latitud está fuera del rango, verifique signo (-90 a 90)</small>
+              }
+
+              <!-- Validaciones Longitud -->
+              @if (formulario.get('longitud')?.errors?.['required'] && formulario.get('longitud')?.touched) {
+                <small class="error">La longitud es obligatoria.</small>
+              }@else if(formulario.get('longitud')?.errors?.['min'] || formulario.get('longitud')?.errors?.['max']) {
+                <small class="error">La longitud está fuera del rango, verifique signo (-90 a 90)</small>
+              }
+            </div>
+          </fieldset> 
+
+
+            <!-- sadasd -->
+            <fieldset id="mapa" class="campo">
+              <app-mapa-selector
+                [latitud]="formulario.get('latitud')?.value ?  formulario.get('latitud')?.value : lat"
+                [longitud]="formulario.get('longitud')?.value ?  formulario.get('longitud')?.value : long"
+                [zoom]="4"
+                (coordenadasSeleccionadas)="onCoordenadasSeleccionadas($event)">
+              </app-mapa-selector>
+
+            </fieldset>
+
+
+            <!-- sdasdasd -->
+
+          
+
+
+
+          <!-- DESCRIPCION -->
           <fieldset class="form-group">
             <label for="desc" class="label">Descripción</label>
-            <textarea id="desc" class="input" rows="3" formControlName="descripcion" placeholder="Breve descripción de la obra"></textarea>
-            @if (formulario.get('descripcion')?.invalid && formulario.get('descripcion')?.touched) {
-              <small class="error">Ingrese una descripción (mín. 5).</small>
+            <textarea 
+              id="desc"
+              type="text" 
+              class="input" 
+              rows="6" 
+              formControlName="descripcion" 
+              placeholder="Breve descripción de la obra"
+              [class.invalido]="formulario.get('descripcion')?.invalid && formulario.get('descripcion')?.touched" >
+            </textarea>
+
+            @if (formulario.get('descripcion')?.errors?.['requerid'] && formulario.get('descripcion')?.touched) {
+              <small class = "error">La descripcion de la obra es obligatoria.</small>
+            } @else if (formulario.get('descripcion')?.errors?.['minlength'] && formulario.get('descripcion')?.touched) {
+              <small class = "error">Descripcion demasiado corta (min. 5 caracteres).</small>
+            } @else if (formulario.get('descripcion')?.errors?.['pattern'] && formulario.get('descripcion')?.dirty) {
+              <small class = "error">Caracter invalido, solo se permiten (- _ ! ¡ & ¿ ? " + =).</small>
+            } @else if(formulario.get('descripcion')?.errors?.['espacios'] && formulario.get('descripcion')?.touched) {
+              <small class="error">La descripcion de la obra es obligatoria.</small>
             }
+
           </fieldset>
 
          <app-drag-zone-multiple
@@ -111,3 +227,18 @@
     </div>
   </div>
 </div>
+
+<app-mensaje-modal
+  [isVisible]="modalVisible"
+  [titulo]="modalTitulo"
+  [mensaje]="modalMensaje"
+  [conIcon]="true"
+  [tipo]="modalTipo"
+  tipoContenido="texto"
+  [mostrarCerrar]="true"
+  [mostrarBotonAceptar]="true"
+  [mostrarBotonCancelar]="false"
+  textoBotonAceptar="Aceptar"
+  (aceptar)="onModalAceptar()"
+  (cerrado)="onModalCerrado()"
+></app-mensaje-modal>

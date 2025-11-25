@@ -1,0 +1,33 @@
+<div id="gestionar-roles" class="corazon-favoritos">
+
+    <h3 id="titulo">Roles</h3>
+
+    <!-- Roles -->
+    <div class="scroll" >
+        @for (r of rolesExistentes; track r) {
+            @if(r !== 'ROLE_USUARIO'){
+                <div class="item-lista" 
+                    (click)="modificoRoles(r)">
+
+                    <span class="nombre">{{ rolModelDescripcion[r] || r  }}</span>
+
+                    @if (tieneRol(r)) {
+                    <span class="material-icons icon-check activo">check_circle</span>
+                    } @else {
+                    <span class="material-icons icon-check">radio_button_unchecked</span>
+                    }
+                </div>
+            }
+        }
+        @if(advertenciaArq){
+            <small>* Si continua se desvinculará de todos sus estudios, no se puede deshacer!</small>
+        }
+    </div>
+
+    <!-- Botonera -->
+    <div id="botonera" class="crear">
+        
+        <button id="cancelar" (click)="cancelar()">CANCELAR</button>
+        <button id="aceptar" (click)="aceptar()">ACEPTAR</button>
+    </div>
+</div>

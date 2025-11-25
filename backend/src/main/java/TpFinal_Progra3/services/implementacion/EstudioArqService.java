@@ -22,6 +22,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -175,7 +176,7 @@ public class EstudioArqService implements EstudioArqServiceInterface {
     }
 
     @Transactional
-    public EstudioArqDTO actualizarEstudioImagenPerfil(HttpServletRequest request,Long id, String url) {
+    public EstudioArqDTO actualizarEstudioImagenPerfil(HttpServletRequest request,Long id,ImagenDTO imgDTO) {
 
         EstudioArq estudio = estudioArqRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Estudio no encontrado con ID: " + id));
@@ -185,31 +186,26 @@ public class EstudioArqService implements EstudioArqServiceInterface {
                     "El Arquitecto logueado no pertenece al Estudio de Arquitectura ID: " + id);
         }
 
-<<<<<<< HEAD
-        estudio.setImagen(imagenService.obtenerImagen(url));
+        String urlBorrar = (estudio.getImagen() != null) ? estudio.getImagen().getUrl() : null;
+        String urlNueva = imgDTO != null ? imgDTO.getUrl() : null;
 
-        return estudioArqMapper.mapDTO(estudioArqRepository.save(estudio));
-=======
-        //Hay algo para actualizar
-        if(url.equals(estudio.getImagen().getUrl())){
-            //Devuelvo el estudio como estaba
-            return estudioArqMapper.mapDTO(estudio);
+        //Se fija si la img cambio
+        boolean imagenCambio = !Objects.equals(urlBorrar, urlNueva);
+
+        if (imagenCambio) {
+            if (urlNueva == null || urlNueva.isBlank()) {
+                // Quitar imagen del estudio
+                estudio.setImagen(null);
+            } else {
+                // Setear nueva imagen
+                estudio.setImagen(imagenService.obtenerImagen(urlNueva));
+            }
         }
 
-        String urlBorrar = estudio.getImagen().getUrl();
-
-        if (url.isEmpty()){
-            //sacamos la foto
-            estudio.setImagen(null);
-        } else {
-            //seteamos nueva foto que la obtiene de la BD
-            estudio.setImagen(imagenService.obtenerImagen(url));
-        }
-
-        //Guardo el usuario con la foto null o la nueva foto
         EstudioArqDTO estudioActualizado = estudioArqMapper.mapDTO(estudioArqRepository.save(estudio));
 
-        if (urlBorrar != null) {
+        //borra de la BD la imagen anterior
+        if (imagenCambio && urlBorrar != null) {
             eliminarImagen(urlBorrar);
         }
 
@@ -221,12 +217,12 @@ public class EstudioArqService implements EstudioArqServiceInterface {
 >>>>>>> backup
     }
 
-    private boolean puedeGestionarEstudio(HttpServletRequest request, Long id){
+    public boolean puedeGestionarEstudio(HttpServletRequest request, Long id){
         Usuario usr = usuarioService.buscarUsuario(request);
 
         return usr.getCredencial().tieneRolUsuario(RolUsuario.ROLE_ADMINISTRADOR)
                 || usr.getEstudios().stream().anyMatch(e -> e.getId().equals(id));
-    }
 
+    }
 
 }

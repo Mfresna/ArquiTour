@@ -5,6 +5,7 @@ export const environment = {
   portBack: '8080',
   imgEstudio: 'assets/img/por_defecto/estudioPerfil.png',
   imgObra: 'assets/img/por_defecto/obra.png',
+  imgUsuario: 'assets/img/por_defecto/usuarioPerfil.png',
   imagenesFondo: [
     'assets/img/fondo/bg1.webp',
     'assets/img/fondo/bg2.webp',
@@ -14,5 +15,8 @@ export const environment = {
     'assets/img/fondo/bg6.webp',
     'assets/img/fondo/bg7.webp',
     'assets/img/fondo/bg8.webp'
-  ]
+  ],
+  iconoMapaPrincipal: 'assets/icons/pin-obra.svg',
+  iconoMapaPrincipalUsuario: 'assets/icons/pin-user.svg',
+  templateMapa: 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png',
 };

@@ -93,10 +93,12 @@
   [isVisible]="modalVisible"
   [titulo]="modalTitulo"
   [mensaje]="modalMensaje" 
-  [conIcon]= "false"
+  [conIcon]="false"
   tipoContenido="texto" 
-  [mostrarCerrar]="false"
+  [mostrarCerrar]="mostrarCruz"         
+  [mostrarBotonAceptar]="true"
+  [mostrarBotonCancelar]="false"
+  textoBotonAceptar="Ir a cambiar contraseña"
+  (aceptar)="irACambiarPass()"
+  (cerrado)="onModalCerrado()"        
 />
-
-
-

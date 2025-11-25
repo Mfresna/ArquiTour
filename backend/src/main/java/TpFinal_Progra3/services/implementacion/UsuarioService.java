@@ -170,9 +170,6 @@ public class UsuarioService implements UsuarioServiceInterface {
         }
     }
 
-
-
->>>>>>> backup
     public Usuario buscarUsuario(Long id) {
         return usuarioRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Usuario no encontrado con ID: " + id));
@@ -282,7 +279,7 @@ public class UsuarioService implements UsuarioServiceInterface {
         if(!usr.getIsActivo()){
             throw new ProcesoInvalidoException("El usuario " + id + " ya se encontraba inhabilitado.");
         } else if (usr.getEmail().equals(defaultAdminEmail)) {
-            throw new ProcesoInvalidoException("El usuario " + id + " no se puede inhabilitar.");
+            throw new ProcesoInvalidoException(HttpStatus.BAD_REQUEST ,"El usuario " + id + " no se puede inhabilitar.");
         }
         usr.setIsActivo(false);
         usuarioRepository.save(usr);
@@ -327,7 +324,7 @@ public class UsuarioService implements UsuarioServiceInterface {
 
         Usuario usr = buscarUsuario(id);
         if(!usr.getIsActivo()){
-            throw new ProcesoInvalidoException("No se permite modificar los roles de un usuario inhabilitado");
+            throw new ProcesoInvalidoException(HttpStatus.FORBIDDEN,"No se permite modificar los roles de un usuario inhabilitado");
         }
 
         rolesDTO.getRoles().forEach(rol ->
@@ -347,15 +344,21 @@ public class UsuarioService implements UsuarioServiceInterface {
 
         Usuario usr = buscarUsuario(id);
         if(!usr.getIsActivo()){
-            throw new ProcesoInvalidoException("No se permite modificar los roles de un usuario inhabilitado");
+            throw new ProcesoInvalidoException(HttpStatus.FORBIDDEN,"No se permite modificar los roles de un usuario inhabilitado");
         }
 
         if(usr.getEmail().equals(defaultAdminEmail)){
-            throw new ProcesoInvalidoException("Al usuario " + id + " no se le puede quitar roles.");
+            throw new ProcesoInvalidoException(HttpStatus.UNPROCESSABLE_ENTITY,"Al usuario " + id + " no se le puede quitar roles.");
         }
 
         if(rolesDTO.getRoles().contains(RolUsuario.ROLE_USUARIO)){
             throw new ProcesoInvalidoException(HttpStatus.BAD_REQUEST,"El Rol Usuario no puede ser revocado");
+        }
+
+        //Saco el usuario de los estudios donde esta vinculado
+        if(rolesDTO.getRoles().contains(RolUsuario.ROLE_ARQUITECTO)){
+            //Borra automaticamente la vinculacion en las obras
+            usr.getEstudios().clear();
         }
 
         rolesDTO.getRoles().forEach(rol ->

@@ -1,47 +1,45 @@
 <div id="global">
 
   <div id="contenedor-estudios">
+
     <div id="panel-izq">
-      <h3 class="titulo">Estudios</h3>
+
       <div id="panel-filtros">
-          <form [formGroup]="filtro" (submit)="cargarEstudios()" class="fila">
-            <fieldset>
-              <label for="filtroNombre">Buscar por nombre:</label>
-              <input
-                id="filtroNombre"
-                type="text"
-                formControlName="nombre"
-                placeholder="Ej: Estudio Sur Arquitectos"
-                [class.invalido]="filtro.get('nombre')?.invalid && filtro.get('nombre')?.touched"
-                autocomplete="off">
+        <h3 class="titulo">Estudios</h3>  
+        <form [formGroup]="filtro" (submit)="cargarEstudios()" class="form-filtros">
+          
+          <!-- NOMBRE -->
+          <fieldset class="campo">
+            <label for="filtroNombre">Nombre</label>
+            <input
+              id="filtroNombre"
+              type="text"
+              formControlName="nombre"
+              placeholder="Ej: Estudio Sur Arquitectos"
+              [class.invalido]="filtro.get('nombre')?.invalid && filtro.get('nombre')?.touched"
+              autocomplete="off"
+              (blur)="cargarEstudios()"
+              (keyup.enter)="cargarEstudios()">
+          </fieldset>
 
-              @if (filtro.get('nombre')?.errors?.['minlength'] && filtro.get('nombre')?.touched) {
-                <small>Mínimo 2 caracteres.</small>
-              }
-            </fieldset>
+          <div id = "botonera">
+            <button id="buscar" type="submit">BUSCAR</button>
+            <button id="limpiar" type="button" (click)="limpiarFiltro()">LIMPIAR</button>
+          </div>
 
-            <div class="botones">
-              <button class="buscar" type="submit">BUSCAR</button>
-              <button class="limpiar" type="button" (click)="limpiarFiltro()">LIMPIAR</button>
-            </div>
-
-          </form>
-
-
-
+        </form>
 
       </div>
-<!-- 
+
       @if (isArquitecto()) {
-        <button class="buscar boton-extra" (click)="cargarMisEstudios()">
+        <button id="btn-mis-estudios" class="buscar boton-extra" (click)="misEstudios()">
           Mis Estudios
         </button>
-      } -->
-
-
+      }
 
     </div>
 
+    <!-- PANEL DERECHO -->
     <div id="panel-der">
       <div id="panel-scroll">
         <div class="grid">
@@ -69,3 +67,20 @@
   </div>
     
 </div>
+<app-esperando-modal 
+  [isVisible]="spinerVisible" 
+/>
+<app-mensaje-modal
+  [isVisible]="modalVisible"
+  [titulo]="modalTitulo"
+  [mensaje]="modalMensaje"
+  [conIcon]="true"
+  [tipo]="modalTipo"
+  tipoContenido="texto"
+  [mostrarCerrar]="true"
+  [mostrarBotonAceptar]="true"
+  [mostrarBotonCancelar]="false"
+  textoBotonAceptar="Aceptar"
+  (aceptar)="onModalAceptar()"
+  (cerrado)="onModalCerrado()"
+></app-mensaje-modal>

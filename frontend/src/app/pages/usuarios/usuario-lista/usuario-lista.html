@@ -1,6 +1,7 @@
 <div id="global">
   <div id="contenedor-usuarios">
 
+    <!-- AREA DE FILTRADO -->
     <div id="panel-izq">
       <h3 class="titulo">Usuarios</h3>
       <div id="panel-filtros">
@@ -65,16 +66,18 @@
               (change)="cargarUsuarios()">
               <option value="">-- Todos --</option>
                 @for (r of roles; track r){
-                  <option [value]="r">
-                    {{ RolModelDescripcion[r] || r }}
-                  </option>
+                  @if(r !== 'ROLE_USUARIO'){
+                    <option [value]="r">
+                      {{ RolModelDescripcion[r] || r }}
+                    </option>
+                  }
                 }
             </select>
           </fieldset>
 
-          <div id = "botonera" class="acciones">
-            <button type="submit">Buscar</button>
-            <button type="button" (click)="limpiarFiltros()">Limpiar</button>
+          <div id = "botonera">
+            <button id="buscar" type="submit">Buscar</button>
+            <button id="limpiar" type="button" (click)="limpiarFiltros()">Limpiar</button>
           </div>
           
         </form>
@@ -83,23 +86,26 @@
     </div>
 
     <!-- LISTADO DE USUARIOS -->
-
     <div id="panel-der">
       <div id="panel-scroll">
         <!-- ACA -->
         <div id="contenedor-lista">
           @if (usuarios) {
-            <ul class="lista-obras" >
+            <ul id="lista-usuarios" >
               @for (u of usuarios; track u.id ?? $index) {
-                <li class="obra-card" >
+                <li>
 
-                  <div id="informacion" class="contenido-usuario" [routerLink]="['/usuario/', u.id!]">
+                  <div id="informacion" 
+                    class="contenido-usuario"
+                    (click)="irDetalleUsuario(u.id!)"
+                    [class.usr-hab]="u.activo"
+                    [class.usr-deshab]="!u.activo">
                     <!-- informacion -->
                     <div class="informacion-usuario">
-                      <div clas="nombre-usuario">
-                        <h4>{{u.nombre + ' ' + u.apellido + ' ' + u.activo}}</h4>
+                      <div class="nombre-usuario">
+                        <h4>{{u.nombre + ' ' + u.apellido}}</h4>
                       </div>
-                      <div clas="datos-usurio">
+                      <div class="datos-usuario">
                         <p>{{u.email}}</p>
                         <p class="rol-usuario">{{getDescripcionRol(u.roles)}}</p>
                       </div>
@@ -108,28 +114,42 @@
                   </div>
 
                   <!-- botonera de accion -->
-                  <div clas="botonera">
+                  <div class="botonera">
 
                     <div id="btn-rol" class="btn-etiqueta-detalle">
-                      <span class="material-symbols-rounded">admin_panel_settings</span>
-                      <div class="etiqueta-detalle">Gestionar Roles</div>
+                      <span 
+                        class="material-symbols-rounded btn-rol" 
+                        (click)="abrirSelectorRoles($event, u)"
+                        [class.zoom]="!mostrarSelectorRoles">admin_panel_settings</span>
+                      
+                        @if(!mostrarSelectorRoles){
+                          <div class="etiqueta-detalle">Gestionar Roles</div>
+                        }
+                      
+                        @if (mostrarSelectorRoles && usuarioSeleccionado?.id === u.id) {
+                          <app-select-roles
+                            [id]="u.id!"
+                            [rolesAnteriores]="getRolesEnumValidos(u.roles)"
+                            (cambiosRoles)="cambiosDeRoles($event)"
+                            (cerrado)="cerrarSelector()">
+                          </app-select-roles>
+                        }
                     </div>
 
                     <div id="btn-estado" class="btn-etiqueta-detalle">
-                      <span class="material-symbols-rounded"
-                        [class.inhabilitado]="u.activo"
+                      <span class="material-symbols-rounded "
+                        [class.inhabilitado]="!u.activo"
+                        [class.zoom]="!mostrarSelectorRoles"
                         (click)="CambiarEstadoCuenta(u)">person_off</span>
 
-                      @if(u.activo){
-                        <div class="etiqueta-detalle">inhabilitar</div>
-                      }@else {
-                        <div class="etiqueta-detalle">habilitar</div>
+                      @if(u.activo && !mostrarSelectorRoles){
+                        <div class="etiqueta-detalle">Desactivar</div>
+                      }@else if(!mostrarSelectorRoles) {
+                        <div class="etiqueta-detalle">Activar</div>
                       }
 
                     </div>
-              
                   </div>
-
                 </li>
               }
             </ul>
@@ -144,3 +164,22 @@
   </div>
 
 </div>
+
+<app-esperando-modal 
+  [isVisible]="spinerVisible" 
+  [mensaje]="spinerMensaje"
+/>
+<app-mensaje-modal
+  [isVisible]="modalVisible"
+  [titulo]="modalTitulo"
+  [mensaje]="modalMensaje"
+  [tipo]="modalTipo"
+  [conIcon]="true"
+  tipoContenido="texto"
+  [mostrarCerrar]="true"
+  [mostrarBotonAceptar]="true"
+  [mostrarBotonCancelar]="false"
+  textoBotonAceptar="Aceptar"
+  (aceptar)="onModalAceptar()"
+  (cerrado)="onModalCerrado()"
+></app-mensaje-modal>

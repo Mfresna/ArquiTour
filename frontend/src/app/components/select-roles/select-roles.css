@@ -1,0 +1,164 @@
+#gestionar-roles {
+  position: absolute;
+  top: 115%;
+  left: 50%;
+  transform: translateX(-50%);
+
+  z-index: 99999;
+  min-width: 260px;
+  max-width: 320px;
+
+  background: var(--colorPrincipal, #fff);
+  box-shadow: 0 10px 26px rgba(15, 23, 42, 0.2);
+
+  border-bottom-left-radius: 12px;
+  border-bottom-right-radius: 12px;
+  border-top-left-radius: 12px;
+
+  padding: 0.9rem 1rem;
+
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+
+  border: 1px solid rgba(0, 0, 0, 0.04);
+
+}
+
+/* Título del popup */
+#titulo{
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+  
+  color: var(--colorTerciario, #111827);
+}
+
+/* ====== LISTAS ====== */
+.item-lista {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.4rem;
+
+  padding: 0.35rem 0.6rem;
+  margin-left: 2%;
+  border-radius: 999px;
+  background: #f3f4f6;
+
+  cursor: pointer;
+ 
+}
+
+.item-lista + .item-lista {
+  margin-top: 0.3rem;
+}
+
+.item-lista:hover {
+  background: #e5f1fb;
+  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.18);
+  transform: translateY(-1px);
+}
+
+
+.item-lista .nombre {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
+  font-size: 0.9rem;
+
+  color: var(--colorTerciario);
+}
+
+/* Icono de estado (check / círculo) */
+.icon-check {
+  font-size: 20px;
+  color: #9ca3af;
+  flex-shrink: 0;
+  transition: color 0.15s ease, transform 0.12s ease;
+}
+
+.icon-check.activo {
+  color: var(--colorBoton, #0077b6);
+  transform: scale(1.05);
+}
+
+/* ====== BOTONERA ====== */
+#botonera{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+
+  padding: 10px 0px 6px 0px;
+  margin-top: 5px;
+  width: 100%;
+
+  gap: 15px;
+  
+  border-top: 1px solid #e5e7eb;
+}
+
+#botonera button {
+  border: none;
+  border-radius: 999px;
+
+  padding: .65rem .9rem;
+
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  cursor: pointer;
+
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: filter 0.15s ease, transform 0.12s ease, box-shadow 0.15s ease;
+}
+
+small {
+  color: #ff3333;
+  font-size: 0.9rem;
+  text-align: left;
+  margin-left: 0.6rem;
+}
+
+/*Btn Aceptar*/
+#aceptar {
+  background: var(--colorBoton, #0077b6);
+  color: #fff;
+}
+
+#aceptar:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 16px rgba(0,119,182,.25);
+}
+
+/*Btn Cancelar*/
+#cancelar {
+  background: #f9fafb;
+  color: #1e293b;
+  border-color: #dbe3eb;
+}
+
+#cancelar:hover {
+  background: #eef2f6;
+}
+
+/* =============== PANEL DE SCROLL =============== */
+.scroll {
+  max-height: 200px;       
+  overflow-y: auto;        
+  margin-top: 0.4rem;
+  padding-right: 8px;   
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  scrollbar-color: transparent;
+
+}
+

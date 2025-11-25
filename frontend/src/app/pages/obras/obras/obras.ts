@@ -8,10 +8,13 @@ import { CategoriaObraDescripcion, CategoriaObraModel } from '../../../models/ob
 import { EstadoObraDescripcion, EstadoObraModel } from '../../../models/obraModels/estadoObraModel';
 import { EstudioModel } from '../../../models/estudioModels/estudioModel';
 import { EstudioService } from '../../../services/estudioService/estudio-service';
+import { EsperandoModal } from "../../../components/esperando-modal/esperando-modal";
+import { finalize } from 'rxjs';
+import { MensajeModal, MessageType } from '../../../components/mensaje-modal/mensaje-modal';
 
 @Component({
   selector: 'app-obras',
-  imports: [ReactiveFormsModule, RouterLink],
+  imports: [ReactiveFormsModule, RouterLink, EsperandoModal, MensajeModal],
   templateUrl: './obras.html',
   styleUrl: './obras.css',
 })
@@ -28,6 +31,19 @@ export class Obras implements OnInit {
 
   estudios: EstudioModel[] = [];
 
+  spinerVisible: boolean = false;
+
+  modalErrorVisible: boolean = false;
+  modalErrorMensaje: string = '';
+
+  errorEstudios: string | null = null;
+
+  // ===== MODAL =====
+  modalVisible = false;
+  modalTitulo = '';
+  modalMensaje = '';
+  modalTipo: MessageType = 'info';
+  
   constructor(
     private fb: FormBuilder,
     private obraService: ObraService,
@@ -46,6 +62,29 @@ export class Obras implements OnInit {
     this.cargarObras();
   }
 
+  private mostrarError(msg: string): void {
+    this.modalErrorMensaje = msg;
+    this.modalErrorVisible = true;
+  }
+
+   // ================= MODAL =================
+
+  private mostrarModal(titulo: string, mensaje: string, tipo: MessageType = 'info'
+  ): void {
+    this.modalTitulo  = titulo;
+    this.modalMensaje = mensaje;
+    this.modalTipo    = tipo;
+    this.modalVisible = true;
+  }
+
+  onModalAceptar(): void {
+    this.modalVisible = false;
+  }
+
+  onModalCerrado(): void {
+    this.modalVisible = false;
+  }
+
   /** Trae estudios para mostrar en el filtro y cachea nombres */
   private cargarEstudiosFiltro(): void {
     this.estudioService.getFiltrarEstudios().subscribe({
@@ -58,12 +97,17 @@ export class Obras implements OnInit {
           }
         }
       },
-      error: () => alert('No se pudieron cargar los estudios'),
+      error: (e) => {
+        console.error(e);
+        this.errorEstudios = 'No se pudieron cargar los estudios. Recargue la página.';
+      }
     });
   }
 
   cargarObras(): void {
     const obra = this.filtro.value;
+
+    this.spinerVisible = true;
 
     this.obraService.getFiltrarObras(
       obra.categoria || undefined,
@@ -71,11 +115,26 @@ export class Obras implements OnInit {
       obra.estudioId ? Number(obra.estudioId) : undefined,
       obra.nombre?.trim() || undefined
     )
+    .pipe(
+      finalize(() => this.spinerVisible = false)  
+    )
     .subscribe({
-      next: (lista: ObraModel[]) => this.obras = lista,
-      error: () => alert('No se pudo cargar la lista de obras'),
+      next: (lista: ObraModel[]) => {
+        this.obras = lista;
+
+      },
+      error: () => {
+        this.spinerVisible = false;
+        this.mostrarModal(
+          'Error al cargar obras',
+          'No se pudieron cargar las obras. Intente nuevamente más tarde.',
+          'error'
+        );
+      }
     });
   }
+
+
 
   limpiarFiltro(): void {
     this.filtro.reset({
@@ -104,4 +163,7 @@ export class Obras implements OnInit {
     if (img.src.includes(this.imagenDefecto)) return;
     img.src = this.imagenDefecto;
   }
+
+ 
+
 }

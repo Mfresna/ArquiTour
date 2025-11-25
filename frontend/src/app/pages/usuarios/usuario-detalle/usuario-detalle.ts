@@ -4,22 +4,23 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { finalize, map, Observable, switchMap } from 'rxjs';
 import { fechaNacValidador } from '../../../auth/validadores/fechaValidador';
 import { nombreValidador, apellidoValidador } from '../../../auth/validadores/textoValidador';
-import { DragZoneImagenes } from '../../../components/drag-zone-imagenes/drag-zone-imagenes';
 import { ImagenService } from '../../../services/imagenService/imagen-service';
 import { UsuarioService } from '../../../services/usuarioService/usuario-service';
 import { EsperandoModal } from '../../../components/esperando-modal/esperando-modal';
 import { DragZoneSimple } from '../../../components/drag-zone-simple/drag-zone-simple';
 import { environment } from '../../../../environments/environment';
 import { Location } from '@angular/common';
+import { TieneCambiosPendientes } from '../../../guards/salirSinGuardar/salir-sin-guardar-guard';
+import { MensajeModal, MessageType } from '../../../components/mensaje-modal/mensaje-modal';
 
 
 @Component({
   selector: 'app-usuario-detalle',
-  imports: [ReactiveFormsModule, DragZoneSimple,EsperandoModal],
+  imports: [ReactiveFormsModule, DragZoneSimple,EsperandoModal, MensajeModal],
   templateUrl: './usuario-detalle.html',
   styleUrl: './usuario-detalle.css',
 })
-export class UsuarioDetalle implements OnInit, AfterViewInit{
+export class UsuarioDetalle implements OnInit, AfterViewInit, TieneCambiosPendientes{
 
   perfilForm!: FormGroup;
 
@@ -41,11 +42,20 @@ export class UsuarioDetalle implements OnInit, AfterViewInit{
   spinerVisible: boolean = false;
   spinerMensaje!: string;
 
+  imagenDefecto = `${environment.imgUsuario}`;
+
     //EMITERS
   @Output() volverEmit = new EventEmitter<void>();
 
     //COMPONENTE DE IMAGEN
-  @ViewChild('campoImagen') campoImagen!: DragZoneImagenes;
+  @ViewChild('campoImagen') campoImagen!: DragZoneSimple;
+
+  // MODAL
+  modalVisible = false;
+  modalTitulo = '';
+  modalMensaje = '';
+  modalTipo: MessageType = 'info';
+  redirigirDespues: string | null = null;
 
   constructor(
     private fb: FormBuilder,
@@ -55,6 +65,46 @@ export class UsuarioDetalle implements OnInit, AfterViewInit{
     private route: ActivatedRoute,
     private location: Location   
   ) {}
+
+   // ---------------- MODAL ----------------
+
+  private mostrarModal(
+    titulo: string,
+    mensaje: string,
+    tipo: MessageType = 'info',
+    redirigirA: string | null = null
+  ) {
+    this.modalTitulo = titulo;
+    this.modalMensaje = mensaje;
+    this.modalTipo = tipo;
+    this.modalVisible = true;
+    this.redirigirDespues = redirigirA;
+  }
+
+  onModalAceptar() {
+    this.modalVisible = false;
+
+    if (this.redirigirDespues) {
+      this.router.navigate([this.redirigirDespues]);
+    }
+
+    this.redirigirDespues = null;
+  }
+
+  onModalCerrado() {
+    this.modalVisible = false;
+  }
+
+  tieneCambiosPendientes(): boolean {
+    // Si todavía no existe el form, no hay cambios
+    if (!this.perfilForm) return false;
+
+    // Si no está en modo edición, no sale el cartel
+    if (!this.editando) return false;
+
+    // Si está en edición y el form fue modificado
+    return this.perfilForm.dirty;
+  }
   
   ngOnInit(): void {
     this.perfilForm = this.fb.group(
@@ -142,14 +192,22 @@ export class UsuarioDetalle implements OnInit, AfterViewInit{
         //Recarga las Variables
         const idParam = this.route.snapshot.params['id'];
         idParam ? this.cargarusuario(idParam) : this.cargarMe();
+
+        this.mostrarModal(
+          "Perfil actualizado",
+          "Los datos se han actualizado correctamente.",
+          "success"
+        );
       },
       error: (e) => {
         if(e.status === 400){
           //BAD_REQUEST
-          alert("Error en los Datos cargados")
+          this.mostrarModal("Datos inválidos", "Revisá los campos cargados.", "warning");
         }else if(e.status === 403){
           //FORBBIDEN
-          alert("El usuario no se puede modificar");
+          this.mostrarModal("Acceso denegado", "No tenés permiso para modificar este usuario.", "error", "/");
+        }else {
+          this.mostrarModal("Error inesperado", "No se pudo actualizar el perfil.", "error");
         }
       }
     });
@@ -180,12 +238,12 @@ export class UsuarioDetalle implements OnInit, AfterViewInit{
         console.error(e)
         if(e.status === 400){
           //BAD_REQUEST
-          alert("Verifique la imagen, su nombre y su extension.")
+          this.mostrarModal("Imagen inválida", "Verificá el archivo cargado.", "warning");
         }else if(e.status === 415){
           //UNSUPPORTED_MEDIA_TYPE
-          alert("El tipo de archivo no es soportado, solo se pueden cargar imagenes");
+           this.mostrarModal("Formato no válido", "Sólo se permiten imágenes JPG/PNG/WEBP.", "error");
         }else{
-          alert("El proceso de subir la Imagen Fallo.")
+            this.mostrarModal("Error al subir imagen", "No se pudo actualizar la imagen.", "error");
         }
       }
     });
@@ -200,7 +258,9 @@ export class UsuarioDetalle implements OnInit, AfterViewInit{
   private borrarImg(){
     this.usuarioService.borrarFotoPerfil().subscribe({
       next: () =>{console.log("Img Borrada Exitosamente")},
-      error: (e) => {console.error("ERROR al borrar la img", e)}
+      error: () => {
+        this.mostrarModal("Error", "No se pudo borrar la imagen.", "error");
+      }
     })
   }
   
@@ -250,7 +310,13 @@ export class UsuarioDetalle implements OnInit, AfterViewInit{
 
       },
       error: (e) => {
-        console.error("No se puede leer el usuario", e);
+        this.mostrarModal(
+          "Error al cargar",
+          "No se pudieron cargar los datos de tu perfil.",
+          "error",
+          "/"
+        );
+
       }
     });
   }
@@ -271,7 +337,12 @@ export class UsuarioDetalle implements OnInit, AfterViewInit{
 
       },
       error: (e) => {
-        console.error("No se puede leer el usuario", e);
+       this.mostrarModal(
+          "Usuario no encontrado",
+          "El usuario solicitado no existe.",
+          "warning",
+          "/usuarios"
+        );
       }
     });
   }
@@ -282,6 +353,12 @@ export class UsuarioDetalle implements OnInit, AfterViewInit{
       return `${environment.apiUrl}${path}`;
     }
     return null;
+  }
+
+  imagenError(ev: Event): void {
+    const img = ev.target as HTMLImageElement;
+    if (img.src.includes(this.imagenDefecto)) return;
+    img.src = `${location.origin}/${this.imagenDefecto.replace(/^\/+/, '')}`;
   }
 
   volver(){

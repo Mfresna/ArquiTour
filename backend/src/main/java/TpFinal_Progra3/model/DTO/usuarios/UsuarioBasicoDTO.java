@@ -40,7 +40,7 @@ public class UsuarioBasicoDTO {
     private LocalDate fechaNacimiento;
 
     @Schema(description = "Descripción opcional", example = "Arquitecto chileno reconocido.")
-    @Size(max = 255, message = "La descripción no debe superar los 255 caracteres.")
+    @Size(max = 300, message = "La descripción no debe superar los 255 caracteres.")
     private String descripcion;
 
 <<<<<<< HEAD

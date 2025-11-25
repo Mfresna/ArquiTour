@@ -9,10 +9,11 @@ import { ObraService } from '../../../services/obraService/obra-service';
 import { ObraModel } from '../../../models/obraModels/obraModel';
 import { UsuarioModel } from '../../../models/usuarioModels/usuarioModel';
 import { UsuarioService } from '../../../services/usuarioService/usuario-service';
+import { MensajeModal, MessageType } from '../../../components/mensaje-modal/mensaje-modal';
 
 @Component({
   selector: 'app-estudio-detalle',
-  imports: [RouterLink],
+  imports: [RouterLink, MensajeModal],
   templateUrl: './estudio-detalle.html',
   styleUrl: './estudio-detalle.css',
 })
@@ -25,6 +26,16 @@ export class EstudioDetalle {
   arquitectosVinculados: { id: number; nombre: string }[] = [];
 
   imagenDefecto = `${environment.imgEstudio}`;
+
+
+  private idsEstudiosUsuario: number[] = [];
+
+  
+  // ===== MODAL =====
+  modalVisible = false;
+  modalTitulo = '';
+  modalMensaje = '';
+  modalTipo: MessageType = 'info';
 
   constructor(
     private route: ActivatedRoute,
@@ -42,6 +53,7 @@ export class EstudioDetalle {
       return;
     }
 
+    // Cargar Estudio
     this.estudioService.getEstudio(id).subscribe({
       next: (est: EstudioModel) => {
         this.estudio = est;
@@ -55,10 +67,67 @@ export class EstudioDetalle {
         const idsArquitectos = est.arquitectosIds ?? [];
         this.cargarArquitectosVinculadosPorIds(idsArquitectos);
       },
-      error: () => this.router.navigate(['/estudios']),
+      error: (e) => {
+        console.error(e);
+
+        if(e.status === 404){
+          this.mostrarModal(
+            "Estudio no encontrado",
+            "El estudio solicitado no existe.",
+            "warning"
+          );
+        }else if(e.status >= 500){
+          this.mostrarModal(
+            "Error del servidor",
+            "Ocurrió un error al cargar el estudio.",
+            "error"
+          );
+        }else{
+          this.mostrarModal(
+            "Error inesperado",
+            "No se pudo cargar el estudio.",
+            "error"
+          );
+        } 
+      }
+    });
+
+    // 2) Cargar usuario logueado (para saber sus estudios)
+    this.usuarioService.getUsuarioMe().subscribe({
+      next: usuario => {
+        this.idsEstudiosUsuario = usuario.idEstudios ?? [];
+      },
+      error: (e) => {
+        console.error("No se puede leer el usuario", e);
+        this.mostrarModal(
+          "Error:",
+          "No se pudieron cargar los datos del sus estudios.",
+          "warning"
+        );
+        this.idsEstudiosUsuario = [];
+      }
     });
   }
 
+  private mostrarModal(titulo: string, mensaje: string, tipo: MessageType = 'info'
+  ): void {
+    this.modalTitulo = titulo;
+    this.modalMensaje = mensaje;
+    this.modalTipo = tipo;
+    this.modalVisible = true;
+  }
+
+  
+  onModalAceptar(): void {
+    this.modalVisible = false;
+    this.router.navigate(['/estudios']);
+  }
+
+  onModalCerrado(): void {
+    this.modalVisible = false;
+  }
+
+  //======OBRAS===================
   private cargarObrasVinculadasPorIds(ids: number[]): void {
     if (!ids?.length) {
       this.obrasVinculadas = [];
@@ -101,6 +170,7 @@ export class EstudioDetalle {
     });
   }
 
+  //=====ARQUITECTOS===================
   private cargarArquitectosVinculadosPorIds(ids: number[]): void {
     if (!ids?.length) {
       this.arquitectosVinculados = [];
@@ -153,6 +223,7 @@ export class EstudioDetalle {
     });
   }
 
+  //===============IMAGEN====================
   imgSrc(nombre?: string): string {
     if (!nombre) return this.imagenDefecto;
 
@@ -166,10 +237,22 @@ export class EstudioDetalle {
     img.src = `${location.origin}/${this.imagenDefecto.replace(/^\/+/, '')}`;
   }
 
-  // Roles
+  
+  //=========ROLES====================
   puedeGestionar(): boolean {
-    return this.tokenSrv.isAdmin() || this.tokenSrv.isArquitecto();
+ 
+    if (!this.estudio?.id) return false;
+
+    // ADMIN siempre puede
+    if (this.tokenSrv.isAdmin()) return true;
+
+    // Si no es arquitecto, no puede
+    if (!this.tokenSrv.isArquitecto()) return false;
+
+    // Arquitecto: solo si este estudio está en sus idEstudios
+    return this.idsEstudiosUsuario.includes(this.estudio.id);
   }
+
 
   editar(): void {
     if (!this.estudio?.id) return;
@@ -182,10 +265,44 @@ export class EstudioDetalle {
 
     this.estudioService.deleteEstudio(this.estudio.id).subscribe({
       next: () => {
-        alert('Estudio eliminado correctamente.');
-        this.router.navigate(['/estudios']);
+        this.mostrarModal(
+          'Estudio eliminado',
+          'El estudio fue eliminado correctamente.',
+          'success'
+        );
       },
-      error: () => alert('No se pudo eliminar el estudio'),
+      error: (e) =>{
+        console.error(e);
+
+        if(e.status === 409){
+          //BAD_REQUEST
+          this.mostrarModal(
+            'No se puede eliminar',
+            'El estudio tiene obras asociadas. Debe eliminarlas primero.',
+            'warning'
+          );
+        }else if(e.status === 404){
+          //UNSUPPORTED_MEDIA_TYPE
+          this.mostrarModal(
+            'Estudio no encontrado',
+            'El estudio ya no existe.',
+            'warning'
+          );
+        }else if(e.status >= 500){
+          this.mostrarModal(
+            'Error del servidor',
+            'Ocurrió un error al intentar eliminar el estudio.',
+            'error'
+          );
+        }else{
+          this.mostrarModal(
+            'Error inesperado',
+            'El proceso de eliminación falló por un motivo desconocido.',
+            'error'
+          );
+        }
+
+      }
     });
   }
 }

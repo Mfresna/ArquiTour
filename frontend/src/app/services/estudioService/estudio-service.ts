@@ -46,12 +46,7 @@ export class EstudioService {
   }
 
   updateImagenPerfil(idEstudio: number, url: string | null) {
-    return this.http.patch<EstudioModel>(
-      `${this.ESTUDIOS_URL}/${idEstudio}/imagenPerfil`,
-      { url },{
-        withCredentials: true,
-      }
-    );
+    return this.http.patch<EstudioModel>(`${this.ESTUDIOS_URL}/${idEstudio}/imagenPerfil`,{url});
   }
 
   //Arquitectos

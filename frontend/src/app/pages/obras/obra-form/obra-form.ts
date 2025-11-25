@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { DragZoneImagenes } from '../../../components/drag-zone-imagenes/drag-zone-imagenes';
 import { ActivatedRoute, Router } from '@angular/router';
 import { take, finalize, switchMap, forkJoin } from 'rxjs';
 import { environment } from '../../../../environments/environment';
@@ -12,17 +11,28 @@ import { EstudioModel } from '../../../models/estudioModels/estudioModel';
 import { EstudioService } from '../../../services/estudioService/estudio-service';
 import { ObraModel } from '../../../models/obraModels/obraModel';
 import { DragZoneMultiple } from '../../../components/drag-zone-multiple/drag-zone-multiple';
+import { TieneCambiosPendientes } from '../../../guards/salirSinGuardar/salir-sin-guardar-guard';
+import { estudioNombreValidador, obraNombreValidador } from '../../../validadores/nombresValidador';
+import { noBlancoEspacios } from '../../../validadores/sinEspacioValidador';
+import { anioEstadoObra } from '../../../auth/validadores/fechaValidador';
+import { MensajeModal, MessageType } from '../../../components/mensaje-modal/mensaje-modal';
+import { MapaSelector } from "../../../components/mapa-selector/mapa-selector";
 
 @Component({
   selector: 'app-obra-form',
-  imports: [ReactiveFormsModule, DragZoneMultiple],
+  imports: [ReactiveFormsModule, DragZoneMultiple, MensajeModal, MapaSelector],
   templateUrl: './obra-form.html',
   styleUrl: './obra-form.css',
 })
-export class ObraForm {
+export class ObraForm implements TieneCambiosPendientes{
   formulario!: FormGroup;
   editar = false;
   id?: number;
+
+  lat: number = -38.0004;
+  long: number = -57.5562
+  
+  omitirGuard = false;
 
   imagenActualUrl: string | null = null;
   imagenDefecto = `${environment.imgObra}`;
@@ -42,6 +52,13 @@ export class ObraForm {
 
   estudios: EstudioModel[] = [];
 
+  // ===== MODAL =====
+  modalVisible = false;
+  modalTitulo = '';
+  modalMensaje = '';
+  modalTipo: MessageType = 'info';
+  redirigirDespues = false;
+
   constructor(
     private fb: FormBuilder,
     private route: ActivatedRoute,
@@ -51,17 +68,52 @@ export class ObraForm {
     private estudioService: EstudioService,
   ) {}
 
+  tieneCambiosPendientes(): boolean {
+    if (this.omitirGuard) {
+      return false;
+  }
+
+  return this.formulario?.dirty ?? false;
+}
+
   ngOnInit(): void {
-    this.formulario = this.fb.group({
-      nombre: ['', [Validators.required, Validators.minLength(2)]],
-      categoria: ['', [Validators.required]],
-      estado:    ['', [Validators.required]],
-      estudioId: ['', [Validators.required]],
-      anioEstado: ['', [Validators.required, Validators.min(1800), Validators.max(new Date().getFullYear())]],
-      latitud: ['', [Validators.required, Validators.min(-90), Validators.max(90)]],
-      longitud: ['', [Validators.required, Validators.min(-180), Validators.max(180)]],
-      descripcion: ['', [Validators.required, Validators.minLength(5)]],
-    });
+    this.formulario = this.fb.group(
+      {
+        nombre: ['', [
+          Validators.required, 
+          Validators.minLength(2),
+          Validators.maxLength(100),
+          obraNombreValidador
+        ]],
+        categoria: ['', [Validators.required]],
+        estado:    ['', [Validators.required]],
+        estudioId: ['', [Validators.required]],
+        anioEstado: ['', [
+          Validators.required,
+          anioEstadoObra
+        ]],
+        latitud: ['', [
+          Validators.required,
+          Validators.min(-90),
+          Validators.max(90)
+        ]],
+        longitud: ['', [
+          Validators.required,
+          Validators.min(-180),
+          Validators.max(180)
+        ]],
+        descripcion: ['', [
+          Validators.required,
+          Validators.minLength(5),
+          Validators.pattern(/^[A-Za-zÁÉÍÓÚáéíóúÑñ0-9\-_\!¡¿&=\+\"\?\s\.,]+$/),
+          noBlancoEspacios
+        ]],
+      }
+      
+    );
+
+    this.normalizarComaEnControl('latitud');
+    this.normalizarComaEnControl('longitud');
 
     this.cargarEstudios();
 
@@ -71,6 +123,62 @@ export class ObraForm {
       this.id = Number(idParam);
       this.cargarObra(this.id);
     }
+  }
+
+  private normalizarComaEnControl(nombreControl: string): void {
+  const control = this.formulario.get(nombreControl);
+  if (!control) return;
+
+  control.valueChanges.subscribe(rawValue => {
+    if (rawValue === null || rawValue === undefined) return;
+
+    const str = String(rawValue);
+    if (!str.includes(',')) return;
+
+    const normalizado = str.replace(/,/g, '.');
+    const num = Number(normalizado);
+
+    control.setValue(
+      isNaN(num) ? normalizado : num,
+      { emitEvent: false } 
+    );
+  });
+}
+
+  // ============ MODAL ============
+  private mostrarModal(
+    titulo: string,
+    mensaje: string,
+    tipo: MessageType = 'info',
+    redirigir: boolean = false
+  ): void {
+    this.modalTitulo = titulo;
+    this.modalMensaje = mensaje;
+    this.modalTipo = tipo;
+    this.modalVisible = true;
+    this.redirigirDespues = redirigir;
+  }
+
+  onModalAceptar(): void {
+    this.modalVisible = false;
+
+    if (this.redirigirDespues) {
+      // navegación sin preguntar el guard
+      this.omitirGuard = true;
+
+      if (this.editar && this.id != null) {
+        this.router.navigate(['/obras', this.id]);
+      } else {
+        this.router.navigate(['/obras']);
+      }
+    }
+
+    this.redirigirDespues = false;
+  }
+
+  onModalCerrado(): void {
+    this.modalVisible = false;
+    this.redirigirDespues = false;
   }
 
   // ==================== AUXILIARES ====================
@@ -88,7 +196,7 @@ export class ObraForm {
           }
         }
       },
-      error: () => alert('No se pudieron cargar los estudios'),
+      error: () => alert('No se pudieron cargar los estudios'),//VVERRRRRR
     });
   }
 
@@ -139,7 +247,7 @@ export class ObraForm {
             return `${environment.apiUrl}${path}`;
           });
 
-          // (Opcional) primera como "portada"
+          // Primera como "portada"
           const img = obra.urlsImagenes[0];
           const path = img.startsWith('/') ? img : `/${img}`;
           this.imagenActualUrl = `${environment.apiUrl}${path}`;
@@ -149,7 +257,43 @@ export class ObraForm {
         }
 
       },
-      error: () => alert('No se pudo cargar la obra.'),
+      error: (e) => {
+    
+        console.error(e);
+
+        if(e.status === 404){
+          this.mostrarModal(
+            'Obra no encontrada',
+            'La obra que intenta editar no existe o fue eliminada.',
+            'warning',
+            true
+          );
+        }else if(e.status ===  401){
+          this.mostrarModal(
+            'Sin permisos',
+            'No puede gestionar obras de estudios a los que no pertenece.',
+            'error',
+            true
+          );
+        }else if(e.status === 406){
+          this.mostrarModal(
+            'Error del servidor',
+            'Ocurrió un error al cargar la obra. Intente nuevamente más tarde.',
+            'error',
+            true
+          );
+        }else if(e.status >= 500){
+          alert("Error de servidor")
+        }else{
+           this.mostrarModal(
+            'Error al cargar',
+            'No se pudo cargar la obra.',
+            'error',
+            true
+          );
+        }
+
+      }
     });
   }
 
@@ -198,7 +342,11 @@ export class ObraForm {
           // si no quedaron imágenes, no permitimos guardar
         if (urlsExistentesRel.length === 0) {
           this.subiendo = false;
-          alert('La obra debe tener al menos una imagen.');
+          this.mostrarModal(
+            'Imagen requerida',
+            'La obra debe tener al menos una imagen.',
+            'warning'
+          );
           return;
         }
     
@@ -208,8 +356,34 @@ export class ObraForm {
         })
           .pipe(finalize(() => this.subiendo = false))
           .subscribe({
-            next: () => this.router.navigate(['/obras', this.id]),
-            error: () => alert('No se pudo actualizar la obra.')
+            next: () => {
+              this.omitirGuard = true;   
+              this.mostrarModal(
+                'Obra actualizada',
+                'Los datos de la obra se guardaron correctamente.',
+                'success',
+                true
+              );
+            },
+            error: (e) =>{
+
+              console.error(e);
+
+              if(e.status === 404){
+                this.mostrarModal(
+                  'Error al actualizar',
+                  'No se pudo actualizar la obra.',
+                  'error'
+                  );
+              }else{
+                  this.mostrarModal(
+                    'Error al actualizar',
+                    'No se pudo actualizar la obra.',
+                    'error'
+                  );
+              }
+
+            }
           });
         return;
       }
@@ -240,9 +414,22 @@ export class ObraForm {
       ).subscribe({
         next: () => {
           this.archivosSeleccionados = [];
-          this.router.navigate(['/obras', this.id!]);
+          this.omitirGuard = true;
+          this.mostrarModal(
+            'Obra actualizada',
+            'Los datos de la obra se guardaron correctamente.',
+            'success',
+            true
+          );
         },
-        error: () => alert('No se pudo actualizar la obra.')
+        error: (e) => {
+          console.error(e);
+          this.mostrarModal(
+            'Error al actualizar',
+            'No se pudo actualizar la obra.',
+            'error'
+          );
+        }
       });
 
       return;
@@ -262,7 +449,11 @@ export class ObraForm {
 
     if (!archivos.length) {
       this.subiendo = false;
-      alert('Debe cargar al menos una imagen para la obra.');
+      this.mostrarModal(
+        'Imagen requerida',
+        'Debe cargar al menos una imagen para la obra.',
+        'warning'
+      );
       return;
     }
 
@@ -278,7 +469,11 @@ export class ObraForm {
 
         if (!urls.length) {
           this.subiendo = false;
-          alert('Sin URLs de imágenes');
+          this.mostrarModal(
+            'Error de imágenes',
+            'No se pudieron obtener las URLs de las imágenes.',
+            'error'
+          );
           return;
         }
 
@@ -286,19 +481,90 @@ export class ObraForm {
           .pipe(finalize(() => this.subiendo = false))
           .subscribe({
             next: () => {
+              this.omitirGuard = true;
               this.formulario.reset();
               this.archivosSeleccionados = [];
               this.imagenesExistentes = [];
-              alert('Obra creada');
-              this.router.navigate(['/obras']);
+               this.mostrarModal(
+                'Obra creada',
+                'La obra fue creada correctamente.',
+                'success',
+                true
+              );
             },
-            error: () => alert('No se pudo crear la obra.')
+            error: (e) => {
+    
+              console.error(e);
+
+              if(e.status === 404){
+                this.mostrarModal(
+                  'Estudio no encontrado',
+                  'El estudio seleccionado no existe.',
+                  'warning'
+                );
+              }else if(e.status ===  401){
+                 this.mostrarModal(
+                  'Sin permisos',
+                  'No puede crear una obra para un estudio al que no pertenece.',
+                  'error'
+                );
+              }else if(e.status === 406){
+                  this.mostrarModal(
+                  'Obra duplicada',
+                  'Ya existe una obra con el mismo nombre en el mismo estudio.',
+                  'warning'
+                );
+              }else if(e.status >= 500){
+                 this.mostrarModal(
+                  'Error del servidor',
+                  'Ocurrió un error al crear la obra. Intente más tarde.',
+                  'error'
+                );
+              }else{
+                this.mostrarModal(
+                  'Error al crear',
+                  'No se pudo crear la obra.',
+                  'error'
+                );
+              }
+
+            }
           });
       },
-      error: () => {
+      error: (e) => {
+        console.error(e);
         this.subiendo = false;
-        alert('No se pudieron subir las imágenes.');
+        this.mostrarModal(
+          'Error al subir imágenes',
+          'No se pudieron subir las imágenes de la obra.',
+          'error'
+        );
       }
+    });
+  }
+
+
+  esNegativo(): string{
+
+    if(this.formulario.get('anioEstado')?.invalid){
+      return '';
+    }else{
+      let edad = Number(this.formulario.get('anioEstado')?.value ?? NaN);
+
+      if(edad >= 0){
+        return '(d.C.)';
+      }else if(edad < 0){
+        return '(a.C.)';
+      }else{
+        return '';
+      }
+    }
+  }
+
+  onCoordenadasSeleccionadas(event: { latitud: number; longitud: number }) {
+    this.formulario.patchValue({
+      latitud: event.latitud,
+      longitud: event.longitud,
     });
   }
 }

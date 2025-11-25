@@ -83,7 +83,7 @@
                 <small>Solo simbolos permitidos (@ . _ ! +) .</small>
             }@else{
                 @if (
-                    (registerForm.get('nuevaPass')?.errors?.['mayuscula'] ||
+                    (registerForm.get('nuevaPass')?.errors?.['mayscula'] ||
                     registerForm.get('nuevaPass')?.errors?.['minuscula'] ||
                     registerForm.get('nuevaPass')?.errors?.['faltaNumero'] ||
                     registerForm.get('nuevaPass')?.errors?.['minlength']) &&
@@ -91,9 +91,9 @@
                     <small>La contraseña debe contener al menos:</small>
                     <small>
                         <ul>
-                            <li>1 Mayuscula</li>
-                            <li>1 Minuscula</li>
-                            <li>1 Numero</li>
+                            <li>1 Mayúscula</li>
+                            <li>1 Minúscula</li>
+                            <li>1 Número</li>
                             <li>6 Caracteres</li>
                         </ul>
                     </small>
@@ -205,11 +205,11 @@
           } @else if (registerForm.get('fechaNacimiento')?.errors?.['formato'] && registerForm.get('fechaNacimiento')?.dirty) {
             <small>El formato de la fecha no es correcto, recuerde (dia/mes/año).</small>
           } @else if (registerForm.get('fechaNacimiento')?.errors?.['fechaFutura'] && registerForm.get('fechaNacimiento')?.dirty) {
-            <small>La fecha es invalida, no puede ser fecha futura.</small>
+            <small>La fecha es inválida, no puede ser fecha futura.</small>
           } @else if (registerForm.get('fechaNacimiento')?.errors?.['edadMinima'] && registerForm.get('fechaNacimiento')?.dirty) {
             <small>La fecha es muy proxima a hoy.</small>
           } @else if (registerForm.get('fechaNacimiento')?.errors?.['fechaLimite'] && registerForm.get('fechaNacimiento')?.dirty) {
-            <small>La fecha parece ser invalida.</small>
+            <small>La fecha parece ser inválida.</small>
           }
     
         </fieldset>
@@ -230,10 +230,11 @@
           </textarea>
           
           @if (registerForm.get('descripcion')?.errors?.['maxLength'] && registerForm.get('descripcion')?.dirty) {
-            <small>Caracteres maximos excedidos.</small>
+            <small>Caracteres maximos excedidos. (max. 280)</small>
           } @else if (registerForm.get('descripcion')?.errors?.['pattern'] && registerForm.get('descripcion')?.dirty) {
-            <small>Caracter invalido, solo se permiten (- _ ! ¡ &).</small>
+            <small>Caracter inválido, solo se permiten (- _ ! ¡ &).</small>
           }
+
         </fieldset>
 
         <!-- IMAGEN-->
@@ -257,5 +258,20 @@
 <app-esperando-modal 
   [isVisible]="spinerVisible" 
   [mensaje]="spinerMensaje"
+/>
+
+<app-mensaje-modal
+  [isVisible]="modalVisible"
+  [titulo]="modalTitulo"
+  [mensaje]="modalMensaje"
+  [tipo]="modalTipo"
+  [conIcon]="true"
+  tipoContenido="texto"
+  [mostrarCerrar]="true"
+  [mostrarBotonAceptar]="true"
+  [mostrarBotonCancelar]="false"
+  textoBotonAceptar="Aceptar"
+  (aceptar)="onModalAceptar()"
+  (cerrado)="onModalCerrado()"
 />
 
