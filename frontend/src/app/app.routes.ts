@@ -1,8 +1,7 @@
 import { Routes } from '@angular/router';
-<<<<<<< HEAD
 
 export const routes: Routes = [];
-=======
+
 import { Login } from './auth/pages/login/login';
 import { Auth } from './auth/pages/autenticacion/auth';
 import { Component } from '@angular/core';
