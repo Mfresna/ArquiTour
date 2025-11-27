@@ -94,9 +94,7 @@ fieldset {
 .campo {
   display: flex;
   flex-direction: column;
-
   border: 0;
-
   gap: 0.2rem;
 }
 
@@ -104,7 +102,6 @@ fieldset {
  #arq-est {
   font-weight: 500;
   margin-left: 0.5rem;
-  
   color: var(--colorTerciario);
 }
 
@@ -120,19 +117,19 @@ fieldset {
 
   font-size: 1rem;
   
-  background-color: #fff;
+  background-color: var(--colorPrincipal);
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 #panel-campos input:focus {
   outline: none;
   border-color: var(--colorBoton, #0077b6);
-  box-shadow: 0 0 6px rgba(0, 119, 182, 0.35);
+  box-shadow: 0 0 6px var(--sombra);
 }
 
 /* Estado inválido */
 input.invalido {
-  border: 2px solid #ff5c5c !important;
+  border: 2px solid var(--colorBotonEliminar) !important;
   background: #ffecec !important;
 }
 
@@ -160,7 +157,7 @@ small.comentario {
 }
 
 #btn-ingresar:hover {
-  background-color: #0096c7;
+  background-color: var(--colorBotonHover);
   transform: scale(1.03);
 }
 
@@ -172,7 +169,7 @@ small.comentario {
 
 /* ===== Errores ===== */
 small.error {
-  color: #ff3333;
+  color: var(--colorBotonEliminar);
   font-size: 0.9rem;
   text-align: left;
   margin-left: 0.6rem;
@@ -183,7 +180,6 @@ small.error {
   display: flex;
   flex-direction: row;
   align-items: center;
-
   gap: 20px;
 }
 
@@ -259,18 +255,17 @@ small.error {
   align-items: center;
 
   padding: .35rem .9rem .35rem 2.4rem;
-  background: #f2f5f9;
+  background: var(--colorItem);
   border-radius: 999px;
 
   border: 1px solid #d9e1ea;
   box-shadow: 0 1px 2px rgba(0,0,0,.06);
 
-  color: #334155;
+  color: var(--colorTerciario);
   font-size: .88rem;
   font-weight: 500;
 
-  overflow: hidden; /* IMPORTANTE para cortar la punta */
-  transition: background .25s ease;
+  overflow: hidden; 
 }
 
 .burbuja:hover {
@@ -284,7 +279,7 @@ small.error {
   padding-left: 5px;
 }
 
-/* BOTÓN — centrado perfecto */
+/* BOTÓN */
 .cont-cruz {
   position: absolute;
   left: 0;

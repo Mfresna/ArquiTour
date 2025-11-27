@@ -49,9 +49,7 @@
   display: flex;
   flex-direction: row;
   align-items: center;
-
-  gap: 1.15rem;
-  
+  gap: 1.15rem; 
 }
 
 .boton{
@@ -80,12 +78,12 @@
 
   /*Boton Editar*/
 #btn-editar {
-  background-color: #0096c7;
+  background-color: var(--colorBoton);
   transform: scale(1.03);
 }
 
 #btn-editar:hover {
-  background-color: #005b8d;  
+  background-color:var(--colorBotonHover);  
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);  
   transform: translateY(-2px);  
 }
@@ -98,12 +96,12 @@
 
   /*Boton Cambiar Pass*/
 #btn-eliminar {
-  background-color: #d32424;
+  background-color: var(--colorBotonEliminar);
   transform: scale(1.03);
 }
 
 #btn-eliminar:hover {
-  background-color: #a51b1b; 
+  background-color: var(--colorBotonEliminarHover);
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);  
   transform: translateY(-2px);  
 }
@@ -119,7 +117,7 @@
   position: relative;
   width: 100%;
   aspect-ratio: 1 / 1;          
-  background: #f8fafc;
+  background: var(--colorFondoTarjeta);
   border-radius: .8rem;
   box-shadow: 0 2px 8px rgba(0,0,0,.1);
   overflow: hidden;
@@ -134,7 +132,7 @@
   height: 100%;
   object-fit:contain;             
   border-radius: .8rem;
-  background: #f2f2f2;
+  background: var(--colorFondoTarjeta);
 }
 
 
@@ -146,18 +144,19 @@
 }
 
 .encabezado h3 {
-  margin: 0 0 .6rem 0;
-  font-size: 1.05rem;
+  font-size: 1rem;
+  text-transform: uppercase;
+  color: var(--colorTextoEtiquetas);
   font-weight: 600;
+  letter-spacing: .04em;
+  margin-bottom: 10px;
 }
-
 
 .panel-obras {
   max-height: 55vh;
   display: flex;
   flex-direction: column;
 }
-
 
 .obras-scroll {
   list-style: none;
@@ -173,12 +172,13 @@
 
 
 .obra-item {
-  background: #f9fafb;
-  border: 1px solid #e5e7eb;
-  color: #1e293b;
+  background: var(--colorItem);
+  border: 1px solid #b0b3b8;
+  color: var(--colorTerciario);
+  border: 1px solid var(--colorSecundario);
+  border-radius: 999px;
   padding: 0.7rem 1rem;
-  border-radius: .6rem;
-  box-shadow: 0 1px 3px rgba(0,0,0,.04);
+  box-shadow: 0 1px 3px var(--sombra);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -188,24 +188,16 @@
   margin-right: 10px;
   cursor: pointer;
   user-select: none;
+  text-decoration: none;
+  margin-bottom: 2px;;
 }
 
 .obra-item:hover {
-  background: #f1f5f9;
+  background: var(--colorSecundario);
   border-color: #cbd5e1;
   transform: translateY(-1px);
 }
 
-
-.obra-item a {
-  text-decoration: none;
-  color: inherit;
-  font-weight: 500;
-}
-
-.obra-item a:hover {
-  color: #2563eb;
-}
 
 /* === Fila 3: arquitectos === */
 .panel-arquitectos {
@@ -225,9 +217,14 @@
 .arq-item li {
   padding: .35rem .75rem;
   border-radius: 999px;
-  background: #eef2f7;
-  color: #334155;
+  background: var(--colorItem);
+  color: var(--colorTerciario);
   font-size: .9rem;
+}
+.vacio {
+  color: var(--colorTerciario);
+  margin-top: 10px;
+
 }
 
 /* === Responsive === */
