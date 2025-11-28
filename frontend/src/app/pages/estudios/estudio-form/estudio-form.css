@@ -1,3 +1,4 @@
+
 #global {
   background-color: var(--colorFondoTarjeta, #fff);
   color: var(--colorTerciario, #222);
@@ -15,6 +16,7 @@
 
   margin: 1% auto;
   padding-bottom: 0.5rem;
+ 
 }
 
 @keyframes aparecer {
@@ -259,7 +261,7 @@ small.error {
   border-radius: 999px;
 
   border: 1px solid #d9e1ea;
-  box-shadow: 0 1px 2px rgba(0,0,0,.06);
+  box-shadow: 0 1px 2px var(--sombra);
 
   color: var(--colorTerciario);
   font-size: .88rem;
@@ -269,7 +271,7 @@ small.error {
 }
 
 .burbuja:hover {
-  background: #e9edf3;
+  background: var(--colorSecundario);
 }
 
 /* Texto */

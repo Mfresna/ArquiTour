@@ -166,10 +166,7 @@ input.invalido {
 }
 
   /*Boton Limpiar*/
-#limpiar {
-  color: #1e293b;
-  border: 1px solid #dbe3eb;
-}
+
 
 #limpiar:hover {
   background: var(--colorSecundario);

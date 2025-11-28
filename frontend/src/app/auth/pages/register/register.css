@@ -143,11 +143,11 @@ input {
 input:focus {
   outline: none;
   border-color: var(--colorBoton, #0077b6);
-  box-shadow: 0 0 6px rgba(0, 119, 182, 0.35);
+  box-shadow: 0 0 6px var(--sombra);
 }
 
 input.invalido {
-  border: 2px solid #ff5c5c;
+  border: 2px solid var(--colorBotonEliminar);
   background: #ffecec;
 }
 
@@ -210,7 +210,7 @@ textarea{
 }
 
 #btnSiguiente:hover {
-  background-color: #0096c7;
+  background-color: var(--colorBotonHover);
   transform: scale(1.03);
 }
 
@@ -222,7 +222,7 @@ textarea{
 
 /* ===== Errores ===== */
 small {
-  color: #ff3333;
+  color: var(--colorBotonEliminar);
   font-size: 0.9rem;
   text-align: left;
   margin-left: 0.6rem;

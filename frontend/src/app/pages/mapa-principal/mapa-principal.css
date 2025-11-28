@@ -104,14 +104,14 @@
 
   font-size: 1rem;
 
-  background-color: #fff;
+  background-color: var(--colorPrincipal);
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 #panel-filtros .form-filtros input:focus {
   outline: none;
   border-color: var(--colorBoton, #0077b6);
-  box-shadow: 0 0 6px rgba(0, 119, 182, 0.35);
+  box-shadow: 0 0 6px var(--sombra);
 }
 
 #panel-filtros .form-filtros fieldset.campo {
@@ -146,7 +146,7 @@
   border: 1px solid #ccc;
   font-family: var(--fuenteBase, "Segoe UI", Roboto, sans-serif);
   font-size: 1rem;
-  background-color: #fff;
+  background-color: var(--colorPrincipal);
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
   height: 42px;
   box-sizing: border-box;
@@ -157,7 +157,7 @@
 #panel-filtros .form-filtros input[type="text"]:focus {
   outline: none;
   border-color: var(--colorBoton, #0077b6);
-  box-shadow: 0 0 6px rgba(0, 119, 182, 0.35);
+  box-shadow: 0 0 6px var(--sombra);
 }
 
 #panel-filtros .form-filtros select {
@@ -178,7 +178,7 @@
 /* Estado inválido */
 .form-filtros input.invalido,
 .form-filtros select.invalido {
-  border: 2px solid #ff5c5c;
+  border: 2px solid var(--colorBotonEliminar);
   background: #ffecec;
 }
 
@@ -231,6 +231,6 @@
 }
 
 .listado-obras li:hover {
-  background-color: rgba(148, 163, 184, 0.15);
+  background-color: var(--colorItem);
   transform: translateX(2px);
 }

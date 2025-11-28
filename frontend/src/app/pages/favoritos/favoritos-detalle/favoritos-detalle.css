@@ -87,7 +87,7 @@
   border: none;
   border-radius: 999px;
   background: rgba(0, 0, 0, 0.6);
-  color: white;
+  color:var(--colorSecundario);
   padding: 4px;
   cursor: pointer;
   opacity: 0;
@@ -109,7 +109,7 @@
 /* ===== MENSAJE VACÍO ===== */
 .vacio {
   text-align: center;
-  color: #999;
+  color: var(--colorTerciario);
   padding: 4rem 2rem;
   font-size: 1.1rem;
 }
