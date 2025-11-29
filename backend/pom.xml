@@ -124,6 +124,12 @@
 			<version>3.10.1</version>
 		</dependency>
 
+		<!-- Para usar converitr pdf en imagen -->
+		<dependency>
+			<groupId>org.apache.pdfbox</groupId>
+			<artifactId>pdfbox</artifactId>
+			<version>3.0.1</version>
+		</dependency>
 
 	</dependencies>
 

@@ -19,6 +19,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
+import java.io.ByteArrayInputStream;
+
 
 @Service
 @Profile("local")
@@ -32,7 +34,7 @@ public class LocalStorageService implements ImagenStorageInterface {
             ".gif",
             ".webp");
 
-    private LocalStorageService(@Value("${dir.imagenes}") String dirImagenes) throws IOException {
+    public LocalStorageService(@Value("${dir.imagenes}") String dirImagenes) throws IOException {
         //La ruta relativa ./imagenes => la convierte en absoluta (C://usr/fotos/imagenes/)
         this.rutaLocal = Paths.get(dirImagenes).toAbsolutePath().normalize();
 
@@ -73,6 +75,49 @@ public class LocalStorageService implements ImagenStorageInterface {
             //Si existe un archivo con el mismo nombre lo reeemplaza (poco probable por UUID)
         try {
             Files.copy(archivo.getInputStream(), target, StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException e) {
+            throw new CargarImagenException(HttpStatus.INTERNAL_SERVER_ERROR ,"Error al guardar la imagen.");
+        }
+
+        return "/imagen/" + nombreArchivo;
+    }
+
+    //SUBIR IMAGEN DEL PEDF
+    public String subirImagenDesdeBytes(byte[] datos, String nombreOriginal){
+
+        if (datos == null || datos.length == 0) {
+            throw new CargarImagenException(HttpStatus.BAD_REQUEST,"El archivo está vacio.");
+        }
+
+        //VALIDACIONES DE SEGURIDAD
+        //Valida que la imagen sea imagen
+        try (ByteArrayInputStream bais = new ByteArrayInputStream(datos)) {
+            if (ImageIO.read(bais) == null) {
+                throw new CargarImagenException(HttpStatus.UNSUPPORTED_MEDIA_TYPE,"El archivo no es una imagen válida.");
+            }
+        } catch (IOException e) {
+            throw new CargarImagenException(HttpStatus.UNSUPPORTED_MEDIA_TYPE,"No se pudo leer la imagen.");
+        }
+
+        // Valida la extension del archivo (usando el nombre sugerido)
+        String extensionValida = getExtension(StringUtils.cleanPath(
+                nombreOriginal == null ? "" : nombreOriginal
+        ));
+
+        //NOMBRE UNICO DE LA IMAGEN
+        String nombreArchivo = UUID.randomUUID() + (extensionValida.isBlank() ? ".img" : extensionValida);
+
+        //Ruta de la imagen a guardar
+        Path target = this.rutaLocal.resolve(nombreArchivo).normalize();
+
+        if (!target.getParent().equals(this.rutaLocal)) {
+            throw new CargarImagenException("Ruta inválida.");
+        }
+
+        //GUARDA EL ARCHIVO EN LA RUTA TARGET
+        //Si existe un archivo con el mismo nombre lo reeemplaza (poco probable por UUID)
+        try (ByteArrayInputStream bais = new ByteArrayInputStream(datos)) {
+            Files.copy(bais, target, StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException e) {
             throw new CargarImagenException(HttpStatus.INTERNAL_SERVER_ERROR ,"Error al guardar la imagen.");
         }
