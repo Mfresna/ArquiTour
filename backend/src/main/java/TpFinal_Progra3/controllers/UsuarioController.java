@@ -199,7 +199,7 @@ public class UsuarioController {
         filtro.setIsActivo(isActivo);
         filtro.setRol(rol);
 
-        return ResponseEntity.ok(usuarioService.filtrarUsuarios(filtro));
+        return ResponseEntity.ok(usuarioService.filtrarUsuariosDto(filtro));
     }
 
     @Operation(summary = "Obtener mi perfil", description = "Devuelve los datos del usuario autenticado actualmente.")

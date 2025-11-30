@@ -166,7 +166,7 @@ public class UsuarioService implements UsuarioServiceInterface {
         return usuarioMapper.mapResponseDTO(buscarUsuario(id));
     }
 
-    public List<UsuarioResponseDTO> filtrarUsuarios(UsuarioFiltroDTO filtro) {
+    public List<UsuarioResponseDTO> filtrarUsuariosDto(UsuarioFiltroDTO filtro) {
         // Validar existencia del rol si se solicita
         if (filtro.getRol() != null && rolRepository.findByRol(filtro.getRol()).isEmpty()) {
             throw new NotFoundException("El rol " + filtro.getRol() + " no existe.");
@@ -175,6 +175,17 @@ public class UsuarioService implements UsuarioServiceInterface {
         return usuarioRepository.findAll(UsuarioSpecification.filtrar(filtro))
                 .stream()
                 .map(usuarioMapper::mapResponseDTO)
+                .toList();
+    }
+
+    public List<Usuario> filtrarUsuarios(UsuarioFiltroDTO filtro) {
+        // Validar existencia del rol si se solicita
+        if (filtro.getRol() != null && rolRepository.findByRol(filtro.getRol()).isEmpty()) {
+            throw new NotFoundException("El rol " + filtro.getRol() + " no existe.");
+        }
+
+        return usuarioRepository.findAll(UsuarioSpecification.filtrar(filtro))
+                .stream()
                 .toList();
     }
 

@@ -20,7 +20,7 @@ public class ImagenService implements ImagenServiceInterface {
 
     private final ImagenRepository imagenRepository;
     private final ImagenMapper imagenMapper;
-    private final ImagenStorageInterface almacImagenSerive;
+    private final ImagenStorageInterface almacImagenService;
 
     public Imagen crearImagen(ImagenDTO dto) {
         return imagenRepository.save(imagenMapper.mapImagen(dto));
@@ -60,7 +60,7 @@ public class ImagenService implements ImagenServiceInterface {
 
     public List<String> subirImagenes(List<MultipartFile> archivos){
         //Sube las imagenes y las guarda en la base de datos
-        List<String> urls = almacImagenSerive.subirImagenes(archivos);
+        List<String> urls = almacImagenService.subirImagenes(archivos);
 
         urls.forEach(url->crearImagen(ImagenDTO.builder()
                         .url(url)

@@ -1,5 +1,6 @@
 package TpFinal_Progra3.model.DTO.notificaciones;
 
+import TpFinal_Progra3.model.enums.TipoNotificacion;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Data;
@@ -34,4 +35,7 @@ public class NotificacionResponseDTO {
 
     @Schema(description = "Indica si la notificación fue leída", example = "false")
     private Boolean isLeido;
+
+    private TipoNotificacion tipo;
+    private Long referenciaId;
 }

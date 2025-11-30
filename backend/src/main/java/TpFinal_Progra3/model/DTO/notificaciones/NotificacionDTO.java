@@ -1,5 +1,6 @@
 package TpFinal_Progra3.model.DTO.notificaciones;
 
+import TpFinal_Progra3.model.enums.TipoNotificacion;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -32,4 +33,5 @@ public class NotificacionDTO {
     @NotBlank(message = "El mensaje no puede estar vacío.")
     @Size(min = 2, max = 500, message = "El mensaje debe tener entre 2 y 500 caracteres.")
     private String mensaje;
+
 }

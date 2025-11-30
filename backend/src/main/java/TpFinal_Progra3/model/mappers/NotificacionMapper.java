@@ -10,18 +10,15 @@ public class NotificacionMapper {
     public NotificacionResponseDTO mapResponseDto(Notificacion notificacion) {
         return NotificacionResponseDTO.builder()
                 .id(notificacion.getId())
-
-                .mensaje(notificacion.getMensaje())
-
-                .fecha(notificacion.getFecha()) // usamos la fecha generada automáticamente
-                .isLeido(notificacion.getIsLeido())
-
-                .emisorEmail(notificacion.getEmisor().getEmail())
                 .emisorId(notificacion.getEmisor().getId())
-
-                .receptorEmail(notificacion.getReceptor().getEmail())
-                .receptorId(notificacion.getReceptor().getId())
-
+                .emisorEmail(notificacion.getEmisor().getEmail())
+                .receptorId(notificacion.getReceptor() != null ? notificacion.getReceptor().getId() : null)
+                .receptorEmail(notificacion.getReceptor() != null ? notificacion.getReceptor().getEmail() : null)
+                .mensaje(notificacion.getMensaje())
+                .fecha(notificacion.getFecha())
+                .isLeido(notificacion.getIsLeido())
+                .tipo(notificacion.getTipo())
+                .referenciaId(notificacion.getReferenciaId())
                 .build();
     }
 }
