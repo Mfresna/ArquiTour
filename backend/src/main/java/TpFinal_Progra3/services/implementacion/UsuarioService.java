@@ -10,6 +10,7 @@ import TpFinal_Progra3.model.DTO.usuarios.UsuarioBasicoDTO;
 import TpFinal_Progra3.model.DTO.usuarios.UsuarioDTO;
 import TpFinal_Progra3.model.DTO.usuarios.UsuarioResponseDTO;
 import TpFinal_Progra3.model.entities.*;
+import TpFinal_Progra3.model.enums.TipoNotificacion;
 import TpFinal_Progra3.model.mappers.ObraMapper;
 import TpFinal_Progra3.model.mappers.UsuarioMapper;
 import TpFinal_Progra3.repositories.ObraRepository;
@@ -37,6 +38,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -49,6 +51,7 @@ public class UsuarioService implements UsuarioServiceInterface {
     private final JwtService jwtService;
     private final PasswordEncoder passwordEncoder;
     private final ValidacionEmailService validacionEmailService;
+    private final NotificacionService notificacionService;
 
     @Value("${default.admin.email}")
     private String defaultAdminEmail;
@@ -152,11 +155,8 @@ public class UsuarioService implements UsuarioServiceInterface {
     }
 
     public Usuario buscarUsuario(HttpServletRequest request) {
-        String tokenHeader = request.getHeader("Authorization");
-        if (tokenHeader == null || !tokenHeader.startsWith("Bearer ")) {
-            throw new CredencialException(HttpStatus.UNAUTHORIZED,"No se identificó el Token proporcionado.");
-        }
-        String emailUsuario = jwtService.extractUsername(tokenHeader.substring(7));
+
+        String emailUsuario = jwtService.extractUsername(request);
 
         return usuarioRepository.findByEmailIgnoreCase(emailUsuario)
                 .orElseThrow(() -> new NotFoundException("Usuario no encontrado a partir del Token recibido."));
@@ -283,6 +283,9 @@ public class UsuarioService implements UsuarioServiceInterface {
                            .orElseThrow(() -> new NotFoundException("El rol no se encuentra en la Base de Datos"))
                    ));
 
+        //Genera una notificacion automatica
+        enviarNotificacionRoles(request,rolesDTO,usr,"agregó");
+
         return usuarioMapper.mapResponseDTO(usuarioRepository.save(usr));
     }
 
@@ -316,6 +319,8 @@ public class UsuarioService implements UsuarioServiceInterface {
                         .remove(rolRepository.findByRol(rol)
                                 .orElseThrow(() -> new NotFoundException("El rol no se encuentra en la Base de Datos"))
                         ));
+        //Genera una notificacion automatica
+        enviarNotificacionRoles(request,rolesDTO,usr,"quitó");
 
         return usuarioMapper.mapResponseDTO(usuarioRepository.save(usr));
     }
@@ -328,6 +333,20 @@ public class UsuarioService implements UsuarioServiceInterface {
     }
 
     //---------------METODOS SUPERFLUOS A CONTROLLER----------------
+
+
+    private void enviarNotificacionRoles(HttpServletRequest request, RolesDTO rolesDTO, Usuario usr, String accion){
+
+        String mensajes = rolesDTO.getRoles().stream()
+                .map(rol -> "Se le " + accion + " el rol de: " + rol.name())
+                .collect(Collectors.joining("\n"));
+
+        notificacionService.crearNotificacionAutomatica(
+                buscarUsuario(request),
+                usr,
+                mensajes,
+                TipoNotificacion.CAMBIO_ROL);
+    }
 
     @Transactional
     public void eliminarFavoritoDeUsuario(Usuario usuario, Favorito favorito) {

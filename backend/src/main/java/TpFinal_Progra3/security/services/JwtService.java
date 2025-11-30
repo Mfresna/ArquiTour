@@ -1,5 +1,6 @@
 package TpFinal_Progra3.security.services;
 
+import TpFinal_Progra3.exceptions.CredencialException;
 import TpFinal_Progra3.exceptions.ProcesoInvalidoException;
 import TpFinal_Progra3.model.entities.Usuario;
 import io.jsonwebtoken.Claims;
@@ -7,8 +8,10 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -40,6 +43,15 @@ public class JwtService {
     //Extrae el claim del username o el ID segun como generé el Token
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
+    }
+
+    //Extrae el Email de la request
+    public String extractUsername(HttpServletRequest request){
+        String tokenHeader = request.getHeader("Authorization");
+        if (tokenHeader == null || !tokenHeader.startsWith("Bearer ")) {
+            throw new CredencialException(HttpStatus.UNAUTHORIZED,"No se identificó el Token proporcionado.");
+        }
+        return extractUsername(tokenHeader.substring(7));
     }
 
     //Genera el token con los roles, hace uso de BuildToken.

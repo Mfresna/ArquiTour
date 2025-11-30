@@ -1,4 +1,5 @@
 package TpFinal_Progra3.services.implementacion;
+import TpFinal_Progra3.exceptions.NotFoundException;
 import TpFinal_Progra3.exceptions.ProcesoInvalidoException;
 import TpFinal_Progra3.model.DTO.notificaciones.NotificacionDTO;
 import TpFinal_Progra3.model.DTO.notificaciones.NotificacionResponseDTO;
@@ -7,7 +8,9 @@ import TpFinal_Progra3.model.entities.Usuario;
 import TpFinal_Progra3.model.enums.TipoNotificacion;
 import TpFinal_Progra3.model.mappers.NotificacionMapper;
 import TpFinal_Progra3.repositories.NotificacionRepository;
+import TpFinal_Progra3.repositories.UsuarioRepository;
 import TpFinal_Progra3.security.model.enums.RolUsuario;
+import TpFinal_Progra3.security.services.JwtService;
 import TpFinal_Progra3.services.interfaces.NotificacionServiceinterface;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -19,20 +22,21 @@ import java.util.List;
 @RequiredArgsConstructor
 public class NotificacionService implements NotificacionServiceinterface {
 
-    private final UsuarioService usuarioService;
+    private final JwtService jwtService;
+    private final UsuarioRepository usuarioRepository;
     private final NotificacionRepository notificacionRepository;
     private final NotificacionMapper notificacionMapper;
 
     // ====== endpoint manual (DTO) ======
     public NotificacionResponseDTO crearNotificacion(HttpServletRequest request, NotificacionDTO dto) {
 
-        Usuario emisor = usuarioService.buscarUsuario(
-                usuarioService.obtenerMiPerfil(request).getId()
-        );
+        Usuario emisor = obtenerUsuario(request);
+
         if (emisor.getId().equals(dto.getIdReceptor())) {
             throw new ProcesoInvalidoException("El Receptor no puede ser igual al Emisor");
         }
-        Usuario receptor = usuarioService.buscarUsuario(dto.getIdReceptor());
+
+        Usuario receptor = obtenerUsuario(dto.getIdReceptor());
 
         Notificacion notificacion = Notificacion.builder()
                 .emisor(emisor)
@@ -46,7 +50,7 @@ public class NotificacionService implements NotificacionServiceinterface {
     }
 
     public List<NotificacionResponseDTO> obtenerRecibidas(HttpServletRequest request, Boolean isLeidas) {
-        Long receptorId = usuarioService.obtenerMiPerfil(request).getId();
+        Long receptorId = obtenerUsuario(request).getId();
 
         return notificacionRepository.findByReceptor_Id(receptorId).stream()
                 .filter(n -> isLeidas == null || n.getIsLeido().equals(isLeidas))
@@ -55,7 +59,7 @@ public class NotificacionService implements NotificacionServiceinterface {
     }
 
     public List<NotificacionResponseDTO> obtenerEnviadas(HttpServletRequest request) {
-        Long emisorId = usuarioService.obtenerMiPerfil(request).getId();
+        Long emisorId = obtenerUsuario(request).getId();
 
         return notificacionRepository.findByEmisor_Id(emisorId).stream()
                 .map(notificacionMapper::mapResponseDto)
@@ -95,6 +99,18 @@ public class NotificacionService implements NotificacionServiceinterface {
         receptores.forEach(receptor ->
                 crearNotificacionAutomatica(emisor, receptor, mensaje, tipo, idSolicitud)
         );
+    }
+
+    //=================================================================================
+
+    private Usuario obtenerUsuario(HttpServletRequest request){
+         return usuarioRepository.findByEmailIgnoreCase(jwtService.extractUsername(request))
+                .orElseThrow(() -> new NotFoundException("Usuario no encontrado a partir del Token recibido."));
+    }
+
+    private Usuario obtenerUsuario(Long id){
+        return usuarioRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Usuario no encontrado con ID: " + id));
     }
 }
 

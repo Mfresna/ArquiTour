@@ -23,7 +23,7 @@ public class Notificacion {
     private Usuario emisor;
 
     @ManyToOne
-    @JoinColumn(name = "receptor_id")
+    @JoinColumn(name = "receptor_id", nullable = false)
     private Usuario receptor;
 
     private String mensaje;

@@ -28,24 +28,30 @@ public class SolicitudRolController {
 
     private final SolicitudService solicitudService;
 
-    @PostMapping("/nueva")
+    @PreAuthorize("!hasRole('ARQUITECTO')")
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<SolicitudArqResponseDTO> crearSolicitud(
             HttpServletRequest request,
-            @RequestPart("datosSolicitud") SolicitudArqDTO datosSolicitud,
+            //@RequestPart("datos") SolicitudArqDTO datosSolicitud,
             @RequestPart(value = "archivos") List<MultipartFile> archivos) {
 
-        System.out.println("HOLA 1");
+        SolicitudArqDTO a = SolicitudArqDTO.builder()
+                .matriculaArquitecto("MAT")
+                .universidad("UNMDP")
+                .anioRecibido(2020)
+                .build();
+
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(
                     solicitudService.crearSolicitud(
                     request,
-                    datosSolicitud,
+                    a,
                     archivos)
                 );
     }
 
-    @PatchMapping("/{id}/asignarseSolicitud")
     @PreAuthorize("hasRole('ADMINISTRADOR')")
+    @PatchMapping("/{id}/tomarla")
     public ResponseEntity<SolicitudArqResponseDTO> tomarSolicitud(
             HttpServletRequest request,
             @PathVariable @Positive Long id) {
@@ -53,7 +59,7 @@ public class SolicitudRolController {
         return ResponseEntity.ok(solicitudService.tomarSolicitud(request, id));
     }
 
-    @PatchMapping("/{id}/resolver")
+    @PatchMapping("/{id}/resolverla")
     @PreAuthorize("hasRole('ADMINISTRADOR')")
     public ResponseEntity<SolicitudArqResponseDTO> resolverSolicitud(
             HttpServletRequest request,

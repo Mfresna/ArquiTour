@@ -13,6 +13,7 @@ import TpFinal_Progra3.model.enums.TipoNotificacion;
 import TpFinal_Progra3.model.mappers.SolicitudMapper;
 import TpFinal_Progra3.repositories.SolicitudArqRepository;
 import TpFinal_Progra3.security.model.DTO.RolesDTO;
+import TpFinal_Progra3.security.model.entities.Rol;
 import TpFinal_Progra3.security.model.enums.RolUsuario;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -39,13 +40,13 @@ public class SolicitudService {
                                                   SolicitudArqDTO dto,
                                                   List<MultipartFile> archivos) {
 
-        System.out.println("HOLA 1");
         Usuario usuario = usuarioService.buscarUsuario(request);
 
-        if (solicitudRepository.existsByUsuarioIdAndEstado(usuario.getId(), EstadoSolicitud.PENDIENTE)) {
+        if (solicitudRepository.existsByUsuario_IdAndEstado(usuario.getId(), EstadoSolicitud.PENDIENTE)) {
+            System.out.println("HOLA");
             throw new SolicitudesException(HttpStatus.BAD_REQUEST, "Ya tenés una solicitud pendiente.");
         }
-        System.out.println("HOLA 2");
+
         List<Imagen> imagenes = imagenService.subirArchivosMixtos(archivos);
 
         if(imagenes.isEmpty()){
@@ -68,6 +69,10 @@ public class SolicitudService {
         filtro.setRol(RolUsuario.ROLE_ADMINISTRADOR);
         List<Usuario> admins = usuarioService.filtrarUsuarios(filtro);
 
+        //Si el usuario es Admin no le mando la notificacion (él mismo no se puede aceptar)
+        if(usuario.getCredencial().tieneRolUsuario(RolUsuario.ROLE_ADMINISTRADOR)){
+            admins = admins.stream().filter(a-> !a.equals(usuario)).toList();
+        }
 
         notificacionService.notificacionMasiva(
                 usuario,
@@ -80,7 +85,6 @@ public class SolicitudService {
         return solicitudMapper.mapResponseDTO(solicitud);
     }
 
-
     // ========== 2) TOMAR SOLICITUD (EN_PROCESO) ==========
 
     @Transactional
@@ -90,6 +94,10 @@ public class SolicitudService {
 
         SolicitudCambioRolArq solicitud = solicitudRepository.findById(solicitudId)
                 .orElseThrow(() -> new NotFoundException("Solicitud no encontrada."));
+
+        if(solicitud.getUsuario().equals(admin)){
+            throw new SolicitudesException(HttpStatus.NOT_MODIFIED, "No se puede Autoaceptar la Solicitud");
+        }
 
         if (solicitud.getEstado() == EstadoSolicitud.PENDIENTE) {
             solicitud.setEstado(EstadoSolicitud.EN_PROCESO);

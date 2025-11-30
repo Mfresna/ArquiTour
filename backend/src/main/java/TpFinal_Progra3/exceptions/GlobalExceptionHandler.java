@@ -142,6 +142,10 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(e.getStatusCode()).body(e.getMessage());
     }
 
+    @ExceptionHandler(SolicitudesException.class)
+    public ResponseEntity<String> handleSolicitudesException(SolicitudesException e) {
+        return ResponseEntity.status(e.getStatusCode()).body(e.getMessage());
+    }
 
 }
 

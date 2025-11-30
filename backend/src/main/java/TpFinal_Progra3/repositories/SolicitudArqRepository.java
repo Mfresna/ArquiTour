@@ -9,12 +9,18 @@ import java.util.Optional;
 
 public interface SolicitudArqRepository extends JpaRepository<SolicitudCambioRolArq, Long> {
 
-    boolean existsByUsuarioId(Long usuarioId);
-    boolean existsByUsuarioIdAndEstado(Long usuarioId, EstadoSolicitud estado);
+    boolean existsByUsuario_Id(Long usuarioId);
+    boolean existsByUsuario_IdAndEstado(Long usuarioId, EstadoSolicitud estado);
 
     List<SolicitudCambioRolArq> findByEstadoOrderByFechaCreacionAsc(EstadoSolicitud estado);
 
     List<SolicitudCambioRolArq> findByUsuarioIdOrderByFechaCreacionDesc(Long usuarioId);
 
     List<SolicitudCambioRolArq> findByEstado(EstadoSolicitud estado);
+
+    List<SolicitudCambioRolArq> findByUniversidad(String universidad);
+
+    List<SolicitudCambioRolArq> findByMatriculaArquitecto(String matriculaArquitecto);
+
 }
+
