@@ -10,11 +10,14 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @Tag(name = "SolicitudRol", description = "SolicitudDeRoles")
 @SecurityRequirement(name = "bearerAuth")
@@ -25,13 +28,14 @@ public class SolicitudRolController {
 
     private final SolicitudService solicitudService;
 
-    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping("/nueva")
     public ResponseEntity<SolicitudArqResponseDTO> crearSolicitud(
             HttpServletRequest request,
-            @RequestPart("datosSolicitud") @Valid SolicitudArqDTO datosSolicitud,
-            @RequestPart(value = "archivos", required = false) MultipartFile[] archivos) {
+            @RequestPart("datosSolicitud") SolicitudArqDTO datosSolicitud,
+            @RequestPart(value = "archivos") List<MultipartFile> archivos) {
 
-        return ResponseEntity.ok()
+        System.out.println("HOLA 1");
+        return ResponseEntity.status(HttpStatus.CREATED)
                 .body(
                     solicitudService.crearSolicitud(
                     request,

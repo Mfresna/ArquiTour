@@ -37,22 +37,20 @@ public class SolicitudService {
     @Transactional
     public SolicitudArqResponseDTO crearSolicitud(HttpServletRequest request,
                                                   SolicitudArqDTO dto,
-                                                  MultipartFile[] archivos) {
+                                                  List<MultipartFile> archivos) {
 
-
+        System.out.println("HOLA 1");
         Usuario usuario = usuarioService.buscarUsuario(request);
 
         if (solicitudRepository.existsByUsuarioIdAndEstado(usuario.getId(), EstadoSolicitud.PENDIENTE)) {
             throw new SolicitudesException(HttpStatus.BAD_REQUEST, "Ya tenés una solicitud pendiente.");
         }
+        System.out.println("HOLA 2");
+        List<Imagen> imagenes = imagenService.subirArchivosMixtos(archivos);
 
-        // TODO: verificar si los archivos son IMG o PDF y subirlos
-        // Ejemplo (descomentar y adaptar):
-        // List<Imagen> imagenes = Arrays.stream(archivos)
-        //         .map(imagenService::subirImagenSolicitud)
-        //         .toList();
-
-        List<Imagen> imagenes = null; // por ahora
+        if(imagenes.isEmpty()){
+            throw new SolicitudesException(HttpStatus.NOT_ACCEPTABLE, "Las imagenes son Obligatorias");
+        }
 
         SolicitudCambioRolArq solicitud = SolicitudCambioRolArq.builder()
                 .usuario(usuario)
