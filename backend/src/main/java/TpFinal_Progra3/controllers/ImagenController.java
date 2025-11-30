@@ -1,6 +1,7 @@
 package TpFinal_Progra3.controllers;
 
 import TpFinal_Progra3.model.DTO.ImagenDTO;
+import TpFinal_Progra3.model.entities.Imagen;
 import TpFinal_Progra3.services.implementacion.ImagenService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -27,6 +28,7 @@ import java.util.List;
 public class ImagenController {
 
     private final ImagenService imagenService;
+
 
     @Operation(
             summary = "Obtener imagen por ID",
@@ -77,4 +79,21 @@ public class ImagenController {
             @RequestParam("archivos") List<MultipartFile> archivos){
         return ResponseEntity.ok(imagenService.subirImagenes(archivos));
     }
+
+    @PostMapping("/subir-mixto")
+    public ResponseEntity<List<String>> subirArchivosMixtos(
+            @RequestParam("archivos") List<MultipartFile> archivos
+    ) {
+        // Usa tu nuevo método del service que maneja PDFs + imágenes
+        List<Imagen> imagenes = imagenService.subirArchivosMixtos(archivos);
+
+        // Del resultado sacamos solo las URLs, como en /subir
+        List<String> urls = imagenes.stream()
+                .map(Imagen::getUrl)
+                .toList();
+
+        return ResponseEntity.ok(urls);
+    }
+
+
 }

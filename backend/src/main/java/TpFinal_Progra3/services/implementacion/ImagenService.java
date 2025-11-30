@@ -5,13 +5,14 @@ import TpFinal_Progra3.model.DTO.ImagenDTO;
 import TpFinal_Progra3.model.entities.Imagen;
 import TpFinal_Progra3.model.mappers.ImagenMapper;
 import TpFinal_Progra3.repositories.ImagenRepository;
-import TpFinal_Progra3.services.almacenamiento.CloudinaryService;
+import TpFinal_Progra3.services.almacenamiento.PdfAImagenService;
 import TpFinal_Progra3.services.interfaces.ImagenServiceInterface;
 import TpFinal_Progra3.services.interfaces.ImagenStorageInterface;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -21,6 +22,8 @@ public class ImagenService implements ImagenServiceInterface {
     private final ImagenRepository imagenRepository;
     private final ImagenMapper imagenMapper;
     private final ImagenStorageInterface almacImagenService;
+    private final PdfAImagenService pdfAImagenService;
+
 
     public Imagen crearImagen(ImagenDTO dto) {
         return imagenRepository.save(imagenMapper.mapImagen(dto));
@@ -68,5 +71,71 @@ public class ImagenService implements ImagenServiceInterface {
 
         return urls;
     }
+
+    public List<Imagen> subirArchivosMixtos(List<MultipartFile> archivos) {
+
+        if (archivos == null || archivos.isEmpty()) {
+            throw new IllegalArgumentException("La lista de archivos no puede ser nula ni estar vacía.");
+        }
+
+        List<Imagen> resultado = new ArrayList<>();
+
+        // Separamos imágenes y PDFs
+        List<MultipartFile> imagenes = new ArrayList<>();
+        List<MultipartFile> pdfs = new ArrayList<>();
+
+        for (MultipartFile archivo : archivos) {
+
+            if (archivo == null || archivo.isEmpty()) {
+                throw new IllegalArgumentException("Uno de los archivos enviados es nulo o está vacío.");
+            }
+
+            String contentType = archivo.getContentType();
+            String nombreOriginal = archivo.getOriginalFilename();
+            String nombreLower = (nombreOriginal == null) ? "" : nombreOriginal.toLowerCase();
+
+            boolean esPdf = "application/pdf".equalsIgnoreCase(contentType)
+                    || nombreLower.endsWith(".pdf");
+
+            if (esPdf) {
+                pdfs.add(archivo);
+            } else {
+                imagenes.add(archivo);
+            }
+        }
+
+        // ===== 1) Procesar TODAS LAS IMÁGENES  =====
+        if (!imagenes.isEmpty()) {
+            List<String> urlsImagenes = almacImagenService.subirImagenes(imagenes);
+
+            for (String url : urlsImagenes) {
+                Imagen imagen = crearImagen(
+                        ImagenDTO.builder()
+                                .url(url)
+                                .build()
+                );
+                resultado.add(imagen);
+            }
+        }
+
+        // ===== 2) Procesar CADA PDF =====
+        for (MultipartFile pdf : pdfs) {
+
+            List<String> urlsPdf = pdfAImagenService.convertirPdfYGuardar(pdf);
+
+            for (String url : urlsPdf) {
+                Imagen imagen = crearImagen(
+                        ImagenDTO.builder()
+                                .url(url)
+                                .build()
+                );
+                resultado.add(imagen);
+            }
+        }
+
+        return resultado;
+    }
+
+
 
 }
