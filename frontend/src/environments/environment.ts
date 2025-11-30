@@ -20,3 +20,4 @@ export const environment = {
   iconoMapaPrincipalUsuario: 'assets/icons/pin-user.svg',
   templateMapa: 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png',
 };
+
