@@ -95,8 +95,7 @@
   border: 1px solid #ccc;
   font-family: var(--fuenteBase, "Segoe UI", Roboto, sans-serif);
   font-size: 1rem;
-  background-color: #fff;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  background-color: var(--colorPrincipal);
   height: 42px;
   box-sizing: border-box;
 }
@@ -106,7 +105,7 @@
 #panel-filtros .form-filtros input[type="text"]:focus {
   outline: none;
   border-color: var(--colorBoton, #0077b6);
-  box-shadow: 0 0 6px rgba(0, 119, 182, 0.35);
+  box-shadow: 0 0 6px var(--sombra);
 }
 
 #panel-filtros .form-filtros select {
@@ -127,8 +126,7 @@
 /* Estado inválido */
 .form-filtros input.invalido,
 .form-filtros select.invalido {
-  border: 2px solid #ff5c5c;
-  background: #ffecec;
+  border: 2px solid var(--colorBotonEliminar);
 }
 
 /* ===== Grid de obras ===== */
@@ -184,7 +182,7 @@
 /* Mensaje lista vacía */
 .vacio {
   text-align: center;
-  color: #999;
+  color: var(--colorTerciario);
   padding: 4rem 2rem;
   font-size: 1.1rem;
 }
@@ -208,22 +206,12 @@
 
 .acciones button[type="submit"] {
   background: var(--colorBoton, #0077b6);
-  color: #fff;
+  color: var(--colorSecundario);
 }
 
-.acciones button[type="submit"]:hover {
+.acciones button:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 16px rgba(0,119,182,.25);
-}
-
-.acciones button[type="button"] {
-  background: #f9fafb;
-  color: #1e293b;
-  border-color: #dbe3eb;
-}
-
-.acciones button[type="button"]:hover {
-  background: #eef2f6;
+  box-shadow: 0 8px 10px var(--sombra);
 }
 
 /* Responsive acciones */

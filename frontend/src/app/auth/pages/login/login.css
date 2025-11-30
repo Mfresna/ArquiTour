@@ -139,7 +139,7 @@ input:focus {
 }
 
 input.invalido {
-  border: 2px solid #ff5c5c;
+  border: 2px solid var(--colorBotonEliminar);
   background: #ffecec;
 }
 
@@ -192,7 +192,7 @@ input.invalido {
 }
 
 #login:hover {
-  background-color: #0096c7;
+  background-color: var(--colorBotonHover);
   transform: scale(1.03);
 }
 
@@ -204,7 +204,7 @@ input.invalido {
 
 /* ===== Errores ===== */
 small {
-  color: #ff3333;
+  color: var(--colorBotonEliminar);
   font-size: 0.9rem;
   text-align: left;
   margin-left: 0.6rem;

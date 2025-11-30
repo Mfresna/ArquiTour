@@ -1,0 +1,269 @@
+/* CONTENEDOR GENERAL */
+.nf-contenedor {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1rem;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+/* TARJETA CENTRAL */
+.nf-card {
+  display: flex;
+  gap: 2rem;
+
+  background: var(--colorPrincipal, #ffffff);
+  border-radius: 1.5rem;
+  box-shadow: 0 12px 30px var(--sombra);
+  padding: 2rem 2.5rem;
+
+  max-width: 900px;
+  width: 100%;
+  max-height: 80vh;
+  overflow: hidden;
+  align-items: center;
+}
+
+
+/* Para pantallas chicas */
+@media (max-width: 720px) {
+  .nf-card {
+    grid-template-columns: 1fr;
+    padding: 2rem 1.6rem;
+  }
+}
+
+/* ANIMACIÓN ENTRADA */
+@keyframes nf-entrar {
+  from {
+    transform: translateY(15px) scale(0.97);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+}
+
+/* ================= ILUSTRACIÓN ================= */
+
+.nf-illustration {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* "MAPA" DOBLADO */
+.nf-map {
+  position: relative;
+  width: 220px;
+  height: 180px;
+
+  display: flex;
+  gap: 4px;
+
+  transform: rotate(-6deg);
+  animation: nf-flotar 3.5s ease-in-out infinite;
+}
+
+.nf-map-fold {
+  flex: 1;
+  border-radius: 12px;
+  background: linear-gradient(
+    135deg,
+    #dbeafe 0%,
+    #e0f2fe 40%,
+    #f1f5f9 100%
+  );
+  box-shadow: 0 6px 16px rgba(15, 23, 42, 0.18);
+
+  position: relative;
+  overflow: hidden;
+}
+
+/* Diferentes inclinaciones para dar sensación de plegado */
+.nf-fold-left {
+  transform: skewY(4deg) translateY(6px);
+}
+.nf-fold-center {
+  transform: translateY(-4px);
+}
+.nf-fold-right {
+  transform: skewY(-4deg) translateY(4px);
+}
+
+/* Líneas tipo calles */
+.nf-map-fold::before,
+.nf-map-fold::after {
+  content: '';
+  position: absolute;
+  inset: 14% 18%;
+  border-radius: 16px;
+  border: 1px dashed rgba(37, 99, 235, 0.25);
+}
+
+.nf-map-fold::after {
+  inset: 32% 24%;
+  border-style: solid;
+  border-color: rgba(59, 130, 246, 0.18);
+}
+
+/* Caminito punteado animado */
+.nf-path {
+  position: absolute;
+  left: 12%;
+  right: 16%;
+  top: 60%;
+
+  height: 0;
+  border-top: 2px dashed rgba(37, 99, 235, 0.55);
+  border-radius: 999px;
+
+  animation: nf-path-mover 2.5s linear infinite;
+}
+
+@keyframes nf-path-mover {
+  0% {
+    transform: translateX(0);
+    opacity: 0.8;
+  }
+  50% {
+    transform: translateX(10px);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 0.8;
+  }
+}
+
+/* Pin de ubicación */
+.nf-pin {
+  position: absolute;
+  right: 18%;
+  top: 22%;
+  transform-origin: bottom center;
+  animation: nf-pin-saltar 2.2s ease-in-out infinite;
+}
+
+.nf-pin-head {
+  width: 34px;
+  height: 34px;
+  border-radius: 999px 999px 999px 999px;
+  background: radial-gradient(circle at 30% 30%, #e0f2fe 0, #0ea5e9 40%, #0369a1 100%);
+  position: relative;
+  box-shadow: 0 6px 14px rgba(56, 189, 248, 0.55);
+}
+
+.nf-pin-head::before {
+  content: '';
+  position: absolute;
+  inset: 8px;
+  border-radius: inherit;
+  background: var(--colorPrincipal, #ffffff);
+  opacity: 0.15;
+}
+
+/* Punta del pin */
+.nf-pin-body {
+  width: 0;
+  height: 0;
+  border-left: 9px solid transparent;
+  border-right: 9px solid transparent;
+  border-top: 16px solid #0369a1;
+  margin: -3px auto 0;
+}
+
+/* Sombra del pin */
+.nf-pin-shadow {
+  width: 32px;
+  height: 8px;
+  border-radius: 999px;
+  background: rgba(15, 23, 42, 0.15);
+  margin: 4px auto 0;
+  filter: blur(3px);
+}
+
+/* Animaciones del mapa/pin */
+@keyframes nf-flotar {
+  0%   { transform: translateY(0) rotate(-6deg); }
+  50%  { transform: translateY(-6px) rotate(-4deg); }
+  100% { transform: translateY(0) rotate(-6deg); }
+}
+
+@keyframes nf-pin-saltar {
+  0%   { transform: translateY(0) scale(1); }
+  40%  { transform: translateY(-8px) scale(1.02); }
+  60%  { transform: translateY(-4px) scale(1); }
+  100% { transform: translateY(0) scale(1); }
+}
+
+/* ================= TEXTO ================= */
+
+.nf-text {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.9rem;
+}
+
+.nf-text h1 {
+  font-size: 3.2rem;
+  margin: 0;
+  color: var(--colorBoton, #0077b6);
+  letter-spacing: 2px;
+}
+
+.nf-text h2 {
+  margin: 0;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--colorTerciario, #1f2933);
+}
+
+.nf-text p {
+  margin: 0.3rem 0 0.8rem;
+  color: var(--colorTerciario, #4b5563);
+  line-height: 1.5;
+}
+
+/* BOTONES */
+.nf-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  margin-top: 0.8rem;
+}
+
+.nf-actions a {
+  text-decoration: none;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-size: 0.9rem;
+}
+
+/* Botón principal */
+.btn-primario {
+  padding: 0.7rem 1.4rem;
+  border-radius: 999px;
+  border: none;
+  background: var(--colorBoton, #0077b6);
+  color: var(--colorPrincipal, #ffffff);
+  box-shadow: 0 8px 18px var(--sombra);
+  cursor: pointer;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
+}
+
+.btn-primario:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 22px var(--sombra);
+  background: var(--colorBotonHover, #0883c6);
+}

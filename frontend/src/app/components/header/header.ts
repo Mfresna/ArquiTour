@@ -1,7 +1,6 @@
 import { Component, ElementRef, HostListener, OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { AuthService } from '../../auth/services/authService/auth-service';
-import { Auth } from "../../auth/pages/autenticacion/auth";
 import { TokenService } from '../../auth/services/tokenService/token-service';
 
 @Component({

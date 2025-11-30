@@ -5,11 +5,16 @@
   --colorSecundario: #f0f0f0;
   --colorTerciario: #222222;
   --colorFondoTarjeta: #fafafa;
+  --colorItem: #f0f4ff;
   --sombra: rgba(0, 0, 0, 0.15);
   --colorBoton: #0077b6;
+  --colorBotonHover: #005b8d;
+  --colorBotonEliminar: #d32424;
+  --colorBotonEliminarHover: #a51b1b;
   --fuenteBase: "Segoe UI", Roboto, sans-serif;
   --radioMenu: 15px;
   --colorLink: #0077b6;
+  --colorTextoEtiquetas: #64748b;
 }
 
 * {

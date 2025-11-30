@@ -121,7 +121,7 @@
 
   font-size: 1rem;
 
-  background-color: #fff;
+  background-color: var(--colorPrincipal);
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
@@ -129,7 +129,7 @@
 #panel-filtros .form-filtros input:focus {
   outline: none;
   border-color: var(--colorBoton, #0077b6);
-  box-shadow: 0 0 6px rgba(0, 119, 182, 0.35);
+  box-shadow: 0 0 6px var(--sombra);
 }
 
 #panel-filtros .form-filtros select {
@@ -150,7 +150,7 @@
 /* Estado inválido */
 input.invalido,
 select.invalido {
-  border: 2px solid #ff5c5c;
+  border: 2px solid var(--colorBotonEliminar);
   background: #ffecec;
 }
 
@@ -176,25 +176,20 @@ select.invalido {
   /*Boton Buscar*/
 #buscar {
   background: var(--colorBoton, #0077b6);
-  color: #fff;
+  color: var(--colorSecundario);
 }
 
 #buscar:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 16px rgba(0,119,182,.25);
+  box-shadow: 0 8px 16px var(--sombra);
 }
 
-  /*Boton Limpiar*/
-#limpiar {
-  background: #f9fafb;
-  color: #1e293b;
-
-  border: 1px solid #dbe3eb;
-}
 
 #limpiar:hover {
-  background: #eef2f6;
+  background: var(--colorSecundario);
+  box-shadow: 0 8px 16px var(--sombra);
 }
+
 
 
 /*================ PANEL LISTA DERECHA =====================*/
@@ -250,7 +245,7 @@ select.invalido {
 }
 
 .contenido-usuario.usr-deshab{
-  border-left: .21rem solid #ff3333;
+  border-left: .21rem solid var(--colorBotonEliminar);
 }
 
   /*Datos del Usuario*/
@@ -304,7 +299,7 @@ select.invalido {
 }
 
 .inhabilitado{
-  color: #ff3333;
+  color: var(--colorBotonEliminar);
 }
 
   /*Etiqueta Animada de Botones*/
@@ -320,8 +315,8 @@ select.invalido {
   left: 50%;
   transform: translateX(-50%) scale(0.95);
 
-  background: #222;
-  color: #fff;
+  background: var(--colorTerciario);
+  color: var(--colorSecundario);
 
   padding: 5px 8px;
   margin-top: 5px;
@@ -345,7 +340,7 @@ select.invalido {
   transform: translateX(-50%);
   border-width: 5px;
   border-style: solid;
-  border-color: transparent transparent #222 transparent;
+  border-color: transparent transparent var(--colorTerciario) transparent;
 }
 
 .btn-etiqueta-detalle:hover .etiqueta-detalle{

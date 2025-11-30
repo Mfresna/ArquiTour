@@ -144,7 +144,11 @@ onModalCerrado(): void {
         finalize(() => this.enviandoPin = false) 
       ).subscribe({
         next: (res) => {
-          alert("Le enviamos un correo para reestablecer su contraseña");
+          this.mostrarModal(
+            "Correo enviado",
+            "Le enviamos un correo para reestablecer su contraseña.",
+            "success"
+          );
         },  
         error: (e) => {
           if (e.status >= 400 || e.status <= 499) {

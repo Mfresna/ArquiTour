@@ -118,20 +118,19 @@
 
   font-size: 1rem;
 
-  background-color: #fff;
+  background-color: var(--colorPrincipal);
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 #panel-filtros .form-filtros input:focus {
   outline: none;
   border-color: var(--colorBoton, #0077b6);
-  box-shadow: 0 0 6px rgba(0, 119, 182, 0.35);
+  box-shadow: 0 0 6px var(--sombra);
 }
 
 /* Estado inválido */
 input.invalido {
-  border: 2px solid #ff5c5c;
-  background: #ffecec;
+  border: 2px solid var(--colorBotonEliminar);
 }
 
 
@@ -158,24 +157,20 @@ input.invalido {
   /*Boton Buscar*/
 #buscar {
   background: var(--colorBoton, #0077b6);
-  color: #fff;
+  color: var(--colorSecundario);
 }
 
 #buscar:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 16px rgba(0,119,182,.25);
+  box-shadow: 0 8px 16px var(--sombra);
 }
 
   /*Boton Limpiar*/
-#limpiar {
-  background: #f9fafb;
-  color: #1e293b;
 
-  border: 1px solid #dbe3eb;
-}
 
 #limpiar:hover {
-  background: #eef2f6;
+  background: var(--colorSecundario);
+  box-shadow: 0 8px 16px var(--sombra);
 }
 
   /*Boton Ver Mis estudios*/

@@ -24,3 +24,26 @@
   </div>
 
 </div>
+
+<!-- SPINNER / ESPERANDO -->
+<app-esperando-modal
+  [isVisible]="spinerVisible"
+  [mensaje]="spinerMensaje">
+</app-esperando-modal>
+
+<!-- MODAL DE MENSAJE / CONFIRMACIÓN -->
+<app-mensaje-modal
+  [isVisible]="modalVisible"
+  [titulo]="modalTitulo"
+  [mensaje]="modalMensaje"
+  [tipo]="modalTipo"
+  [conIcon]="true"
+  tipoContenido="texto"
+  [mostrarCerrar]="true"
+  [mostrarBotonAceptar]="true"
+  [mostrarBotonCancelar]="obraPendienteEliminar !== null"  
+  textoBotonAceptar="Aceptar"
+  textoBotonCancelar="Cancelar"
+  (aceptar)="onModalAceptar()"
+  (cerrado)="onModalCerrado()">
+</app-mensaje-modal>

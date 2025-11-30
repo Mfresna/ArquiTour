@@ -162,19 +162,19 @@
   color: var(--colorPrincipal, #fff);
   
   cursor: pointer;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+  box-shadow: 0 4px 8px var(--sombra); 
 
   transition: transform 0.2s, box-shadow 0.3s, background-color 0.3s ease; 
 }
 
   /*Boton Editar*/
 #btn-editar {
-  background-color: #0096c7;
+  background-color: var(--colorBoton);
   transform: scale(1.03);
 }
 
 #btn-editar:hover {
-  background-color: #005b8d;  
+  background-color: var(--colorBotonHover);  
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);  
   transform: translateY(-2px);  
 }
@@ -187,13 +187,13 @@
 
   /*Boton Cambiar Pass*/
 #btn-pass {
-  background-color: #d32424;
+  background-color: var(--colorBotonEliminar);
   transform: scale(1.03);
 }
 
 #btn-pass:hover {
-  background-color: #a51b1b; 
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);  
+  background-color: var(--colorBotonEliminarHover); 
+  box-shadow: 0 8px 16px var(--sombra);  
   transform: translateY(-2px);  
 }
 
@@ -230,8 +230,8 @@
   margin-left: 30px;
 
   border-radius: .8rem;
-  background: #f2f2f2;
-  box-shadow: 0 2px 8px rgba(0,0,0,.1);
+  background: var(--colorSecundario);
+  box-shadow: 0 2px 8px var(--sombra);
  
 }
 
@@ -328,7 +328,7 @@ input:focus {
 }
 
 input.invalido {
-  border: 2px solid #ff5c5c;
+  border: 2px solid var(--colorBotonEliminar);
   background: #ffecec;
 }
 
@@ -362,7 +362,7 @@ textarea:disabled{
 
 /* ================ Errores ======================== */
 small {
-  color: #ff3333;
+  color: var(--colorBotonEliminarHover);
   font-size: 0.9rem;
   text-align: left;
   margin-left: 0.6rem;

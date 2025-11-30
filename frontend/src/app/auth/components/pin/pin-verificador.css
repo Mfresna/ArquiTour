@@ -23,6 +23,6 @@
 }
 
 .error{
-  border: 1px solid #ff3333;
-  color: #ff3333;
+  border: 1px solid var(--colorBotonEliminar);
+  color: var(--colorBotonEliminar);
 }

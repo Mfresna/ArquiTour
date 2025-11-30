@@ -112,11 +112,11 @@
           @if (obra.descripcion) {
             <p>{{ obra.descripcion }}</p>
           } @else {
-            <p class="muted">Sin descripción.</p>
+            <p class="vacio">Sin descripción.</p>
           }
         </div>
 
-        <div id="mapa-contenedor" class="fondo-trambolico">
+        <div id="mapa-contenedor">
           @if(obra.latitud != null && obra.longitud != null ){
             <app-mapa-obra
                 [latitud]="obra.latitud"
