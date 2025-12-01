@@ -263,8 +263,6 @@ export class MapaPrincipal implements AfterViewInit, OnDestroy {
     }
   }
 
-
-
   centrarEnObra(obra: ObraMapaModel): void {
 
     if (!obra.latitud || !obra.longitud) return;
@@ -280,6 +278,33 @@ export class MapaPrincipal implements AfterViewInit, OnDestroy {
       this.map.setView([obra.latitud, obra.longitud], 16, { animate: true });
     }
   }
+
+
+  irAMiUbicacion(): void {
+    if (this.coordsUsuario) {
+      const { latitud, longitud } = this.coordsUsuario;
+
+      this.map.setView([latitud, longitud], this.zoomAobra, {
+        animate: true
+      });
+    } else {
+      this.obtenerUbicacionDelUsuario().then(ubicacion => {
+        if (ubicacion) {
+          this.coordsUsuario = {
+            latitud: ubicacion.lat,
+            longitud: ubicacion.lon
+          };
+
+          this.map.setView([ubicacion.lat, ubicacion.lon], this.zoomAobra, {
+            animate: true
+          });
+        } else {
+          alert('No se pudo obtener tu ubicación. Verificá los permisos del navegador.');
+        }
+      });
+    }
+  }
+
 
 
   //Deprecated
@@ -312,5 +337,3 @@ export class MapaPrincipal implements AfterViewInit, OnDestroy {
   }
 
 }
-
-
