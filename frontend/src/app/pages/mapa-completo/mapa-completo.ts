@@ -48,12 +48,29 @@ export class MapaCompleto implements AfterViewInit, OnDestroy {
     this.map = L.map('mapa-obras', {
       center: [0, 0],
       zoom: 3,
-      minZoom: 3
+      minZoom: 3,
+
+      //Tamaño maximo del area de navegacion
+      maxBounds: [
+        [-85.05112878, -180],
+        [85.05112878, 180]
+      ],
+      maxBoundsViscosity: 1.0, // efecto elástico en los bordes
+      worldCopyJump: false 
+      
     });
 
-    // Podés cambiar esto a tu environment.templateMapa si querés
     L.tileLayer(`${environment.templateMapa}`, {
       maxZoom: 19,
+
+      //No repite el mapa, muestra uno solo
+      bounds: [
+        [-85.05112878, -180],
+        [85.05112878, 180]
+      ],
+
+      noWrap: true,
+
       attribution:
         '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
     }).addTo(this.map);

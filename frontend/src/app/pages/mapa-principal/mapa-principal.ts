@@ -87,14 +87,33 @@ export class MapaPrincipal implements AfterViewInit, OnDestroy {
     this.map = L.map('mapa-obras', {
       center: [0, 0],
       zoom: 3,
-      minZoom: 3
+      minZoom: 3,
+
+      //Tamaño maximo del area de navegacion
+      maxBounds: [
+        [-85.05112878, -180],
+        [85.05112878, 180]
+      ],
+      maxBoundsViscosity: 1.0, // efecto elástico en los bordes
+      worldCopyJump: false 
+      
+
     });
 
     //'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
     //https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png
-    //Sete la informacion contextual atribution es el copyright de abajo a la derecha
     L.tileLayer(`${environment.templateMapa}`, {
       maxZoom: 19,
+
+
+      //No repite el mapa, muestra uno solo
+      bounds: [
+        [-85.05112878, -180],
+        [85.05112878, 180]
+      ],
+
+      noWrap: true,
+
       attribution:
         '&copy; <a href="https://carto.com/attributions">CARTO</a>'
     }).addTo(this.map);
