@@ -27,8 +27,9 @@ export class MapaSelector implements AfterViewInit, OnChanges, OnDestroy {
     longitud: number;
   }>();
 
-  @ViewChild('mapContainer', { static: true })
-  mapContainer!: ElementRef<HTMLDivElement>;
+  @ViewChild('mapContainer', { static: true }) mapContainer!: ElementRef<HTMLDivElement>;
+
+  @ViewChild('inputDireccion') inputDireccion!: ElementRef<HTMLInputElement>;
 
   private map?: L.Map;
   private marker?: L.Marker;
@@ -80,12 +81,11 @@ export class MapaSelector implements AfterViewInit, OnChanges, OnDestroy {
     // Click del usuario → mover pin y emitir coords
     this.map.on('click', (e: L.LeafletMouseEvent) => {
       const { lat, lng } = e.latlng;
-      this.colocarOMoverMarcador(lat, lng);
+      this.moverMapaYEmitir(lat, lng);
 
-      this.coordenadasSeleccionadas.emit({
-        latitud: lat,
-        longitud: lng,
-      });
+      //Limpia el input de busqueda
+      this.inputDireccion.nativeElement.value = '';
+
     });
   }
 
@@ -94,9 +94,9 @@ export class MapaSelector implements AfterViewInit, OnChanges, OnDestroy {
     if (!this.map) return;
 
     const center = this.obtenerCentroInicial();
-    const zoom = this.obtenerZoomValido(this.zoom);
 
-    this.map.setView(center, zoom);
+    // Mantiene el zoom actual del mapa
+    this.map.panTo(center);
     this.colocarOMoverMarcador(center[0], center[1]);
   }
 
@@ -130,6 +130,56 @@ export class MapaSelector implements AfterViewInit, OnChanges, OnDestroy {
       }).addTo(this.map!);
     }
   }
+
+  buscarDireccion(direccion: string): void {
+    const query = direccion?.trim();
+    if (!query) return;
+
+    const texto = query;
+    const url = `https://nominatim.openstreetmap.org/search?format=json&addressdetails=0&limit=1&q=${encodeURIComponent(texto)}`;
+
+    fetch(url, {
+      headers: {
+        'Accept': 'application/json',
+        'User-Agent': 'ArquiTour/1.0 (tu-email@ejemplo.com)',
+      },
+    })
+      .then(res => res.json())
+      .then((resultados: any[]) => {
+        if (!resultados || resultados.length === 0) {
+          console.warn('Dirección no encontrada');
+          alert('No se encontró la dirección especificada');
+          return;
+        }
+
+        const { lat, lon } = resultados[0];
+
+        const latNum = parseFloat(lat);
+        const lonNum = parseFloat(lon);
+
+        this.moverMapaYEmitir(latNum, lonNum);
+      })
+      .catch(err => {
+        console.error('Error al buscar dirección en Nominatim', err);
+        alert('Ocurrió un error al buscar la dirección');
+      });
+  }
+
+  /** Mueve mapa, marcador y emite coords al padre */
+  private moverMapaYEmitir(lat: number, lon: number): void {
+    if (!this.map) return;
+
+    const nuevoCentro: L.LatLngExpression = [lat, lon];
+
+    this.map.setView(nuevoCentro, 16);
+    this.colocarOMoverMarcador(lat, lon);
+
+    this.coordenadasSeleccionadas.emit({
+      latitud: lat,
+      longitud: lon,
+    });
+  }
+
 }
 
 

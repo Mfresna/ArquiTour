@@ -1,3 +1,22 @@
+<div class="buscador-mapa">
+  <div class="contenedor-busqueda">
+    <input
+      #inputDireccion
+      type="text"
+      class="input-mapa"
+      placeholder="Buscar dirección (ej: Calle 123, Mar del Plata, Argentina)"
+      (keyup.enter)="buscarDireccion(inputDireccion.value)">
+
+    <button
+      type="button"
+      class="buscar-btn"
+      (click)="buscarDireccion(inputDireccion.value)">
+      <span class="material-icons">search</span>
+
+    </button>
+  </div>
+</div>
+
 <div class="mapa-selector-wrapper">
   <div #mapContainer class="mapa-selector"></div>
 </div>
