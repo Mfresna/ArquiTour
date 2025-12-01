@@ -79,7 +79,7 @@
   
     <div id="panel-derecha">
       <span
-        id="notifiaciones"
+        id="notificaciones"
         class="material-icons deshabilitado"
         tabindex="0">notifications</span>  
 
@@ -104,13 +104,16 @@
           }
 
           <hr>
-          <a id="modo-noche" (click)="toggleModoNoche()">Modo Noche
-            <span id="noche-toggle" 
+          <a id="modo-noche" (click)="toggleModoNoche()">
+            Modo Noche
+            <span
+              id="noche-toggle"
               class="material-icons user-icon-trigger"
-              [attr.modoNoche]="modoNoche">
-                {{modoNoche ? 'toggle_on' : 'toggle_off' }}
+              [class.activo]="modoNoche">
+              {{ modoNoche ? 'toggle_on' : 'toggle_off' }}
             </span>
           </a>
+
 
         </div>
       }

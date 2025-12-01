@@ -67,7 +67,7 @@
   font-weight: 500;
   margin-left: 0.5rem;
   font-size: 0.9rem;
-  color: var(--colorTerciario);
+  color: var(--texto-principal);
 }
 
 .fila input[type="text"] {
@@ -77,7 +77,7 @@
   border: 1px solid #ccc;
   font-family: var(--fuenteBase, "Segoe UI", Roboto, sans-serif);
   font-size: 1rem;
-  background-color: var(--colorPrincipal);
+  background-color: var(--fondo-superficie);
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
   height: 42px;
   box-sizing: border-box;
@@ -120,7 +120,7 @@
 /* Buscar */
 .botones button[type="submit"] {
   background: var(--colorBoton, #0077b6);
-  color: #fff;
+  color: var(--texto-boton-buscar);
 }
 .botones button[type="submit"]:hover {
   transform: translateY(-2px);
@@ -129,9 +129,16 @@
 
 /* Limpiar */
 
+.botones button[type="button"] {
+  background: var(--boton-secundario-bg);
+  color: var(--boton-secundario-texto);
+  border: 1px solid transparent;
+}
+
 .botones button[type="button"]:hover {
-  background: var(--colorSecundario);
-  box-shadow: 0 8px 16px var(--sombra);
+  background: var(--boton-secundario-bg-hover);
+  color: var(--boton-secundario-texto);
+  transform: translateY(-2px);
 }
 
 /* Responsive botones */
@@ -154,7 +161,7 @@
 /* ======== TARJETAS FAVORITOS ======== */
 .card {
   display: block;
-  background: var(--colorFondoTarjeta, #fff);
+  background: var(--fondo-superficie, #fff);
   border-radius: 12px;
   overflow: hidden;
   box-shadow: 0 2px 8px var(--sombra);
@@ -184,14 +191,14 @@
   margin: 0 0 0.3rem 0;
   font-size: 1.1rem;
   font-weight: 600;
-  color: var(--colorTerciario);
+  color: var(--texto-principal);
 }
 
 /* Cantidad de obras */
 .contador {
   margin: 0;
   font-size: 0.9rem;
-  color: #555;
+  color: var(--texto-principal);
 }
 
 /* ========== BOTONES EDITAR / ELIMINAR ========== */
@@ -309,7 +316,7 @@
 /* ======== MENSAJE VACÍO ======== */
 .vacio {
   text-align: center;
-  color: var(--colorTerciario);
+  color: var(--texto-principal);
   padding: 4rem 2rem;
   font-size: 1.1rem;
 }

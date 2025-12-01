@@ -9,9 +9,9 @@
 .tarjeta-detalle {
   width: 100%;
   max-width: 1100px;
-  background: var(--colorFondoTarjeta, #fff);
+  background: var(--fondo-superficie, #fff);
   border-radius: 1rem;
-  box-shadow: 0 8px 24px rgba(0,0,0,.08);
+  box-shadow: 0 8px 24px var(--sombra);
   padding: 2rem;
   display: flex;
   flex-direction: column;
@@ -68,10 +68,10 @@
 
   text-transform: uppercase; 
   text-align: center;  
-  color: var(--colorPrincipal, #fff);
+  color: var(--texto-boton-buscar);
   
   cursor: pointer;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+  box-shadow: 0 4px 8px var(--sombra); 
 
   transition: transform 0.2s, box-shadow 0.3s, background-color 0.3s ease; 
 }
@@ -89,7 +89,7 @@
 }
 
 #btn-editar:disabled {
-  background-color: #a0c4d9;
+  background-color: var(--boton-primario-deshabilitado);
   cursor: not-allowed;
   transform: none;
 }
@@ -107,7 +107,7 @@
 }
 
 #btn-eliminar:disabled {
-  background-color: #ce7171;
+  background-color: var(--boton-eliminar-deshabilitado);
   cursor: not-allowed;
   transform: none;
 }
@@ -117,7 +117,7 @@
   position: relative;
   width: 100%;
   aspect-ratio: 1 / 1;          
-  background: var(--colorFondoTarjeta);
+  background: var(--fondo-superficie);
   border-radius: .8rem;
   box-shadow: 0 2px 8px var(--sombra);
   overflow: hidden;
@@ -132,12 +132,12 @@
   height: 100%;
   object-fit:contain;             
   border-radius: .8rem;
-  background: var(--colorFondoTarjeta);
+  background: var(--fondo-superficie);
 }
 
 
 .panel {
-  background: var(--colorFondoTarjeta, #fff);
+  background: var(--fondo-superficie, #fff);
   border-radius: .8rem;
   box-shadow: 0 2px 8px var(--sombra);
   padding: 1rem;
@@ -146,7 +146,7 @@
 .encabezado h3 {
   font-size: 1rem;
   text-transform: uppercase;
-  color: var(--colorTextoEtiquetas);
+  color: var(--texto-principal);
   font-weight: 600;
   letter-spacing: .04em;
   margin-bottom: 10px;
@@ -172,9 +172,9 @@
 
 
 .obra-item {
-  background: var(--colorItem);
-  border: 1px solid #b0b3b8;
-  color: var(--colorTerciario);
+  background: var(--fondo-suave);
+  border: 1px solid var(--borde-suave);
+  color: var(--texto-principal);
   border: 1px solid var(--colorSecundario);
   border-radius: 999px;
   padding: 0.7rem 1rem;
@@ -186,6 +186,7 @@
   transition: all .2s ease;
   margin-top: 10px;
   margin-right: 10px;
+  margin-left:2px;
   cursor: pointer;
   user-select: none;
   text-decoration: none;
@@ -194,7 +195,7 @@
 
 .obra-item:hover {
   background: var(--colorSecundario);
-  border-color: #cbd5e1;
+  border-color: var(--borde-fuerte);
   transform: translateY(-1px);
 }
 
@@ -217,12 +218,12 @@
 .arq-item li {
   padding: .35rem .75rem;
   border-radius: 999px;
-  background: var(--colorItem);
-  color: var(--colorTerciario);
+  background: var(--colorSecundario);
+  color: var(--texto-principal);
   font-size: .9rem;
 }
 .vacio {
-  color: var(--colorTerciario);
+  color: var(--texto-principal);
   margin-top: 10px;
 
 }

@@ -1,7 +1,7 @@
 
 #global {
-  background-color: var(--colorFondoTarjeta, #fff);
-  color: var(--colorTerciario, #222);
+  background-color: var(--fondo-superficie, #fff);
+  color: var(--texto-principal, #222);
 
   border-radius: 1rem;
   box-shadow: 0 4px 12px var(--sombra);
@@ -65,7 +65,7 @@
   width: 50%;
   height: 3px;
   border-radius: 3px;
-  background: linear-gradient(90deg, var(--colorBoton, #0077b6), #00b4d8);
+  background: linear-gradient(90deg, var(--colorBoton, #0077b6), var(--color-acento, #00b4d8));
   margin: 0.80rem auto 0;
   opacity: 0.9;
 }
@@ -104,7 +104,7 @@ fieldset {
  #arq-est {
   font-weight: 500;
   margin-left: 0.5rem;
-  color: var(--colorTerciario);
+  color: var(--texto-principal);
 }
 
 #panel-campos input {
@@ -115,11 +115,11 @@ fieldset {
   margin-top: 7px;
 
   border-radius: 1.2rem;          
-  border: 1px solid #ccc;
+  border: 1px solid var(--borde-suave);
 
   font-size: 1rem;
   
-  background-color: var(--colorPrincipal);
+  background-color: var(--fondo-pagina);
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
@@ -132,11 +132,11 @@ fieldset {
 /* Estado inválido */
 input.invalido {
   border: 2px solid var(--colorBotonEliminar) !important;
-  background: #ffecec !important;
+  background: var(--color-error-suave) !important;
 }
 
 small.comentario {
-  color:#b4b3b3;
+  color: var(--texto-suave);
   font-size: 0.9rem;
   text-align: left;
   margin-left: 1.2rem;
@@ -146,7 +146,7 @@ small.comentario {
 /* ===== Botón INGRESAR ===== */
 #btn-ingresar{
   background-color: var(--colorBoton, #0077b6);
-  color: var(--colorPrincipal, #fff);
+  color: var(--texto-boton-buscar);
   padding: 0.75rem;
   border: none;
   border-radius: 1.35rem;
@@ -164,7 +164,7 @@ small.comentario {
 }
 
 #btn-ingresar:disabled {
-  background-color: #a0c4d9;
+  background-color: var(--boton-primario-deshabilitado);
   cursor: not-allowed;
   transform: none;
 }
@@ -193,7 +193,7 @@ small.error {
   aspect-ratio: 1 / 1;
 
   background-color: var(--colorBoton);
-  color: var(--colorPrincipal, #fff);
+  color: var(--fondo-superficie);
 
   border: none;
   border-radius: 999px;
@@ -214,7 +214,7 @@ small.error {
 }
 
 #btn-agregar-arq:disabled {
-  background-color: #a0c4d9 !important;
+  background-color: var(--boton-primario-deshabilitado) !important;
   cursor: not-allowed !important;
   transform: none !important;
 }
@@ -257,13 +257,13 @@ small.error {
   align-items: center;
 
   padding: .35rem .9rem .35rem 2.4rem;
-  background: var(--colorItem);
+  background: var(--fondo-suave);
   border-radius: 999px;
 
-  border: 1px solid #d9e1ea;
+  border: 1px solid var(--borde-suave);
   box-shadow: 0 1px 2px var(--sombra);
 
-  color: var(--colorTerciario);
+  color: var(--texto-principal);
   font-size: .88rem;
   font-weight: 500;
 
@@ -305,7 +305,7 @@ small.error {
 .cont-cruz .material-icons {
   font-size: .95rem;
   font-weight: 600;
-  color: #64748b;
+  color: var(--texto-secundario);
 }
 
 /* HOVER — se pinta toda la punta izquierda */

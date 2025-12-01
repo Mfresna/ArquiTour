@@ -1,6 +1,6 @@
 header {
   width: 100%;
-  background-color: var(--colorTerciario);
+  background-color: var(--nav-bg);
   padding: 10px 35px 8px;
   min-height: 3.2rem;
   box-shadow: 0 2px 4px var(--sombra);
@@ -46,7 +46,7 @@ header {
 /*============ PANELES ============*/
     /*PANEL IZQUIERDO*/
   
-  #logo-container {
+#logo-container {
   display: flex;
   align-items: center;
   cursor: pointer;
@@ -83,7 +83,7 @@ header {
 }
 
 #panel-central li .boton {
-  color: var(--colorSecundario);
+  color: var(--nav-text);
 
   text-decoration: none;
 
@@ -96,7 +96,7 @@ header {
 }
 
 #panel-central li .boton:hover {
-  color: var(--colorLink, rgb(84, 127, 237));
+  color: var(--colorLink);
   transform: scale(1.05);
 }
 
@@ -107,14 +107,25 @@ header {
   height: 100%;
   user-select: none;
   cursor: pointer;
-
-  color: rgba(248, 247, 247);
   transition: color 0.3s ease, transform 0.4s ease;
 }
 
 #panel-derecha > span:hover {
   color: var(--colorLink);
-  transform: scale(1.05);
+}
+
+#notificaciones { 
+  color: var(--nav-icon) !important;
+  opacity: 0.5;
+}
+
+#notificaciones:hover {
+  color: var(--nav-icon) !important;
+  opacity: 0.8;
+}
+
+#usuario {
+  color: var(--nav-icon);
 }
 
 /*============ MENUES DESPLEGABLE ============*/
@@ -127,15 +138,16 @@ header {
   z-index: 1000;
   
   /*Diseño estetico*/
-  background-color: white;
-  border: 1px solid #ccc;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  background-color: var(--fondo-superficie);
+  border: 1px solid var(--borde-suave);
+  box-shadow: 0 4px 10px var(--sombra);
 
   padding: 10px;
 }
 
 .menu-desplegable a:hover {
-  background-color: #f0f0f0;
+  background-color: var(--colorSecundario);
+  border-radius: 20px;
 }
 
   /*MENU USUARIO*/
@@ -150,7 +162,7 @@ header {
   justify-content: space-between;
 
   text-decoration: none;
-  color: #333;
+  color: var(--texto-principal);
 
   margin: 2px 0px;
   padding: 8px 15px;
@@ -159,7 +171,7 @@ header {
 }
 
 a:hover #logout{
-  color: red;
+  color: var(--color-error);
 }
 
   /*Modo Noche*/
@@ -173,15 +185,12 @@ a:hover #logout{
 
 #noche-toggle{
   font-size: 38px;
+  color: #05537D;
   transition: color .5s ease;
 }
 
-#noche-toggle[modoNoche = "true"]{
-  color: #05537d;
-}
-
-#noche-toggle[modoNoche = "false"]{
-  color: #2693ce;
+#noche-toggle.activo {
+  color: #597686;
 }
 
   /*Linea divisoria*/
@@ -191,7 +200,7 @@ a:hover #logout{
   height: 1px;
   width: 80%;
   margin: 8px auto; /*Centra la linea*/
-  background-color: #ccc;
+  background-color: var(--borde-fuerte);
 }
 
         /*MENU OBRAS*/
@@ -216,7 +225,7 @@ a:hover #logout{
 
   text-decoration: none;
   text-align: center;
-  color: #333;
+  color: var(--texto-principal);
 
   margin: 2px 0px;
   padding: 8px 15px;
@@ -248,7 +257,7 @@ a:hover #logout{
 
   text-decoration: none;
   text-align: center;
-  color: #333;
+  color: var(--texto-principal);
 
   margin: 2px 0px;
   padding: 8px 15px;
@@ -256,8 +265,6 @@ a:hover #logout{
   cursor: pointer;
   user-select: none;
   width: 100%; 
-
-  border-radius: 5px;
 }
 
       /*MENU MAPA*/
@@ -282,7 +289,7 @@ a:hover #logout{
 
   text-decoration: none;
   text-align: center;
-  color: #333;
+  color: var(--texto-principal);
 
   margin: 2px 0px;
   padding: 8px 15px;
@@ -290,8 +297,6 @@ a:hover #logout{
   cursor: pointer;
   user-select: none;
   width: 100%; 
-
-  border-radius: 5px;
 }
 
 /*============ CLASES BORDES============*/
@@ -326,6 +331,6 @@ a:hover #logout{
 }
 
 .deshabilitado{
-  color:  #4c4949 !important;
+  color:  var(--texto-principal)  !important;
   cursor: default !important;
 }

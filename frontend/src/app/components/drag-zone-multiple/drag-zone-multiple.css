@@ -13,12 +13,11 @@ label {
 
 /* ================= DROPZONE ================== */
 #dropzone{
-  background: #f9fbff;
-  border: 2px dashed #dce6f7;
+  background: var(--fondo-suave, var(--fondo-superficie));
+  border: 2px dashed var(--borde-suave);
   border-radius: 14px;
   padding: 0;
   min-height: 220px;
-  /* max-height: 340px; */
 
   display: flex;
   flex-direction: column;
@@ -26,16 +25,16 @@ label {
   overflow: hidden;
 
   transition: border-color .2s ease, background-color .2s ease, box-shadow .2s ease;
-  box-shadow: 0 6px 16px rgba(0,0,0,.05);
-  color: var(--colorTerciario, #222);
+  box-shadow: 0 6px 16px var(--sombra, rgba(0,0,0,.05));
+  color: var(--texto-principal, var(--texto-principal, #222222));
 }
 
 /* Hover */
 #dropzone:hover,
 #dropzone:focus {
-  background: #f3f8ff;
+  background: var(--fondo-superficie, #f3f8ff);
   border-color: var(--colorBoton, #0077b6);
-  box-shadow: 0 10px 22px rgba(0,0,0,.06);
+  box-shadow: 0 10px 22px var(--sombra-fuerte, rgba(0,0,0,.06));
 }
 
 /* Contenedor interno */
@@ -52,7 +51,7 @@ label {
 #dropzone-msg {
   text-align: center;
   padding: 1rem;
-  color: #444;
+  color: var(--texto-parrafo, var(--texto-secundario, #444444));
   animation: aparecer-msg .3s ease-out;
 }
 
@@ -71,10 +70,10 @@ label {
 /* Imagen individual */
 .item-previa {
   position: relative;
-  border: 1px solid #ddd;
+  border: 1px solid var(--borde-suave);
   border-radius: 10px;
   overflow: hidden;
-  background: white;
+  background: var(--fondo-superficie, #ffffff);
   aspect-ratio: 1 / 1;
 }
 
@@ -98,7 +97,8 @@ label {
   position: absolute;
   top: 6px;
   right: 6px;
-  background: rgba(0,0,0,0.35);
+  background: var(--btn-quitar-bg);
+  color: var(--fondo-superficie)!important;
   border: none;
   width: 30px;
   height: 30px;
@@ -112,20 +112,20 @@ label {
 
 .btn-quitar .material-icons {
   font-size: 18px;
-  color: white;
   pointer-events: none;
+
 }
 
 /* Hover delete */
 .btn-quitar:hover {
-  background: rgba(0,0,0,0.6);
+  background: var(--btn-quitar-bg-hover);
 }
 
 /* ================== BOTONERA INFERIOR ================== */
 #botonera-img{
   flex-shrink: 0;
-  background: #f3f6fb;
-  border-top: 1px solid #dce6f7;
+  background: var(--fondo-superficie, #f3f6fb);
+  border-top: 1px solid var(--borde-suave);
   display: flex;
   justify-content: center;
 }
@@ -134,8 +134,8 @@ label {
   padding: .65rem 1.4rem;
   width: 100%;
   border: 0;
-  background: #f9fafb;
-  color: #1e293b;
+  background: var(--fondo-superficie, #f9fafb);
+  color: var(--texto-principal, #1e293b);
   font-weight: 700;
   text-transform: uppercase;
   cursor: pointer;
@@ -143,7 +143,7 @@ label {
 }
 
 #botonera-img .btn-outline:hover{
-  background: #eef2f6;
+  background: var(--colorSecundario, #eef2f6);
   transform: translateY(-1px);
 }
 

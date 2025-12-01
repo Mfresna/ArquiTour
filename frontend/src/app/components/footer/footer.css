@@ -1,7 +1,7 @@
 footer {
     width: 100%;
     text-align: center;
-    background-color: var(--colorTerciario);
-    color: var(--colorSecundario);
+    background-color: var(--nav-bg);
+    color: var(--nav-text);
     padding: 15px 0;
 }

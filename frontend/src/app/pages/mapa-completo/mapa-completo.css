@@ -3,7 +3,7 @@
   height: 100%;
   border-radius: 1rem;
   overflow: hidden;
-  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.15);
+  box-shadow: 0 4px 12px var(--sombra);
 }
 /*IMPORTANTISIMO PORQUE SINO NO CARGA EL MAPA*/
 
@@ -49,8 +49,8 @@
   position: absolute;       
   top: 25px;                
   right: 25px;              
-  background: rgba(0, 0, 0, 0.582);
-  color: var(--colorSecundario);
+  background: var(--fondo-suave);
+  color: var(--texto-principal);
   padding: 10px 16px;
   border-radius: 35px;
   font-size: 1rem;
@@ -63,6 +63,6 @@
 }
 
 #burbuja:hover {
-  background: var(--colorTerciario);
+  background: var(--colorSecundario);
   box-shadow: 0 8px 16px var(--sombra);
 }

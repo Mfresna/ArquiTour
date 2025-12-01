@@ -13,7 +13,7 @@
   justify-content: space-between;
 }
 
-.titulo{
+.titulo {
   text-transform: uppercase;
   font-size: 1.8rem;
   font-weight: 700;
@@ -21,35 +21,36 @@
   flex-shrink: 0;
   text-align: center;
   letter-spacing: 0.5px;
-  color: var(--colorBoton, #0077b6);     
+
+  color: var(--colorBoton); /* variable global */
 }
 
 
-
+/* ===== GRID DE TARJETAS ===== */
 .obras-lista {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 1.5rem;
   list-style: none;
   margin: 0;
-  padding: 10px; 
+  padding: 10px;
 }
+
 
 /* ===== TARJETA ===== */
 .obras-lista .card {
-  background: var(--colorPrincipal);
+  background: var(--fondo-superficie);        /* Fondo tarjeta modo claro/oscuro */
   border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 2px 8px var(--sombra);
+  box-shadow: 0 2px 8px var(--sombra);         /* Sombra según tema */
   transition: transform 0.2s, box-shadow 0.2s;
   cursor: pointer;
   text-decoration: none;
   color: inherit;
   display: block;
   position: relative;
-  caret-color: transparent;  
-  user-select: none;      
-
+  caret-color: transparent;
+  user-select: none;
 }
 
 .obras-lista .card:hover {
@@ -57,14 +58,24 @@
   box-shadow: 0 4px 16px var(--sombra);
 }
 
+
+/* ===== IMAGEN ===== */
 .obras-lista .card img {
   width: 100%;
   height: 200px;
   object-fit: cover;
-  background: linear-gradient(135deg, #dfe0e6 0%, #e1e4e7 100%);
-  border-bottom: 1px solid rgb(204, 198, 198);
+
+  /* degradado sin color fijo */
+  background: linear-gradient(135deg,
+    var(--colorSecundario) 0%,
+    var(--fondo-superficie) 100%
+  );
+
+  border-bottom: 1px solid var(--borde-suave);
 }
 
+
+/* ===== CUERPO DE TARJETA ===== */
 .obras-lista .card-body {
   padding: 1rem;
 }
@@ -73,27 +84,39 @@
   margin: 0;
   font-size: 1.1rem;
   font-weight: 600;
-  color: var(--colorTerciario);
+  color: var(--texto-principal); /* Texto que respeta modo claro/oscuro */
   text-transform: capitalize;
 }
 
+
+/* ===== BOTÓN QUITAR ===== */
 .btn-quitar {
   position: absolute;
-  top: 8px;      
-  right: 8px;   
+  top: 8px;
+  right: 8px;
   width: 28px;
   height: 28px;
-  z-index: 10;   
+  z-index: 10;
+
   border: none;
   border-radius: 999px;
-  background: rgba(0, 0, 0, 0.6);
-  color:var(--colorSecundario);
+
+  background: var(--btn-quitar-bg);                 /* variable global */
+  color: var(--btn-quitar-icono);                   /* variable global */
   padding: 4px;
+
   cursor: pointer;
   opacity: 0;
-  transition: opacity 0.2s ease, visibility 0.2s ease, transform 0.15s ease;
+
+  transition: opacity 0.2s ease,
+              visibility 0.2s ease,
+              transform 0.15s ease,
+              background-color 0.2s;
 }
 
+.btn-quitar:hover {
+  background: var(--btn-quitar-bg-hover);           /* variable global */
+}
 
 .btn-quitar .material-icons {
   font-size: 18px;
@@ -109,8 +132,7 @@
 /* ===== MENSAJE VACÍO ===== */
 .vacio {
   text-align: center;
-  color: var(--colorTerciario);
+  color: var(--texto-principal);   /* variable global */
   padding: 4rem 2rem;
   font-size: 1.1rem;
 }
-

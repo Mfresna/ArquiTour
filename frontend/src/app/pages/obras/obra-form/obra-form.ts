@@ -196,7 +196,7 @@ export class ObraForm implements TieneCambiosPendientes{
           }
         }
       },
-      error: () => alert('No se pudieron cargar los estudios'),//VVERRRRRR
+      error: () => alert('No se pudieron cargar los estudios'),
     });
   }
 

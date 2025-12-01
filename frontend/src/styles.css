@@ -1,38 +1,164 @@
 @import "leaflet/dist/leaflet.css";
 
+
+/* ================== BASE ================== */
 :root {
-  --colorPrincipal: #ffffff;
+  --fuenteBase: "Segoe UI", Roboto, sans-serif;
+  --nav-bg: #222222;       
+  --nav-text: #f0f0f0;    
+  --nav-icon: #f8f7f7;
+}
+
+/*                 ================== MODO CLARO ================== */
+
+:root[data-tema="claro"],
+:root:not([data-tema]) {
+
+  color-scheme: light;
+
+  /* ================== FONDOS ================== */
+  --fondo-superficie: #ffffff;
   --colorSecundario: #f0f0f0;
-  --colorTerciario: #222222;
   --colorFondoTarjeta: #fafafa;
   --colorItem: #f0f4ff;
-  --sombra: rgba(0, 0, 0, 0.15);
+  --fondo-suave: #f8f8f8;
+
+  /* ================== TEXTO ================== */
+  --texto-principal: #222222;
+  --texto-parrafo: #374151;
+
+  /* ================== COLORES ACCIÓN ================== */
   --colorBoton: #0077b6;
   --colorBotonHover: #005b8d;
+  --boton-primario-deshabilitado: #a0c4d9;
+
+  /* ===== Botón eliminar ===== */
   --colorBotonEliminar: #d32424;
   --colorBotonEliminarHover: #a51b1b;
-  --fuenteBase: "Segoe UI", Roboto, sans-serif;
-  --radioMenu: 15px;
+  --color-error: #ff6b6b;
+
+  /* ===== Botón quitar imágenes ===== */
+  --btn-quitar-bg: rgba(0, 0, 0, 0.35);
+  --btn-quitar-bg-hover: rgba(0, 0, 0, 0.55);
+  --btn-quitar-icono: #ffffff;
+
+  /* ===== Botón Buscar ===== */
+  --texto-boton-buscar: #ffffff;         
+  
+ /* ===== Botón limpiar ===== */
+  --boton-secundario-bg: #edeff3;        
+  --boton-secundario-bg-hover: #e1e4ea;  
+  --boton-secundario-texto: #111111;
+
+  /* ================== LINKS ================== */
   --colorLink: #0077b6;
-  --colorTextoEtiquetas: #64748b;
+
+  /* ================== BORDES ================== */
+  --borde-suave: #d0d0d0;
+  --borde-fuerte: #b5b5b5;
+
+  /* ================== SOMBRAS ================== */
+  --sombra: rgba(0, 0, 0, 0.15);
+
+  /* ================== SCROLLBAR ================== */
+  --color-scrollbar: #cbd5e1;
+
+  /* ================== OTROS ================== */
+  --radioMenu: 15px;
+  --fondo-boton-flotante: rgba(184, 177, 177, 0.45);
+  --fondo-boton-flotante-hover: #5f6366;
+  --color-contorno-favorito: #928787;
+  --color-exito: #4ade80;
 }
 
+
+/*                    ================== MODO OSCURO ================== */
+
+:root[data-tema="oscuro"] {
+  color-scheme: dark;
+
+  /* ================== FONDOS ================== */
+  --fondo-pagina: #23272d;
+  --fondo-superficie: #2f3033;
+  --fondo-suave: #1a1d22;
+  --fondo-suave-alt: #20242b; 
+  --colorFondoTarjeta: #14171c;
+  --colorSecundario: #0d0f12;
+  --colorItem: #2f3033;
+
+  /* ================== TEXTO ================== */
+  --texto-principal: #f1f5f9;
+  --texto-secundario: #c7cdd4;
+  --texto-suave: #8a9099;
+  --texto-invertido: #0d0f12;
+
+  /* ================== BORDES ================== */
+  --borde-suave: #2a2f36;
+  --borde-fuerte: #3a414a;
+
+  /* ================== ACENTOS Y BOTONES ================== */
+  --color-primario: #3995eb;
+  --color-primario-suave: rgba(74,168,255,0.18);
+  --color-primario-fuerte: #1f8cff;
+  --color-acento: #8ecaff;
+
+ 
+  --colorBoton: #3995eb;
+  --colorBotonHover: #1f8cff;
+  --colorBotonEliminar: #ff6b6b;
+  --colorBotonEliminarHover: #ff4a4a;
+  --colorLink: #8ecaff;
+
+  /* ================== ESTADOS ================== */
+  --color-error: #ff6b6b;
+  --color-error-suave: rgba(255,107,107,0.16);
+  --color-exito: #4ade80;
+  --color-exito-suave: rgba(74, 222, 128, 0.16);
+
+/* ================== SOMBRAS ================== */
+--sombra: rgba(0, 0, 0, 0.55);     
+--sombra-fuerte: rgba(0, 0, 0, 0.75); 
+
+
+  /* ================== SCROLLBAR ================== */
+  --color-scrollbar: #3b424c;
+
+  /* ================== BOTONES FLOTANTES ================== */
+  --fondo-boton-flotante: rgba(255,255,255,0.08);
+  --fondo-boton-flotante-hover: rgba(255,255,255,0.16);
+  --boton-primario-deshabilitado: #3b4650;
+
+    /* ================== BOTON LIMPIAR ================== */
+  --boton-secundario-bg: #3e4448;      
+  --boton-secundario-bg-hover: #4a5156;  
+  --boton-secundario-texto: #f5f5f5;
+
+  --texto-boton-buscar: #f1f5f9; 
+
+  /* ================== BOTÓN QUITAR IMÁGENES ================== */
+  --btn-quitar-bg: rgba(255, 255, 255, 0.32);
+  --btn-quitar-bg-hover: rgba(255, 255, 255, 0.54);
+  --btn-quitar-icono: #000000;
+
+  /* ================== ICONO FAVORITO ================== */
+  --color-contorno-favorito: #a6b1bb;
+
+  /* ================== FUENTE ================== */
+  --fuenteBase: "Segoe UI", Roboto, sans-serif;
+}
+
+
+/* ================== RESET ================== */
 * {
-    font-family: var(--fuenteBase);
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  font-family: var(--fuenteBase);
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
-
 
 html, body, app-root {
-
   display: grid;
   grid-template-rows: auto 1fr auto;
   min-height: 100vh;
-} 
 
-
-
-
-
+}

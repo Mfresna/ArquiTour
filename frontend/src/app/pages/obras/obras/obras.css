@@ -39,7 +39,7 @@
   font-size: 1.8rem;
   font-weight: 700;
   margin-top: 10px;
-  color: var(--colorTerciario);
+  color: var(--texto-principal);
   flex-shrink: 0;
   text-align: center;
   letter-spacing: 0.5px;
@@ -76,7 +76,7 @@
   font-weight: 500;
   margin-left: 0.5rem;
   font-size: 0.9rem;
-  color: var(--colorTerciario);
+  color: var(--texto-principal);
 }
 
 #panel-filtros .form-filtros fieldset.campo > :first-child {
@@ -92,10 +92,10 @@
   width: 100%;
   padding: 0.6rem 0.8rem;
   border-radius: 1.2rem;          
-  border: 1px solid #ccc;
+  border: 1px solid var(--borde-suave);
   font-family: var(--fuenteBase, "Segoe UI", Roboto, sans-serif);
   font-size: 1rem;
-  background-color: var(--colorPrincipal);
+  background-color: var(--fondo-superficie);
   height: 42px;
   box-sizing: border-box;
 }
@@ -140,7 +140,7 @@
 }
 
 .obra-card {
-  background: var(--colorPrincipal);
+  background: var(--fondo-superficie);
   border-radius: 12px;
   overflow: hidden;
   box-shadow: 0 2px 8px var(--sombra);
@@ -158,7 +158,7 @@
   height: 200px;
   object-fit: cover;
   background: linear-gradient(135deg, #dfe0e6 0%, #e1e4e7 100%);
-  border-bottom: 1px solid rgb(204, 198, 198);
+  border-bottom: 1px solid var(--borde-suave);
 }
 
 .obra-card .info {
@@ -169,12 +169,12 @@
   margin: 0 0 0.5rem 0;
   font-size: 1.1rem;
   font-weight: 600;
-  color: var(--colorTerciario);
+  color: var(--texto-principal);
   text-transform: capitalize;
 }
 
 .obra-estudio {
-  color: #666;
+  color: var(--texto-secundario);
   font-size: 0.85rem;
   text-transform: capitalize;
 }
@@ -182,7 +182,7 @@
 /* Mensaje lista vacía */
 .vacio {
   text-align: center;
-  color: var(--colorTerciario);
+  color: var(--texto-principal);
   padding: 4rem 2rem;
   font-size: 1.1rem;
 }
@@ -206,12 +206,19 @@
 
 .acciones button[type="submit"] {
   background: var(--colorBoton, #0077b6);
-  color: var(--colorSecundario);
+  color: var(--texto-boton-buscar);
 }
 
 .acciones button:hover {
   transform: translateY(-2px);
   box-shadow: 0 8px 10px var(--sombra);
+}
+.acciones button[type="button"] {
+  background: var(--boton-secundario-bg);
+}
+
+.error-estudios {
+  color: var(--color-error);
 }
 
 /* Responsive acciones */
