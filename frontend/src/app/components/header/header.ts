@@ -2,6 +2,7 @@ import { Component, ElementRef, HostListener, OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { AuthService } from '../../auth/services/authService/auth-service';
 import { TokenService } from '../../auth/services/tokenService/token-service';
+import { TemaService } from '../../services/temaService/tema-service';
 
 @Component({
   selector: 'app-header',
@@ -9,7 +10,7 @@ import { TokenService } from '../../auth/services/tokenService/token-service';
   templateUrl: './header.html',
   styleUrl: './header.css',
 })
-export class Header{
+export class Header implements OnInit{
 
   usuarioMenu: boolean = false;
   modoNoche: boolean = false;
@@ -23,8 +24,14 @@ export class Header{
   constructor(
     private authService: AuthService,
     private tokenService: TokenService,
-    private elementRef: ElementRef
+    private elementRef: ElementRef,
+    private temaService: TemaService 
   ){}
+
+  ngOnInit(): void {
+    const temaActual = document.documentElement.getAttribute('data-tema');
+    this.modoNoche = temaActual === 'oscuro';
+  }
 
   cerrarSesion(){
     this.cerrarTodosMenus();
@@ -53,7 +60,8 @@ export class Header{
   }
 
   toggleModoNoche(){
-    this.modoNoche = !this.modoNoche
+    this.modoNoche = !this.modoNoche;   
+    this.temaService.toggleTema();
   }
 
   toggleObrasMenu(){

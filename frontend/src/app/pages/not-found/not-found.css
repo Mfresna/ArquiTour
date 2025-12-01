@@ -13,7 +13,7 @@
   display: flex;
   gap: 2rem;
 
-  background: var(--colorPrincipal, #ffffff);
+  background: var(--fondo-superficie, #ffffff);
   border-radius: 1.5rem;
   box-shadow: 0 12px 30px var(--sombra);
   padding: 2rem 2.5rem;
@@ -161,7 +161,7 @@
   position: absolute;
   inset: 8px;
   border-radius: inherit;
-  background: var(--colorPrincipal, #ffffff);
+  background: var(--fondo-superficie, #ffffff);
   opacity: 0.15;
 }
 
@@ -219,12 +219,12 @@
   margin: 0;
   font-size: 1.6rem;
   font-weight: 700;
-  color: var(--colorTerciario, #1f2933);
+  color: var(--texto-principal, #1f2933);
 }
 
 .nf-text p {
   margin: 0.3rem 0 0.8rem;
-  color: var(--colorTerciario, #4b5563);
+  color: var(--texto-principal, #4b5563);
   line-height: 1.5;
 }
 
@@ -251,7 +251,7 @@
   border-radius: 999px;
   border: none;
   background: var(--colorBoton, #0077b6);
-  color: var(--colorPrincipal, #ffffff);
+  color: var(--fondo-superficie, #ffffff);
   box-shadow: 0 8px 18px var(--sombra);
   cursor: pointer;
 

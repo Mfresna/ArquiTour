@@ -2,16 +2,16 @@
   display: flex;
   justify-content: center;
   padding: 2rem;
-  background: #f8f8f8;
+  background: var(--fondo-suave, #f8f8f8);
 }
 
 #contenedor-form {
-  background: var;
+  background: var(--fondo-superficie, #fff);
   width: 100%;
   max-width: 900px;
   padding: 2rem 3rem;
   border-radius: 1rem;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+  box-shadow: 0 4px 15px var(--sombra);
 }
 
 #titulo {
@@ -32,7 +32,11 @@
   width: 50%;
   height: 3px;
   border-radius: 3px;
-  background: linear-gradient(90deg, var(--colorBoton, #0077b6), #00b4d8);
+  background: linear-gradient(
+    90deg,
+    var(--colorBoton, #0077b6),
+    var(--color-acento, #00b4d8)
+  );
   margin: 0.8rem auto 0;
   opacity: 0.9;
 }
@@ -63,17 +67,17 @@
   width: 100%;
   padding: 0.6rem 0.8rem;
   border-radius: 1.2rem;
-  border: 1px solid #ccc;
+  border: 1px solid var(--borde-suave);
   font-family: var(--fuenteBase);
   font-size: 1rem;
   transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
-  background-color: #fff;
+  background-color: var(--fondo-pagina);
 }
 
 .input:focus {
   outline: none;
   border-color: var(--colorBoton, #0077b6);
-  box-shadow: 0 0 6px rgba(0, 119, 182, 0.35);
+  box-shadow: 0 0 6px var(--sombra);
 }
 
 textarea.input {
@@ -82,7 +86,7 @@ textarea.input {
 }
 
 .error {
-  color: #ff3333;
+  color: var(--color-error);
   font-size: 0.9rem;
   text-align: left;
   margin-left: 0.6rem;
@@ -101,7 +105,7 @@ app-drag-zone-multiple {
 
 .btn-primario {
   background-color: var(--colorBoton, #0077b6);
-  color: var(--colorPrincipal, #fff);
+  color: var(--texto-boton-buscar);
   padding: 0.75rem 1.6rem;
   border: none;
   border-radius: 1.35rem;
@@ -113,26 +117,21 @@ app-drag-zone-multiple {
   letter-spacing: 0.5px;
 }
 
-.btn-primario:hover {
-  background-color: #0096c7;
+.btn-primario:not(:disabled):hover {
+  background-color: var(--colorBotonHover, #1d4ed8);
   transform: scale(1.03);
 }
 
-
 .btn-primario:disabled {
-  background-color: #a0c4d9;
+  background-color: var(--boton-primario-deshabilitado);
   cursor: not-allowed;
   transform: none;
 }
 
-.btn-primario:hover:not(:disabled) {
-  background: #1d4ed8;
-}
-
 /* Estado inválido */
 .invalido{
-  border: 2px solid #ff5c5c !important;
-  background: #ffecec !important;
+  border: 2px solid var(--color-error) !important;
+  background: var(--color-error-suave) !important;
 }
 
 /* ===== Responsive ===== */

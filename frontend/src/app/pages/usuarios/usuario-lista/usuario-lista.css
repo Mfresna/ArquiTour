@@ -106,7 +106,7 @@
   margin-left: 0.5rem;
   
   font-size: 0.9rem;
-  color: var(--colorTerciario);
+  color: var(--texto-principal);
 }
 
 #panel-filtros select,
@@ -121,7 +121,7 @@
 
   font-size: 1rem;
 
-  background-color: var(--colorPrincipal);
+  background-color: var(--fondo-superficie);
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
@@ -176,7 +176,7 @@ select.invalido {
   /*Boton Buscar*/
 #buscar {
   background: var(--colorBoton, #0077b6);
-  color: var(--colorSecundario);
+  color: var(--texto-boton-buscar);
 }
 
 #buscar:hover {
@@ -185,8 +185,17 @@ select.invalido {
 }
 
 
+#limpiar {
+  background: var(--boton-secundario-bg);
+  color: var(--boton-secundario-texto);
+  border: 1px solid transparent;
+}
+
+
 #limpiar:hover {
-  background: var(--colorSecundario);
+  background: var(--boton-secundario-bg-hover);
+  color: var(--boton-secundario-texto);
+  transform: translateY(-2px);
   box-shadow: 0 8px 16px var(--sombra);
 }
 
@@ -216,7 +225,7 @@ select.invalido {
 
   border-radius: 12px;
 
-  background: var(--colorFondoTarjeta);
+  background: var(--fondo-superficie);
   box-shadow: 0 2px 8px var(--sombra);
 
   transition: transform 0.2s, box-shadow 0.2s;
@@ -254,7 +263,7 @@ select.invalido {
   font-size: 1.3rem;
   font-weight: 600;
   text-transform: capitalize;
-  color: var(--colorTerciario);
+  color: var(--texto-principal);
 }
 
 .datos-usuario{
@@ -315,7 +324,7 @@ select.invalido {
   left: 50%;
   transform: translateX(-50%) scale(0.95);
 
-  background: var(--colorTerciario);
+  background: var(--texto-principal);
   color: var(--colorSecundario);
 
   padding: 5px 8px;
@@ -340,7 +349,7 @@ select.invalido {
   transform: translateX(-50%);
   border-width: 5px;
   border-style: solid;
-  border-color: transparent transparent var(--colorTerciario) transparent;
+  border-color: transparent transparent var(--texto-principal) transparent;
 }
 
 .btn-etiqueta-detalle:hover .etiqueta-detalle{

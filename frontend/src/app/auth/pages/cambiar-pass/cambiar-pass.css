@@ -1,6 +1,6 @@
 #contenedor {
-    background-color: var(--colorFondoTarjeta, #fff);
-    color: var(--colorTerciario, #222);
+    background-color: var(--fondo-superficie, #fff);
+    color: var(--texto-principal, #222);
 
     border-radius: 1rem;
     box-shadow: 0 4px 12px var(--sombra);
@@ -41,7 +41,7 @@
   margin-bottom: 2.5rem;
   font-size: 1.8rem;
   font-weight: 700;
-  color: var(--colorBoton, #0077b6);
+  color: (var(--colorBoton), #0077b6);
   position: relative;
   letter-spacing: 0.5px;
 }
@@ -136,7 +136,7 @@ input.invalido {
 /* ===== Botón GUARDAR NUEVA CONTRASEÑA ===== */
 #enviar {
   background-color: var(--colorBoton, #0077b6);
-  color: var(--colorPrincipal, #fff);
+  color: var(--fondo-superficie, #fff);
   padding: 0.75rem;
   border: none;
   border-radius: 1.35rem;

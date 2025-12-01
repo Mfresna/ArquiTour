@@ -99,12 +99,12 @@
   gap: 0.2rem;
 }
 
- fieldset.campo > label {
+fieldset.campo > label {
   font-weight: 500;
   margin-left: 0.5rem;
   
   font-size: 0.9rem;
-  color: var(--colorTerciario);
+  color: var(--texto-principal);
 }
 
 #panel-filtros input {
@@ -114,11 +114,11 @@
   padding: 0.6rem 0.8rem;
 
   border-radius: 1.2rem;          
-  border: 1px solid #ccc;
+  border: 1px solid var(--borde-suave);
 
   font-size: 1rem;
 
-  background-color: var(--colorPrincipal);
+  background-color: var(--fondo-superficie);
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
@@ -157,7 +157,7 @@ input.invalido {
   /*Boton Buscar*/
 #buscar {
   background: var(--colorBoton, #0077b6);
-  color: var(--colorSecundario);
+  color: var(--texto-boton-buscar);
 }
 
 #buscar:hover {
@@ -167,9 +167,17 @@ input.invalido {
 
   /*Boton Limpiar*/
 
+#limpiar {
+  background: var(--boton-secundario-bg);
+  color: var(--boton-secundario-texto);
+  border: 1px solid transparent;
+}
+
 
 #limpiar:hover {
-  background: var(--colorSecundario);
+  background: var(--boton-secundario-bg-hover);
+  color: var(--boton-secundario-texto);
+  transform: translateY(-2px);
   box-shadow: 0 8px 16px var(--sombra);
 }
 
@@ -177,16 +185,28 @@ input.invalido {
 #btn-mis-estudios {
   margin-bottom: 1rem;
   min-height: 52px;
+  background: var(--boton-secundario-bg);  
+  color: var(--texto-principal);       
+  border: none;
+  border-radius: 999px;
+  font-weight: 700;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: transform .15s, box-shadow .2s, background-color .2s;
+}
+
+#btn-mis-estudios {
+  background: var(--boton-secundario-bg);
+  color: var(--boton-secundario-texto);
+  border: 1px solid transparent;
 }
 
 #btn-mis-estudios:hover {
   background: var(--colorBoton, #0883c6);
-  color: #fff;
+  color: var(--texto-boton-buscar);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 16px var(--sombra);
 
-  transform: translateY(-1px);
-  box-shadow: 0 8px 16px rgba(0,119,182,.25);
-
-  transition: color .25s ease, border-color .25s ease;
 }
 
 
@@ -203,7 +223,7 @@ input.invalido {
 /* ======== TARJETAS ======== */
 .card {
   display: block;
-  background: var(--colorPrincipal);
+  background: var(--fondo-superficie);
   border-radius: 12px;
   overflow: hidden;
   box-shadow: 0 2px 8px var(--sombra);
@@ -225,7 +245,7 @@ input.invalido {
   object-fit: cover;
   background: linear-gradient(135deg, #dfe0e6 0%, #e1e4e7 100%);
   display: block;
-  border-bottom: 1px solid rgb(204, 198, 198);
+  border-bottom: 1px solid var(--borde-suave);
 }
 
 .card-body {
@@ -236,13 +256,13 @@ input.invalido {
   margin: 0;
   font-size: 1.1rem;
   font-weight: 600;
-  color: var(--colorTerciario);
+  color: var(--texto-principal);
 }
 
 /* ======== MENSAJE VACÍO ======== */
 .vacio {
   text-align: center;
-  color: #999;
+  color: var(--texto-secundario);
   padding: 4rem 2rem;
   font-size: 1.1rem;
 }
@@ -256,7 +276,7 @@ input.invalido {
   #panel-filtros {
     width: 100%;
     box-shadow: none;
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid var(--borde-suave);
     border-radius: 0;
   }
 

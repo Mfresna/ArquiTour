@@ -14,11 +14,12 @@
 }
 
 .modal-content {
-    background: white;
+    background: var(--fondo-superficie);
+    color: var(--texto-principal);
     border-radius: 12px;
     width: 90%;
     max-width: 450px;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 10px 40px var(--sombra-fuerte);
     animation: slideIn 0.3s ease-out;
     overflow: hidden;
 }
@@ -55,8 +56,8 @@
 
 /* Colores según el tipo */
 .modal-ok .icon-wrapper {
-    background-color: #e8f5e9;
-    color: #4CAF50;
+    background-color: var(--color-exito-suave);
+    color: var(--color-exito)
 }
 
 .modal-error .icon-wrapper {

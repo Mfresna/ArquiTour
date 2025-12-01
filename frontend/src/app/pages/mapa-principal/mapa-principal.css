@@ -3,7 +3,7 @@
   height: 100%;
   border-radius: 1rem;
   overflow: hidden;
-  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.15);
+  box-shadow: 0 4px 12px var(--sombra);
 }
 /*IMPORTANTISIMO PORQUE SINO NO CARGA EL MAPA*/
 
@@ -48,6 +48,8 @@
 
   border-radius: 12px;
   flex-shrink: 0;
+  background: var(--fondo-superficie);
+  box-shadow: 0 2px 8px var(--sombra);
 }
 
 #panel-filtros .titulo {
@@ -90,23 +92,24 @@
   margin-left: 0.5rem;
   
   font-size: 0.9rem;
-  color: var(--colorTerciario);
+  color: var(--texto-principal);
 }
 
 #panel-filtros input {
   width: 100%;
   height: 42px;
-
   padding: 0.6rem 0.8rem;
 
-  border-radius: 1.2rem;          
-  border: 1px solid #ccc;
+  border-radius: 1.2rem;
+  border: 1px solid var(--borde-suave);
 
   font-size: 1rem;
+  color: var(--texto-principal);
+  background-color: var(--fondo-pagina);
 
-  background-color: var(--colorPrincipal);
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
+
 
 #panel-filtros .form-filtros input:focus {
   outline: none;
@@ -127,7 +130,7 @@
   font-weight: 500;
   margin-left: 0.5rem;
   font-size: 0.9rem;
-  color: var(--colorTerciario);
+  color: var(--texto-principal);
 }
 
 #panel-filtros .form-filtros fieldset.campo > :first-child {
@@ -141,14 +144,19 @@
 #panel-filtros .form-filtros select,
 #panel-filtros .form-filtros input[type="text"] {
   width: 100%;
+  height: 42px;
   padding: 0.6rem 0.8rem;
-  border-radius: 1.2rem;          
-  border: 1px solid #ccc;
+
+  border-radius: 1.2rem;
+  border: 1px solid var(--borde-suave);
+
   font-family: var(--fuenteBase, "Segoe UI", Roboto, sans-serif);
   font-size: 1rem;
-  background-color: var(--colorPrincipal);
+  color: var(--texto-principal);
+
+  background-color: var(--fondo-pagina);  /* ← igual que en el otro form */
+
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
-  height: 42px;
   box-sizing: border-box;
 }
 
@@ -179,7 +187,7 @@
 .form-filtros input.invalido,
 .form-filtros select.invalido {
   border: 2px solid var(--colorBotonEliminar);
-  background: #ffecec;
+   background: var(--color-error-suave, #ffecec);
 }
 
 /*================================= LISTA OBRAS */
@@ -199,11 +207,11 @@
   width: 8px;
 }
 #panel-scroll::-webkit-scrollbar-thumb {
-  background: rgba(0, 0, 0, 0.2);
+  background: var(--color-scrollbar);
   border-radius: 8px;
 }
 #panel-scroll::-webkit-scrollbar-thumb:hover {
-  background: rgba(0, 0, 0, 0.3);
+  background: var(--borde-fuerte);
 }
 
 
@@ -231,6 +239,6 @@
 }
 
 .listado-obras li:hover {
-  background-color: var(--colorItem);
+  background-color: var(--fondo-suave);
   transform: translateX(2px);
 }

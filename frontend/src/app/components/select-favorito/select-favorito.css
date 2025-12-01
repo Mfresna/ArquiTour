@@ -8,7 +8,7 @@
   min-width: 260px;
   max-width: 320px;
 
-  background: var(--colorPrincipal, #fff);
+  background: var(--fondo-superficie, #fff);
   border-radius: 12px;
   box-shadow: 0 10px 26px rgba(15, 23, 42, 0.2);
   padding: 0.9rem 1rem;
@@ -26,7 +26,7 @@
   margin: 0;
   font-size: 1rem;
   font-weight: 600;
-  color: var(--colorTerciario, #111827);
+  color: var(--texto-principal, #111827);
 }
 
 /* ====== LISTAS ====== */
