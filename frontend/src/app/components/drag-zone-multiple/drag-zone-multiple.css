@@ -51,7 +51,7 @@ label {
 #dropzone-msg {
   text-align: center;
   padding: 1rem;
-  color: var(--texto-parrafo, var(--texto-secundario, #444444));
+  color: var(--texto-secundario);
   animation: aparecer-msg .3s ease-out;
 }
 

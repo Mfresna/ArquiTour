@@ -92,13 +92,19 @@
 <app-mensaje-modal
   [isVisible]="modalVisible"
   [titulo]="modalTitulo"
-  [mensaje]="modalMensaje" 
-  [conIcon]="false"
-  tipoContenido="texto" 
-  [mostrarCerrar]="mostrarCruz"         
-  [mostrarBotonAceptar]="true"
-  [mostrarBotonCancelar]="false"
-  textoBotonAceptar="Aceptar"
-  (aceptar)="irACambiarPass()"
-  (cerrado)="onModalCerrado()"        
-/>
+  [mensaje]="modalMensaje"
+  [tipo]="modalTipo"
+  [conIcon]="true"
+  [tipoContenido]="'texto'"
+
+  [mostrarCerrar]="mostrarCruz"
+  [mostrarBotonAceptar]="mostrarBotonAceptar"
+  [mostrarBotonCancelar]="mostrarBotonCancelar"
+  [textoBotonAceptar]="textoBotonAceptar"
+  [textoBotonCancelar]="textoBotonCancelar"
+  [cerrarAlClickFuera]="cerrarAlClickFuera"
+
+  (aceptar)="onModalAceptar()"
+  (cancelar)="onModalCancelar()"
+  (cerrado)="onModalCerrado()"
+></app-mensaje-modal>

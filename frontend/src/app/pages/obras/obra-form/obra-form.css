@@ -58,6 +58,21 @@
   gap: 0.5rem;
 }
 
+#panel-campos .form-group select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  padding-right: 2.2rem; 
+  background-image:
+    linear-gradient(45deg, transparent 50%, #666 50%),
+    linear-gradient(135deg, #666 50%, transparent 50%);
+  background-position:
+    calc(100% - 18px) 52%,
+    calc(100% - 12px) 52%;
+  background-size: 6px 6px;
+  background-repeat: no-repeat;
+}
+
 .label {
   font-weight: 500;
   margin-left: 0.5rem;

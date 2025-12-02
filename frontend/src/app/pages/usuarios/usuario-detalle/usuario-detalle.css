@@ -279,7 +279,7 @@
   margin-bottom: 1.5rem;
   font-size: 1.8rem;
   font-weight: 700;
-  color: var(--colorBoton, #0077b6);
+  color: var(--colorBoton);
   position: relative;
   letter-spacing: 0.5px;
 }
@@ -292,8 +292,8 @@
   border-radius: 3px;
     background: linear-gradient(
     90deg,
-    var(--colorBoton, #0077b6),
-    var(--color-acento, #00b4d8)
+    var(--colorBoton),
+    var(--color-acento)
   );
   margin: 0.80rem auto 0;
   opacity: 0.9;
@@ -323,7 +323,7 @@ label {
 input {
   padding: 0.6rem 0.8rem;
   border-radius: 1.2rem;
-  border: 1px solid var(--borde-suave, #ccc);
+  border: 1px solid var(--borde-suave);
   font-family: var(--fuenteBase);
   font-size: 1rem;
   color: var(--texto-principal);
@@ -332,19 +332,19 @@ input {
 
 input:focus {
   outline: none;
-  border-color: var(--colorBoton, #0077b6);
+  border-color: var(--colorBoton);
   box-shadow: 0 0 6px var(--sombra);
 }
 
 input.invalido {
-  border: 2px solid var(--colorBotonEliminar);
-  background: var(--color-error-suave, #ffecec);
+  border: 2px solid var(--color-error);
+  background: var(--color-error-suave);
 }
 
 textarea{
   padding: 0.6rem 0.6rem;
   border-radius: 1.2rem;
-  border: 1px solid var(--borde-suave, #ccc);
+  border: 1px solid var(--borde-suave);
   font-family: var(--fuenteBase);
   font-size: 1rem;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
@@ -371,7 +371,7 @@ textarea:disabled{
 
 /* ================ Errores ======================== */
 small {
-  color: var(--colorBotonEliminarHover);
+  color: var(--color-error);
   font-size: 0.9rem;
   text-align: left;
   margin-left: 0.6rem;

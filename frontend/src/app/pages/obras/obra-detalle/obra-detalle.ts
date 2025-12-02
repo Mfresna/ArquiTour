@@ -53,6 +53,16 @@ export class ObraDetalle {
   modalTitulo = '';
   modalMensaje = '';
   modalTipo: MessageType = 'info';
+
+  mostrarCruz = false;
+  mostrarBotonAceptar = true;
+  mostrarBotonCancelar = false;
+  textoBotonAceptar = 'Aceptar';
+  textoBotonCancelar = 'Cancelar';
+  cerrarAlClickFuera = true;
+
+  esConfirmacionEliminacion = false;
+
   redirigirAObras = false;
 
   constructor(
@@ -123,21 +133,20 @@ export class ObraDetalle {
             'Obra no encontrada',
             'La obra solicitada no existe o fue eliminada.',
             'warning',
-            true
+            { redirigirAObras: true }
           );
         } else if (e.status >= 500) {
           this.mostrarModal(
             'Error del servidor',
             'Ocurrió un error al cargar la obra. Intente nuevamente más tarde.',
             'error',
-            true
+            { redirigirAObras: true }
           );
         } else {
           this.mostrarModal(
             'Error inesperado',
             'No se pudo cargar la obra.',
             'error',
-            true
           );
         }
       },
@@ -152,55 +161,92 @@ export class ObraDetalle {
     titulo: string,
     mensaje: string,
     tipo: MessageType = 'info',
-    redirigir: boolean = false
+    opciones?: {
+      redirigirAObras?: boolean;
+      mostrarCruz?: boolean;
+      mostrarBotonAceptar?: boolean;
+      mostrarBotonCancelar?: boolean;
+      textoBotonAceptar?: string;
+      textoBotonCancelar?: string;
+      cerrarAlClickFuera?: boolean;
+    }
   ): void {
     this.modalTitulo = titulo;
     this.modalMensaje = mensaje;
     this.modalTipo = tipo;
     this.modalVisible = true;
-    this.redirigirAObras = redirigir;
+
+    const {
+      redirigirAObras = false,
+      mostrarCruz = false,
+      mostrarBotonAceptar = true,
+      mostrarBotonCancelar = false,
+      textoBotonAceptar = 'Aceptar',
+      textoBotonCancelar = 'Cancelar',
+      cerrarAlClickFuera = true,
+    } = opciones || {};
+
+    this.redirigirAObras = redirigirAObras;
+    this.mostrarCruz = mostrarCruz;
+    this.mostrarBotonAceptar = mostrarBotonAceptar;
+    this.mostrarBotonCancelar = mostrarBotonCancelar;
+    this.textoBotonAceptar = textoBotonAceptar;
+    this.textoBotonCancelar = textoBotonCancelar;
+    this.cerrarAlClickFuera = cerrarAlClickFuera;
   }
 
   onModalAceptar(): void {
+    if (this.esConfirmacionEliminacion) {
+   
+      this.esConfirmacionEliminacion = false;
+      this.modalVisible = false;
+      this.eliminarObra();  
+      return;
+    }
+
     this.modalVisible = false;
 
     if (this.redirigirAObras) {
+      this.redirigirAObras = false;
       this.router.navigate(['/obras']);
     }
+  }
 
-    this.redirigirAObras = false;
+  onModalCancelar(): void {
+    this.esConfirmacionEliminacion = false;
+    this.modalVisible = false;
   }
 
   onModalCerrado(): void {
+    this.esConfirmacionEliminacion = false;
     this.modalVisible = false;
-    this.redirigirAObras = false;
   }
   
 
   // ================== FAVORITOS: CORAZÓN + POPUP ==================
 
   private verificarSiEstaEnFavoritos(idObra: number): void {
-  this.favoritosService.getFavoritosDelUsuario().subscribe({
-    next: (listas) => {
-      // Busco en cada lista si está la obra
-      let encontrada = false;
+    this.favoritosService.getFavoritosDelUsuario().subscribe({
+      next: (listas) => {
+        // Busco en cada lista si está la obra
+        let encontrada = false;
 
-      const consultas = listas.map(lista =>
-        this.favoritosService.getObrasDeFavorito(lista.id).subscribe({
-          next: (obras) => {
-            if (obras.some(o => o.id === idObra)) {
-              encontrada = true;
-              this.estaEnFavoritos = true; 
+        const consultas = listas.map(lista =>
+          this.favoritosService.getObrasDeFavorito(lista.id).subscribe({
+            next: (obras) => {
+              if (obras.some(o => o.id === idObra)) {
+                encontrada = true;
+                this.estaEnFavoritos = true; 
+              }
             }
-          }
-        })
-      );
-    },
-    error: () => {
-      console.warn('No se pudieron verificar los favoritos.');
-    }
-  });
-}
+          })
+        );
+      },
+      error: () => {
+        console.warn('No se pudieron verificar los favoritos.');
+      }
+    });
+  }
 
 
   /** Recibe del hijo si la obra pertenece a alguna lista */
@@ -294,7 +340,27 @@ export class ObraDetalle {
 
   eliminar(): void {
     if (!this.obra?.id) return;
-    if (!confirm('¿Eliminar esta obra?')) return;
+
+    this.esConfirmacionEliminacion = true;
+
+    this.mostrarModal(
+      'Confirmar eliminación',
+      '¿Seguro que deseas eliminar esta obra? Esta acción no se puede deshacer.',
+      'warning',
+      {
+        mostrarCruz: false,
+        mostrarBotonAceptar: true,
+        mostrarBotonCancelar: true,
+        textoBotonAceptar: 'Eliminar',
+        textoBotonCancelar: 'Cancelar',
+        cerrarAlClickFuera: false,
+      }
+    );
+  }
+
+  // Acción real de borrado
+  private eliminarObra(): void {
+    if (!this.obra?.id) return;
 
     this.spinerVisible = true;
     
@@ -306,7 +372,13 @@ export class ObraDetalle {
           'Obra eliminada',
           'La obra fue eliminada correctamente.',
           'success',
-          true
+          {
+            redirigirAObras: true,
+            mostrarCruz: false,
+            mostrarBotonAceptar: true,
+            mostrarBotonCancelar: false,
+            cerrarAlClickFuera: false,
+          }
         );
       },
       error: (e) =>{
@@ -315,10 +387,10 @@ export class ObraDetalle {
             'Obra no encontrada',
             'La obra ya no existe.',
             'warning',
-            true
+            { redirigirAObras: true }
           );
         }else if(e.status === 401){
-           this.mostrarModal(
+          this.mostrarModal(
             'Sin permisos',
             'Un arquitecto no puede eliminar obras que no pertenecen a sus estudios.',
             'error'

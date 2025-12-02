@@ -22,6 +22,7 @@ export class SelectFavorito implements OnInit {
 
   // Mensaje de error
   mensajeErrorCreacion: string | null = null;
+  estaEnErrorCreacion: boolean = false;
 
 
 
@@ -169,10 +170,12 @@ export class SelectFavorito implements OnInit {
 
     // limpio mensaje previo
     this.mensajeErrorCreacion = null;
+    this.estaEnErrorCreacion = false;
 
     // 1) Validación: vacío
     if (!limpio) {
       this.mensajeErrorCreacion = 'Ingrese un nombre para la lista.';
+      this.estaEnErrorCreacion = true; 
       input.focus();
       return;
     }
@@ -184,6 +187,7 @@ export class SelectFavorito implements OnInit {
 
     if (yaExiste) {
       this.mensajeErrorCreacion = 'Ya existe una lista con ese nombre.';
+      this.estaEnErrorCreacion = true;
       input.focus();
       return;
     }
@@ -195,6 +199,7 @@ export class SelectFavorito implements OnInit {
         next: (resp) => {
           // recargo listas para ver la nueva
           this.cargarListas();
+          this.estaEnErrorCreacion = false;
 
           // limpio input
           input.value = '';
@@ -213,7 +218,7 @@ export class SelectFavorito implements OnInit {
         },
         error: (e) => {
           this.mensajeErrorCreacion = 'No se pudo crear la lista.';
-          
+          this.estaEnErrorCreacion = true;
           console.error(e);
         }
       });

@@ -163,7 +163,6 @@
           </fieldset> 
 
 
-            <!-- sadasd -->
             <fieldset id="mapa" class="campo">
               <app-mapa-selector
                 [latitud]="formulario.get('latitud')?.value ?  formulario.get('latitud')?.value : lat"
@@ -174,13 +173,7 @@
 
             </fieldset>
 
-
-            <!-- sdasdasd -->
-
           
-
-
-
           <!-- DESCRIPCION -->
           <fieldset class="form-group">
             <label for="desc" class="label">Descripción</label>
@@ -235,10 +228,13 @@
   [conIcon]="true"
   [tipo]="modalTipo"
   tipoContenido="texto"
-  [mostrarCerrar]="true"
-  [mostrarBotonAceptar]="true"
-  [mostrarBotonCancelar]="false"
-  textoBotonAceptar="Aceptar"
+  [mostrarCerrar]="mostrarCruz"
+  [mostrarBotonAceptar]="mostrarBotonAceptar"
+  [mostrarBotonCancelar]="mostrarBotonCancelar"
+  [textoBotonAceptar]="textoBotonAceptar"
+  [textoBotonCancelar]="textoBotonCancelar"
+  [cerrarAlClickFuera]="cerrarAlClickFuera"
   (aceptar)="onModalAceptar()"
+  (cancelar)="onModalCancelar()"
   (cerrado)="onModalCerrado()"
 ></app-mensaje-modal>

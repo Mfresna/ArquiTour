@@ -34,6 +34,17 @@ export class Favoritos {
   modalMensaje = '';
   modalTipo: MessageType = 'info';
 
+  mostrarCruz = true;
+  mostrarBotonAceptar = true;
+  mostrarBotonCancelar = false;
+  textoBotonAceptar = 'Aceptar';
+  textoBotonCancelar = 'Cancelar';
+  cerrarAlClickFuera = true;
+
+  // modo del modal: mensaje normal o confirmación de eliminar
+  modalModo: 'normal' | 'confirmEliminar' = 'normal';
+  listaIdPendiente?: number;
+
   constructor(
     private fb: FormBuilder,
     private favoritosService: FavoritosService
@@ -46,21 +57,60 @@ export class Favoritos {
 
   // ========== MODAL REUTILIZABLE ========
 
-  private mostrarModal(
-    titulo: string, mensaje: string, tipo: MessageType = 'info'
+   private mostrarModal(
+    titulo: string,
+    mensaje: string,
+    tipo: MessageType = 'info'
   ): void {
     this.modalTitulo = titulo;
     this.modalMensaje = mensaje;
     this.modalTipo = tipo;
+
+    this.modalModo = 'normal';
+    this.listaIdPendiente = undefined;
+
+    this.mostrarCruz = true;
+    this.mostrarBotonAceptar = true;
+    this.mostrarBotonCancelar = false;
+    this.textoBotonAceptar = 'Aceptar';
+    this.textoBotonCancelar = 'Cancelar';
+    this.cerrarAlClickFuera = true;
+
     this.modalVisible = true;
   }
 
+
   onModalAceptar(): void {
+    if (this.modalModo === 'confirmEliminar') {
+      const id = this.listaIdPendiente;
+      this.modalVisible = false;
+      this.modalModo = 'normal';
+      this.listaIdPendiente = undefined;
+
+      if (id != null) {
+        this.ejecutarEliminarLista(id);
+      }
+      return;
+    }
+
+    // modo normal: solo cerrar
     this.modalVisible = false;
   }
+
+  onModalCancelar(): void {
+    // cancelar confirmación
+    this.modalVisible = false;
+    this.modalModo = 'normal';
+    this.listaIdPendiente = undefined;
+  }
+
   onModalCerrado(): void {
+    // cerrar por X o click fuera
     this.modalVisible = false;
+    this.modalModo = 'normal';
+    this.listaIdPendiente = undefined;
   }
+
 
   private inicializarFormulario(): void {
     this.filtro = this.fb.group({
@@ -138,27 +188,30 @@ export class Favoritos {
   }
 
   eliminarLista(id: number): void {
-    if (!confirm('¿Eliminar esta lista de favoritos?')) return;
+    this.mostrarConfirmEliminar(id);
+  }
 
+  /** Lógica real de eliminación (antes estaba dentro de eliminarLista) */
+  private ejecutarEliminarLista(id: number): void {
     this.spinerVisible = true;
     this.spinerMensaje = 'Eliminando lista...';
 
     this.favoritosService.deleteFavorito(id).pipe(
-      finalize(()=>{
+      finalize(()=> {
         this.spinerVisible = false;
         this.spinerMensaje = '';
       })
     ).subscribe({
       next: () => {
         this.listas = this.listas.filter(l => l.id !== id);
-          this.mostrarModal(
-            'Lista eliminada',
-            'La lista fue eliminada correctamente.',
-            'success'
-          );
+        this.mostrarModal(
+          'Lista eliminada',
+          'La lista fue eliminada correctamente.',
+          'success'
+        );
       },
       error: () => {
-         this.mostrarModal(
+        this.mostrarModal(
           'Error al eliminar',
           'No se pudo eliminar la lista.',
           'error'
@@ -166,6 +219,25 @@ export class Favoritos {
       }
     });
   }
+
+/** Modal especial de confirmación para eliminar una lista */
+private mostrarConfirmEliminar(idLista: number): void {
+  this.modalTitulo = 'Eliminar lista';
+  this.modalMensaje = '¿Seguro que deseas eliminar esta lista de favoritos? Esta acción no se puede deshacer.';
+  this.modalTipo = 'warning';
+
+  this.modalModo = 'confirmEliminar';
+  this.listaIdPendiente = idLista;
+
+  this.mostrarCruz = false;
+  this.mostrarBotonAceptar = true;
+  this.mostrarBotonCancelar = true;
+  this.textoBotonAceptar = 'Eliminar';
+  this.textoBotonCancelar = 'Cancelar';
+  this.cerrarAlClickFuera = false;
+
+  this.modalVisible = true;
+}
 
 
 

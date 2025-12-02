@@ -47,7 +47,7 @@
 }
 
 #btnVolver:hover {
-    background-color: rgba(0, 0, 0, 0.06);
+    background-color: var(--sombra);
     transform: scale(1.04);
 }
 
@@ -97,7 +97,7 @@
   width: 50%;
   height: 3px;
   border-radius: 3px;
-  background: linear-gradient(90deg, var(--colorBoton, #0077b6), #00b4d8);
+  background: linear-gradient(90deg, var(--colorBoton, #0077b6), var(--color-acento, #00b4d8));
   margin: 0.80rem auto 0;
   opacity: 0.9;
 }
@@ -126,7 +126,7 @@ label {
 input {
   padding: 0.6rem 0.8rem;
   border-radius: 1.2rem;
-  border: 1px solid #ccc;
+  border: 1px solid var(--borde-suave);
   font-family: var(--fuenteBase);
   font-size: 1rem;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
@@ -135,12 +135,12 @@ input {
 input:focus {
   outline: none;
   border-color: var(--colorBoton, #0077b6);
-  box-shadow: 0 0 6px rgba(0, 119, 182, 0.35);
+  box-shadow: 0 0 6px var(--sombra);
 }
 
 input.invalido {
   border: 2px solid var(--colorBotonEliminar);
-  background: #ffecec;
+  background: var(--color-error-suave);
 }
 
 /* ===== Input PASS Ver Contraseña ===== */
@@ -166,12 +166,12 @@ input.invalido {
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #a2a2a2;
+  color: var(--ojo-pass);
   transition: color 0.2s;
 }
 
 .ver-password:hover {
-  color: #454545;
+  color: var(--texto-principal);
 }
 
 .ver-password .material-icons {
@@ -180,8 +180,8 @@ input.invalido {
 
 /* ===== Botón INGRESAR ===== */
 #login {
-  background-color: var(--color-primario, #0077b6);
-  color: var(--fondo-superficie, #fff);
+  background-color: var(--colorBoton);
+  color: var(--texto-boton-buscar, #fff);
   padding: 0.75rem;
   border: none;
   border-radius: 1.35rem;
@@ -197,7 +197,7 @@ input.invalido {
 }
 
 #login:disabled {
-  background-color: #a0c4d9;
+  background-color: var(--boton-primario-deshabilitado);
   cursor: not-allowed;
   transform: none;
 }
@@ -220,7 +220,7 @@ small {
 
 .forgot-link {
   font-size: 0.9rem;
-  color: #007bff;
+  color: var(--colorBoton);
   text-decoration: none;
   cursor: pointer;
 }

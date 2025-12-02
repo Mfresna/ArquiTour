@@ -39,8 +39,22 @@ export class EstudioForm implements TieneCambiosPendientes {
   modalTitulo = '';
   modalMensaje = '';
   modalTipo: MessageType = 'info';
-  // en este form siempre redirigimos a /estudios en los casos que corresponde
-  redirigirADestudios = false;
+  redirigirAEstudios = false;
+  mostrarCruz = true;
+  mostrarBotonAceptar = true;
+  mostrarBotonCancelar = false;
+  textoBotonAceptar = 'Aceptar';
+  textoBotonCancelar = 'Cancelar';
+  cerrarAlClickFuera = true;
+
+  // Modo de uso del modal: 
+  // - 'normal': solo cerrar
+  // - 'redir': al aceptar, redirige
+  // - 'confirmQuitarArq': confirmación de quitar arquitecto
+  modalModo: 'normal' | 'redir' | 'confirmQuitarArq' = 'normal';
+  
+  // Confirm específico para quitar arquitecto
+  arquitectoIdPendiente?: number;
 
   constructor(
     private fb: FormBuilder,
@@ -96,33 +110,92 @@ export class EstudioForm implements TieneCambiosPendientes {
     this.modalMensaje = mensaje;
     this.modalTipo = tipo;
     this.modalVisible = true;
-    this.redirigirADestudios = redirigirDespues;
+
+    // Configuración visual por defecto
+    this.mostrarCruz = true;
+    this.mostrarBotonAceptar = true;
+    this.mostrarBotonCancelar = false;
+    this.textoBotonAceptar = 'Aceptar';
+    this.textoBotonCancelar = 'Cancelar';
+    this.cerrarAlClickFuera = true;
+
+    // Modo del modal
+    if (redirigirDespues) {
+      this.modalModo = 'redir';
+      this.redirigirAEstudios = true;
+
+      this.mostrarCruz = false;
+      this.cerrarAlClickFuera = false;
+    } else {
+      this.modalModo = 'normal';
+      this.redirigirAEstudios = false;
+    }
+
+    this.arquitectoIdPendiente = undefined;
   }
+
 
   onModalAceptar(): void {
-  this.modalVisible = false;
+  switch (this.modalModo) {
 
-  if (this.redirigirADestudios) {
-    // navegación sin preguntar el guard
-    this.omitirGuard = true;
+    // CONFIRMAR QUITAR ARQUITECTO
+    case 'confirmQuitarArq': {
+      const idArq = this.arquitectoIdPendiente;
+      this.modalVisible = false;
+      this.arquitectoIdPendiente = undefined;
+      this.modalModo = 'normal';
 
-    if (this.editar && this.id != null) {
-      // MODO EDICIÓN → voy al detalle del estudio
-      this.router.navigate(['/estudios', this.id]);
-    } else {
-      // MODO CREACIÓN → vuelvo al listado
-      this.router.navigate(['/estudios']);
+      if (idArq != null) {
+        this.ejecutarQuitarArquitecto(idArq);
+      }
+      break;
+    }
+
+    // MENSAJE CON REDIRECCIÓN (crear / actualizar estudio)
+    case 'redir': {
+      this.modalVisible = false;
+      this.modalModo = 'normal';
+
+      if (this.redirigirAEstudios) {
+        this.omitirGuard = true;
+
+        if (this.editar && this.id != null) {
+          this.router.navigate(['/estudios', this.id]);
+        } else {
+          this.router.navigate(['/estudios']);
+        }
+      }
+
+      this.redirigirAEstudios = false;
+      break;
+    }
+
+    // MENSAJE NORMAL (info / error sin redirigir)
+    case 'normal':
+    default: {
+      this.modalVisible = false;
+      this.modalModo = 'normal';
+      this.redirigirAEstudios = false;
+      break;
     }
   }
-
-  this.redirigirADestudios = false;
 }
 
 
-  onModalCerrado(): void {
-    this.modalVisible = false;
-    this.redirigirADestudios = false;
-  }
+onModalCancelar(): void {
+  this.arquitectoIdPendiente = undefined;
+  this.modalVisible = false;
+  this.modalModo = 'normal';
+  this.redirigirAEstudios = false;
+}
+
+onModalCerrado(): void {
+  this.arquitectoIdPendiente = undefined;
+  this.modalVisible = false;
+  this.modalModo = 'normal';
+  this.redirigirAEstudios = false;
+}
+
 
   //==========CARGAR ESTUDIOS===============
 
@@ -294,7 +367,8 @@ export class EstudioForm implements TieneCambiosPendientes {
     this.mostrarModal(
       'Error al actualizar',
       'No se pudo actualizar el estudio.',
-      'error'
+      'error',
+      false
     );
   }
 
@@ -312,7 +386,8 @@ export class EstudioForm implements TieneCambiosPendientes {
           this.mostrarModal(
             'Error al crear',
             'No se pudo crear el estudio.',
-            'error'
+            'error',
+            false
           );
         } 
       });
@@ -368,9 +443,31 @@ export class EstudioForm implements TieneCambiosPendientes {
 
   /* ===================== GESTIÓN ARQUITECTO ===================== */
 
-  quitarArquitecto(arqId: number): void {
+   quitarArquitecto(arqId: number): void {
+      if (!this.editar || !this.id) return;
+
+      this.arquitectoIdPendiente = arqId;
+
+      this.modalModo = 'confirmQuitarArq';
+      this.redirigirAEstudios = false;  // acá nunca redirigimos
+
+      this.modalTitulo = 'Desvincular arquitecto';
+      this.modalMensaje = '¿Seguro que deseas desvincular este arquitecto del estudio?';
+      this.modalTipo = 'warning';
+
+      this.modalVisible = true;
+
+      this.mostrarCruz = false;
+      this.mostrarBotonAceptar = true;
+      this.mostrarBotonCancelar = true;
+      this.textoBotonAceptar = 'Quitar';
+      this.textoBotonCancelar = 'Cancelar';
+      this.cerrarAlClickFuera = false;
+    }
+
+
+    private ejecutarQuitarArquitecto(arqId: number): void {
     if (!this.editar || !this.id) return;
-    if (!confirm('¿Quitar este arquitecto del estudio?')) return;
 
     this.estudioService.eliminarArquitecto(this.id, arqId).pipe(take(1)).subscribe({
       next: (estudioActualizado) => {
@@ -380,48 +477,50 @@ export class EstudioForm implements TieneCambiosPendientes {
           const actuales = (this.formulario.get('arquitectosIds')?.value ?? []) as number[];
           this.formulario.get('arquitectosIds')?.setValue(actuales.filter(x => x !== arqId));
         }
+
         this.arquitectosVinculados = this.arquitectosVinculados.filter(a => a.id !== arqId);
+
         this.mostrarModal(
-          'Arquitecto quitado',
+          'Arquitecto Desvinculado',
           'El arquitecto fue desvinculado del estudio correctamente.',
-          'success',  
-          false      
+          'success',
+          false
         );
       },
       error: (e) => {
         console.error(e);
 
-        if(e.status === 404){
+        if (e.status === 404) {
           this.mostrarModal(
             'Estudio no encontrado',
             'El estudio no existe o ya fue eliminado.',
             'warning',
             true
           );
-        }else if(e.status === 401){
+        } else if (e.status === 401) {
           this.mostrarModal(
             'Sin permisos',
             'El arquitecto logueado no puede gestionar otros arquitectos en este estudio.',
             'error'
           );
-        }else if(e.status === 409){
+        } else if (e.status === 409) {
           this.mostrarModal(
             'No pertenece al estudio',
             'El arquitecto que intenta quitar no forma parte del estudio.',
             'warning'
           );
-        }else{
+        } else {
           this.mostrarModal(
             'Error',
             'No se pudo quitar el arquitecto del estudio.',
             'error'
           );
         }
-
-        
-      } 
+      }
     });
   }
+
+
 
   agregarArquitectoPorEmail(): void {
     this.mensajeErrorAgregar = null;

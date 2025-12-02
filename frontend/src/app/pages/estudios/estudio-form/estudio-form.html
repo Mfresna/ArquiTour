@@ -58,7 +58,7 @@
               @for (arq of arquitectosVinculados; track arq.id) {
                 <div class="burbuja">
 
-                  <button class="cont-cruz" (click)="quitarArquitecto(arq.id)">
+                  <button type= "button" class="cont-cruz" (click)="quitarArquitecto(arq.id)">
                     <span class="material-icons">close</span>
                   </button>
 
@@ -119,17 +119,21 @@
     </div>
   </div>
 </div>
+
 <app-mensaje-modal
   [isVisible]="modalVisible"
   [titulo]="modalTitulo"
   [mensaje]="modalMensaje"
-  [tipo]="modalTipo"
   [conIcon]="true"
+  [tipo]="modalTipo"
   tipoContenido="texto"
-  [mostrarCerrar]="true"
-  [mostrarBotonAceptar]="true"
-  [mostrarBotonCancelar]="false"
-  textoBotonAceptar="Aceptar"
+  [mostrarCerrar]="mostrarCruz"
+  [mostrarBotonAceptar]="mostrarBotonAceptar"
+  [mostrarBotonCancelar]="mostrarBotonCancelar"
+  [textoBotonAceptar]="textoBotonAceptar"
+  [textoBotonCancelar]="textoBotonCancelar"
+  [cerrarAlClickFuera]="cerrarAlClickFuera"
   (aceptar)="onModalAceptar()"
+  (cancelar)="onModalCancelar()"
   (cerrado)="onModalCerrado()"
-/>
+></app-mensaje-modal>

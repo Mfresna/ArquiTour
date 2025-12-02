@@ -22,7 +22,7 @@
     <input
       #nombreLista
       placeholder="Nueva lista..."
-      [class.input-error]="mensajeErrorCreacion"
+      [class.input-error]="estaEnErrorCreacion"
     />
     <button (click)="crearLista(nombreLista)">Crear</button>
   </div>
