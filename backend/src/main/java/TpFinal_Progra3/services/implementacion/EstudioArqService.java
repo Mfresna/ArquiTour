@@ -90,19 +90,19 @@ public class EstudioArqService implements EstudioArqServiceInterface {
                 .orElseThrow(() -> new NotFoundException("Estudio no encontrado con ID: " + estudioId));
 
         if(!puedeGestionarEstudio(request,estudioId)){
-            throw new ProcesoInvalidoException(HttpStatus.UNAUTHORIZED,"El Arquitecto no puede agregar a otros Arquitectos a un estudio del que no forma parte");
+            throw new ProcesoInvalidoException(HttpStatus.FORBIDDEN,"El Arquitecto no puede agregar a otros Arquitectos a un estudio del que no forma parte");
         }
 
         Usuario arquitecto = usuarioService.buscarUsuario(arquitectoId);
 
         // Validar que el usuario esté activo
         if (!arquitecto.getIsActivo()) {
-            throw new ProcesoInvalidoException("El usuario no está activo.");
+            throw new ProcesoInvalidoException(HttpStatus.CONFLICT,"El usuario no está activo.");
         }
 
         // Validar que tenga el rol de ARQUITECTO
         if (!arquitecto.getCredencial().tieneRolUsuario(RolUsuario.ROLE_ARQUITECTO)){
-            throw new ProcesoInvalidoException("El usuario no tiene el rol de ARQUITECTO.");
+            throw new ProcesoInvalidoException(HttpStatus.UNPROCESSABLE_ENTITY,"El usuario no tiene el rol de ARQUITECTO.");
         }
 
         // Agregar el arquitecto si no está ya presente
