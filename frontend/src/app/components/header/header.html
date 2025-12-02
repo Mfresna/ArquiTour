@@ -94,8 +94,13 @@
         <!-- Badge solo si hay notificaciones sin leer -->
         @if (cantNotifSinLeer$ | async; as count) {
           @if (count > 0) {
-            <span class="badge-notificaciones">
-              {{count}}
+            <span 
+              class="badge-notificaciones"
+              [class.un-digito]="count < 10"
+              [class.dos-digitos]="count >= 10">
+
+                {{ count > 99 ? '99+' : count }}
+
             </span>
           }
         }

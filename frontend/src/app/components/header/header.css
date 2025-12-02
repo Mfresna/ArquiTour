@@ -122,7 +122,7 @@ header {
 }
 
 /*============== CAMPANA DE NOTIFICACIONES ===============*/
-/* Contenedor de la campana y el badge */
+  /* Contenedor de la campana y el badge */
 #contenedor-notificaciones {
   position: relative;
   display: inline-flex;
@@ -131,43 +131,55 @@ header {
   cursor: pointer;
 }
 
-/* Badge rojo con número de notificaciones */
+  /*Badget de notificacion*/
 .badge-notificaciones {
   position: absolute;
-  top: -4px;    /* ajustá fino según veas */
-  right: -4px;  /* idem */
+  top: -6px;
+  right: -6px;
 
-  min-width: 16px;
-  height: 16px;
-  padding: 0 4px;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 6px;
 
-  background-color: var(--color-error, #ff5252);
+  background-color: var(--color-error, #ff3b30);
   color: #fff;
 
-  font-size: 10px;
-  font-weight: 600;
+  font-weight: 500;
+  line-height: 1;
 
-  border-radius: 999px;
+  border-radius: 999px; 
 
   display: flex;
   align-items: center;
   justify-content: center;
 
-  pointer-events: none; /* el click cae igual en la campana */
+  white-space: nowrap;  
+  pointer-events: none;
+
   animation: none;
 }
 
+  /*Tamaño del badget*/
+.un-digito{
+  font-size: 14px;
+}
+
+.dos-digitos{
+    font-size: 12px;
+}
+
 /*============== animacion del baget ====================*/
-@keyframes badgePing {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.15); }
-  100% { transform: scale(1); }
-}
 
-#contenedor-notificaciones:hover .badge-notificaciones {
-  animation: badgePing 0.3s ease-out;
-}
+  /*Cuando Paso el mouse por encima*/
+@keyframes badgePing { 
+  0% { transform: scale(1); } 
+  50% { transform: scale(1.15);} 
+  100% { transform: scale(1); } 
+} 
 
+#contenedor-notificaciones:hover .badge-notificaciones { 
+  animation: badgePing 0.3s ease-out; 
+}
 
 /*============ MENUES DESPLEGABLE ============*/
 .menu-desplegable {
