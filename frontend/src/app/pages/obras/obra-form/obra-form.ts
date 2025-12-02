@@ -30,8 +30,8 @@ export class ObraForm implements TieneCambiosPendientes{
   id?: number;
 
   lat: number = -38.0004;
-  long: number = -57.5562
-  
+  long: number = -57.5562;
+    
   omitirGuard = false;
 
   imagenActualUrl: string | null = null;
@@ -58,6 +58,14 @@ export class ObraForm implements TieneCambiosPendientes{
   modalMensaje = '';
   modalTipo: MessageType = 'info';
   redirigirDespues = false;
+
+  // opciones del modal (como en login / detalle)
+  mostrarCruz = true;
+  mostrarBotonAceptar = true;
+  mostrarBotonCancelar = false;
+  textoBotonAceptar = 'Aceptar';
+  textoBotonCancelar = 'Cancelar';
+  cerrarAlClickFuera = true;
 
   constructor(
     private fb: FormBuilder,
@@ -147,28 +155,48 @@ export class ObraForm implements TieneCambiosPendientes{
 
   // ============ MODAL ============
   private mostrarModal(
-    titulo: string,
-    mensaje: string,
-    tipo: MessageType = 'info',
-    redirigir: boolean = false
-  ): void {
-    this.modalTitulo = titulo;
-    this.modalMensaje = mensaje;
-    this.modalTipo = tipo;
-    this.modalVisible = true;
-    this.redirigirDespues = redirigir;
+      titulo: string,
+      mensaje: string,
+      tipo: MessageType = 'info',
+      opciones?: {
+        redirigirDespues?: boolean;
+        mostrarCruz?: boolean;
+        cerrarAlClickFuera?: boolean;
+      }
+    ): void {
+      this.modalTitulo = titulo;
+      this.modalMensaje = mensaje;
+      this.modalTipo = tipo;
+      this.modalVisible = true;
+
+      const {
+        redirigirDespues = false,
+        mostrarCruz = true,
+        cerrarAlClickFuera = true,
+      } = opciones || {};
+
+      this.redirigirDespues = redirigirDespues;
+
+      this.mostrarCruz = mostrarCruz;
+      this.mostrarBotonAceptar = true;
+      this.mostrarBotonCancelar = false;
+      this.textoBotonAceptar = 'Aceptar';
+      this.textoBotonCancelar = 'Cancelar';
+      this.cerrarAlClickFuera = cerrarAlClickFuera;
   }
 
   onModalAceptar(): void {
     this.modalVisible = false;
 
     if (this.redirigirDespues) {
-      // navegación sin preguntar el guard
+
       this.omitirGuard = true;
 
       if (this.editar && this.id != null) {
+
         this.router.navigate(['/obras', this.id]);
       } else {
+
         this.router.navigate(['/obras']);
       }
     }
@@ -176,7 +204,13 @@ export class ObraForm implements TieneCambiosPendientes{
     this.redirigirDespues = false;
   }
 
+
   onModalCerrado(): void {
+    this.modalVisible = false;
+    this.redirigirDespues = false;
+  }
+
+  onModalCancelar(): void {
     this.modalVisible = false;
     this.redirigirDespues = false;
   }
@@ -266,21 +300,21 @@ export class ObraForm implements TieneCambiosPendientes{
             'Obra no encontrada',
             'La obra que intenta editar no existe o fue eliminada.',
             'warning',
-            true
+            { redirigirDespues: true }
           );
         }else if(e.status ===  401){
           this.mostrarModal(
             'Sin permisos',
             'No puede gestionar obras de estudios a los que no pertenece.',
             'error',
-            true
+            { redirigirDespues: true }
           );
         }else if(e.status === 406){
           this.mostrarModal(
             'Error del servidor',
             'Ocurrió un error al cargar la obra. Intente nuevamente más tarde.',
             'error',
-            true
+            { redirigirDespues: true }
           );
         }else if(e.status >= 500){
           alert("Error de servidor")
@@ -289,7 +323,7 @@ export class ObraForm implements TieneCambiosPendientes{
             'Error al cargar',
             'No se pudo cargar la obra.',
             'error',
-            true
+            { redirigirDespues: true }
           );
         }
 
@@ -362,7 +396,11 @@ export class ObraForm implements TieneCambiosPendientes{
                 'Obra actualizada',
                 'Los datos de la obra se guardaron correctamente.',
                 'success',
-                true
+                {
+                  redirigirDespues: true,
+                  mostrarCruz: false,
+                  cerrarAlClickFuera: false,
+                }
               );
             },
             error: (e) =>{
@@ -419,7 +457,11 @@ export class ObraForm implements TieneCambiosPendientes{
             'Obra actualizada',
             'Los datos de la obra se guardaron correctamente.',
             'success',
-            true
+            {
+              redirigirDespues: true,
+              mostrarCruz: false,
+              cerrarAlClickFuera: false,
+            }
           );
         },
         error: (e) => {
@@ -489,7 +531,11 @@ export class ObraForm implements TieneCambiosPendientes{
                 'Obra creada',
                 'La obra fue creada correctamente.',
                 'success',
-                true
+                {
+                  redirigirDespues: true,
+                  mostrarCruz: false,
+                  cerrarAlClickFuera: false,
+                }
               );
             },
             error: (e) => {

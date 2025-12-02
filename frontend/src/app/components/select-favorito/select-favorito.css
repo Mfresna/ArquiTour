@@ -3,8 +3,8 @@
   position: absolute;
   top: 110%;          /* se apoya debajo del corazón */
   right: 0;
-
-  z-index: 99999999;
+  backdrop-filter: blur(2px);
+  z-index: 1000;
   min-width: 260px;
   max-width: 320px;
 

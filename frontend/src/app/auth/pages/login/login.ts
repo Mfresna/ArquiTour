@@ -28,9 +28,14 @@ export class Login implements OnInit {
   modalVisible: boolean = false;
   modalTitulo: string = '';
   modalMensaje: string = '';
-  modalTipo: MessageType = 'info'; 
+  modalTipo: MessageType = 'info';
+
   mostrarCruz: boolean = false;
-  private cierrePorAceptar: boolean = false;
+  mostrarBotonAceptar: boolean = true;
+  mostrarBotonCancelar: boolean = false;
+  textoBotonAceptar: string = 'Aceptar';
+  textoBotonCancelar: string = 'Cancelar';
+  cerrarAlClickFuera: boolean = true;
 
 
   //EMITERS
@@ -51,31 +56,61 @@ export class Login implements OnInit {
   }
 
 
-  // MÉTODO SIMPLE PARA MOSTRAR MODAL
-  mostrarModal(titulo: string, mensaje: string, tipo: MessageType = 'info', mostrarCruz: boolean = false 
+  // MÉTODO PARA MOSTRAR MODAL
+  mostrarModal(
+    titulo: string,
+    mensaje: string,
+    tipo: MessageType = 'info',
+    opciones?: {
+      mostrarCruz?: boolean;
+      mostrarBotonAceptar?: boolean;
+      mostrarBotonCancelar?: boolean;
+      textoBotonAceptar?: string;
+      textoBotonCancelar?: string;
+      cerrarAlClickFuera?: boolean;
+    }
   ): void {
-  this.modalTitulo = titulo;
-  this.modalMensaje = mensaje;
-  this.modalTipo = tipo;
-  this.modalVisible = true;
-  this.mostrarCruz = mostrarCruz;
+    this.modalTitulo = titulo;
+    this.modalMensaje = mensaje;
+    this.modalTipo = tipo;
+    this.modalVisible = true;
+
+    this.mostrarCruz         = opciones?.mostrarCruz ?? false;
+    this.mostrarBotonAceptar = opciones?.mostrarBotonAceptar ?? true;
+    this.mostrarBotonCancelar = opciones?.mostrarBotonCancelar ?? false;
+    this.textoBotonAceptar   = opciones?.textoBotonAceptar ?? 'Aceptar';
+    this.textoBotonCancelar  = opciones?.textoBotonCancelar ?? 'Cancelar';
+    this.cerrarAlClickFuera  = opciones?.cerrarAlClickFuera ?? true;
   }
 
-onModalCerrado(): void {
-  this.modalVisible = false;
+// Cierre por evento "cerrado" del modal (por cruz o click fuera)
+  onModalCerrado(): void {
+    this.modalVisible = false;
+  }
 
-  if (this.cierrePorAceptar) {
-    this.cierrePorAceptar = false;
-    this.mostrarCruz = false;
-    return;              
+  // Click en botón ACEPTAR del modal
+  onModalAceptar(): void {
+    if (this.estadoCredencial === EstadoLogin.CAMBIAR_PASS) {
+      // Caso especial: contraseña por defecto → ir a cambiar
+      this.modalVisible = false;
+      this.irACambiarPass();
+    } else {
+      // Otros casos: solo cerrar
+      this.modalVisible = false;
+    }
   }
-  if (this.mostrarCruz && this.estadoCredencial === EstadoLogin.CAMBIAR_PASS) {
-    this.mostrarCruz = false;
-    this.router.navigate(['/home']);
-    return;
+
+  // Click en botón CANCELAR del modal
+  onModalCancelar(): void {
+    if (this.estadoCredencial === EstadoLogin.CAMBIAR_PASS) {
+      // Caso especial: usuario decide seguir con la misma contraseña
+      this.modalVisible = false;
+      this.estadoCredencial = EstadoLogin.OK;
+      this.router.navigate(['/home']);
+    } else {
+      this.modalVisible = false;
+    }
   }
-  this.mostrarCruz = false;
-}
 
   loguearse(): void {
     if (this.login.invalid) {
@@ -88,10 +123,17 @@ onModalCerrado(): void {
 
             this.mostrarModal(
               "CONTRASEÑA POR DEFECTO",
-              "Usted posee la contraseña por defecto, debe cambiarla por seguridad.",
+              "Usted posee la contraseña por defecto, le sugerimos cambiarla por seguridad.",
               "warning",
-              true
-            );  
+              {
+                mostrarCruz: false,
+                mostrarBotonAceptar: true,
+                mostrarBotonCancelar: true,
+                textoBotonAceptar: "Cambiar contraseña",
+                textoBotonCancelar: "Seguir sin cambiar",
+                cerrarAlClickFuera: false
+              }
+            );
                       
           } else {
             this.estadoCredencial = EstadoLogin.OK;
@@ -178,7 +220,6 @@ onModalCerrado(): void {
   }
 
   irACambiarPass(): void {
-    this.cierrePorAceptar = true;
     this.router.navigate(['/cambiarpass']);
   }
 

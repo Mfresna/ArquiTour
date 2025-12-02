@@ -167,7 +167,7 @@ select.invalido {
   padding: .65rem .9rem;
   border-radius: 999px;
   border: 1px solid transparent;
-  font-weight: 700;
+  font-weight: 600;
   text-transform: uppercase;
   cursor: pointer;
   transition: transform .15s, box-shadow .2s, background-color .2s;

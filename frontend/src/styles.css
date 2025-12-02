@@ -7,6 +7,7 @@
   --nav-bg: #222222;       
   --nav-text: #f0f0f0;    
   --nav-icon: #f8f7f7;
+  --ojo-pass: #a2a2a2;
 }
 
 /*                 ================== MODO CLARO ================== */
@@ -36,6 +37,7 @@
   --colorBotonEliminar: #d32424;
   --colorBotonEliminarHover: #a51b1b;
   --color-error: #ff6b6b;
+  --color-error-suave: #f1caca;
 
   /* ===== Botón quitar imágenes ===== */
   --btn-quitar-bg: rgba(0, 0, 0, 0.35);
@@ -69,6 +71,7 @@
   --fondo-boton-flotante-hover: #5f6366;
   --color-contorno-favorito: #928787;
   --color-exito: #4ade80;
+  --ojo-contraseña: #a2a2a2;
 }
 
 

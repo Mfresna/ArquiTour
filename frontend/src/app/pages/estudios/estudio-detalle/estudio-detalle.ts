@@ -37,6 +37,16 @@ export class EstudioDetalle {
   modalMensaje = '';
   modalTipo: MessageType = 'info';
 
+  mostrarCruz = false;
+  mostrarBotonAceptar = true;
+  mostrarBotonCancelar = false;
+  textoBotonAceptar = 'Aceptar';
+  textoBotonCancelar = 'Cancelar';
+  cerrarAlClickFuera = true;
+
+  esConfirmacionEliminacion = false;
+
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -109,24 +119,89 @@ export class EstudioDetalle {
     });
   }
 
-  private mostrarModal(titulo: string, mensaje: string, tipo: MessageType = 'info'
+
+  private mostrarModal(
+    titulo: string,
+    mensaje: string,
+    tipo: MessageType = 'info',
+    opciones?: {
+      mostrarCruz?: boolean;
+      mostrarBotonAceptar?: boolean;
+      mostrarBotonCancelar?: boolean;
+      textoBotonAceptar?: string;
+      textoBotonCancelar?: string;
+      cerrarAlClickFuera?: boolean;
+    }
   ): void {
     this.modalTitulo = titulo;
     this.modalMensaje = mensaje;
     this.modalTipo = tipo;
     this.modalVisible = true;
-  }
 
+    const {
+      mostrarCruz = false,
+      mostrarBotonAceptar = true,
+      mostrarBotonCancelar = false,
+      textoBotonAceptar = 'Aceptar',
+      textoBotonCancelar = 'Cancelar',
+      cerrarAlClickFuera = true,
+    } = opciones || {};
+
+    this.mostrarCruz = mostrarCruz;
+    this.mostrarBotonAceptar = mostrarBotonAceptar;
+    this.mostrarBotonCancelar = mostrarBotonCancelar;
+    this.textoBotonAceptar = textoBotonAceptar;
+    this.textoBotonCancelar = textoBotonCancelar;
+    this.cerrarAlClickFuera = cerrarAlClickFuera;
+  }
   
   onModalAceptar(): void {
+    if (this.esConfirmacionEliminacion) {
+      // confirmar eliminación
+      this.esConfirmacionEliminacion = false;
+      this.modalVisible = false;
+      this.eliminarEstudio();   
+      return;
+    }
+
+
     this.modalVisible = false;
+
     this.router.navigate(['/estudios']);
   }
+
+  // Click en botón CANCELAR
+  onModalCancelar(): void {
+    this.esConfirmacionEliminacion = false;
+    this.modalVisible = false;
+  }
+
 
   onModalCerrado(): void {
     this.modalVisible = false;
   }
 
+
+  confirmarEliminacion(): void {
+    if (!this.estudio?.id) return;
+
+    this.esConfirmacionEliminacion = true;
+    this.mostrarModal(
+      'Confirmar Eliminación',
+      '¿Seguro que deseas eliminar este estudio? Esta acción no se puede deshacer.',
+      'warning',
+      {
+        mostrarCruz: false,
+        mostrarBotonAceptar: true,
+        mostrarBotonCancelar: true,
+        textoBotonAceptar: 'Eliminar',
+        textoBotonCancelar: 'Cancelar',
+        cerrarAlClickFuera: false,
+      }
+    );
+  }
+
+  
   //======OBRAS===================
   private cargarObrasVinculadasPorIds(ids: number[]): void {
     if (!ids?.length) {
@@ -259,50 +334,56 @@ export class EstudioDetalle {
     this.router.navigate(['/estudios', this.estudio.id, 'editar']);
   }
 
-  eliminar(): void {
+  private eliminarEstudio(): void {
     if (!this.estudio?.id) return;
-    if (!confirm('¿Eliminar este estudio?')) return;
 
     this.estudioService.deleteEstudio(this.estudio.id).subscribe({
       next: () => {
         this.mostrarModal(
           'Estudio eliminado',
           'El estudio fue eliminado correctamente.',
-          'success'
+          'success',
+          {
+            mostrarCruz: false,
+            mostrarBotonAceptar: true,
+            mostrarBotonCancelar: false,
+            cerrarAlClickFuera: false,
+          }
         );
       },
-      error: (e) =>{
+      error: (e) => {
         console.error(e);
 
-        if(e.status === 409){
-          //BAD_REQUEST
+        if (e.status === 409) {
           this.mostrarModal(
             'No se puede eliminar',
             'El estudio tiene obras asociadas. Debe eliminarlas primero.',
             'warning'
           );
-        }else if(e.status === 404){
-          //UNSUPPORTED_MEDIA_TYPE
+        } else if (e.status === 404) {
           this.mostrarModal(
             'Estudio no encontrado',
             'El estudio ya no existe.',
             'warning'
           );
-        }else if(e.status >= 500){
+        } else if (e.status >= 500) {
           this.mostrarModal(
             'Error del servidor',
             'Ocurrió un error al intentar eliminar el estudio.',
             'error'
           );
-        }else{
+        } else {
           this.mostrarModal(
             'Error inesperado',
             'El proceso de eliminación falló por un motivo desconocido.',
             'error'
           );
         }
-
-      }
+      },
     });
+  }
+
+  eliminar(): void {
+    this.confirmarEliminacion();
   }
 }
