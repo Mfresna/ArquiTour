@@ -1,6 +1,6 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable, OnInit } from '@angular/core';
-import { BehaviorSubject, interval, startWith, switchMap } from 'rxjs';
+import { BehaviorSubject, interval, startWith, switchMap, tap } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { NotificacionResponseModel } from '../../models/notificacionModels/notificacionResponseModel';
 
@@ -58,7 +58,19 @@ export class NotificacionService {
     return this.http.get<NotificacionResponseModel[]>(`${this.NOTIFICACION_URL}/recibidas`, {params});
   }
 
-  
+  // ======= PATCH: marcar UNA como leída =======
+  marcarNotificacionLeida(idNotificacion: string) {
+    return this.http.patch(`${this.NOTIFICACION_URL}/leer/${idNotificacion}`,{}
+    ).pipe(
+      tap(() => this.refrescarManual()) //actualiza las notificaciones
+    );
+  }
 
-  
+  // ======= PATCH: marcar TODAS como leídas =======
+  marcarTodasLeidas() {
+    return this.http.patch(`${this.NOTIFICACION_URL}/leer-todas`,{}
+    ).pipe(
+      tap(() => this.refrescarManual()) //actualiza las notificaciones
+    );
+  }
 }

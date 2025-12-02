@@ -128,10 +128,18 @@ export class Header implements OnInit{
     //hacer el subscribe para verlas
   }
 
-  marcarTodasLeidas(){
-    alert("Marcar leidas");
+  marcarTodasLeidas() {
+    this.notificacionService.marcarTodasLeidas().subscribe({
+      next: () => {
+        console.log("Todas marcadas como leídas");
+      },
+      error: err => {
+        console.error(err);
+        alert("Hay notificaciones que no pueden ser marcadas como leidas.")
+      }
+    });
   }
-
+  
   //========== ESCUCHADORES
   @HostListener('document:keydown.escape', ['$event'])
   handleKeyboardEvent(event: any) { 
