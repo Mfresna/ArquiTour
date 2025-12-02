@@ -34,7 +34,7 @@ label {
 #dropzone:focus {
   background: var(--fondo-superficie, #f3f8ff);
   border-color: var(--colorBoton, #0077b6);
-  box-shadow: 0 10px 22px var(--sombra-fuerte, rgba(0,0,0,.06));
+  box-shadow: 0 10px 22px var(--sombra-fuerte);
 }
 
 /* Contenedor interno */
@@ -53,7 +53,7 @@ label {
   text-align: center;
   user-select: none;
   padding: 1rem;
-  color: var(--texto-parrafo, var(--texto-secundario, #444444));
+  color: var(--texto-secundario, #444444);
   animation: aparecer-msg .3s ease-out;
 }
 

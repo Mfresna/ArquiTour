@@ -75,7 +75,7 @@
   margin-top: 10px;
   margin-bottom: 10px;
   
-  color: var(--colorBoton, #0077b6);
+  color: var(--colorBoton);
 }
 
 #panel-filtros {
@@ -117,7 +117,7 @@
   padding: 0.6rem 0.8rem;
 
   border-radius: 1.2rem;          
-  border: 1px solid #ccc;
+  border: 1px solid var(--borde-suave);
 
   font-size: 1rem;
 
@@ -128,7 +128,7 @@
 #panel-filtros .form-filtros select:focus,
 #panel-filtros .form-filtros input:focus {
   outline: none;
-  border-color: var(--colorBoton, #0077b6);
+  border-color: var(--colorBoton);
   box-shadow: 0 0 6px var(--sombra);
 }
 
@@ -150,8 +150,8 @@
 /* Estado inválido */
 input.invalido,
 select.invalido {
-  border: 2px solid var(--colorBotonEliminar);
-  background: #ffecec;
+  border: 2px solid var(--color-error);
+  background: var(--color-error-suave);
 }
 
   /*==== BOTONES ======*/
@@ -175,7 +175,7 @@ select.invalido {
 
   /*Boton Buscar*/
 #buscar {
-  background: var(--colorBoton, #0077b6);
+  background: var(--colorBoton);
   color: var(--texto-boton-buscar);
 }
 
@@ -193,8 +193,6 @@ select.invalido {
 
 
 #limpiar:hover {
-  background: var(--boton-secundario-bg-hover);
-  color: var(--boton-secundario-texto);
   transform: translateY(-2px);
   box-shadow: 0 8px 16px var(--sombra);
 }
@@ -250,7 +248,7 @@ select.invalido {
 }
 
 .contenido-usuario.usr-hab{
-  border-left: .21rem solid #1e6e0c;
+  border-left: .21rem solid var(--color-habilitado);
 }
 
 .contenido-usuario.usr-deshab{

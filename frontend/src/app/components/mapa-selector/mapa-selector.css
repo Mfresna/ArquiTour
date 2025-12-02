@@ -2,7 +2,7 @@
   width: 100%;
   border-radius: 0.75rem;
   overflow: hidden;
-  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.2);
+  box-shadow: 0 4px 12px var(--sombra);
   margin-bottom: 0.75rem;
 }
 
@@ -27,17 +27,17 @@
   padding: 0.6rem 0.8rem;
   padding-right: 45px;              /* espacio para el botón interno */
   border-radius: 1.2rem;
-  border: 1px solid #ccc;
+  border: 1px solid var(--borde-suave);
   font-family: var(--fuenteBase);
   font-size: 1rem;
   transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
-  background-color: #fff;
+  background-color: var(--fondo-pagina);
 }
 
 .input-mapa:focus {
   outline: none;
   border-color: var(--colorBoton, #0077b6);
-  box-shadow: 0 0 6px rgba(0, 119, 182, 0.35);
+  box-shadow: 0 0 6px var(--sombra);
 }
 
 .buscar-btn {
@@ -50,12 +50,12 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #a2a2a2;
+  color: var(--ojo-pass);
   transition: color 0.2s;
 }
 
 .buscar-btn:hover {
-  color: #454545;
+  color: var(--texto-principal);
 }
 
 .buscar-btn .material-icons {

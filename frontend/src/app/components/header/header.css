@@ -96,7 +96,7 @@ header {
 }
 
 #panel-central li .boton:hover {
-  color: var(--colorLink);
+  color: var(--color-acento);
   transform: scale(1.05);
 }
 
@@ -111,7 +111,7 @@ header {
 }
 
 #panel-derecha > span:hover {
-  color: var(--colorLink);
+  color: var(--color-acento);
 }
 
 #notificaciones { 

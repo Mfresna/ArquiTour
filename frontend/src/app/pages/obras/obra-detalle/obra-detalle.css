@@ -174,7 +174,7 @@
 
 #desc-texto p {
   margin: 0;
-  color: var(--texto-parrafo);
+  color: var(--texto-secundario);
   line-height: 1.6;
   font-size: 0.95rem;
   text-align: justify;

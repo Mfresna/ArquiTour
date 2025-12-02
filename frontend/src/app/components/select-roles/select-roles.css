@@ -8,8 +8,8 @@
   min-width: 260px;
   max-width: 320px;
 
-  background: var(--fondo-superficie, #fff);
-  box-shadow: 0 10px 26px rgba(15, 23, 42, 0.2);
+  background: var(--fondo-superficie);
+  box-shadow: 0 10px 26px var(--sombra);
 
   border-bottom-left-radius: 12px;
   border-bottom-right-radius: 12px;
@@ -21,7 +21,7 @@
   flex-direction: column;
   gap: 0.6rem;
 
-  border: 1px solid rgba(0, 0, 0, 0.04);
+  border: 1px solid var(--color-contorno-favorito);
 
 }
 
@@ -31,7 +31,7 @@
   font-size: 1rem;
   font-weight: 600;
   
-  color: var(--texto-principal, #111827);
+  color: var(--texto-principal);
 }
 
 /* ====== LISTAS ====== */
@@ -44,7 +44,8 @@
   padding: 0.35rem 0.6rem;
   margin-left: 2%;
   border-radius: 999px;
-  background: #f3f4f6;
+  background: var(--colorItem);
+  color: var(--texto-principal);
 
   cursor: pointer;
  
@@ -55,8 +56,8 @@
 }
 
 .item-lista:hover {
-  background: #e5f1fb;
-  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.18);
+  background: var(--colorSecundario);
+  box-shadow: 0 2px 6px var(--sombra);
   transform: translateY(-1px);
 }
 
@@ -68,20 +69,18 @@
   white-space: nowrap;
 
   font-size: 0.9rem;
-
-  color: var(--texto-principal);
 }
 
 /* Icono de estado (check / círculo) */
 .icon-check {
   font-size: 20px;
-  color: #9ca3af;
+  color: var(--texto-secundario);  
   flex-shrink: 0;
   transition: color 0.15s ease, transform 0.12s ease;
 }
 
 .icon-check.activo {
-  color: var(--colorBoton, #0077b6);
+  color: var(--colorBoton);
   transform: scale(1.05);
 }
 
@@ -98,7 +97,7 @@
 
   gap: 15px;
   
-  border-top: 1px solid #e5e7eb;
+  border-top: 1px solid var(--btn-quitar-bg-hover);
 }
 
 #botonera button {
@@ -118,7 +117,7 @@
 }
 
 small {
-  color: #ff3333;
+  color: var(--color-error);
   font-size: 0.9rem;
   text-align: left;
   margin-left: 0.6rem;
@@ -126,24 +125,23 @@ small {
 
 /*Btn Aceptar*/
 #aceptar {
-  background: var(--colorBoton, #0077b6);
-  color: #fff;
+  background: var(--colorBoton);
+  color: var(--texto-boton-buscar);
 }
 
 #aceptar:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 16px rgba(0,119,182,.25);
 }
 
 /*Btn Cancelar*/
 #cancelar {
-  background: #f9fafb;
-  color: #1e293b;
-  border-color: #dbe3eb;
+  background: var(--boton-secundario-bg);
+  color: var(--boton-secundario-texto);
+  border: 1px solid transparent;
 }
 
 #cancelar:hover {
-  background: #eef2f6;
+  transform: translateY(-2px);
 }
 
 /* =============== PANEL DE SCROLL =============== */

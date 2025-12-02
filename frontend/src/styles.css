@@ -8,9 +8,13 @@
   --nav-text: #f0f0f0;    
   --nav-icon: #f8f7f7;
   --ojo-pass: #a2a2a2;
+  --color-error: #ff6b6b;
+  --color-exito: #4ade80;
+  --color-habilitado: #1e6e0c;
+  --radioMenu: 15px;
 }
 
-/*                 ================== MODO CLARO ================== */
+                  /*================== MODO CLARO ================== */
 
 :root[data-tema="claro"],
 :root:not([data-tema]) {
@@ -18,64 +22,60 @@
   color-scheme: light;
 
   /* ================== FONDOS ================== */
+  --fondo-pagina: #ffffff;
   --fondo-superficie: #ffffff;
-  --colorSecundario: #f0f0f0;
-  --colorFondoTarjeta: #fafafa;
-  --colorItem: #f0f4ff;
   --fondo-suave: #f8f8f8;
+  --colorSecundario: #f0f0f0;
+  --colorItem: #f0f4ff;
+
 
   /* ================== TEXTO ================== */
   --texto-principal: #222222;
-  --texto-parrafo: #374151;
+  --texto-secundario: #374151;
+
+    /* ================== BORDES ================== */
+  --borde-suave: #d0d0d0;
+  --borde-fuerte: #b5b5b5;
 
   /* ================== COLORES ACCIÓN ================== */
   --colorBoton: #0077b6;
   --colorBotonHover: #005b8d;
   --boton-primario-deshabilitado: #a0c4d9;
 
-  /* ===== Botón eliminar ===== */
   --colorBotonEliminar: #d32424;
   --colorBotonEliminarHover: #a51b1b;
-  --color-error: #ff6b6b;
-  --color-error-suave: #f1caca;
 
-  /* ===== Botón quitar imágenes ===== */
-  --btn-quitar-bg: rgba(0, 0, 0, 0.35);
-  --btn-quitar-bg-hover: rgba(0, 0, 0, 0.55);
-  --btn-quitar-icono: #ffffff;
+  --color-acento: #00b4d8;
 
-  /* ===== Botón Buscar ===== */
-  --texto-boton-buscar: #ffffff;         
-  
- /* ===== Botón limpiar ===== */
-  --boton-secundario-bg: #edeff3;        
-  --boton-secundario-bg-hover: #e1e4ea;  
-  --boton-secundario-texto: #111111;
-
-  /* ================== LINKS ================== */
-  --colorLink: #0077b6;
-
-  /* ================== BORDES ================== */
-  --borde-suave: #d0d0d0;
-  --borde-fuerte: #b5b5b5;
+   /* ================== ESTADOS ================== */
+  --color-error-suave: #f3d8d8;
 
   /* ================== SOMBRAS ================== */
   --sombra: rgba(0, 0, 0, 0.15);
+  --sombra-fuerte: rgba(0, 0, 0, 0.25); 
 
   /* ================== SCROLLBAR ================== */
   --color-scrollbar: #cbd5e1;
 
-  /* ================== OTROS ================== */
-  --radioMenu: 15px;
-  --fondo-boton-flotante: rgba(184, 177, 177, 0.45);
-  --fondo-boton-flotante-hover: #5f6366;
+   /* ================ BOTÓN LIMPIA ================ */
+  --boton-secundario-bg: #edeff3;        
+  --boton-secundario-bg-hover: #e1e4ea;  
+  --boton-secundario-texto: #2e2c2c;
+
+  /* ================== BOTON BUSCAR ================== */
+  --texto-boton-buscar: #ffffff; 
+
+  /* =====  BOTÓN QUITAR IMÁGENES ===== */
+  --btn-quitar-bg: rgba(0, 0, 0, 0.35);
+  --btn-quitar-bg-hover: rgba(0, 0, 0, 0.55);
+
+  /* ================== ICONO FAVORITO ================== */
   --color-contorno-favorito: #928787;
-  --color-exito: #4ade80;
-  --ojo-contraseña: #a2a2a2;
+  
 }
 
 
-/*                    ================== MODO OSCURO ================== */
+                  /* ================== MODO OSCURO ================== */
 
 :root[data-tema="oscuro"] {
   color-scheme: dark;
@@ -84,70 +84,51 @@
   --fondo-pagina: #23272d;
   --fondo-superficie: #2f3033;
   --fondo-suave: #1a1d22;
-  --fondo-suave-alt: #20242b; 
-  --colorFondoTarjeta: #14171c;
   --colorSecundario: #0d0f12;
-  --colorItem: #2f3033;
+  --colorItem: #3b3b3d;
 
   /* ================== TEXTO ================== */
   --texto-principal: #f1f5f9;
   --texto-secundario: #c7cdd4;
-  --texto-suave: #8a9099;
-  --texto-invertido: #0d0f12;
 
   /* ================== BORDES ================== */
   --borde-suave: #2a2f36;
   --borde-fuerte: #3a414a;
 
-  /* ================== ACENTOS Y BOTONES ================== */
-  --color-primario: #3995eb;
-  --color-primario-suave: rgba(74,168,255,0.18);
-  --color-primario-fuerte: #1f8cff;
-  --color-acento: #8ecaff;
-
- 
+  /* ================== COLORES ACCIÓN ================== */
   --colorBoton: #3995eb;
   --colorBotonHover: #1f8cff;
+  --boton-primario-deshabilitado: #3b4650;
+
   --colorBotonEliminar: #ff6b6b;
   --colorBotonEliminarHover: #ff4a4a;
-  --colorLink: #8ecaff;
+ 
+  --color-acento: #8ecaff;
 
   /* ================== ESTADOS ================== */
-  --color-error: #ff6b6b;
   --color-error-suave: rgba(255,107,107,0.16);
-  --color-exito: #4ade80;
-  --color-exito-suave: rgba(74, 222, 128, 0.16);
 
-/* ================== SOMBRAS ================== */
---sombra: rgba(0, 0, 0, 0.55);     
---sombra-fuerte: rgba(0, 0, 0, 0.75); 
-
+  /* ================== SOMBRAS ================== */
+  --sombra: rgba(0, 0, 0, 0.55);     
+  --sombra-fuerte: rgba(0, 0, 0, 0.75); 
 
   /* ================== SCROLLBAR ================== */
   --color-scrollbar: #3b424c;
 
-  /* ================== BOTONES FLOTANTES ================== */
-  --fondo-boton-flotante: rgba(255,255,255,0.08);
-  --fondo-boton-flotante-hover: rgba(255,255,255,0.16);
-  --boton-primario-deshabilitado: #3b4650;
-
-    /* ================== BOTON LIMPIAR ================== */
+  /* ================== BOTON LIMPIAR ================== */
   --boton-secundario-bg: #3e4448;      
   --boton-secundario-bg-hover: #4a5156;  
   --boton-secundario-texto: #f5f5f5;
 
+  /* ================== BOTON BUSCAR ================== */
   --texto-boton-buscar: #f1f5f9; 
 
   /* ================== BOTÓN QUITAR IMÁGENES ================== */
   --btn-quitar-bg: rgba(255, 255, 255, 0.32);
   --btn-quitar-bg-hover: rgba(255, 255, 255, 0.54);
-  --btn-quitar-icono: #000000;
 
   /* ================== ICONO FAVORITO ================== */
   --color-contorno-favorito: #a6b1bb;
-
-  /* ================== FUENTE ================== */
-  --fuenteBase: "Segoe UI", Roboto, sans-serif;
 }
 
 

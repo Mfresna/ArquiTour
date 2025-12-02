@@ -5,6 +5,7 @@
 
   height: 100%;
   min-height: 0;
+  background: var(--fondo-pagina)
 }
 
 #contenedor-estudios {
@@ -175,8 +176,6 @@ input.invalido {
 
 
 #limpiar:hover {
-  background: var(--boton-secundario-bg-hover);
-  color: var(--boton-secundario-texto);
   transform: translateY(-2px);
   box-shadow: 0 8px 16px var(--sombra);
 }
