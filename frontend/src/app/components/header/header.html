@@ -78,14 +78,33 @@
     </div>
   
     <div id="panel-derecha">
-      <span
-        id="notificaciones"
-        class="material-icons deshabilitado"
-        tabindex="0">notifications</span>  
+
+      <div id="contenedor-notificaciones"
+          (click)="abrirNotificaciones()"
+          tabindex="0"
+          (keydown.enter)="abrirNotificaciones()">
+
+        <span
+          id="notificaciones"
+          class="material-icons span-menu"
+          tabindex="-1">
+            notifications
+        </span>
+
+        <!-- Badge solo si hay notificaciones sin leer -->
+        @if (cantNotifSinLeer$ | async; as count) {
+          @if (count > 0) {
+            <span class="badge-notificaciones">
+              {{count}}
+            </span>
+          }
+        }
+
+      </div>
 
       <span 
         id="usuario"
-        class="material-icons"
+        class="material-icons span-menu"
         (click)="toggleUsuarioMenu()"
         (keydown.escape)="toggleUsuarioMenu()"
         tabindex="0">person</span>
@@ -123,6 +142,5 @@
 
   }
 
-  
 
 </header>

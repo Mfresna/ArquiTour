@@ -1,0 +1,63 @@
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { Injectable, OnInit } from '@angular/core';
+import { BehaviorSubject, interval, startWith, switchMap } from 'rxjs';
+import { environment } from '../../../environments/environment';
+import { NotificacionResponseModel } from '../../models/notificacionModels/notificacionResponseModel';
+
+@Injectable({
+  providedIn: 'root',
+})
+export class NotificacionService implements OnInit {
+
+  private readonly NOTIFICACION_URL = `${environment.apiUrl}/notificaciones`;
+
+    // Contador como observer para que puedan subscribirse
+  private notificacionesSinLeer = new BehaviorSubject<number>(0);
+  cantNotifSinLeer$ = this.notificacionesSinLeer.asObservable();
+
+
+  constructor(
+    private http: HttpClient
+  ) {}
+  
+  ngOnInit(): void {
+    this.iniciarPolling();
+  }
+
+  //Cada n segundos consulta las notificaciones
+  private iniciarPolling(): void {
+    //se repite cada 30 segundos
+    interval(30000)
+      .pipe(
+        startWith(0),
+        switchMap(() => this.getNotificacionesRecibidas(false)) 
+      )
+      .subscribe({
+        next: notifs => this.notificacionesSinLeer.next(notifs.length),
+        error: err => {
+          console.error('Error obteniendo notificaciones', err);
+          this.notificacionesSinLeer.next(0);
+        }
+      });
+  }
+
+  refrescarManual() {
+
+    this.getNotificacionesRecibidas(false).subscribe({
+      next: notifs => this.notificacionesSinLeer.next(notifs.length),
+      error: err => console.error(err)
+    });
+
+  }
+
+  getNotificacionesRecibidas(isLeido?: boolean) {
+
+    let params = new HttpParams();    
+    if (isLeido !== undefined) {
+      params = params.set('isLeido', isLeido);
+    }
+    return this.http.get<NotificacionResponseModel[]>(`${this.NOTIFICACION_URL}/recibidas`, {params});
+  }
+
+  
+}

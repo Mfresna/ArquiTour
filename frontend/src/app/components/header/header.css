@@ -102,31 +102,72 @@ header {
 
 
     /*PANEL DERECHO*/
-#panel-derecha > span{
+#panel-derecha .span-menu{
   font-size: 30px;
   height: 100%;
   user-select: none;
   cursor: pointer;
+
+  color: var(--nav-icon);
+
   transition: color 0.3s ease, transform 0.4s ease;
 }
 
-#panel-derecha > span:hover {
+#panel-derecha .span-menu:hover {
   color: var(--colorLink);
 }
 
-#notificaciones { 
-  color: var(--nav-icon) !important;
-  opacity: 0.5;
+#notificaciones{
+  font-size: 28px !important;
 }
 
-#notificaciones:hover {
-  color: var(--nav-icon) !important;
-  opacity: 0.8;
+/*============== CAMPANA DE NOTIFICACIONES ===============*/
+/* Contenedor de la campana y el badge */
+#contenedor-notificaciones {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
 }
 
-#usuario {
-  color: var(--nav-icon);
+/* Badge rojo con número de notificaciones */
+.badge-notificaciones {
+  position: absolute;
+  top: -4px;    /* ajustá fino según veas */
+  right: -4px;  /* idem */
+
+  min-width: 16px;
+  height: 16px;
+  padding: 0 4px;
+
+  background-color: var(--color-error, #ff5252);
+  color: #fff;
+
+  font-size: 10px;
+  font-weight: 600;
+
+  border-radius: 999px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  pointer-events: none; /* el click cae igual en la campana */
+  animation: none;
 }
+
+/*============== animacion del baget ====================*/
+@keyframes badgePing {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.15); }
+  100% { transform: scale(1); }
+}
+
+#contenedor-notificaciones:hover .badge-notificaciones {
+  animation: badgePing 0.3s ease-out;
+}
+
 
 /*============ MENUES DESPLEGABLE ============*/
 .menu-desplegable {

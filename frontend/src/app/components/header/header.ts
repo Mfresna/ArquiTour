@@ -3,10 +3,13 @@ import { RouterLink } from '@angular/router';
 import { AuthService } from '../../auth/services/authService/auth-service';
 import { TokenService } from '../../auth/services/tokenService/token-service';
 import { TemaService } from '../../services/temaService/tema-service';
+import { Observable } from 'rxjs';
+import { NotificacionService } from '../../services/notificacionService/notificacion-service';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
   selector: 'app-header',
-  imports: [RouterLink],
+  imports: [RouterLink, AsyncPipe],
   templateUrl: './header.html',
   styleUrl: './header.css',
 })
@@ -21,16 +24,21 @@ export class Header implements OnInit{
 
   mapaMenu: boolean = false;
 
+  cantNotifSinLeer$!: Observable<number>;
+
   constructor(
     private authService: AuthService,
     private tokenService: TokenService,
     private elementRef: ElementRef,
-    private temaService: TemaService 
+    private temaService: TemaService,
+    private notificacionService: NotificacionService
   ){}
 
   ngOnInit(): void {
     const temaActual = document.documentElement.getAttribute('data-tema');
     this.modoNoche = temaActual === 'oscuro';
+
+    this.cantNotifSinLeer$ = this.notificacionService.cantNotifSinLeer$
   }
 
   cerrarSesion(){
@@ -95,6 +103,13 @@ export class Header implements OnInit{
     this.obrasMenu = false;
     this.mapaMenu=false;
 
+  }
+
+  //================= NOTIFICACIONES
+
+  abrirNotificaciones() {
+    this.notificacionService.refrescarManual();
+    //hacer el subscribe para verlas
   }
 
   //========== ESCUCHADORES
