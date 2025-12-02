@@ -14,6 +14,7 @@ import TpFinal_Progra3.security.services.JwtService;
 import TpFinal_Progra3.services.interfaces.NotificacionServiceinterface;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -65,6 +66,24 @@ public class NotificacionService implements NotificacionServiceinterface {
                 .map(notificacionMapper::mapResponseDto)
                 .toList();
     }
+
+    public void marcarLeida(Long idNotificacion) {
+        notificacionRepository.findById(idNotificacion)
+                .ifPresentOrElse(
+                        n -> {
+                            n.setIsLeido(true);
+                            notificacionRepository.save(n);
+                        },
+                        () -> { throw new NotFoundException(HttpStatus.NOT_FOUND, "Notificación no encontrada"); }
+                );
+    }
+
+    public void marcarTodasLeidas(HttpServletRequest request) {
+        //Todas las recibidas
+        obtenerRecibidas(request,null)
+                .forEach(n -> marcarLeida(n.getId()));
+    }
+
 
     public Notificacion crearNotificacionAutomatica(
             Usuario emisor,

@@ -6,6 +6,7 @@ import TpFinal_Progra3.services.implementacion.NotificacionService;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -79,5 +80,17 @@ public class NotificacionController {
     @GetMapping("/enviadas")
     public ResponseEntity<List<NotificacionResponseDTO>> notificacionesEnviadas(HttpServletRequest request) {
         return ResponseEntity.ok(notificacionService.obtenerEnviadas(request));
+    }
+
+    @PatchMapping("/leer/{id}")
+    public ResponseEntity<Void> marcarLeida(@PathVariable @Positive Long idNotificacion) {
+        notificacionService.marcarLeida(idNotificacion);
+        return ResponseEntity.ok().build();
+    }
+
+    @PatchMapping("/leer-todas")
+    public ResponseEntity<Void> marcarTodasLeidas(HttpServletRequest request) {
+        notificacionService.marcarTodasLeidas(request);
+        return ResponseEntity.ok().build();
     }
 }

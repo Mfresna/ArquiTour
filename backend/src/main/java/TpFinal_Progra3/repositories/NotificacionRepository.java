@@ -1,8 +1,6 @@
 package TpFinal_Progra3.repositories;
 
 import TpFinal_Progra3.model.entities.Notificacion;
-import TpFinal_Progra3.model.entities.Usuario;
-import TpFinal_Progra3.security.model.enums.RolUsuario;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
