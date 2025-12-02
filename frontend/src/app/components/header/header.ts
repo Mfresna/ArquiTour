@@ -15,14 +15,13 @@ import { AsyncPipe } from '@angular/common';
 })
 export class Header implements OnInit{
 
-  usuarioMenu: boolean = false;
   modoNoche: boolean = false;
 
+  usuarioMenu: boolean = false;
   obrasMenu: boolean = false;
-
   estudiosMenu: boolean = false;
-
   mapaMenu: boolean = false;
+  notificacionesMenu: boolean = false;
 
   cantNotifSinLeer$!: Observable<number>;
 
@@ -60,16 +59,18 @@ export class Header implements OnInit{
 
 
   //=========== TOGGLE MENUS
+  toggleModoNoche(){
+    this.modoNoche = !this.modoNoche;   
+    this.temaService.toggleTema();
+  }
+
   toggleUsuarioMenu(){
     this.usuarioMenu = !this.usuarioMenu;
 
     this.obrasMenu = false
     this.estudiosMenu = false
-  }
-
-  toggleModoNoche(){
-    this.modoNoche = !this.modoNoche;   
-    this.temaService.toggleTema();
+    this.mapaMenu=false;
+    this.notificacionesMenu = false;
   }
 
   toggleObrasMenu(){
@@ -78,6 +79,7 @@ export class Header implements OnInit{
     this.usuarioMenu = false;
     this.estudiosMenu = false;
     this.mapaMenu=false;
+    this.notificacionesMenu = false;
 
   }
 
@@ -87,6 +89,7 @@ export class Header implements OnInit{
     this.usuarioMenu = false
     this.obrasMenu = false;
     this.mapaMenu=false;
+    this.notificacionesMenu = false;
   }
 
   toggleMapaMenu(){
@@ -95,6 +98,16 @@ export class Header implements OnInit{
     this.usuarioMenu = false;
     this.obrasMenu = false;
     this.estudiosMenu = false;
+    this.notificacionesMenu = false;
+  }
+
+  toggleNotificacionesMenu(){
+    this.notificacionesMenu = !this.notificacionesMenu;
+
+    this.usuarioMenu = false;
+    this.obrasMenu = false;
+    this.mapaMenu=false;
+    this.estudiosMenu = false;
   }
 
   cerrarTodosMenus(){
@@ -102,14 +115,21 @@ export class Header implements OnInit{
     this.usuarioMenu = false;
     this.obrasMenu = false;
     this.mapaMenu=false;
+    this.notificacionesMenu = false;
 
   }
 
   //================= NOTIFICACIONES
 
   abrirNotificaciones() {
+    this.toggleNotificacionesMenu();
+
     this.notificacionService.refrescarManual();
     //hacer el subscribe para verlas
+  }
+
+  marcarTodasLeidas(){
+    alert("Marcar leidas");
   }
 
   //========== ESCUCHADORES

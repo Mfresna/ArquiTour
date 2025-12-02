@@ -7,7 +7,7 @@ import { NotificacionResponseModel } from '../../models/notificacionModels/notif
 @Injectable({
   providedIn: 'root',
 })
-export class NotificacionService implements OnInit {
+export class NotificacionService {
 
   private readonly NOTIFICACION_URL = `${environment.apiUrl}/notificaciones`;
 
@@ -18,9 +18,8 @@ export class NotificacionService implements OnInit {
 
   constructor(
     private http: HttpClient
-  ) {}
-  
-  ngOnInit(): void {
+  ) {
+    //Se implementa aca para que ni bien se construya ya se ejecute el metodo
     this.iniciarPolling();
   }
 
@@ -58,6 +57,8 @@ export class NotificacionService implements OnInit {
     }
     return this.http.get<NotificacionResponseModel[]>(`${this.NOTIFICACION_URL}/recibidas`, {params});
   }
+
+  
 
   
 }
