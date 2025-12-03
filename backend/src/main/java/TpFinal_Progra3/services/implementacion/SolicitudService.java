@@ -74,10 +74,10 @@ public class SolicitudService {
             admins = admins.stream().filter(a-> !a.equals(usuario)).toList();
         }
 
-        notificacionService.notificacionMasiva(
+        notificacionService.crearNotificacionMultiples(
                 usuario,
                 admins,
-                "Nueva solicitud de cambio de rol a arquitecto",
+                "Nueva Solicitudad Cambio de Rol",
                 TipoNotificacion.SOLICITUD_CAMBIO_ROL,
                 solicitud.getId());
 
@@ -167,7 +167,7 @@ public class SolicitudService {
 
         solicitudRepository.save(solicitud);
 
-        notificacionService.crearNotificacionAutomatica(
+        notificacionService.crearNotificacion(
                 admin,
                 solicitud.getUsuario(),
                 mensajeNotificacion,

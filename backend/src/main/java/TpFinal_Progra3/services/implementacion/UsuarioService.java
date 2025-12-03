@@ -344,11 +344,12 @@ public class UsuarioService implements UsuarioServiceInterface {
                 })
                 .collect(Collectors.joining("\n"));
 
-        notificacionService.crearNotificacionAutomatica(
+        notificacionService.crearNotificacion(
                 buscarUsuario(request),
                 usr,
                 mensajes,
-                TipoNotificacion.CAMBIO_ROL);
+                TipoNotificacion.CAMBIO_ROL,
+                null);
     }
 
     @Transactional

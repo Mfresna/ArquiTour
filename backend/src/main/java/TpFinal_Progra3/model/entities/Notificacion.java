@@ -41,5 +41,6 @@ public class Notificacion {
     @Column(name = "tipo_notificacion", nullable = false)
     private TipoNotificacion tipo;
 
-    private Long referenciaId;
+    @Builder.Default
+    private Long referenciaId = null;
 }
