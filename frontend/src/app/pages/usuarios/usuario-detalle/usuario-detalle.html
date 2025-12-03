@@ -35,6 +35,18 @@
 
     </div>
 
+    @if(miPerfil){
+      <div id="roles-contenedor">
+        @for (r of roles; track r) {
+          @if (r !== 'ROLE_USUARIO') {
+            <div class="burbuja-rol">
+              <p class="rol-nombre">{{ rolModelDescripcion[r] || r }}</p>
+            </div>
+          }
+        }
+      </div>
+    }
+
     <!-- ====== Fila 2: imagen + obras ====== -->
     <div id="contenido">
 

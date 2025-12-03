@@ -12,6 +12,9 @@ import { environment } from '../../../../environments/environment';
 import { Location } from '@angular/common';
 import { TieneCambiosPendientes } from '../../../guards/salirSinGuardar/salir-sin-guardar-guard';
 import { MensajeModal, MessageType } from '../../../components/mensaje-modal/mensaje-modal';
+import { UsuarioModel } from '../../../models/usuarioModels/usuarioModel';
+import { RolesEnum } from '../../../models/usuarioModels/rolEnum';
+import { RolModelDescripcion } from '../../../models/usuarioModels/rolModels';
 
 
 @Component({
@@ -30,9 +33,11 @@ export class UsuarioDetalle implements OnInit, AfterViewInit, TieneCambiosPendie
   emailRegistrado!: string;
   nombre!: string;
   apellido!: string;
+  roles!: RolesEnum[]
+  rolModelDescripcion = RolModelDescripcion;
 
   miPerfil: boolean = false;
-
+  
   imagenUrlExistente!: string;
   nuevaImagen: File | null = null;
   quitadoImg: boolean = false;
@@ -295,19 +300,7 @@ export class UsuarioDetalle implements OnInit, AfterViewInit, TieneCambiosPendie
     this.usuarioService.getUsuarioMe().subscribe({
       next: (item) => {
         this.miPerfil = true;
-        
-        this.perfilForm.patchValue(item);
-
-        this.id = item.id;
-        this.emailRegistrado = item.email;
-        this.nombre = item.nombre;
-        this.apellido = item.apellido;
-        this.imagenUrlExistente = item.urlImagen;
-
-
-        this.nuevaImagen = null;
-        this.quitadoImg = false;
-
+        this.cargarDatos(item);
       },
       error: (e) => {
         this.mostrarModal(
@@ -324,17 +317,7 @@ export class UsuarioDetalle implements OnInit, AfterViewInit, TieneCambiosPendie
   private cargarusuario(id: string){
     this.usuarioService.getUsuario(id).subscribe({
       next: (item) => {
-        this.perfilForm.patchValue(item);
-        
-        this.id = item.id;
-        this.emailRegistrado = item.email;
-        this.nombre = item.nombre;
-        this.apellido = item.apellido;
-        this.imagenUrlExistente = item.urlImagen;
-
-        this.nuevaImagen = null;
-        this.quitadoImg = false;
-
+        this.cargarDatos(item);
       },
       error: (e) => {
        this.mostrarModal(
@@ -345,6 +328,20 @@ export class UsuarioDetalle implements OnInit, AfterViewInit, TieneCambiosPendie
         );
       }
     });
+  }
+
+  private cargarDatos(item: UsuarioModel){
+    this.perfilForm.patchValue(item);
+        
+    this.id = item.id;
+    this.emailRegistrado = item.email;
+    this.nombre = item.nombre;
+    this.apellido = item.apellido;
+    this.imagenUrlExistente = item.urlImagen;
+    this.roles = this.getRolesEnumValidos(item.roles);
+
+    this.nuevaImagen = null;
+    this.quitadoImg = false;
   }
 
   cargarImg(url: string): string | null{
@@ -365,5 +362,14 @@ export class UsuarioDetalle implements OnInit, AfterViewInit, TieneCambiosPendie
     this.location.back();
   }
 
+
+  //ROLES
+  getRolesEnumValidos(roles: string[]): RolesEnum[] {
+    if (!roles || roles.length === 0) return [];
+
+    return roles
+      .filter(r => Object.values(RolesEnum).includes(r as RolesEnum))
+      .map(r => r as RolesEnum);
+  }
 
 }
