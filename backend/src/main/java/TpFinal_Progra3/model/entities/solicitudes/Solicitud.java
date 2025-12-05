@@ -11,12 +11,14 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Entity
-@Table(name = "cambio_rol_arq")
+@Table(name = "solicitudes")
+//es para que maneje con joins los hijos de esta clase
+@Inheritance(strategy = InheritanceType.JOINED)
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class SolicitudCambioRolArq {
+public abstract class Solicitud {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,6 +27,21 @@ public class SolicitudCambioRolArq {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "usuario_id", nullable = false)
     private Usuario usuario; // el que pide el cambio de Rol
+
+    @Builder.Default
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private EstadoSolicitud estado = EstadoSolicitud.PENDIENTE;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "admin_asignado_id")
+    private Usuario adminAsignado; // el Admin que resuelve
+
+    @Builder.Default
+    @Column(nullable = false)
+    private LocalDate fechaCreacion = LocalDate.now();
+
+    
 
     private String matriculaArquitecto;
 
@@ -40,15 +57,8 @@ public class SolicitudCambioRolArq {
     )
     private List<Imagen> imagenesSolicitud;
 
-    @Builder.Default
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private EstadoSolicitud estado = EstadoSolicitud.PENDIENTE;
 
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "admin_asignado_id")
-    private Usuario adminAsignado; // el Admin que resuelve
 
     @Builder.Default
     @Column(nullable = false)
