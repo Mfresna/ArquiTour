@@ -334,3 +334,22 @@ a:hover #logout{
   color:  var(--texto-principal)  !important;
   cursor: default !important;
 }
+
+#modo-noche {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--nav-text);
+  gap: .3rem;
+}
+
+#modo-noche:hover #noche-toggle {
+  transform: scale(1.05);
+}
+
+
+
+
+
+
+

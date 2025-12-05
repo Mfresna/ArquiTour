@@ -1,0 +1,114 @@
+<div class="nosotros-menu">
+
+  <button (click)="toggle('nosotros')" 
+          [class.active]="openSection === 'nosotros'">
+    Sobre ArquiTour
+  </button>
+
+  <button (click)="toggle('obras')" 
+          [class.active]="openSection === 'obras'">
+    Obras y Estudios
+  </button>
+
+  <button (click)="toggle('favoritos')" 
+          [class.active]="openSection === 'favoritos'">
+    Favoritos
+  </button>
+
+</div>
+
+@if(openSection === 'nosotros'){
+  <!-- ===================== SECCIÓN NOSOTROS ===================== -->
+  <section id="nosotros" class="bw-section">
+    <div class="text-block">
+      <h3 class="tag">Sobre ArquiTour</h3>
+      <h2>Descubrí la arquitectura como nunca antes</h2>
+      <p>
+        En ArquiTour podés recorrer obras icónicas y rincones ocultos, conocer a los estudios que las crearon y crear tus propios caminos dentro de la ciudad.
+        Los arquitectos pueden mostrar sus proyectos, actualizar sus obras, gestionar sus estudios y construir una presencia viva en la plataforma.
+
+        Un lugar donde la arquitectura se comparte, se explora y se transforma en inspiración.
+      </p>
+      <p>
+        Navegá de forma visual, guardá lo que te inspira y regresá cuando quieras.
+      </p>
+    </div>
+
+    <!-- Layout base con dos imágenes -->
+    <div class="image-block mapa-bg">
+      <img src="assets/bienvenida/mapa.png" alt="Vista general de ArquiTour">
+      <img class="obras-img"
+        src="assets/bienvenida/obras.png"
+        alt="Obras destacadas en ArquiTour" />
+    </div>
+  </section>
+}
+
+@if(openSection === 'obras'){
+  <!-- ===================== SECCIÓN OBRAS ===================== -->
+  <section id="obras" class="bw-section reverse">
+    <div class="text-block">
+      <h3 class="tag">Obras y Estudios</h3>
+      <h2>Explorá obras y estudios</h2>
+      <p>
+        Explorá obras arquitectónicas con todo detalle: imágenes, contexto, datos técnicos y su ubicación.
+        Conocé también los estudios detrás de cada proyecto, su estilo, trayectoria y principales realizaciones.
+        Descubrí arquitectura de manera integral, desde la obra construida hasta quienes la hacen posible.
+      </p>
+      <p>
+        Ideal para inspirarte, estudiar tipologías o preparar recorridos urbanos.
+      </p>
+    </div>
+
+    <!-- NUEVO bloque de imágenes, igual lógica que "Nosotros" -->
+    <div class="image-block obras-bg">
+      <!-- tarjeta de detalle de la obra -->
+      <img
+        src="assets/bienvenida/detalle-obra.png"
+        alt="Detalle de obra seleccionada en ArquiTour">
+
+      <!-- galería de miniaturas -->
+      <img
+        class="galeria-img"
+        src="assets/bienvenida/estudios.png"
+        alt="Galería de imágenes de la obra en ArquiTour">
+    </div>
+  </section>
+
+}
+
+@if(openSection === 'favoritos'){
+  <!-- ===================== SECCIÓN FAVORITOS ===================== -->
+  <section id="favoritos" class="bw-section reverse">
+    <div class="text-block">
+      <h3 class="tag">Favoritos</h3>
+      <h2>Guardá tus obras favoritas y volvé a ellas cuando quieras.</h2>
+      <p>
+        Creá listas personalizadas con los proyectos que más te inspiran: organizalas por ciudad, estilo, 
+        temática o el criterio que más te guste.
+        Cada colección se convierte en tu propio espacio de referencia, ideal para explorar tendencias, 
+        comparar propuestas y descubrir nuevas miradas dentro del mundo de la arquitectura.
+      </p>
+
+    </div>
+
+    <!-- Misma estructura de doble imagen -->
+    <div class="image-block favoritos-bg">
+      <img
+        src="assets/bienvenida/detalle-favorito.png"
+        alt="Pantalla de favoritos en ArquiTour">
+      <img
+        class="obras-img"
+        src="assets/bienvenida/favoritos.png"
+        alt="Ejemplo de lista de favoritos en ArquiTour">
+    </div>
+  </section>
+
+
+}
+
+
+
+
+
+

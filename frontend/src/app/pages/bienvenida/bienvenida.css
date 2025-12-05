@@ -1,0 +1,332 @@
+/* =========================================================
+   CONTENEDOR PRINCIPAL
+========================================================= */
+.bienvenida-main {
+  background: var(--fondo-pagina);
+  color: var(--texto-principal);
+}
+
+
+/* =========================================================
+   SECCIONES GENERALES
+========================================================= */
+.bw-section {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 4rem 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 3rem;
+}
+
+/* Texto general */
+.bw-section .text-block p {
+  flex: 1 1 0;
+  max-width: 520px;
+  text-align: justify;      
+}
+
+
+/* Imagen general */
+.bw-section .image-block {
+  flex: 1 1 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.bw-section .image-block img {
+  width: 100%;
+  max-width: 520px;
+  border-radius: 22px;
+  box-shadow: 0 10px 26px var(--sombra);
+  object-fit: cover;
+}
+
+/* Etiquetas "Nosotros", "Obras", etc. */
+.bw-section .tag {
+  font-size: 0.85rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: var(--color-acento);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.2rem 0.7rem;
+  border-radius: 999px;
+  background: rgba(0, 180, 216, 0.08);
+  margin-bottom: 0.6rem;
+}
+
+/* Títulos */
+.bw-section h2 {
+  font-size: 1.9rem;
+  font-weight: 700;
+  margin-bottom: 0.8rem;
+  color: var(--texto-principal);
+}
+
+/* Párrafos */
+.bw-section p {
+  font-size: 1.2rem;
+  line-height: 1.6;
+  color: var(--texto-secundario);
+  margin-bottom: 0.4rem;
+  text-align: justify;       
+}
+
+/* Separador entre secciones */
+.bw-section + .bw-section {
+  border-top: 1px solid var(--borde-suave);
+}
+
+
+
+/* =========================================================
+   SECCIÓN NOSOTROS
+========================================================= */
+#nosotros.bw-section {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 4rem;
+}
+
+/* Texto */
+#nosotros .text-block {
+  flex: 0 0 45%;
+}
+
+/* Contenedor de imágenes */
+#nosotros .image-block.mapa-bg {
+  flex: 0 0 55%;
+  position: relative;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  min-height: 380px;
+}
+
+/* Mapa */
+#nosotros .mapa-bg > img:first-child {
+  width: 75%;
+  max-width: 540px;
+  border-radius: 22px;
+  box-shadow: 0 10px 26px rgba(0,0,0,0.15);
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeMapa 0.5s ease forwards;
+}
+
+/* Tarjeta Obras sobre el mapa */
+#nosotros .mapa-bg .obras-img {
+  position: absolute;
+  right: 25%;
+  bottom: -10%;
+  width: 40%;
+  max-width: 330px;
+  border-radius: 18px;
+  box-shadow: 0 16px 32px rgba(0,0,0,0.22);
+  z-index: 3;
+  opacity: 0;
+  transform: translateY(30px);
+  animation: fadeObras 0.65s ease forwards;
+}
+
+
+
+/* =========================================================
+   ANIMACIONES
+========================================================= */
+@keyframes fadeMapa {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeObras {
+  0%   { opacity: 0; transform: translateY(30px); }
+  40%  { opacity: 0; }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+@media (max-width: 900px) {
+
+  .bw-section,
+  .bw-section.reverse {
+    flex-direction: column;
+    padding: 3rem 1.5rem;
+  }
+
+  .bw-section .text-block,
+  .bw-section .image-block {
+    max-width: 100%;
+  }
+
+  .bw-section h2 {
+    font-size: 1.6rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .bw-section {
+    padding: 2.5rem 1.25rem;
+  }
+
+  .bw-section h2 {
+    font-size: 1.45rem;
+  }
+
+  .bw-section p {
+    font-size: 0.95rem;
+  }
+}
+
+
+
+/* =========================================================
+   SECCIÓN OBRAS (DISEÑO INVERTIDO)
+========================================================= */
+
+/* Distribución específica */
+#obras.bw-section {
+  flex-direction: row-reverse; 
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+/* Contenedor de imágenes */
+#obras .image-block.obras-bg {
+  flex: 0 0 55%;
+  position: relative;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  min-height: 360px;
+}
+
+/* Texto */
+#obras .text-block {
+  max-width: 520px;
+}
+
+/* Imagen principal (detalle obra) */
+#obras .obras-bg > img:first-child {
+  width: 82%;
+  max-width: 540px;
+  border-radius: 22px;
+  box-shadow: 0 10px 26px rgba(0,0,0,0.15);
+  position: relative;
+  right: 20%;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeMapa 0.5s ease forwards;
+}
+
+/* Imagen secundaria (galería) */
+#obras .obras-bg .galeria-img {
+  position: absolute;
+  left: -6%;
+  bottom: -8%;
+  width: 48%;
+  max-width: 420px;
+  border-radius: 20px;
+  box-shadow: 0 16px 32px rgba(0,0,0,0.22);
+  z-index: 3;
+  opacity: 0;
+  transform: translateY(30px);
+  animation: fadeObras 0.65s ease forwards;
+}
+
+/* =========================================================
+   SECCIÓN FAVORITOS
+========================================================= */
+
+/* Distribución específica */
+#favoritos.bw-section {
+  justify-content: center;
+  gap: 1.5rem;
+}
+
+/* Texto */
+#favoritos .text-block {
+  max-width: 420px;
+}
+
+/* Contenedor de imágenes */
+#favoritos .image-block.favoritos-bg {
+  flex: 0 0 55%;
+  position: relative;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  min-height: 360px;
+}
+
+/* Imagen principal (detalle favorito) */
+#favoritos .favoritos-bg > img:first-child {
+  width: 65%;
+  max-width: 540px;
+  border-radius: 22px;
+  box-shadow: 0 10px 26px rgba(0,0,0,0.15);
+  position: relative;
+  right: 10%;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeMapa 0.5s ease forwards;   /* misma animación suave que el resto */
+}
+
+/* Imagen secundaria (lista de favoritos) */
+#favoritos .favoritos-bg .obras-img {
+  position: absolute;
+  left: 50%;
+  bottom: -8%;
+  width: 70%;
+  max-width: 420px;
+  border-radius: 20px;
+  box-shadow: 0 16px 32px rgba(0,0,0,0.22);
+  z-index: 3;
+  opacity: 0;
+  transform: translateY(30px);
+  animation: fadeObras 0.65s ease forwards;
+}
+.nosotros-menu {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  
+  display: flex;
+  justify-content: center;
+  gap: 2.5rem;
+
+  padding: 1.5rem 2rem 0.5rem;
+  border-bottom: 1px solid var(--borde-suave);
+}
+
+.nosotros-menu button {
+  background: none;
+  border: none;
+  cursor: pointer;
+
+  font-size: 1rem;
+  font-weight: 600;
+  text-transform: uppercase;
+
+  color: var(--texto-secundario);
+  padding-bottom: .4rem;
+}
+
+.nosotros-menu button.active {
+  color: var(--color-acento);
+  border-bottom: 2px solid var(--color-acento);
+}
+.boton.activo {
+  color: var(--color-acento);
+  border-bottom: 2px solid var(--color-acento);
+}
+

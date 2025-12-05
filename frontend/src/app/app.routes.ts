@@ -22,6 +22,7 @@ import { salirSinGuardarGuard } from './guards/salirSinGuardar/salir-sin-guardar
 import { NotFound } from './pages/not-found/not-found';
 import { MapaPrincipal } from './pages/mapa-principal/mapa-principal';
 import { MapaCompleto } from './pages/mapa-completo/mapa-completo';
+import { Bienvenida } from './pages/bienvenida/bienvenida';
 
 
 
@@ -34,6 +35,7 @@ export const routes: Routes = [
   { path: 'login', component: Auth, canActivate: [noAuthGuard]},
   { path: 'registro', component: Auth, canActivate: [noAuthGuard]},
   { path: 'auth/password/:token', component: CambiarPass, canActivate: [noAuthGuard]},  //Caundo recibo el Mail para recuperar la cuenta
+  { path: 'bienvenida', component: Bienvenida, canActivate: [noAuthGuard]},
 
 
   //======= APLICAR GUARDS =========//

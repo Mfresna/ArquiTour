@@ -1,5 +1,5 @@
 import { Component, ElementRef, HostListener, OnInit } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../auth/services/authService/auth-service';
 import { TokenService } from '../../auth/services/tokenService/token-service';
 import { TemaService } from '../../services/temaService/tema-service';
@@ -21,16 +21,23 @@ export class Header implements OnInit{
 
   mapaMenu: boolean = false;
 
+  isBienvenida: boolean = false;
+
   constructor(
     private authService: AuthService,
     private tokenService: TokenService,
     private elementRef: ElementRef,
-    private temaService: TemaService 
+    private temaService: TemaService,
+    private router: Router
   ){}
 
   ngOnInit(): void {
     const temaActual = document.documentElement.getAttribute('data-tema');
     this.modoNoche = temaActual === 'oscuro';
+
+    this.router.events.subscribe(() => {
+      this.isBienvenida = this.router.url === '/bienvenida';
+    });
   }
 
   cerrarSesion(){
@@ -94,7 +101,6 @@ export class Header implements OnInit{
     this.usuarioMenu = false;
     this.obrasMenu = false;
     this.mapaMenu=false;
-
   }
 
   //========== ESCUCHADORES
@@ -117,4 +123,6 @@ export class Header implements OnInit{
     }
   
   }
+
+
 }

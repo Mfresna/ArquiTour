@@ -9,6 +9,35 @@
     </a>
   </div>
 
+  @if(!isLogged()){
+    <div id="panel-central">
+      <ul>
+          @if(isBienvenida){
+            <li>
+              <a class="boton" routerLink="/">INICIO</a>
+            </li>
+          }
+          <li>
+            <div id="panel-nosotros">
+              <a class="boton" routerLink="/bienvenida" 
+              [class.activo]="isBienvenida">NOSOTROS</a>
+            </div>
+          </li>
+      </ul>
+    </div>
+    <div id="panel-derecha">
+      <button id="modo-noche" (click)="toggleModoNoche()">
+      Modo Noche
+        <span
+        id="noche-toggle"
+        class="material-icons user-icon-trigger"
+        [class.activo]="modoNoche">
+        {{ modoNoche ? 'toggle_on' : 'toggle_off' }}
+        </span>
+      </button>
+    </div>
+  }
+
   @if(isLogged()){
 
     <div id="panel-central">
