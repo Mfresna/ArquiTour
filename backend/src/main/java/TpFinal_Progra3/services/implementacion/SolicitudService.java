@@ -47,9 +47,17 @@ public class SolicitudService {
 
         Usuario usuario = usuarioService.buscarUsuario(request);
 
-        if (solicitudRepository.existsByUsuario_IdAndTipoAndEstado(usuario.getId(), dto.getTipo(), EstadoSolicitud.PENDIENTE )) {
-            throw new SolicitudesException(HttpStatus.BAD_REQUEST, "Ya tenés una solicitud pendiente.");
+        if (dto.getTipo() == TipoSolicitud.ALTA_ARQUITECTO) {
+            if (solicitudRepository.existsByUsuario_IdAndTipoAndEstado(usuario.getId(), dto.getTipo(), EstadoSolicitud.PENDIENTE)) {
+                throw new SolicitudesException(HttpStatus.BAD_REQUEST, "Ya tenés una solicitud de ALTA pendiente.");
+            }
+
+        } else if (dto.getTipo() == TipoSolicitud.BAJA_ROL) {
+            if (solicitudRepository.existsByUsuario_IdAndTipoAndRolAndEstado(usuario.getId(), dto.getTipo(), dto.getRolAEliminar(), EstadoSolicitud.PENDIENTE)) {
+                throw new SolicitudesException(HttpStatus.BAD_REQUEST, "Ya tenés una solicitud de BAJA pendiente para ese rol.");
+            }
         }
+
 
         Solicitud solicitud;
 
