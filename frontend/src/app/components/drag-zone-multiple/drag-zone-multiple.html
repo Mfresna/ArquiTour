@@ -40,10 +40,8 @@
 
       } @else {
 
-        <div id="dropzone-msg">
-          <strong>Arrastre y suelte una o varias imágenes aquí<br></strong>
-          <span> o haga clic para seleccionar desde su equipo <br></span>
-          <small class="formats"> Formatos: JPG, PNG, WEBP</small>
+        <div id="dropzone-msg"
+          [innerHTML]="mensajeVacio || mensajePorDefecto">
         </div>
 
       }

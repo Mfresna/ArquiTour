@@ -47,7 +47,7 @@ public class SolicitudService {
 
         Usuario usuario = usuarioService.buscarUsuario(request);
 
-        if (solicitudRepository.existsByUsuario_IdAndTipoAndEstado(usuario.getId(), EstadoSolicitud.PENDIENTE, dto.getTipo())) {
+        if (solicitudRepository.existsByUsuario_IdAndTipoAndEstado(usuario.getId(), dto.getTipo(), EstadoSolicitud.PENDIENTE )) {
             throw new SolicitudesException(HttpStatus.BAD_REQUEST, "Ya tenés una solicitud pendiente.");
         }
 
@@ -130,30 +130,78 @@ public class SolicitudService {
     }
 
     // ========== 3) RESOLVER SOLICITUD (APROBAR / RECHAZAR) ==========
+    // @Transactional
+    // public Solicitud resolverSolicitud(HttpServletRequest request,
+    //                                               Long solicitudId,
+    //                                               SolicitudResolucionDTO resolucion) {
+
+    //     Usuario admin = usuarioService.buscarUsuario(request);
+
+    //     Solicitud solicitud = solicitudRepository.findById(solicitudId)
+    //             .orElseThrow(() -> new NotFoundException("Solicitud no encontrada."));
+
+    //     if (solicitud.getEstado() != EstadoSolicitud.PENDIENTE) {
+    //         throw new SolicitudesException(HttpStatus.BAD_REQUEST, "La solicitud ya fue resuelta.");
+    //     }
+
+    //     if (solicitud.getAdminAsignado() == null ||
+    //             !solicitud.getAdminAsignado().getId().equals(admin.getId())) {
+    //         throw new SolicitudesException(HttpStatus.FORBIDDEN, "Solo el administrador asignado puede resolver esta solicitud.");
+    //     }
+
+    //     solicitud.setAdminAsignado(admin);
+    //     solicitud.setComentarioAdmin(resolucion.getComentarioAdmin());
+    //     solicitud.setFechaResolucion(LocalDate.now());
+    //     solicitud.setEstado(resolucion.isAceptar() ? EstadoSolicitud.APROBADA : EstadoSolicitud.RECHAZADA);
+
+
+    //     String mensajeNotificacion = "Su Solicitud fue RECHAZADA";
+
+    //     if (resolucion.isAceptar()) {
+    //         aplicarEfectoSolicitud(request, solicitud);
+    //         mensajeNotificacion = "Su Solicitud fue APROBADA";
+    //     }
+
+    //     notificacionService.crearNotificacion(
+    //             admin,
+    //             solicitud.getUsuario(),
+    //             mensajeNotificacion,
+    //             TipoNotificacion.RESPUESTA_CAMBIO_ROL,
+    //             solicitud.getId()
+    //     );
+
+    //     return solicitudRepository.save(solicitud);
+    // }
+
+    // ========== 3) RESOLVER SOLICITUD (APROBAR / RECHAZAR) ==========
     @Transactional
     public Solicitud resolverSolicitud(HttpServletRequest request,
-                                                  Long solicitudId,
-                                                  SolicitudResolucionDTO resolucion) {
+                                    Long solicitudId,
+                                    SolicitudResolucionDTO resolucion) {
 
         Usuario admin = usuarioService.buscarUsuario(request);
 
         Solicitud solicitud = solicitudRepository.findById(solicitudId)
                 .orElseThrow(() -> new NotFoundException("Solicitud no encontrada."));
 
-        if (solicitud.getEstado() != EstadoSolicitud.PENDIENTE) {
-            throw new SolicitudesException(HttpStatus.BAD_REQUEST, "La solicitud ya fue resuelta.");
+        // 🔴 Solo se puede resolver si está EN_PROCESO
+        if (solicitud.getEstado() != EstadoSolicitud.EN_PROCESO) {
+            throw new SolicitudesException(HttpStatus.BAD_REQUEST,
+                    "La solicitud debe estar EN_PROCESO para poder ser resuelta.");
         }
 
+        // 🔒 Solo el admin asignado puede resolverla
         if (solicitud.getAdminAsignado() == null ||
                 !solicitud.getAdminAsignado().getId().equals(admin.getId())) {
-            throw new SolicitudesException(HttpStatus.FORBIDDEN, "Solo el administrador asignado puede resolver esta solicitud.");
+            throw new SolicitudesException(HttpStatus.FORBIDDEN,
+                    "Solo el administrador asignado puede resolver esta solicitud.");
         }
 
-        solicitud.setAdminAsignado(admin);
         solicitud.setComentarioAdmin(resolucion.getComentarioAdmin());
         solicitud.setFechaResolucion(LocalDate.now());
-        solicitud.setEstado(resolucion.isAceptar() ? EstadoSolicitud.APROBADA : EstadoSolicitud.RECHAZADA);
-
+        solicitud.setEstado(resolucion.isAceptar()
+                ? EstadoSolicitud.APROBADA
+                : EstadoSolicitud.RECHAZADA);
 
         String mensajeNotificacion = "Su Solicitud fue RECHAZADA";
 
@@ -172,6 +220,7 @@ public class SolicitudService {
 
         return solicitudRepository.save(solicitud);
     }
+
 
     private void aplicarEfectoSolicitud(HttpServletRequest request, Solicitud solicitud) {
 
@@ -202,13 +251,35 @@ public class SolicitudService {
                 () -> new NotFoundException("Solicitud no encontrada con ID: " + id));
     }
 
-    public List<SolicitudResponseDTO> filtrarSolicitudes(SolicitudFiltroDTO filtro) {
+    // public List<SolicitudResponseDTO> filtrarSolicitudes(SolicitudFiltroDTO filtro) {
 
+    //     return solicitudRepository.findAll(SolicitudSpecification.filtrar(filtro))
+    //             .stream()
+    //             .map(solicitudMapper::mapToDTO)
+    //             .toList();
+
+    // }
+
+        public List<SolicitudResponseDTO> filtrarSolicitudes(HttpServletRequest request,
+                                                         SolicitudFiltroDTO filtro) {
+
+        // 1. Usuario autenticado
+        Usuario usuario = usuarioService.buscarUsuario(request);
+
+        // 2. ¿Es admin?
+        boolean esAdmin = usuario.getCredencial().tieneRolUsuario(RolUsuario.ROLE_ADMINISTRADOR);
+        // (o stream si no tenés ese método helper)
+
+        // 3. Si NO es admin, solo ve SUS solicitudes
+        if (!esAdmin) {
+            filtro.setUsuarioId(usuario.getId());
+        }
+
+        // 4. Aplica spec como antes
         return solicitudRepository.findAll(SolicitudSpecification.filtrar(filtro))
                 .stream()
                 .map(solicitudMapper::mapToDTO)
                 .toList();
-
     }
 }
 

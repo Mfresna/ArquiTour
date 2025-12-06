@@ -79,11 +79,22 @@ public class SolicitudRolController {
                 ));
     }
 
-    @GetMapping("/filtrar")
-    public ResponseEntity<List<SolicitudResponseDTO>> filtrarSolicitudes(
-            @Valid SolicitudFiltroDTO filtro
-    ) {
-        return ResponseEntity.ok(solicitudService.filtrarSolicitudes(filtro));
-    }
+//     @GetMapping("/filtrar")
+//     public ResponseEntity<List<SolicitudResponseDTO>> filtrarSolicitudes(
+//             @Valid SolicitudFiltroDTO filtro
+//     ) {
+//         return ResponseEntity.ok(solicitudService.filtrarSolicitudes(filtro));
+//     }
+        @GetMapping("/filtrar")
+                public ResponseEntity<List<SolicitudResponseDTO>> filtrarSolicitudes(
+                        @Valid SolicitudFiltroDTO filtro,
+                        HttpServletRequest request
+                ) {
+                return ResponseEntity.ok(
+                        solicitudService.filtrarSolicitudes(request, filtro)
+                );
+        }
+
 
 }
+        

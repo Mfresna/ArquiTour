@@ -22,6 +22,9 @@ import { salirSinGuardarGuard } from './guards/salirSinGuardar/salir-sin-guardar
 import { NotFound } from './pages/not-found/not-found';
 import { MapaPrincipal } from './pages/mapa-principal/mapa-principal';
 import { MapaCompleto } from './pages/mapa-completo/mapa-completo';
+import { Solicitudes } from './pages/solicitudes/solicitudes/solicitudes';
+import { SolicitudForm } from './pages/solicitudes/solicitud-form/solicitud-form';
+import { SolicitudDetalle } from './pages/solicitudes/solicitud-detalle/solicitud-detalle';
 
 
 
@@ -69,6 +72,15 @@ export const routes: Routes = [
   //Gestionar Usuarios
   { path: 'gestionar-usuarios', component: UsuarioLista, canActivate: [rolesGuard], data: {roles: ['ROLE_ADMINISTRADOR']} },
   
+  //Solicitudes
+  { path: 'solicitudes', component: Solicitudes },
+  { path: 'formSolicitudes', component: SolicitudForm},
+  { path: 'solicitudes/:id', component: SolicitudDetalle},
+
+    
+
+
+
   //Por Defecto
   { path: '**', component: NotFound }
 

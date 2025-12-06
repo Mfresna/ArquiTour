@@ -8,7 +8,7 @@
 #contenedor-form {
   background: var(--fondo-superficie, #fff);
   width: 100%;
-  max-width: 900px;
+  max-width: 700px;
   padding: 2rem 3rem;
   border-radius: 1rem;
   box-shadow: 0 4px 15px var(--sombra);
@@ -74,26 +74,12 @@
   background-color: var(--fondo-pagina);
 }
 
-fieldset select {
-  appearance: none;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  padding-right: 2.2rem; 
-  background-image:
-    linear-gradient(45deg, transparent 50%, #666 50%),
-    linear-gradient(135deg, #666 50%, transparent 50%);
-  background-position:
-    calc(100% - 18px) 52%,
-    calc(100% - 12px) 52%;
-  background-size: 6px 6px;
-  background-repeat: no-repeat;
-}
-
 .input:focus {
   outline: none;
   border-color: var(--colorBoton, #0077b6);
   box-shadow: 0 0 6px var(--sombra);
 }
+
 
 textarea.input {
   resize: vertical;
@@ -107,29 +93,42 @@ textarea.input {
   margin-left: 0.6rem;
 }
 
-app-drag-zone-multiple {
-  display: block;
-  margin-top: 0.4rem;
+.ayuda {
+  font-size: 0.8rem;
+  color: var(--texto-secundario);
+  margin-left: 0.6rem;
 }
 
+/* Estado inválido */
+.invalido {
+  border: 2px solid var(--color-error) !important;
+  background: var(--color-error-suave) !important;
+}
+
+/* Botones */
 .acciones {
-  margin-top: 1.2rem;
+  margin-top: 1.4rem;
   display: flex;
   justify-content: center;
+  gap: 0.8rem;
+}
+
+.btn-primario,
+.btn-secundario {
+  padding: 0.75rem 1.6rem;
+  border-radius: 1.35rem;
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border: none;
+  transition: all 0.2s ease;
 }
 
 .btn-primario {
   background-color: var(--colorBoton, #0077b6);
   color: var(--texto-boton-buscar);
-  padding: 0.75rem 1.6rem;
-  border: none;
-  border-radius: 1.35rem;
-  font-weight: 600;
-  font-size: 1.05rem;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
 }
 
 .btn-primario:not(:disabled):hover {
@@ -143,26 +142,19 @@ app-drag-zone-multiple {
   transform: none;
 }
 
-/* Estado inválido */
-.invalido{
-  border: 2px solid var(--color-error) !important;
-  background: var(--color-error-suave) !important;
+.btn-secundario {
+  background-color: var(--boton-secundario-bg);
+  color: var(--texto-principal);
 }
 
-/* ===== Responsive ===== */
+.btn-secundario:hover {
+  transform: scale(1.02);
+}
 
+/* Responsive */
 @media (max-width: 480px) {
   #contenedor-form {
     max-width: 95%;
+    padding: 1.5rem;
   }
-}
-
-#mapa{
-  min-height: 420px;
-  border: none;
-}
-
-#mapa > small{
-  padding-left: 20px;
-  margin-top: 15px;
 }

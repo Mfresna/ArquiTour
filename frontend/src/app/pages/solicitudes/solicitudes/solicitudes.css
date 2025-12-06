@@ -1,0 +1,364 @@
+/* ================= CONTENEDOR GENERAL ================= */
+
+#global-solicitudes {
+  height: 100%;
+  flex-grow: 1;
+  display: flex;
+  overflow: hidden;
+  min-height: 0;
+}
+
+#contenedor-solicitudes {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  width: 100%;
+  gap: 20px;
+  flex: 1;
+  min-height: 0;
+}
+
+/* ================= PANEL IZQUIERDO (FILTROS) ================= */
+
+#panel-izq-solicitudes {
+  padding: 0 0 0 10px;
+  display: flex;  
+  flex-direction: column;
+  gap: 0.8rem;
+  min-width: 280px;
+  max-width: 340px;
+}
+
+/* Título principal (igual estilo que OBRAS) */
+#panel-izq-solicitudes .titulo {
+  text-transform: uppercase;
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-top: 10px;
+  color: var(--colorBoton);
+  flex-shrink: 0;
+  text-align: center;
+  letter-spacing: 0.5px;
+}
+
+/* Caja de filtros */
+#panel-filtros-solicitudes {
+  border-radius: 12px;
+  padding: 1.5rem;
+  flex-shrink: 0;
+  width: 100%;
+}
+
+.form-filtros-solicitudes {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+/* Fieldset / campo */
+#panel-filtros-solicitudes .form-filtros-solicitudes fieldset.campo {
+  border: 0;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+#panel-filtros-solicitudes .form-filtros-solicitudes fieldset.campo > label {
+  font-weight: 500;
+  margin-left: 0.5rem;
+  font-size: 0.9rem;
+  color: var(--texto-principal);
+}
+
+/* Inputs y selects */
+#panel-filtros-solicitudes .form-filtros-solicitudes select,
+#panel-filtros-solicitudes .form-filtros-solicitudes input[type="date"] {
+  width: 100%;
+  padding: 0.6rem 0.8rem;
+  border-radius: 1.2rem;
+  border: 1px solid var(--borde-suave);
+  font-family: var(--fuenteBase, "Segoe UI", Roboto, sans-serif);
+  font-size: 1rem;
+  background-color: var(--fondo-superficie);
+  height: 42px;
+  box-sizing: border-box;
+}
+
+/* Focus */
+#panel-filtros-solicitudes .form-filtros-solicitudes select:focus,
+#panel-filtros-solicitudes .form-filtros-solicitudes input[type="date"]:focus {
+  outline: none;
+  border-color: var(--colorBoton, #0077b6);
+  box-shadow: 0 0 6px var(--sombra);
+}
+
+/* Select "bonito" */
+#panel-filtros-solicitudes .form-filtros-solicitudes select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  padding-right: 2.2rem;
+  background-image:
+    linear-gradient(45deg, transparent 50%, #666 50%),
+    linear-gradient(135deg, #666 50%, transparent 50%);
+  background-position:
+    calc(100% - 18px) 52%,
+    calc(100% - 12px) 52%;
+  background-size: 6px 6px;
+  background-repeat: no-repeat;
+}
+
+/* Botones aplicar / limpiar */
+.acciones-filtro-solicitudes {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.8rem;
+}
+
+.acciones-filtro-solicitudes button {
+  padding: 0.65rem 0.9rem;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  font-weight: 700;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: transform 0.15s, box-shadow 0.2s, background-color 0.2s;
+}
+
+.acciones-filtro-solicitudes .btn-buscar {
+  background: var(--colorBoton, #0077b6);
+  color: var(--texto-boton-buscar);
+}
+
+.acciones-filtro-solicitudes .btn-limpiar {
+  background: var(--boton-secundario-bg);
+  color: var(--texto-principal);
+}
+
+.acciones-filtro-solicitudes button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 10px var(--sombra);
+}
+
+/* Responsive acciones */
+@media (max-width: 480px) {
+  .acciones-filtro-solicitudes {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ================= PANEL DERECHO (LISTA) ================= */
+
+#panel-der-solicitudes {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  padding-left: 20px;
+}
+
+/* Header con botón "Nueva solicitud" */
+.header-solicitudes {
+  padding: 12px 20px 0 0;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 1.2rem;
+  margin-bottom: 20px;
+}
+
+.header-solicitudes h2 {
+  margin: 0;
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: var(--texto-principal);
+}
+
+/* Botón "Nueva solicitud" */
+.btn-nueva-solicitud {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  border-radius: 999px;
+  border: none;
+  padding: 0.55rem 1.2rem;
+  background: var(--colorBoton, #0077b6);
+  color: var(--texto-boton-buscar);
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 3px 8px var(--sombra);
+  transition: transform 0.15s, box-shadow 0.2s, background-color 0.2s;
+  font-size: 0.9rem;
+}
+
+.btn-nueva-solicitud .icono {
+  font-size: 1.2rem;
+  line-height: 1;
+}
+
+.btn-nueva-solicitud:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 7px 14px var(--sombra);
+  background: var(--colorBotonHover, #005f90);
+}
+
+.btn-nueva-solicitud:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+  box-shadow: none;
+}
+
+/* Scroll de la lista (SEPARA del panel izq) */
+#panel-scroll-solicitudes {
+  flex-grow: 1;
+  overflow-y: auto;
+  height: 0;
+  padding: 10px 20px 20px 16px;
+}
+
+/* ================= LISTA DE SOLICITUDES ================= */
+
+.lista-solicitudes {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+  list-style: none;
+  margin: 0;
+  padding: 0 0 0 4px;
+}
+
+.solicitud-card {
+  background: var(--fondo-superficie);
+  border-radius: 12px;
+  padding: 1rem 1.1rem 0.9rem;
+  box-shadow: 0 2px 8px var(--sombra);
+  transition: transform 0.2s, box-shadow 0.2s, background-color 0.2s;
+  cursor: pointer;
+}
+
+.solicitud-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 16px var(--sombra);
+}
+
+/* Cabecera: tipo + estado */
+.solicitud-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.4rem;
+}
+
+/* Chip tipo (ALTA / BAJA) */
+.chip-tipo {
+  padding: 0.18rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  background: var(--boton-secundario-bg);
+  color: var(--texto-principal);
+}
+
+/* Badge estado */
+.badge-estado {
+  padding: 0.18rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+/* Colores por estado */
+.badge-estado.pendiente {
+  background: #fff4cc;
+  color: #b07a00;
+}
+
+.badge-estado.en-proceso {
+  background: #e0f0ff;
+  color: #0b63b0;
+}
+
+.badge-estado.aprobada {
+  background: #d6f5dc;
+  color: #147a32;
+}
+
+.badge-estado.rechazada {
+  background: #ffe0e0;
+  color: #c02828;
+}
+
+/* Fechas */
+.solicitud-fechas {
+  font-size: 0.8rem;
+  color: var(--texto-secundario);
+  margin-bottom: 0.4rem;
+}
+
+/* Texto extra (motivo, comentario, admin) */
+.solicitud-detalle,
+.solicitud-admin {
+  font-size: 0.85rem;
+  color: var(--texto-principal);
+  margin-top: 0.25rem;
+}
+
+/* Footer con botón "Ver detalle" */
+.solicitud-footer {
+  margin-top: 0.6rem;
+}
+
+.btn-ver-detalle {
+  padding: 0.4rem 0.8rem;
+  border-radius: 999px;
+  border: 1px solid var(--borde-suave);
+  background:var(--fondo-pagina);
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: background-color 0.15s, color 0.15s, box-shadow 0.2s;
+}
+
+.btn-ver-detalle:hover {
+  background: var(--colorBoton, #0077b6);
+  color: var(--texto-boton-buscar);
+  box-shadow: 0 2px 6px var(--sombra);
+}
+
+/* Mensaje cuando no hay solicitudes */
+.vacio-solicitudes {
+  text-align: center;
+  color: var(--texto-principal);
+  padding: 4rem 2rem;
+  font-size: 1.05rem;
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media (max-width: 900px) {
+  #contenedor-solicitudes {
+    grid-template-columns: 1fr;
+  }
+
+  #panel-izq-solicitudes {
+    max-width: none;
+    padding: 0 10px;
+  }
+
+  #panel-filtros-solicitudes {
+    width: 100%;
+  }
+
+  .header-solicitudes {
+    padding: 12px 10px 0 10px;
+    justify-content: space-between;
+  }
+
+  #panel-scroll-solicitudes {
+    padding-right: 10px;
+  }
+}

@@ -9,14 +9,18 @@ import TpFinal_Progra3.model.entities.solicitudes.SolicitudBajaRol;
 import TpFinal_Progra3.model.enums.EstadoSolicitud;
 import TpFinal_Progra3.model.enums.TipoSolicitud;
 import org.springframework.stereotype.Component;
+import lombok.RequiredArgsConstructor;
+
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
+@RequiredArgsConstructor
 public class SolicitudMapper {
 
-    private UsuarioMapper usuarioMapper;
+    private final UsuarioMapper usuarioMapper;
+
 
     // =============================================== de DTO a Entidades
 
@@ -58,6 +62,16 @@ public class SolicitudMapper {
                 .fechaCreacion(solicitud.getFechaCreacion())
                 .fechaResolucion(solicitud.getFechaResolucion())
                 .comentarioRta(solicitud.getComentarioAdmin())
+                .idUsuario(
+                    solicitud.getUsuario() != null
+                            ? solicitud.getUsuario().getId()
+                            : null
+                )
+                .idAdminAsignado(
+                        solicitud.getAdminAsignado() != null
+                                ? solicitud.getAdminAsignado().getId()
+                                : null
+                )
                 .build();
 
         // ====== CAMPOS SEGÚN TIPO ======

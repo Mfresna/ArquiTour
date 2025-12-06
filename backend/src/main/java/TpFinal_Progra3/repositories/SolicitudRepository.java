@@ -13,7 +13,7 @@ public interface SolicitudRepository extends JpaRepository<Solicitud, Long>, Jpa
 
     boolean existsByUsuario_Id(Long usuarioId);
     boolean existsByUsuario_IdAndEstado(Long usuarioId, EstadoSolicitud estado);
-    boolean existsByUsuario_IdAndTipoAndEstado(Long usuarioId,EstadoSolicitud estado, TipoSolicitud tipo );
+    boolean existsByUsuario_IdAndTipoAndEstado(Long usuarioId, TipoSolicitud tipo, EstadoSolicitud estado);
 
     List<Solicitud> findByEstado(EstadoSolicitud estado);
     List<Solicitud> findByUsuario(Usuario usuario);
