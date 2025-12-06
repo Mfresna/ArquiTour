@@ -110,12 +110,13 @@ header {
 
   color: var(--nav-icon);
 
-  transition: color 0.3s ease, transform 0.4s ease;
+  transition: color 0.2s ease, transform 0.4s ease;
 }
 
 #panel-derecha .span-menu:hover {
-  color: var(--colorLink);
+  color: var(--color-acento);
 }
+
 
 #notificaciones{
   font-size: 28px !important;
