@@ -141,7 +141,7 @@ export class Login implements OnInit {
           }
         },
         error: (e) => {
-          if(e.status === 401 || e.status === 403){
+          if(e.status === 401 || e.status === 403 || e.status === 404){
             this.estadoCredencial = EstadoLogin.CREDENCIALES_INVALIDAS;
 
           }else if(e.status === 423){

@@ -107,14 +107,83 @@
     </div>
   
     <div id="panel-derecha">
-      <span
-        id="notificaciones"
-        class="material-icons deshabilitado"
-        tabindex="0">notifications</span>  
+
+      <div id="contenedor-notificaciones"
+          (click)="abrirNotificaciones()"
+          tabindex="0"
+          (keydown.enter)="abrirNotificaciones()">
+
+        <span
+          id="notificaciones"
+          class="material-icons span-menu"
+          tabindex="-1">
+            notifications
+        </span>
+
+        <!-- Badge solo si hay notificaciones sin leer -->
+        @if (cantNotifSinLeer$ | async; as count) {
+          @if (count > 0) {
+            <span 
+              class="badge-notificaciones"
+              [class.un-digito]="count < 10"
+              [class.dos-digitos]="count >= 10">
+
+                {{ count > 99 ? '99+' : count }}
+
+            </span>
+          }
+        }
+
+        <!-- Menu de Notificaciones -->
+        @if(notificacionesMenu){
+          <div id="menu-notificaciones" 
+            class="menu-desplegable bordes-radius-inf borde-sup-izq">
+
+            <div id="lista-notificaciones">
+              <a (click)="cerrarTodosMenus()" routerLink="/me">Ver mi Perfil</a>
+              <a (click)="cerrarTodosMenus()" routerLink="/me">Ver mi Perfil</a>
+              <a (click)="cerrarTodosMenus()" routerLink="/me">Ver mi Perfil</a>
+              <a (click)="cerrarTodosMenus()" routerLink="/me">Ver mi Perfil</a>
+              <a (click)="cerrarTodosMenus()" routerLink="/me">Ver mi Perfil</a>
+              <a (click)="cerrarTodosMenus()" routerLink="/me">Ver mi Perfil</a>
+              <a (click)="cerrarTodosMenus()" routerLink="/me">Ver mi Perfil</a>
+              <a (click)="cerrarTodosMenus()" routerLink="/me">Ver mi Perfil</a>
+              <a (click)="cerrarTodosMenus()" routerLink="/me">Ver mi Perfil</a>
+              <a (click)="cerrarTodosMenus()" routerLink="/me">Ver mi Perfil</a>
+              <a (click)="cerrarTodosMenus()" routerLink="/me">Ver mi Perfil</a>
+              <a (click)="cerrarTodosMenus()" routerLink="/me">Ver mi Perfil</a>
+              <a (click)="cerrarTodosMenus()" routerLink="/me">Ver mi Perfil</a>
+              <a (click)="cerrarTodosMenus()" routerLink="/me">Ver mi Perfil</a>
+              <a (click)="cerrarTodosMenus()" routerLink="/me">Ver mi Perfil</a>
+              <a (click)="cerrarTodosMenus()" routerLink="/me">Ver mi Perfil</a>
+              <a (click)="cerrarTodosMenus()" routerLink="/me">Ver mi Perfil</a>
+              <a (click)="cerrarTodosMenus()" routerLink="/me">Ver mi Perfil</a>
+              <a (click)="cerrarTodosMenus()" routerLink="/me">Ver mi Perfil</a>
+              <a (click)="cerrarTodosMenus()" routerLink="/me">Ver mi Perfil</a>
+              <a (click)="cerrarTodosMenus()" routerLink="/me">Ver mi Perfil</a>
+              <a (click)="cerrarTodosMenus()" routerLink="/me">Ver mi Perfil</a>
+              <a (click)="cerrarTodosMenus()" routerLink="/me">Ver mi Perfil</a>
+              <a (click)="cerrarTodosMenus()" routerLink="/me">Ver mi Perfil</a>
+              <a (click)="cerrarTodosMenus()" routerLink="/me">Ver mi Perfil</a>
+              
+            </div>
+            
+            <hr>  <!--MENU INFERIOR -->
+
+            <a id="btn-leer-todas"
+              (click)="marcarTodasLeidas()"
+              >
+              Marcar Todas Leídas
+            </a>
+
+          </div>
+        }
+
+      </div>
 
       <span 
         id="usuario"
-        class="material-icons"
+        class="material-icons span-menu"
         (click)="toggleUsuarioMenu()"
         (keydown.escape)="toggleUsuarioMenu()"
         tabindex="0">person</span>
@@ -152,6 +221,5 @@
 
   }
 
-  
 
 </header>

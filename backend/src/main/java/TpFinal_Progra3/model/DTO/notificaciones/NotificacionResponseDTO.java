@@ -17,14 +17,8 @@ public class NotificacionResponseDTO {
     @Schema(description = "ID del usuario emisor", example = "10")
     private Long emisorId;
 
-    @Schema(description = "Email del usuario emisor", example = "emisor@ejemplo.com")
-    private String emisorEmail;
-
     @Schema(description = "ID del usuario receptor", example = "42")
     private Long receptorId;
-
-    @Schema(description = "Email del usuario receptor", example = "receptor@ejemplo.com")
-    private String receptorEmail;
 
     @Schema(description = "Mensaje de la notificación", example = "Tu obra fue aprobada")
     private String mensaje;

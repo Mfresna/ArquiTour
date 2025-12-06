@@ -2,19 +2,24 @@ package TpFinal_Progra3.services.implementacion;
 
 import TpFinal_Progra3.exceptions.NotFoundException;
 import TpFinal_Progra3.exceptions.SolicitudesException;
+import TpFinal_Progra3.model.DTO.filtros.SolicitudFiltroDTO;
 import TpFinal_Progra3.model.DTO.filtros.UsuarioFiltroDTO;
-import TpFinal_Progra3.model.DTO.solicitudes.SolicitudArqDTO;
-import TpFinal_Progra3.model.DTO.solicitudes.SolicitudArqResponseDTO;
+import TpFinal_Progra3.model.DTO.solicitudes.SolicitudNuevaDTO;
+import TpFinal_Progra3.model.DTO.solicitudes.SolicitudResolucionDTO;
+import TpFinal_Progra3.model.DTO.solicitudes.SolicitudResponseDTO;
 import TpFinal_Progra3.model.entities.Imagen;
-import TpFinal_Progra3.model.entities.SolicitudCambioRolArq;
+import TpFinal_Progra3.model.entities.solicitudes.Solicitud;
 import TpFinal_Progra3.model.entities.Usuario;
+import TpFinal_Progra3.model.entities.solicitudes.SolicitudAltaArquitecto;
+import TpFinal_Progra3.model.entities.solicitudes.SolicitudBajaRol;
 import TpFinal_Progra3.model.enums.EstadoSolicitud;
 import TpFinal_Progra3.model.enums.TipoNotificacion;
+import TpFinal_Progra3.model.enums.TipoSolicitud;
 import TpFinal_Progra3.model.mappers.SolicitudMapper;
-import TpFinal_Progra3.repositories.SolicitudArqRepository;
+import TpFinal_Progra3.repositories.SolicitudRepository;
 import TpFinal_Progra3.security.model.DTO.RolesDTO;
-import TpFinal_Progra3.security.model.entities.Rol;
 import TpFinal_Progra3.security.model.enums.RolUsuario;
+import TpFinal_Progra3.specifications.SolicitudSpecification;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -29,38 +34,45 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SolicitudService {
 
-    private final SolicitudArqRepository solicitudRepository;
+    private final SolicitudRepository solicitudRepository;
     private final SolicitudMapper solicitudMapper;
     private final UsuarioService usuarioService;
     private final ImagenService imagenService;
     private final NotificacionService notificacionService;
 
     @Transactional
-    public SolicitudArqResponseDTO crearSolicitud(HttpServletRequest request,
-                                                  SolicitudArqDTO dto,
-                                                  List<MultipartFile> archivos) {
+    public SolicitudResponseDTO nuevaSolicitud(HttpServletRequest request,
+                                               SolicitudNuevaDTO dto,
+                                               List<MultipartFile> archivos) {
 
         Usuario usuario = usuarioService.buscarUsuario(request);
 
-        if (solicitudRepository.existsByUsuario_IdAndEstado(usuario.getId(), EstadoSolicitud.PENDIENTE)) {
-            System.out.println("HOLA");
+        if (solicitudRepository.existsByUsuario_IdAndTipoAndEstado(usuario.getId(), EstadoSolicitud.PENDIENTE, dto.getTipo())) {
             throw new SolicitudesException(HttpStatus.BAD_REQUEST, "Ya tenés una solicitud pendiente.");
         }
 
-        List<Imagen> imagenes = imagenService.subirArchivosMixtos(archivos);
+        Solicitud solicitud;
 
-        if(imagenes.isEmpty()){
-            throw new SolicitudesException(HttpStatus.NOT_ACCEPTABLE, "Las imagenes son Obligatorias");
+        if (dto.getTipo() == TipoSolicitud.ALTA_ARQUITECTO) {
+            //Solicita ser Arqui
+
+            if(usuario.getCredencial().tieneRolUsuario(RolUsuario.ROLE_ARQUITECTO)){
+                throw new SolicitudesException(HttpStatus.NOT_ACCEPTABLE, "Ya es Arquitecto");
+            }
+
+            List<Imagen> imagenes = imagenService.subirArchivosMixtos(archivos);
+            if (imagenes.isEmpty()) {
+                throw new SolicitudesException(HttpStatus.NO_CONTENT, "Las imagenes son Obligatorias");
+            }
+            solicitud = solicitudMapper.mapSolicitudArq(dto, imagenes, usuario);
+
+        } else if (dto.getTipo() == TipoSolicitud.BAJA_ROL) {
+            //Solicita baja de algun rol
+            solicitud = solicitudMapper.mapSolicitudBajaRol(dto, usuario);
+
+        } else {
+            throw new SolicitudesException(HttpStatus.NOT_ACCEPTABLE, "Tipo de solicitud no soportado");
         }
-
-        SolicitudCambioRolArq solicitud = SolicitudCambioRolArq.builder()
-                .usuario(usuario)
-                .matriculaArquitecto(dto.getMatriculaArquitecto())
-                .universidad(dto.getUniversidad())
-                .anioRecibido(dto.getAnioRecibido())
-                .imagenesSolicitud(imagenes)
-                .estado(EstadoSolicitud.PENDIENTE)
-                .build();
 
         solicitudRepository.save(solicitud);
 
@@ -70,32 +82,31 @@ public class SolicitudService {
         List<Usuario> admins = usuarioService.filtrarUsuarios(filtro);
 
         //Si el usuario es Admin no le mando la notificacion (él mismo no se puede aceptar)
-        if(usuario.getCredencial().tieneRolUsuario(RolUsuario.ROLE_ADMINISTRADOR)){
-            admins = admins.stream().filter(a-> !a.equals(usuario)).toList();
+        if (usuario.getCredencial().tieneRolUsuario(RolUsuario.ROLE_ADMINISTRADOR)) {
+            admins = admins.stream().filter(a -> !a.equals(usuario)).toList();
         }
 
-        notificacionService.notificacionMasiva(
+        notificacionService.crearNotificacionMultiples(
                 usuario,
                 admins,
-                "Nueva solicitud de cambio de rol a arquitecto",
+                dto.getTipo().getDescripcion(),
                 TipoNotificacion.SOLICITUD_CAMBIO_ROL,
                 solicitud.getId());
 
 
-        return solicitudMapper.mapResponseDTO(solicitud);
+        return solicitudMapper.mapToDTO(solicitud);
     }
 
     // ========== 2) TOMAR SOLICITUD (EN_PROCESO) ==========
-
     @Transactional
-    public SolicitudArqResponseDTO tomarSolicitud(HttpServletRequest request, Long solicitudId) {
+    public SolicitudResponseDTO tomarSolicitud(HttpServletRequest request, Long solicitudId) {
 
         Usuario admin = usuarioService.buscarUsuario(request);
 
-        SolicitudCambioRolArq solicitud = solicitudRepository.findById(solicitudId)
+        Solicitud solicitud = solicitudRepository.findById(solicitudId)
                 .orElseThrow(() -> new NotFoundException("Solicitud no encontrada."));
 
-        if(solicitud.getUsuario().equals(admin)){
+        if (solicitud.getUsuario().equals(admin)) {
             throw new SolicitudesException(HttpStatus.NOT_MODIFIED, "No se puede Autoaceptar la Solicitud");
         }
 
@@ -109,29 +120,27 @@ public class SolicitudService {
                 throw new SolicitudesException(HttpStatus.CONFLICT,
                         "La solicitud ya está siendo gestionada por otro administrador.");
             }
-           //Si es el mismo admin lo dejamos como es
+            //Si es el mismo admin lo dejamos como es
         } else {
             throw new SolicitudesException(HttpStatus.BAD_REQUEST,
                     "La solicitud ya fue resuelta.");
         }
 
-        return solicitudMapper.mapResponseDTO(solicitud);
+        return solicitudMapper.mapToDTO(solicitud);
     }
 
     // ========== 3) RESOLVER SOLICITUD (APROBAR / RECHAZAR) ==========
-
     @Transactional
-    public SolicitudArqResponseDTO resolverSolicitud(HttpServletRequest request,
-                                                     Long solicitudId,
-                                                     boolean aprobada,
-                                                     String motivo) {
+    public Solicitud resolverSolicitud(HttpServletRequest request,
+                                                  Long solicitudId,
+                                                  SolicitudResolucionDTO resolucion) {
 
         Usuario admin = usuarioService.buscarUsuario(request);
 
-        SolicitudCambioRolArq solicitud = solicitudRepository.findById(solicitudId)
+        Solicitud solicitud = solicitudRepository.findById(solicitudId)
                 .orElseThrow(() -> new NotFoundException("Solicitud no encontrada."));
 
-        if (solicitud.getEstado() != EstadoSolicitud.EN_PROCESO && solicitud.getEstado() != EstadoSolicitud.PENDIENTE) {
+        if (solicitud.getEstado() != EstadoSolicitud.PENDIENTE) {
             throw new SolicitudesException(HttpStatus.BAD_REQUEST, "La solicitud ya fue resuelta.");
         }
 
@@ -140,34 +149,20 @@ public class SolicitudService {
             throw new SolicitudesException(HttpStatus.FORBIDDEN, "Solo el administrador asignado puede resolver esta solicitud.");
         }
 
-        String mensajeNotificacion;
+        solicitud.setAdminAsignado(admin);
+        solicitud.setComentarioAdmin(resolucion.getComentarioAdmin());
+        solicitud.setFechaResolucion(LocalDate.now());
+        solicitud.setEstado(resolucion.isAceptar() ? EstadoSolicitud.APROBADA : EstadoSolicitud.RECHAZADA);
 
-        if (aprobada) {
-            solicitud.setEstado(EstadoSolicitud.APROBADA);
-            solicitud.setFechaResolucion(LocalDate.now());
-            solicitud.setComentarioAdmin(motivo);
 
-            // Agregar rol ARQUITECTO al usuario
-            usuarioService.agregarRoles(
-                    request,
-                    solicitud.getUsuario().getId(),
-                    RolesDTO.builder()
-                            .roles(List.of(RolUsuario.ROLE_ARQUITECTO))
-                            .build()
-            );
+        String mensajeNotificacion = "Su Solicitud fue RECHAZADA";
 
-            mensajeNotificacion = "Tu solicitud de cambio de rol fue APROBADA.";
-        } else {
-            solicitud.setEstado(EstadoSolicitud.RECHAZADA);
-            solicitud.setFechaResolucion(LocalDate.now());
-            solicitud.setComentarioAdmin(motivo);
-
-            mensajeNotificacion = "Tu solicitud de cambio de rol fue RECHAZADA. Motivo: " + motivo;
+        if (resolucion.isAceptar()) {
+            aplicarEfectoSolicitud(request, solicitud);
+            mensajeNotificacion = "Su Solicitud fue APROBADA";
         }
 
-        solicitudRepository.save(solicitud);
-
-        notificacionService.crearNotificacionAutomatica(
+        notificacionService.crearNotificacion(
                 admin,
                 solicitud.getUsuario(),
                 mensajeNotificacion,
@@ -175,7 +170,46 @@ public class SolicitudService {
                 solicitud.getId()
         );
 
-        return solicitudMapper.mapResponseDTO(solicitud);
+        return solicitudRepository.save(solicitud);
     }
 
+    private void aplicarEfectoSolicitud(HttpServletRequest request, Solicitud solicitud) {
+
+        if (solicitud instanceof SolicitudAltaArquitecto) {
+            // agregar rol arquitecto
+            usuarioService.agregarRoles(request,
+                    solicitud.getUsuario().getId(),
+                    RolesDTO.builder()
+                            .roles(List.of(RolUsuario.ROLE_ARQUITECTO))
+                            .build()
+            );
+
+        } else if (solicitud instanceof SolicitudBajaRol baja) {
+            // quitar el rol solicitado
+            usuarioService.quitarRoles(request,
+                    solicitud.getUsuario().getId(),
+                    RolesDTO.builder()
+                            .roles(List.of(baja.getRolAEliminar()))
+                            .build()
+            );
+        }
+    }
+
+    //======= Obtener Solicitudes
+
+    public Solicitud obtenerSolicitud (Long id){
+        return solicitudRepository.findById(id).orElseThrow(
+                () -> new NotFoundException("Solicitud no encontrada con ID: " + id));
+    }
+
+    public List<SolicitudResponseDTO> filtrarSolicitudes(SolicitudFiltroDTO filtro) {
+
+        return solicitudRepository.findAll(SolicitudSpecification.filtrar(filtro))
+                .stream()
+                .map(solicitudMapper::mapToDTO)
+                .toList();
+
+    }
 }
+
+

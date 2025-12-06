@@ -90,7 +90,7 @@ public class RestAuthenticationEntryPoint implements AuthenticationEntryPoint {
             }
             case AuthenticationServiceException authenticationServiceException -> {
                 errorMessage = "Error en el servicio de autenticación";
-                statusCode = HttpServletResponse.SC_INTERNAL_SERVER_ERROR; // 500
+                statusCode = HttpServletResponse.SC_NOT_FOUND; // 404
             }
             default -> {
                 errorMessage = "Error de autenticación: " + authException.getMessage();
