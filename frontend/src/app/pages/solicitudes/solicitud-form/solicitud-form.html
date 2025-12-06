@@ -3,12 +3,49 @@
 
     <!-- Título -->
     <h1 id="titulo">
+      
       @if(esAlta()) {
         Solicitar alta como arquitecto
       } @else {
         Solicitar baja de rol
       }
     </h1>
+    <!-- ===================== TABS PARA MODO DUAL ===================== -->
+    @if (modoDual) {
+      <div class="tabs-tipo">
+
+        <!-- TAB ALTA -->
+        <button
+          type="button"
+          class="tab"
+          [class.activa]="esAlta()"
+          [disabled]="!altaHabilitada"
+          (click)="cambiarTipo(TipoSolicitudModel.ALTA_ARQUITECTO)">
+
+          Alta como Arquitecto
+
+          @if (!altaHabilitada) {
+            <small>(ya tenés una solicitud pendiente)</small>
+          }
+        </button>
+
+        <!-- TAB BAJA ADMIN -->
+        <button
+          type="button"
+          class="tab"
+          [class.activa]="!esAlta()"
+          [disabled]="!bajaAdminHabilitada"
+          (click)="cambiarTipo(TipoSolicitudModel.BAJA_ROL)">
+
+          Baja como Administrador
+
+          @if (!bajaAdminHabilitada) {
+            <small>(ya tenés una solicitud pendiente)</small>
+          }
+        </button>
+
+      </div>
+    }
 
     <div id="panel-campos">
       <form [formGroup]="formulario" (submit)="enviar($event)" novalidate>
