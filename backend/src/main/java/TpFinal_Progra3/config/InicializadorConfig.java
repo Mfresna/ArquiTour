@@ -41,7 +41,7 @@ public class InicializadorConfig implements CommandLineRunner{
                     .email(defaultAdminEmail)
                     .nombre("Administrador")
                     .apellido("Administrador")
-                    .fechaNacimiento(LocalDate.now())
+                    .fechaNacimiento(LocalDate.of(2000, 1, 1))
                     .descripcion("Administrador por Defecto de la App ArquiTour")
                     .build();
 
