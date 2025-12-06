@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "solicitudes")
@@ -45,9 +46,11 @@ public abstract class Solicitud {
 
     @Builder.Default
     @Column(nullable = false)
-    private LocalDate fechaCreacion = LocalDate.now();
+    //private LocalDate fechaCreacion = LocalDate.now();
+    private LocalDateTime fechaCreacion = LocalDateTime.now();
 
-    private LocalDate fechaResolucion;
+    //private LocalDate fechaResolucion;
+    private LocalDateTime fechaResolucion;
 
     @Column(length = 280)
     private String comentarioAdmin;

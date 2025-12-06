@@ -6,6 +6,7 @@ import { TemaService } from '../../services/temaService/tema-service';
 import { Observable } from 'rxjs';
 import { NotificacionService } from '../../services/notificacionService/notificacion-service';
 import { AsyncPipe } from '@angular/common';
+import { NotificacionResponseModel } from '../../models/notificacionModels/notificacionResponseModel';
 
 @Component({
   selector: 'app-header',
@@ -26,6 +27,8 @@ export class Header implements OnInit{
   cantNotifSinLeer$!: Observable<number>;
 
   isBienvenida: boolean = false;
+
+  notificaciones: NotificacionResponseModel[] = [];
 
   constructor(
     private authService: AuthService,
@@ -132,7 +135,39 @@ export class Header implements OnInit{
     this.toggleNotificacionesMenu();
 
     this.notificacionService.refrescarManual();
-    //hacer el subscribe para verlas
+    
+    this.traerNotificaciones();
+  }
+
+  private traerNotificaciones(){
+    this.notificacionService.getNotificacionesRecibidas()
+    .subscribe({
+      next: (notifs) => {
+        this.notificaciones = notifs;
+      },
+      error: err => console.error(err)
+    });
+  }
+
+  seleccionarNotificacion(notif: NotificacionResponseModel){
+
+    this.marcarNotificacionLeida(notif.id);
+
+    if(notif.referenciaId != null){
+      //Me lleva a ver la solicitud
+    }
+
+  }
+
+  private marcarNotificacionLeida(id: number){
+    this.notificacionService.marcarNotificacionLeida(id.toString()).subscribe({
+    next: () => {
+      // Luego de marcarla, refrescamos la lista
+      this.notificacionService.getNotificacionesRecibidas().subscribe({
+        next: notifs => this.notificaciones = notifs
+      });
+    }
+  });
   }
 
   marcarTodasLeidas() {

@@ -29,11 +29,11 @@ public class SolicitudResponseDTO {
 
     private UsuarioBasicoDTO adminAsignado;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
-    private LocalDate fechaCreacion;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy HH:mm")
+    private LocalDateTime fechaCreacion;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
-    private LocalDate fechaResolucion;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy HH:mm")
+    private LocalDateTime fechaResolucion;
 
     private String comentarioRta;
 

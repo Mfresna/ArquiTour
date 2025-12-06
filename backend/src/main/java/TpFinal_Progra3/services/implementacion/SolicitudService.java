@@ -22,12 +22,14 @@ import TpFinal_Progra3.security.model.enums.RolUsuario;
 import TpFinal_Progra3.specifications.SolicitudSpecification;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -211,7 +213,7 @@ public class SolicitudService {
         }
 
         solicitud.setComentarioAdmin(resolucion.getComentarioAdmin());
-        solicitud.setFechaResolucion(LocalDate.now());
+        solicitud.setFechaResolucion(LocalDateTime.now());
         solicitud.setEstado(resolucion.isAceptar()
                 ? EstadoSolicitud.APROBADA
                 : EstadoSolicitud.RECHAZADA);
@@ -289,7 +291,9 @@ public class SolicitudService {
         }
 
         // 4. Aplica spec como antes
-        return solicitudRepository.findAll(SolicitudSpecification.filtrar(filtro))
+        return solicitudRepository.findAll(
+                        SolicitudSpecification.filtrar(filtro),
+                        Sort.by(Sort.Direction.DESC, "fechaCreacion"))
                 .stream()
                 .map(solicitudMapper::mapToDTO)
                 .toList();

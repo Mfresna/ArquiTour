@@ -140,31 +140,30 @@
             class="menu-desplegable bordes-radius-inf borde-sup-izq">
 
             <div id="lista-notificaciones">
-              <a (click)="cerrarTodosMenus()" routerLink="/me">Ver mi Perfil</a>
-              <a (click)="cerrarTodosMenus()" routerLink="/me">Ver mi Perfil</a>
-              <a (click)="cerrarTodosMenus()" routerLink="/me">Ver mi Perfil</a>
-              <a (click)="cerrarTodosMenus()" routerLink="/me">Ver mi Perfil</a>
-              <a (click)="cerrarTodosMenus()" routerLink="/me">Ver mi Perfil</a>
-              <a (click)="cerrarTodosMenus()" routerLink="/me">Ver mi Perfil</a>
-              <a (click)="cerrarTodosMenus()" routerLink="/me">Ver mi Perfil</a>
-              <a (click)="cerrarTodosMenus()" routerLink="/me">Ver mi Perfil</a>
-              <a (click)="cerrarTodosMenus()" routerLink="/me">Ver mi Perfil</a>
-              <a (click)="cerrarTodosMenus()" routerLink="/me">Ver mi Perfil</a>
-              <a (click)="cerrarTodosMenus()" routerLink="/me">Ver mi Perfil</a>
-              <a (click)="cerrarTodosMenus()" routerLink="/me">Ver mi Perfil</a>
-              <a (click)="cerrarTodosMenus()" routerLink="/me">Ver mi Perfil</a>
-              <a (click)="cerrarTodosMenus()" routerLink="/me">Ver mi Perfil</a>
-              <a (click)="cerrarTodosMenus()" routerLink="/me">Ver mi Perfil</a>
-              <a (click)="cerrarTodosMenus()" routerLink="/me">Ver mi Perfil</a>
-              <a (click)="cerrarTodosMenus()" routerLink="/me">Ver mi Perfil</a>
-              <a (click)="cerrarTodosMenus()" routerLink="/me">Ver mi Perfil</a>
-              <a (click)="cerrarTodosMenus()" routerLink="/me">Ver mi Perfil</a>
-              <a (click)="cerrarTodosMenus()" routerLink="/me">Ver mi Perfil</a>
-              <a (click)="cerrarTodosMenus()" routerLink="/me">Ver mi Perfil</a>
-              <a (click)="cerrarTodosMenus()" routerLink="/me">Ver mi Perfil</a>
-              <a (click)="cerrarTodosMenus()" routerLink="/me">Ver mi Perfil</a>
-              <a (click)="cerrarTodosMenus()" routerLink="/me">Ver mi Perfil</a>
-              <a (click)="cerrarTodosMenus()" routerLink="/me">Ver mi Perfil</a>
+              <!-- Lista no tificaciones -->
+               @if(notificaciones.length === 0) {
+                  <p class="sin-notificaciones">No tenés notificaciones</p>
+                } @else {
+
+                  @for (notif of notificaciones; track notif.id) {
+
+                    <div class="item-notificacion"
+                      (click)="seleccionarNotificacion(notif)">
+                      
+                      <div id="contenido-notificacion">
+                        <p class="mensaje">{{ notif.mensaje }}</p>
+                        <span class="fecha">{{ notif.fecha }}</span>
+                      </div>
+
+                      <div class="contenedor-leida">
+
+                      </div>
+                      
+
+                    </div>
+                  }
+
+                }
               
             </div>
             
