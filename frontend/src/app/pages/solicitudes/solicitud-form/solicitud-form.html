@@ -1,0 +1,150 @@
+<div id="global">
+  <div id="contenedor-form">
+
+    <!-- Título -->
+    <h1 id="titulo">
+      @if(esAlta()) {
+        Solicitar alta como arquitecto
+      } @else {
+        Solicitar baja de arquitecto
+      }
+    </h1>
+
+    <div id="panel-campos">
+      <form [formGroup]="formulario" (submit)="enviar($event)" novalidate>
+        <div id="contenido-scroll">
+
+          <!-- ============ FORM ALTA ============ -->
+          @if(esAlta()) {
+
+            <!-- Matrícula -->
+            <fieldset class="form-group">
+              <label class="label">Matrícula</label>
+              <input
+                type="text"
+                class="input"
+                formControlName="matriculaArquitecto"
+                placeholder="Ej.: MAT-12345"
+                [class.invalido]="formulario.get('matriculaArquitecto')?.invalid 
+                                  && (formulario.get('matriculaArquitecto')?.touched 
+                                      || formulario.get('matriculaArquitecto')?.dirty)">
+
+              @if(formulario.get('matriculaArquitecto')?.errors?.['required'] 
+                  && formulario.get('matriculaArquitecto')?.touched) {
+                <small class="error">La matrícula es obligatoria.</small>
+              } @else if (formulario.get('matriculaArquitecto')?.errors?.['maxlength']) {
+                <small class="error">La matrícula es demasiado larga.</small>
+              }
+            </fieldset>
+
+            <!-- Universidad -->
+            <fieldset class="form-group">
+              <label class="label">Universidad</label>
+              <input
+                type="text"
+                class="input"
+                formControlName="universidad"
+                placeholder="Ej.: Universidad Nacional de ..."
+                [class.invalido]="formulario.get('universidad')?.invalid 
+                                  && (formulario.get('universidad')?.touched 
+                                      || formulario.get('universidad')?.dirty)">
+
+              @if(formulario.get('universidad')?.errors?.['required'] 
+                  && formulario.get('universidad')?.touched) {
+                <small class="error">La universidad es obligatoria.</small>
+              } @else if (formulario.get('universidad')?.errors?.['maxlength']) {
+                <small class="error">La universidad es demasiado larga.</small>
+              }
+            </fieldset>
+
+            <!-- Año recibido -->
+            <fieldset class="form-group">
+              <label class="label">Año de Recibido</label>
+              <input
+                type="number"
+                class="input"
+                formControlName="anioRecibido"
+                placeholder="Ej.: 2020"
+                [class.invalido]="formulario.get('anioRecibido')?.invalid 
+                                  && (formulario.get('anioRecibido')?.touched 
+                                      || formulario.get('anioRecibido')?.dirty)">
+
+              @if(formulario.get('anioRecibido')?.errors?.['required'] 
+                  && formulario.get('anioRecibido')?.touched) {
+                <small class="error">El año es obligatorio.</small>
+              } @else if(formulario.get('anioRecibido')?.errors?.['min'] 
+                         || formulario.get('anioRecibido')?.errors?.['max']) {
+                <small class="error">El año es inválido.</small>
+              }
+            </fieldset>
+
+            <!-- Documentación -->
+            <fieldset class="form-group">
+            
+                <app-drag-zone-multiple
+                    label="Documentación (obligatoria)"
+                    [mensajeVacio]="mensajeDocAlta"
+                    (archivosChange)="archivos = $event"
+                ></app-drag-zone-multiple>
+
+                @if (mostrarErrorArchivos) {
+                <small class="error">
+                Debés adjuntar al menos un archivo para la solicitud de alta.
+                </small>
+                }
+
+            </fieldset>
+          }
+
+          <!-- ============ FORM BAJA ============ -->
+          @if(!esAlta()) {
+
+            <fieldset class="form-group">
+              <label class="label">Motivo</label>
+              <textarea
+                rows="5"
+                class="input"
+                formControlName="motivo"
+                placeholder="Comentanos por qué querés dejar de ser arquitecto en la plataforma"
+                [class.invalido]="formulario.get('motivo')?.invalid 
+                                  && (formulario.get('motivo')?.touched 
+                                      || formulario.get('motivo')?.dirty)">
+              </textarea>
+
+              @if(formulario.get('motivo')?.errors?.['required'] 
+                  && formulario.get('motivo')?.touched) {
+                <small class="error">El motivo es obligatorio.</small>
+              } @else if(formulario.get('motivo')?.errors?.['maxlength']) {
+                <small class="error">El motivo es demasiado largo (máx. 280 caracteres).</small>
+              }
+            </fieldset>
+          }
+
+          <!-- Botones -->
+          <div class="acciones">
+
+            <button type="submit" class="btn-primario" [disabled]="formulario.invalid || cargando">
+              Enviar solicitud
+            </button>
+          </div>
+
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<app-mensaje-modal
+  [isVisible]="modalVisible"
+  [titulo]="modalTitulo"
+  [mensaje]="modalMensaje"
+  [conIcon]="true"
+  [tipo]="modalTipo"
+  tipoContenido="texto"
+  [mostrarCerrar]="true"
+  [mostrarBotonAceptar]="true"
+  [mostrarBotonCancelar]="false"
+  textoBotonAceptar="Aceptar"
+  (aceptar)="onModalAceptar()"
+  (cerrado)="onModalCerrado()"
+></app-mensaje-modal>

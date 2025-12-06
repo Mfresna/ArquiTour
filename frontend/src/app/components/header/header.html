@@ -197,6 +197,8 @@
           </a>
           <a (click)="cerrarTodosMenus()" routerLink="/me">Ver mi Perfil</a>
 
+          <a (click)="cerrarTodosMenus()" routerLink="/solicitudes">Solicitudes</a>
+
           @if(isAdmin()){
             <a (click)="cerrarTodosMenus()" routerLink="/gestionar-usuarios">Gestionar Usuarios</a>
           }

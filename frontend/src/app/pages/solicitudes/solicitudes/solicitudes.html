@@ -1,0 +1,142 @@
+<div id="global-solicitudes">
+  <div id="contenedor-solicitudes">
+
+    <!-- ================= PANEL IZQUIERDO ================= -->
+    <aside id="panel-izq-solicitudes">
+      <h1 class="titulo">Solicitudes</h1>
+
+      <section id="panel-filtros-solicitudes">
+        <form [formGroup]="filtro" class="form-filtros-solicitudes">
+
+          <!-- ========== Tipo ========== -->
+          <fieldset class="campo">
+            <label>Tipo</label>
+            <select formControlName="tipo">
+              <option value="">--Todos--</option>
+              <option [value]="TipoSolicitudModel.ALTA_ARQUITECTO">Alta arquitecto</option>
+              <option [value]="TipoSolicitudModel.BAJA_ROL">Baja rol</option>
+            </select>
+          </fieldset>
+
+          <!-- ========== Estado ========== -->
+          <fieldset class="campo">
+            <label>Estado</label>
+            <select formControlName="estado">
+              <option value="">--Todos--</option>
+              <option [value]="EstadoSolicitudModel.PENDIENTE">Pendiente</option>
+              <option [value]="EstadoSolicitudModel.EN_PROCESO">En proceso</option>
+              <option [value]="EstadoSolicitudModel.APROBADA">Aprobada</option>
+              <option [value]="EstadoSolicitudModel.RECHAZADA">Rechazada</option>
+            </select>
+          </fieldset>
+
+          <!-- ========== Fecha Desde ========== -->
+          <fieldset class="campo">
+            <label>Desde</label>
+            <input type="date" formControlName="fechaDesde">
+          </fieldset>
+
+          <!-- ========== Fecha Hasta ========== -->
+          <fieldset class="campo">
+            <label>Hasta</label>
+            <input type="date" formControlName="fechaHasta">
+          </fieldset>
+
+
+          <div class="acciones-filtro-solicitudes">
+            <button type="submit" class="btn-buscar" (click)="aplicarFiltro()">Buscar</button>
+            <button type="button" class="btn-limpiar" (click)="limpiarFiltro()">Limpiar</button>
+          </div>
+
+        </form>
+      </section>
+    </aside>
+
+    <!-- ================= PANEL DERECHO ================= -->
+    <section id="panel-der-solicitudes">
+
+      <!-- HEADER -->
+      <div class="header-solicitudes">
+
+        <button class="btn-nueva-solicitud"
+                (click)="irANuevaSolicitud()"
+                [disabled]="!puedeCrearSolicitud()">
+          <span class="icono">＋</span>
+          Nueva solicitud
+        </button>
+
+      </div>
+
+      <!-- SCROLL -->
+      <div id="panel-scroll-solicitudes">
+
+        <!-- Lista vacía -->
+        @if(!solicitudes){
+          <div class="vacio-solicitudes">
+            No tenés solicitudes aún.
+          </div>
+        }
+
+        <!-- LISTA -->
+        @if(solicitudes){
+          <ul class="lista-solicitudes">
+
+            @for(s of solicitudes; track s.id){
+
+              <li class="solicitud-card" (click)="verDetalle(s)">
+
+                <!-- Header -->
+                <div class="solicitud-header">
+                  <span class="chip-tipo">{{ s.tipoSolicitud }}</span>
+
+                  <span class="badge-estado"
+                    [class.pendiente]="s.estado === 'PENDIENTE'"
+                    [class.en-proceso]="s.estado === 'EN_PROCESO'"
+                    [class.aprobada]="s.estado === 'APROBADA'"
+                    [class.rechazada]="s.estado === 'RECHAZADA'">
+                    {{ s.estado }}
+                  </span>
+                </div>
+
+                <!-- Fechas -->
+                <div class="solicitud-fechas">
+                  Creada: {{ s.fechaCreacion | date:'dd/MM/yyyy' }}
+
+                  @if(s.fechaResolucion){
+                    · Resuelta: {{ s.fechaResolucion | date:'dd/MM/yyyy' }}
+                  }
+                </div>
+
+                <!-- Motivo / info extra -->
+                @if(s.motivo){
+                  <div class="solicitud-detalle">
+                    Motivo: {{ s.motivo }}
+                  </div>
+                }
+
+                @if(s.adminAsignado){
+                  <div class="solicitud-admin">
+                    Administrador: {{ s.adminAsignado.nombre }} {{ s.adminAsignado.apellido }}
+                  </div>
+                }
+
+                <!-- Footer -->
+                <div class="solicitud-footer">
+                  <button type="button" class="btn-ver-detalle">
+                    Ver detalle
+                  </button>
+                </div>
+
+              </li>
+
+            }
+
+          </ul>
+        }
+
+      </div>
+    </section>
+
+  </div>
+</div>
+

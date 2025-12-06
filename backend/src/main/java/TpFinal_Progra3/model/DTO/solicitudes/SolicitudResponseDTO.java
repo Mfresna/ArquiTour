@@ -22,6 +22,9 @@ public class SolicitudResponseDTO {
 
     private UsuarioBasicoDTO usuario;
 
+    private Long idUsuario;        // id del usuario que pidió la solicitud
+    private Long idAdminAsignado;  // id del admin que la tomó (puede ser null)
+
     private EstadoSolicitud estado;
 
     private UsuarioBasicoDTO adminAsignado;

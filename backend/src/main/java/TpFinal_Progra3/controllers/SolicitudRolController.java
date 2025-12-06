@@ -63,16 +63,35 @@ public class SolicitudRolController {
     @PreAuthorize("hasRole('ADMINISTRADOR')")
     public ResponseEntity<SolicitudArqResponseDTO> resolverSolicitud(
             HttpServletRequest request,
-            @PathVariable @Positive Long id,
-            @RequestBody @Valid ResolucionSolicitudDTO body) {
+            @PathVariable("id") @Positive Long id,
+            @Valid @RequestBody SolicitudResolucionDTO resolucion
+    ) {
 
-        SolicitudArqResponseDTO dto = solicitudService.resolverSolicitud(
-                request,
-                id,
-                body.getAprobada(),
-                body.getMotivo()
-        );
-        return ResponseEntity.ok(dto);
+        return ResponseEntity.ok(
+                solicitudMapper.mapToDTO(
+                        solicitudService.resolverSolicitud(request, id, resolucion)
+                ));
     }
 
+    //========================= OBTENER SOLICITUDES
+
+    @GetMapping("/{id}")
+    public ResponseEntity<SolicitudResponseDTO> obtenerSolicitud(
+            @PathVariable("id") @Positive Long id
+    ) {
+        return ResponseEntity.ok(
+                solicitudMapper.mapToDTO(
+                        solicitudService.obtenerSolicitud(id)
+                ));
+    }
+
+    @GetMapping("/filtrar")
+    public ResponseEntity<List<SolicitudResponseDTO>> filtrarSolicitudes(
+            @Valid SolicitudFiltroDTO filtro
+    ) {
+        return ResponseEntity.ok(solicitudService.filtrarSolicitudes(filtro));
+    }
+
+
 }
+        

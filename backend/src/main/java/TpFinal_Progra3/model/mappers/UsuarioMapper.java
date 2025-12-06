@@ -59,7 +59,9 @@ public class UsuarioMapper {
                 .apellido(usuario.getApellido())
                 .fechaNacimiento(usuario.getFechaNacimiento())
                 .descripcion(usuario.getDescripcion())
-                .urlImagen(usuario.getImagen().getUrl())
+                .urlImagen(usuario.getImagen() != null
+                    ? usuario.getImagen().getUrl()
+                    : null)
                 .build();
 
     }

@@ -1,0 +1,6 @@
+export enum EstadoSolicitudModel {
+  PENDIENTE = 'PENDIENTE',
+  EN_PROCESO = 'EN_PROCESO',
+  APROBADA = 'APROBADA',
+  RECHAZADA = 'RECHAZADA',
+}
