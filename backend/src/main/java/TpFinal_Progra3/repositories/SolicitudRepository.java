@@ -9,16 +9,18 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface SolicitudRepository extends JpaRepository<Solicitud, Long>, JpaSpecificationExecutor<Solicitud> {
 
     boolean existsByUsuario_Id(Long usuarioId);
     boolean existsByUsuario_IdAndEstado(Long usuarioId, EstadoSolicitud estado);
     boolean existsByUsuario_IdAndTipoAndEstado(Long usuarioId, TipoSolicitud tipo, EstadoSolicitud estado);
-    boolean existsByUsuario_IdAndTipoAndRolAndEstado(Long usuarioId, TipoSolicitud tipo, RolUsuario rol,EstadoSolicitud estado);
 
     List<Solicitud> findByEstado(EstadoSolicitud estado);
     List<Solicitud> findByUsuario(Usuario usuario);
+    Optional<Solicitud> findByUsuario_IdAndTipoAndEstado(Long usuarioId, TipoSolicitud tipo, EstadoSolicitud estado);
+
 
 
 }

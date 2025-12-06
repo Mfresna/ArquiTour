@@ -33,7 +33,7 @@ public class NotificacionService {
     public List<NotificacionResponseDTO> obtenerRecibidas(HttpServletRequest request, Boolean isLeidas) {
         Long receptorId = obtenerUsuario(request).getId();
 
-        return notificacionRepository.findByReceptor_Id(receptorId).stream()
+        return notificacionRepository.findByReceptor_IdOrderByFechaDesc(receptorId).stream()
                 .filter(n -> isLeidas == null || n.getIsLeido().equals(isLeidas))
                 .map(notificacionMapper::mapResponseDto)
                 .toList();
