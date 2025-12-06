@@ -1,6 +1,7 @@
 package TpFinal_Progra3.model.mappers;
 
 import TpFinal_Progra3.model.DTO.favoritos.FavoritoBasicoDTO;
+import TpFinal_Progra3.model.DTO.usuarios.UsuarioBasicoDTO;
 import TpFinal_Progra3.model.DTO.usuarios.UsuarioDTO;
 import TpFinal_Progra3.model.DTO.usuarios.UsuarioResponseDTO;
 import TpFinal_Progra3.model.entities.EstudioArq;
@@ -50,6 +51,19 @@ public class UsuarioMapper {
                         .toList())
 
                 .build();
+    }
+
+    public UsuarioBasicoDTO mapBasicoDTO(Usuario usuario) {
+        return UsuarioBasicoDTO.builder()
+                .nombre(usuario.getNombre())
+                .apellido(usuario.getApellido())
+                .fechaNacimiento(usuario.getFechaNacimiento())
+                .descripcion(usuario.getDescripcion())
+                .urlImagen(usuario.getImagen() != null
+                    ? usuario.getImagen().getUrl()
+                    : null)
+                .build();
+
     }
 
 

@@ -11,6 +11,13 @@ export class DragZoneMultiple {
   @Input() label: string = 'Imagen';
   @Input() labelBoton: string = 'Quitar imagen';
   @Input() imagenesExistentes: string[] = [];
+  
+  @Input() mensajeVacio: string | null = null;
+  readonly mensajePorDefecto: string = `
+  <strong>Arrastre y suelte una o varias imágenes aquí<br></strong>
+  <span> o haga clic para seleccionar desde su equipo <br></span>
+  <small class="formats"> Formatos: JPG, PNG, WEBP</small>
+  `;
 
   @Output() archivosChange = new EventEmitter<File[]>();
   @Output() existentesChange = new EventEmitter<string[]>();

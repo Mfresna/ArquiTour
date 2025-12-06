@@ -338,14 +338,18 @@ public class UsuarioService implements UsuarioServiceInterface {
     private void enviarNotificacionRoles(HttpServletRequest request, RolesDTO rolesDTO, Usuario usr, String accion){
 
         String mensajes = rolesDTO.getRoles().stream()
-                .map(rol -> "Se le " + accion + " el rol de: " + rol.name())
+                .map(rol -> {
+                    String nombreLimpio = rol.name().replace("ROLE_", "");
+                    return "Se le " + accion + " el rol de: " + nombreLimpio;
+                })
                 .collect(Collectors.joining("\n"));
 
-        notificacionService.crearNotificacionAutomatica(
+        notificacionService.crearNotificacion(
                 buscarUsuario(request),
                 usr,
                 mensajes,
-                TipoNotificacion.CAMBIO_ROL);
+                TipoNotificacion.CAMBIO_ROL,
+                null);
     }
 
     @Transactional

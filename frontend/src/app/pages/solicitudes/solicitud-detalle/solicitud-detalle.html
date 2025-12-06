@@ -1,0 +1,340 @@
+@if (cargando) {
+  <div class="estado">Cargando solicitud...</div>
+} @else if (!cargando && solicitud) {
+
+  <div class="detalle-solicitud">
+
+    <!-- ====== CABECERA / FICHA ====== -->
+    <section class="cabecera-solicitud">
+
+      <div class="fila-superior">
+        <h1 class="titulo">
+          @if (solicitud.tipoSolicitud === TipoSolicitudModel.ALTA_ARQUITECTO) {
+            Solicitud de alta como arquitecto
+          } @else {
+            Solicitud de baja de rol
+          }
+        </h1>
+
+        <span class="badge-estado"
+          [class.pendiente]="solicitud.estado === EstadoSolicitudModel.PENDIENTE"
+          [class.en-proceso]="solicitud.estado === EstadoSolicitudModel.EN_PROCESO"
+          [class.aprobada]="solicitud.estado === EstadoSolicitudModel.APROBADA"
+          [class.rechazada]="solicitud.estado === EstadoSolicitudModel.RECHAZADA">
+          {{ solicitud.estado }}
+        </span>
+      </div>
+
+      <div class="info-grid">
+
+        <!-- Usuario -->
+        <div class="info-col">
+          <span class="etiqueta">Usuario solicitante</span>
+          @if (solicitud.usuario) {
+            <span class="valor">
+              {{ solicitud.usuario.nombre }} {{ solicitud.usuario.apellido }}
+            </span>
+          } @else {
+            <span class="vacio">—</span>
+          }
+        </div>
+
+        <!-- Tipo -->
+        <div class="info-col">
+          <span class="etiqueta">Tipo de solicitud</span>
+          <span class="valor chip-tipo">
+            {{ solicitud.tipoSolicitud }}
+          </span>
+        </div>
+
+        <!-- Fecha creación -->
+        <div class="info-col">
+          <span class="etiqueta">Fecha de creación</span>
+          <span class="valor">
+            {{ solicitud.fechaCreacion || '—' }}
+          </span>
+        </div>
+
+        <!-- Fecha resolución -->
+        <div class="info-col">
+          <span class="etiqueta">Fecha de resolución</span>
+          @if (solicitud.fechaResolucion) {
+            <span class="valor">
+              {{ solicitud.fechaResolucion }}
+            </span>
+          } @else {
+            <span class="vacio">Sin resolver</span>
+          }
+        </div>
+
+        <!-- Admin asignado -->
+        <div class="info-col">
+          <span class="etiqueta">Administrador asignado</span>
+          @if (solicitud.adminAsignado) {
+            <span class="valor">
+              {{ solicitud.adminAsignado.nombre }} {{ solicitud.adminAsignado.apellido }}
+            </span>
+          } @else {
+            <span class="vacio">Sin asignar</span>
+          }
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ====== DETALLE ESPECÍFICO SEGÚN TIPO ====== -->
+
+    <!-- ALTA ARQUITECTO -->
+    @if (solicitud.tipoSolicitud === TipoSolicitudModel.ALTA_ARQUITECTO) {
+      <section class="bloque-detalle">
+        <div class="bloque-header">
+          <h3>Datos para alta de arquitecto</h3>
+        </div>
+
+        <div class="detalle-grid">
+          <div class="detalle-col">
+            <span class="etiqueta">Matrícula</span>
+            @if (solicitud.matriculaArquitecto) {
+              <span class="valor">{{ solicitud.matriculaArquitecto }}</span>
+            } @else {
+              <span class="vacio">—</span>
+            }
+          </div>
+
+          <div class="detalle-col">
+            <span class="etiqueta">Universidad</span>
+            @if (solicitud.universidad) {
+              <span class="valor">{{ solicitud.universidad }}</span>
+            } @else {
+              <span class="vacio">—</span>
+            }
+          </div>
+
+          <div class="detalle-col">
+            <span class="etiqueta">Año de recibido</span>
+            @if (solicitud.anioRecibido != null) {
+              <span class="valor">{{ solicitud.anioRecibido }}</span>
+            } @else {
+              <span class="vacio">—</span>
+            }
+          </div>
+        </div>
+      </section>
+      <!-- ====== DETALLE GALERIA ====== -->
+      <section class="galeria">
+      <h3>Documentación adjunta</h3>
+
+      @if (docSrc().length) {
+
+          <div class="carrusel-container">
+          <button
+              class="flecha-carrusel izq"
+              type="button"
+              (click)="scrollDocs(-1)">
+              <span class="material-icons icon-flecha">chevron_left</span>
+          </button>
+
+          <div class="imagenes" #carruselDocs>
+              @for (doc of docSrc(); let i = $index; track i) {
+              <button
+                  type="button"
+                  class="imagen"
+                  [class.activa]="docSeleccionado === i"
+                  (click)="abrirDoc(i)">
+
+                  <img
+                  [src]="doc"
+                  alt="Documento {{ i + 1 }}"
+                  (error)="docError($event)" />
+              </button>
+              }
+          </div>
+
+          <button
+              class="flecha-carrusel der"
+              type="button"
+              (click)="scrollDocs(1)">
+              <span class="material-icons icon-flecha">chevron_right</span>
+          </button>
+          </div>
+
+      } @else {
+          <p class="vacio-docs">No hay documentación adjunta.</p>
+      }
+      </section>
+      @if (ventanaDocsAbierta && docActualUrl) {
+          <div class="ventana" (click)="cerrarVentanaDocs()">
+              <div class="v-contenido" (click)="$event.stopPropagation()">
+              <img
+                  class="v-img"
+                  [src]="docActualUrl"
+                  (error)="docError($event)"
+                  alt="Documento ampliado" />
+
+              <div class="v-controles">
+                  <button class="v-btn nav" type="button" (click)="moverDoc(-1)">
+                  <span class="material-icons icon-ventana">chevron_left</span>
+                  </button>
+
+                  <button class="v-btn cerrar" type="button" (click)="cerrarVentanaDocs()">
+                  <span class="material-icons icon-cerrar">close</span>
+                  </button>
+
+                  <button class="v-btn nav" type="button" (click)="moverDoc(1)">
+                  <span class="material-icons icon-ventana">chevron_right</span>
+                  </button>
+              </div>
+              </div>
+          </div>
+      }
+
+
+
+
+
+    }
+
+    <!-- BAJA ROL -->
+    @if (solicitud.tipoSolicitud === TipoSolicitudModel.BAJA_ROL) {
+      <section class="bloque-detalle">
+        <div class="bloque-header">
+          <h3>Detalle de baja de rol</h3>
+        </div>
+
+        <div class="detalle-grid">
+          <div class="detalle-col">
+            <span class="etiqueta">Rol a dar de baja</span>
+            @if (solicitud.rolBaja) {
+              <span class="valor">{{ solicitud.rolBaja }}</span>
+            } @else {
+              <span class="vacio">—</span>
+            }
+          </div>
+        </div>
+
+        <div class="motivo-container">
+          <span class="etiqueta">Motivo</span>
+          @if (solicitud.motivo) {
+            <p class="texto-largo">
+              {{ solicitud.motivo }}
+            </p>
+          } @else {
+            <p class="vacio">Sin motivo detallado.</p>
+          }
+        </div>
+      </section>
+    }
+
+    <!-- ====== COMENTARIO RESPUESTA (SI YA FUE RESUELTA) ====== -->
+    @if (solicitud.comentarioRta) {
+      <section class="bloque-detalle bloque-comentario">
+        <div class="bloque-header">
+          <h3>Comentario de resolución</h3>
+        </div>
+
+        <p class="texto-largo">
+          {{ solicitud.comentarioRta }}
+        </p>
+      </section>
+    }
+
+    <!-- ====== PANEL ADMIN (TOMAR / RESOLVER) ====== -->
+    @if (esAdminActual) {
+      <section class="bloque-detalle panel-admin">
+        <div class="bloque-header">
+          <h3>Gestión de la solicitud</h3>
+        </div>
+
+        <div class="admin-contenido">
+
+          <!-- Botón TOMAR -->
+          @if (puedeTomar()) {
+            <button type="button"
+                    class="btn-accion btn-primario"
+                    (click)="tomar()"
+                    [disabled]="cargando">
+              Tomar solicitud
+            </button>
+          }
+
+          <!-- Formulario RESOLVER -->
+          @if (puedeResolver()) {
+            <form [formGroup]="formResolucion" (ngSubmit)="resolver()" class="form-resolver">
+
+              <div class="grupo-radio">
+                <label>
+                  <input
+                    type="radio"
+                    [value]="true"
+                    formControlName="aprobada">
+                  Aprobar
+                </label>
+
+                <label>
+                  <input
+                    type="radio"
+                    [value]="false"
+                    formControlName="aprobada">
+                  Rechazar
+                </label>
+              </div>
+
+              <div class="grupo-texto">
+                <label class="label">Comentario (opcional)</label>
+                <textarea
+                  rows="4"
+                  class="input"
+                  formControlName="comentario"
+                  placeholder="Podés dejar una breve explicación para el usuario"
+                  [class.invalido]="formResolucion.get('comentario')?.invalid
+                                    && formResolucion.get('comentario')?.touched">
+                </textarea>
+
+                @if (formResolucion.get('comentario')?.errors?.['maxlength']) {
+                  <small class="error">
+                    El comentario es demasiado largo (máx. 280 caracteres).
+                  </small>
+                }
+              </div>
+
+              <div class="acciones-resolver">
+                <button type="submit"
+                        class="btn-accion btn-primario"
+                        [disabled]="formResolucion.invalid || cargando">
+                  Confirmar resolución
+                </button>
+              </div>
+            </form>
+          }
+
+        </div>
+      </section>
+    }
+
+    <!-- ====== BOTÓN VOLVER ====== -->
+    <div class="acciones-final">
+      <button type="button" class="btn-volver" (click)="volver()">
+        Volver a solicitudes
+      </button>
+    </div>
+
+  </div>
+
+} @else {
+  <div class="estado">No se encontró la solicitud.</div>
+}
+
+<app-mensaje-modal
+  [isVisible]="modalVisible"
+  [titulo]="modalTitulo"
+  [mensaje]="modalMensaje"
+  [conIcon]="true"
+  [tipo]="modalTipo"
+  tipoContenido="texto"
+  [mostrarCerrar]="true"
+  [mostrarBotonAceptar]="true"
+  [mostrarBotonCancelar]="false"
+  textoBotonAceptar="Aceptar"
+  (aceptar)="onModalAceptar()"
+  (cerrado)="onModalCerrado()"
+></app-mensaje-modal>

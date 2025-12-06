@@ -3,23 +3,27 @@ import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../auth/services/authService/auth-service';
 import { TokenService } from '../../auth/services/tokenService/token-service';
 import { TemaService } from '../../services/temaService/tema-service';
+import { Observable } from 'rxjs';
+import { NotificacionService } from '../../services/notificacionService/notificacion-service';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
   selector: 'app-header',
-  imports: [RouterLink],
+  imports: [RouterLink, AsyncPipe],
   templateUrl: './header.html',
   styleUrl: './header.css',
 })
 export class Header implements OnInit{
 
-  usuarioMenu: boolean = false;
   modoNoche: boolean = false;
 
+  usuarioMenu: boolean = false;
   obrasMenu: boolean = false;
-
   estudiosMenu: boolean = false;
-
   mapaMenu: boolean = false;
+  notificacionesMenu: boolean = false;
+
+  cantNotifSinLeer$!: Observable<number>;
 
   isBienvenida: boolean = false;
 
@@ -28,12 +32,15 @@ export class Header implements OnInit{
     private tokenService: TokenService,
     private elementRef: ElementRef,
     private temaService: TemaService,
+    private notificacionService: NotificacionService,
     private router: Router
   ){}
 
   ngOnInit(): void {
     const temaActual = document.documentElement.getAttribute('data-tema');
     this.modoNoche = temaActual === 'oscuro';
+
+    this.cantNotifSinLeer$ = this.notificacionService.cantNotifSinLeer$;
 
     this.router.events.subscribe(() => {
       this.isBienvenida = this.router.url === '/bienvenida';
@@ -59,16 +66,18 @@ export class Header implements OnInit{
 
 
   //=========== TOGGLE MENUS
+  toggleModoNoche(){
+    this.modoNoche = !this.modoNoche;   
+    this.temaService.toggleTema();
+  }
+
   toggleUsuarioMenu(){
     this.usuarioMenu = !this.usuarioMenu;
 
     this.obrasMenu = false
     this.estudiosMenu = false
-  }
-
-  toggleModoNoche(){
-    this.modoNoche = !this.modoNoche;   
-    this.temaService.toggleTema();
+    this.mapaMenu=false;
+    this.notificacionesMenu = false;
   }
 
   toggleObrasMenu(){
@@ -77,6 +86,7 @@ export class Header implements OnInit{
     this.usuarioMenu = false;
     this.estudiosMenu = false;
     this.mapaMenu=false;
+    this.notificacionesMenu = false;
 
   }
 
@@ -86,6 +96,7 @@ export class Header implements OnInit{
     this.usuarioMenu = false
     this.obrasMenu = false;
     this.mapaMenu=false;
+    this.notificacionesMenu = false;
   }
 
   toggleMapaMenu(){
@@ -94,6 +105,16 @@ export class Header implements OnInit{
     this.usuarioMenu = false;
     this.obrasMenu = false;
     this.estudiosMenu = false;
+    this.notificacionesMenu = false;
+  }
+
+  toggleNotificacionesMenu(){
+    this.notificacionesMenu = !this.notificacionesMenu;
+
+    this.usuarioMenu = false;
+    this.obrasMenu = false;
+    this.mapaMenu=false;
+    this.estudiosMenu = false;
   }
 
   cerrarTodosMenus(){
@@ -101,8 +122,31 @@ export class Header implements OnInit{
     this.usuarioMenu = false;
     this.obrasMenu = false;
     this.mapaMenu=false;
+    this.notificacionesMenu = false;
+
   }
 
+  //================= NOTIFICACIONES
+
+  abrirNotificaciones() {
+    this.toggleNotificacionesMenu();
+
+    this.notificacionService.refrescarManual();
+    //hacer el subscribe para verlas
+  }
+
+  marcarTodasLeidas() {
+    this.notificacionService.marcarTodasLeidas().subscribe({
+      next: () => {
+        console.log("Todas marcadas como leídas");
+      },
+      error: err => {
+        console.error(err);
+        alert("Hay notificaciones que no pueden ser marcadas como leidas.")
+      }
+    });
+  }
+  
   //========== ESCUCHADORES
   @HostListener('document:keydown.escape', ['$event'])
   handleKeyboardEvent(event: any) { 
