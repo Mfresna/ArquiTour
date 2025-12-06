@@ -54,11 +54,11 @@ export class Solicitudes implements OnInit {
       .filtrarSolicitudes(
         f.tipo || undefined,
         f.estado || undefined,
-        undefined,                     // usuarioId
-        undefined,                     // adminAsignadoId
+        undefined,                     
+        undefined,                   
         f.fechaDesde || undefined,
         f.fechaHasta || undefined,
-        undefined                      // asignada
+        undefined              
       )
       .subscribe({
         next: (lista) => {
@@ -118,23 +118,24 @@ export class Solicitudes implements OnInit {
 
   // =================== NUEVA SOLICITUD (botón +) ===================
 
-  /**
-   * Habilita o no el botón según TODAS las reglas:
-   * - Si NO sos ARQ ni ADMIN => podés pedir ALTA_ARQUITECTO (si no hay alta pendiente)
-   * - Si sos ARQ => podés pedir BAJA_ROL de ARQUITECTO (si no hay baja ARQ pendiente)
-   * - Si sos ADMIN => podés pedir BAJA_ROL de ADMIN (si no hay baja ADMIN pendiente)
-   * - Si sos ARQ y ADMIN => aplica lo anterior para cada rol por separado.
-   */
+
   puedeCrearSolicitud(): boolean {
     const esArq = this.tokenService.isArquitecto();
     const esAdmin = this.tokenService.isAdmin();
 
-    const puedeAltaArq   = !esArq && !esAdmin && !this.tieneAltaArquitectoPendiente();
+    // Cualquier usuario que NO sea arquitecto puede pedir ALTA_ARQUITECTO
+    // (si no tiene alta pendiente)
+    const puedeAltaArq   = !esArq && !this.tieneAltaArquitectoPendiente();
+
+    // Baja de arquitecto
     const puedeBajaArq   = esArq   && !this.tieneBajaArquitectoPendiente();
+
+    // Baja de admin
     const puedeBajaAdmin = esAdmin && !this.tieneBajaAdminPendiente();
 
     return puedeAltaArq || puedeBajaArq || puedeBajaAdmin;
   }
+
 
   irANuevaSolicitud(): void {
     if (!this.puedeCrearSolicitud()) return;
@@ -142,72 +143,88 @@ export class Solicitudes implements OnInit {
     const esArq = this.tokenService.isArquitecto();
     const esAdmin = this.tokenService.isAdmin();
 
-    const puedeAltaArq   = !esArq && !esAdmin && !this.tieneAltaArquitectoPendiente();
+    const puedeAltaArq   = !esArq && !this.tieneAltaArquitectoPendiente();
     const puedeBajaArq   = esArq   && !this.tieneBajaArquitectoPendiente();
     const puedeBajaAdmin = esAdmin && !this.tieneBajaAdminPendiente();
 
     let tipo: TipoSolicitudModel;
     let rolBaja: RolesEnum | null = null;
+    let modoDual = false;
+    let altaHabilitada = false;
+    let bajaAdminHabilitada = false;
 
-    // 1) Usuario común (no ARQ ni ADMIN) -> ALTA ARQUITECTO
-    if (puedeAltaArq) {
+    // ===== CASO ESPECIAL: ADMIN que NO es arquitecto =====
+    if (esAdmin && !esArq) {
+      altaHabilitada = puedeAltaArq;
+      bajaAdminHabilitada = puedeBajaAdmin;
+
+      if (altaHabilitada && bajaAdminHabilitada) {
+        modoDual = true;
+        tipo = TipoSolicitudModel.ALTA_ARQUITECTO; // default al entrar al form
+      } else if (altaHabilitada) {
+        tipo = TipoSolicitudModel.ALTA_ARQUITECTO;
+      } else if (bajaAdminHabilitada) {
+        tipo = TipoSolicitudModel.BAJA_ROL;
+        rolBaja = RolesEnum.ROLE_ADMINISTRADOR;
+      } else {
+        return;
+      }
+
+      const queryParams: any = { tipo };
+
+      if (modoDual) {
+        queryParams.modoDual = true;
+        queryParams.altaHabilitada = altaHabilitada;
+        queryParams.bajaAdminHabilitada = bajaAdminHabilitada;
+      } else if (rolBaja) {
+        queryParams.rolBaja = rolBaja;
+      }
+
+      this.router.navigate(['/formSolicitudes'], { queryParams });
+      return;
+    }
+
+    // ===== RESTO DE CASOS (igual que tenías antes o similar) =====
+    // usuario común
+    if (!esArq && !esAdmin && puedeAltaArq) {
       tipo = TipoSolicitudModel.ALTA_ARQUITECTO;
     }
-    // 2) Solo ARQ -> BAJA rol ARQUITECTO
+    // solo arquitecto
     else if (esArq && !esAdmin && puedeBajaArq) {
       tipo = TipoSolicitudModel.BAJA_ROL;
       rolBaja = RolesEnum.ROLE_ARQUITECTO;
     }
-    // 3) Solo ADMIN -> BAJA rol ADMINISTRADOR
-    else if (!esArq && esAdmin && puedeBajaAdmin) {
-      tipo = TipoSolicitudModel.BAJA_ROL;
-      rolBaja = RolesEnum.ROLE_ADMINISTRADOR;
-    }
-    // 4) ARQ y ADMIN
+    // arquitecto y admin: acá podés dejar tu confirm() anterior si te gusta
     else if (esArq && esAdmin) {
+      const opciones: { rol: RolesEnum; label: string }[] = [];
+      if (puedeBajaArq)   opciones.push({ rol: RolesEnum.ROLE_ARQUITECTO,    label: 'arquitecto' });
+      if (puedeBajaAdmin) opciones.push({ rol: RolesEnum.ROLE_ADMINISTRADOR, label: 'administrador' });
 
-      const opcionesDisponibles: { rol: RolesEnum; label: string }[] = [];
-
-      if (puedeBajaArq) {
-        opcionesDisponibles.push({ rol: RolesEnum.ROLE_ARQUITECTO, label: 'arquitecto' });
-      }
-      if (puedeBajaAdmin) {
-        opcionesDisponibles.push({ rol: RolesEnum.ROLE_ADMINISTRADOR, label: 'administrador' });
-      }
-
-      // Si sólo queda disponible una baja, voy directo a esa
-      if (opcionesDisponibles.length === 1) {
+      if (opciones.length === 1) {
         tipo = TipoSolicitudModel.BAJA_ROL;
-        rolBaja = opcionesDisponibles[0].rol;
-      } else if (opcionesDisponibles.length === 2) {
-        // Tenés los dos roles disponibles para baja -> pregunto cuál
+        rolBaja = opciones[0].rol;
+      } else if (opciones.length === 2) {
         const quiereArq = confirm(
-          'Tenés ambos roles.\n\nAceptar: solicitar baja de ARQUITECTO.\nCancelar: solicitar baja de ADMINISTRADOR.'
+          'Tenés ambos roles.\n\nAceptar: solicitar BAJA de ARQUITECTO.\nCancelar: solicitar BAJA de ADMINISTRADOR.'
         );
-
         tipo = TipoSolicitudModel.BAJA_ROL;
         rolBaja = quiereArq ? RolesEnum.ROLE_ARQUITECTO : RolesEnum.ROLE_ADMINISTRADOR;
       } else {
-      
         return;
       }
-
     } else {
-   
       return;
     }
 
-    // Navegación al formulario de solicitudes
     const queryParams: any = { tipo };
-
-    // Si es una baja de rol, mandamos también qué rol quiere dar de baja.
-    // (Después lo vas a usar en el form para setear dto.rolAEliminar)
     if (tipo === TipoSolicitudModel.BAJA_ROL && rolBaja) {
       queryParams.rolBaja = rolBaja;
     }
 
     this.router.navigate(['/formSolicitudes'], { queryParams });
   }
+
+
 
   // =================== DETALLE ===================
 

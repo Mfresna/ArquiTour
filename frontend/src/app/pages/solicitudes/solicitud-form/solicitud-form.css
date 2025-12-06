@@ -158,3 +158,49 @@ textarea.input {
     padding: 1.5rem;
   }
 }
+.tabs-tipo {
+  display: flex;
+  gap: 32px;
+  margin: 16px 0 10px;
+  border-bottom: 1px solid #d8d8d8;
+  padding-bottom: 6px;
+}
+
+.tabs-tipo .tab {
+  background: transparent;
+  border: none;
+  padding: 4px 0;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  position: relative;
+  color: #333;
+}
+
+.tabs-tipo .tab::after {
+  content: '';
+  position: absolute;
+  bottom: -7px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background-color: transparent;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.tabs-tipo .tab.activa::after {
+  background-color: #00AEEF; /* tu color celeste */
+}
+
+.tabs-tipo .tab:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.tabs-tipo .tab small {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 400;
+  margin-top: 2px;
+  color: #666;
+}

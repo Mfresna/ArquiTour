@@ -25,8 +25,11 @@ export class SolicitudForm {
   // Rol que se quiere dar de baja (se define a partir de query param / roles)
   rolBajaSeleccionado: RolesEnum | null = null;
 
-  // (opcional, por si más adelante querés mostrar algo en pantalla)
   rolesDisponiblesBaja: { valor: RolesEnum; label: string }[] = [];
+
+  modoDual = false;              // muestra tabs alta/baja
+  altaHabilitada = true;
+  bajaAdminHabilitada = true;
 
   archivos: File[] = [];
   mostrarErrorArchivos = false;
@@ -58,7 +61,7 @@ export class SolicitudForm {
     this.detectarTipoYRol();
     this.initForm();
     this.aplicarValidadoresPorTipo();
-    this.configurarCampoRolBajaEnForm(); // solo para mostrar el rol en el form si querés
+    this.configurarRolesBaja(); 
   }
 
   // ==================== TIPO + ROL (desde query params) ====================
@@ -69,31 +72,29 @@ export class SolicitudForm {
     const paramTipo = qp.get('tipo') as TipoSolicitudModel | null;
     const paramRol  = qp.get('rolBaja') as RolesEnum | null;
 
-    // 1) Determinar tipo de solicitud
+    // 👉 NUEVO: modo dual y habilitados
+    this.modoDual = qp.get('modoDual') === 'true';
+    this.altaHabilitada = qp.get('altaHabilitada') !== 'false';       // default true
+    this.bajaAdminHabilitada = qp.get('bajaAdminHabilitada') !== 'false';
+
+    // 1) tipo
     if (paramTipo === TipoSolicitudModel.ALTA_ARQUITECTO ||
         paramTipo === TipoSolicitudModel.BAJA_ROL) {
-
       this.tipo = paramTipo;
     } else {
-      // Fallback automático por rol del usuario:
-      // - no arq => ALTA
-      // - arq => BAJA
       this.tipo = this.tokenService.isArquitecto()
         ? TipoSolicitudModel.BAJA_ROL
         : TipoSolicitudModel.ALTA_ARQUITECTO;
     }
 
-    // 2) Si es BAJA_ROL, determinar qué rol se quiere dar de baja
+    // 2) sólo si BAJA_ROL (para otros casos)
     if (this.tipo === TipoSolicitudModel.BAJA_ROL) {
-
-      // Si viene desde el listado con rol ya elegido:
       if (paramRol === RolesEnum.ROLE_ARQUITECTO ||
           paramRol === RolesEnum.ROLE_ADMINISTRADOR) {
         this.rolBajaSeleccionado = paramRol;
         return;
       }
 
-      // Si no vino rol por query param, hacemos fallback según roles del usuario
       const esArq = this.tokenService.isArquitecto();
       const esAdmin = this.tokenService.isAdmin();
 
@@ -102,14 +103,13 @@ export class SolicitudForm {
       } else if (!esArq && esAdmin) {
         this.rolBajaSeleccionado = RolesEnum.ROLE_ADMINISTRADOR;
       } else if (esArq && esAdmin) {
-        // Tiene ambos y llegó sin query param -> por defecto ARQUITECTO
         this.rolBajaSeleccionado = RolesEnum.ROLE_ARQUITECTO;
       } else {
-        // Usuario sin esos roles -> algo raro, dejamos null
         this.rolBajaSeleccionado = null;
       }
     }
   }
+
 
   // ==================== FORM ====================
 
@@ -167,10 +167,10 @@ export class SolicitudForm {
   private configurarRolesBaja(): void {
     if (this.tipo !== TipoSolicitudModel.BAJA_ROL) return;
 
-    const roles: { valor: RolesEnum; label: string }[] = [];
-
     const esArq = this.tokenService.isArquitecto();
     const esAdmin = this.tokenService.isAdmin();
+
+    const roles: { valor: RolesEnum; label: string }[] = [];
 
     if (esArq) {
       roles.push({ valor: RolesEnum.ROLE_ARQUITECTO, label: 'Arquitecto' });
@@ -182,16 +182,11 @@ export class SolicitudForm {
 
     this.rolesDisponiblesBaja = roles;
 
-    // Si vino un rol por query param y está en la lista, lo selecciono
-    const qp = this.route.snapshot.queryParamMap;
-    const paramRol = qp.get('rolBaja') as RolesEnum | null;
+    // Elegir valor inicial
+    let inicial: RolesEnum | null = this.rolBajaSeleccionado;
 
-    let inicial: RolesEnum | null = null;
-
-    if (paramRol && roles.some(r => r.valor === paramRol)) {
-      inicial = paramRol;
-    } else if (roles.length === 1) {
-      // si solo hay 1 rol, lo elijo por defecto
+    // Si no quedó algo decidido y solo hay 1 rol disponible, lo elijo
+    if (!inicial && roles.length === 1) {
       inicial = roles[0].valor;
     }
 
@@ -201,21 +196,6 @@ export class SolicitudForm {
     }
   }
 
-
-  private configurarCampoRolBajaEnForm(): void {
-    if (this.tipo !== TipoSolicitudModel.BAJA_ROL) return;
-
-    const ctrl = this.formulario.get('rolBaja');
-    if (!ctrl || !this.rolBajaSeleccionado) return;
-
-    const label =
-      this.rolBajaSeleccionado === RolesEnum.ROLE_ADMINISTRADOR
-        ? 'Administrador'
-        : 'Arquitecto';
-
-    // solo para mostrarlo en el input deshabilitado
-    ctrl.setValue(label);
-  }
 
   esAlta(): boolean {
     return this.tipo === TipoSolicitudModel.ALTA_ARQUITECTO;
@@ -397,6 +377,29 @@ export class SolicitudForm {
         }
       });
     }
+
+    cambiarTipo(tipo: TipoSolicitudModel): void {
+      // si está deshabilitado, no hago nada
+      if (tipo === TipoSolicitudModel.ALTA_ARQUITECTO && !this.altaHabilitada) return;
+      if (tipo === TipoSolicitudModel.BAJA_ROL && !this.bajaAdminHabilitada) return;
+
+      this.tipo = tipo;
+
+      // reconfiguro validadores según el tipo
+      this.aplicarValidadoresPorTipo();
+
+      if (tipo === TipoSolicitudModel.BAJA_ROL) {
+        // aseguro que el select tenga los roles y valor inicial
+        this.configurarRolesBaja();
+      } else {
+        // limpiamos cosas de baja
+        this.formulario.patchValue({
+          rolBaja: null,
+          motivo: ''
+        });
+      }
+    }
+
 
 
     volver(): void {
