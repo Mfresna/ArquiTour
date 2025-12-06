@@ -6,7 +6,7 @@
       @if(esAlta()) {
         Solicitar alta como arquitecto
       } @else {
-        Solicitar baja de arquitecto
+        Solicitar baja de rol
       }
     </h1>
 
@@ -80,18 +80,18 @@
 
             <!-- Documentación -->
             <fieldset class="form-group">
-            
-                <app-drag-zone-multiple
-                    label="Documentación (obligatoria)"
-                    [mensajeVacio]="mensajeDocAlta"
-                    (archivosChange)="archivos = $event"
-                ></app-drag-zone-multiple>
 
-                @if (mostrarErrorArchivos) {
+              <app-drag-zone-multiple
+                label="Documentación (obligatoria)"
+                [mensajeVacio]="mensajeDocAlta"
+                (archivosChange)="onArchivosChange($event)"
+              ></app-drag-zone-multiple>
+
+              @if (mostrarErrorArchivos) {
                 <small class="error">
-                Debés adjuntar al menos un archivo para la solicitud de alta.
+                  Debés adjuntar al menos un archivo para la solicitud de alta.
                 </small>
-                }
+              }
 
             </fieldset>
           }
@@ -99,13 +99,40 @@
           <!-- ============ FORM BAJA ============ -->
           @if(!esAlta()) {
 
+            <!-- Rol a dar de baja -->
+            <fieldset class="form-group">
+              <label class="label">Rol a dar de baja</label>
+
+              <select
+                class="input"
+                formControlName="rolBaja"
+                [class.invalido]="formulario.get('rolBaja')?.invalid
+                                  && (formulario.get('rolBaja')?.touched 
+                                      || formulario.get('rolBaja')?.dirty)">
+                <option value="" disabled>Seleccioná el rol que querés dar de baja</option>
+
+                @for (rol of rolesDisponiblesBaja; track rol.valor) {
+                  <option [ngValue]="rol.valor">
+                    {{ rol.label }}
+                  </option>
+                }
+              </select>
+
+              @if(formulario.get('rolBaja')?.errors?.['required'] 
+                  && formulario.get('rolBaja')?.touched) {
+                <small class="error">Debés seleccionar un rol.</small>
+              }
+            </fieldset>
+
+
+            <!-- Motivo -->
             <fieldset class="form-group">
               <label class="label">Motivo</label>
               <textarea
                 rows="5"
                 class="input"
                 formControlName="motivo"
-                placeholder="Comentanos por qué querés dejar de ser arquitecto en la plataforma"
+                placeholder="Comentanos por qué querés dejar de tener este rol en la plataforma"
                 [class.invalido]="formulario.get('motivo')?.invalid 
                                   && (formulario.get('motivo')?.touched 
                                       || formulario.get('motivo')?.dirty)">
@@ -122,7 +149,6 @@
 
           <!-- Botones -->
           <div class="acciones">
-
             <button type="submit" class="btn-primario" [disabled]="formulario.invalid || cargando">
               Enviar solicitud
             </button>
