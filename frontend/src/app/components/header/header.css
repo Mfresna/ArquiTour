@@ -538,3 +538,34 @@ a:hover #logout{
 #modo-noche:hover #noche-toggle {
   transform: scale(1.05);
 }
+/* Botón de modo noche SOLO en el header público (no logueado) */
+#modo-noche-publico {
+  background: none;
+  border: none;
+  padding: 0;                 
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: inherit;           
+}
+
+#noche-toggle-publico {
+  font-size: 28px;
+  color: var(--nav-text);
+  transform: rotate(150deg);
+  transition: transform 0.25s ease, color 0.25s ease;
+}
+#noche-toggle-publico:hover {
+  color: var(--color-acento);
+}
+
+#noche-toggle-publico.activo {
+  color: rgba(214, 192, 91, 0.822);
+  transform: rotate(20deg);
+}
+
+
+#noche-toggle-publico.activo:hover {
+  transform: rotate(40deg);
+}

@@ -1,14 +1,11 @@
 import { Routes } from '@angular/router';
-import { Login } from './auth/pages/login/login';
 import { Auth } from './auth/pages/autenticacion/auth';
-import { Component } from '@angular/core';
 import { Estudios } from './pages/estudios/estudios/estudios';
 import { EstudioDetalle } from './pages/estudios/estudio-detalle/estudio-detalle';
 import { CambiarPass } from './auth/pages/cambiar-pass/cambiar-pass';
 import { EstudioForm } from './pages/estudios/estudio-form/estudio-form';
 
 import { ObraDetalle } from './pages/obras/obra-detalle/obra-detalle';
-import { Register } from './auth/pages/register/register';
 import { ObraForm } from './pages/obras/obra-form/obra-form';
 import { Favoritos } from './pages/favoritos/favoritos/favoritos';
 import { Obras } from './pages/obras/obras/obras';
@@ -75,9 +72,9 @@ export const routes: Routes = [
   { path: 'gestionar-usuarios', component: UsuarioLista, canActivate: [rolesGuard], data: {roles: ['ROLE_ADMINISTRADOR']} },
   
   //Solicitudes
-  { path: 'solicitudes', component: Solicitudes },
-  { path: 'formSolicitudes', component: SolicitudForm},
-  { path: 'solicitudes/:id', component: SolicitudDetalle},
+  { path: 'solicitudes', component: Solicitudes, canActivate: [authGuard] },
+  { path: 'formSolicitudes', component: SolicitudForm, canActivate: [authGuard], canDeactivate: [salirSinGuardarGuard]},
+  { path: 'solicitudes/:id', component: SolicitudDetalle, canActivate: [authGuard]},
 
     
 

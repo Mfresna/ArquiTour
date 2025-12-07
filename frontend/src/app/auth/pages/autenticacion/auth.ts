@@ -4,6 +4,7 @@ import { Register } from "../register/register";
 import { CommonModule } from '@angular/common';
 import { environment } from '../../../../environments/environment';
 import { ActivatedRoute, Router } from '@angular/router';
+import { TokenService } from '../../services/tokenService/token-service';
 
 @Component({
   selector: 'app-auth',
@@ -20,11 +21,16 @@ export class Auth implements OnInit, OnDestroy {
   
 
   constructor(
-    private router: Router){}
+    private router: Router,
+    private tokenService: TokenService){}
 
   ngOnInit(): void {
     const indiceImagen = Math.floor(Math.random() * this.imagenes.length); 
     this.imagSeleccionada = this.imagenes[indiceImagen];
+
+    if(this.tokenService.get() === null){
+      this.router.navigate(['/obras']);
+    }
 
     if (this.router.url.includes('/login')) {
       this.vistaActual = 'login';
