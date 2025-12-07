@@ -8,10 +8,11 @@ import { NotificacionService } from '../../services/notificacionService/notifica
 import { AsyncPipe } from '@angular/common';
 import { NotificacionResponseModel } from '../../models/notificacionModels/notificacionResponseModel';
 import { TipoNotificacionDescripcion, TipoNotificacionEnum } from '../../models/notificacionModels/tipoNotificacionEnum';
+import { MensajeModal } from '../mensaje-modal/mensaje-modal';
 
 @Component({
   selector: 'app-header',
-  imports: [RouterLink, AsyncPipe],
+  imports: [RouterLink, AsyncPipe, MensajeModal],
   templateUrl: './header.html',
   styleUrl: './header.css',
 })
@@ -33,6 +34,13 @@ export class Header implements OnInit{
 
   TipoNotificacionEnum = TipoNotificacionEnum;
   TipoNotificacionDescripcion = TipoNotificacionDescripcion;
+
+  //MODAL
+  modalVisible: boolean = false;
+  modalTitulo!: string;
+  modalMensaje!: string;
+
+
 
   constructor(
     private authService: AuthService,
@@ -159,6 +167,11 @@ export class Header implements OnInit{
 
     if(notif.referenciaId != null){
       this.router.navigate(['/solicitudes', notif.referenciaId]);
+    }else{
+      //Mostrar modal 
+      this.modalVisible = true;
+      this.modalTitulo = TipoNotificacionDescripcion[notif.tipo]
+      this.modalMensaje = notif.mensaje
     }
 
   }

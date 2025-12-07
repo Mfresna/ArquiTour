@@ -228,3 +228,17 @@
 
 
 </header>
+
+<app-mensaje-modal
+  [isVisible]="modalVisible"
+  [titulo]="modalTitulo"
+  [mensaje]="modalMensaje"
+  [conIcon]="false"
+  [tipoContenido]="'texto'"
+
+  [mostrarCerrar]="false"
+  [mostrarBotonCancelar]="false"
+
+  (cerrado)="modalVisible=false"
+
+></app-mensaje-modal>
