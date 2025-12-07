@@ -167,6 +167,7 @@ export class SolicitudForm {
     motivoCtrl.updateValueAndValidity();
     rolBajaCtrl.updateValueAndValidity();
   }
+  
   private configurarRolesBaja(): void {
     if (this.tipo !== TipoSolicitudModel.BAJA_ROL) return;
 
