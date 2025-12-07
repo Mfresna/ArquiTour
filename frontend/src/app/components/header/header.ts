@@ -48,7 +48,7 @@ export class Header implements OnInit{
     private elementRef: ElementRef,
     private temaService: TemaService,
     private notificacionService: NotificacionService,
-    private router: Router
+    public router: Router
   ){}
 
   ngOnInit(): void {

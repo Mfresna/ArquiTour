@@ -30,7 +30,9 @@ export class TokenService {
   get(): string | null {
     return this.obtenerToken(); 
   }
-  clear(): void { this.borrarToken(); }
+  clear(): void { 
+    this.borrarToken(); 
+  }
 
   
   // Decodifica la parte Base64URL a texto UTF-8.

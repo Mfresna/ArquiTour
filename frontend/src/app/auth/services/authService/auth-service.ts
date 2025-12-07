@@ -4,7 +4,7 @@ import { TokenService } from '../tokenService/token-service';
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { AuthResponse } from '../../models/login/authResponseModel';
 import { AuthRequest } from '../../models/login/authRequestModel';
-import { BehaviorSubject, catchError, tap, throwError } from 'rxjs';
+import { BehaviorSubject, catchError, finalize, tap, throwError } from 'rxjs';
 import { LoginForm } from '../../models/login/loginFormModel';
 import { Router } from '@angular/router';
 
@@ -69,17 +69,23 @@ export class AuthService {
 
   logout() {
     console.log("Sesion Cerrada");
+
     this.tokenService.clear();
+    this.estadoRefresh = false;
     this.refreshTokenSubject.next(null);
 
     // Llamar al backend para invalidar el refreshToken
     this.http.post(`${this.AUTH_URL}/logout`, {}, { withCredentials: true })
+      .pipe(
+        finalize(() => {
+          this.router.navigate(['/']);
+        })
+      )
       .subscribe({
         next: () => console.log('Sesión cerrada en el servidor'),
         error: (err) => console.log('Error al cerrar sesión:', err)
       });
-  }
-  
+  } 
 
   enviarRecuperarPass(email: string){   
     return this.http.post(`${this.AUTH_URL}/password`,{email});
