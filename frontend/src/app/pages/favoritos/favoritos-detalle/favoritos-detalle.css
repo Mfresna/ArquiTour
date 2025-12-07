@@ -21,8 +21,7 @@
   flex-shrink: 0;
   text-align: center;
   letter-spacing: 0.5px;
-
-  color: var(--colorBoton); /* variable global */
+  color: var(--colorBoton); 
 }
 
 
@@ -101,8 +100,8 @@
   border: none;
   border-radius: 999px;
 
-  background: var(--btn-quitar-bg);                 /* variable global */
-  color: var(--btn-quitar-icono);                   /* variable global */
+  background: var(--btn-quitar-bg);                 
+  color: var(--fondo-superficie)!important;                  
   padding: 4px;
 
   cursor: pointer;
@@ -115,7 +114,7 @@
 }
 
 .btn-quitar:hover {
-  background: var(--btn-quitar-bg-hover);           /* variable global */
+  background: var(--btn-quitar-bg-hover);          
 }
 
 .btn-quitar .material-icons {

@@ -2,11 +2,11 @@
   display: flex;
   justify-content: center;
   padding: 2rem;
-  background: var(--fondo-suave, #f8f8f8);
+  background: var(--fondo-suave);
 }
 
 #contenedor-form {
-  background: var(--fondo-superficie, #fff);
+  background: var(--fondo-superficie);
   width: 100%;
   max-width: 900px;
   padding: 2rem 3rem;
@@ -20,7 +20,7 @@
   margin-bottom: 1.2rem;
   font-size: 1.8rem;
   font-weight: 700;
-  color: var(--colorBoton, #0077b6);
+  color: var(--colorBoton);
   position: relative;
   letter-spacing: 0.5px;
   text-transform: uppercase;
@@ -34,8 +34,8 @@
   border-radius: 3px;
   background: linear-gradient(
     90deg,
-    var(--colorBoton, #0077b6),
-    var(--color-acento, #00b4d8)
+    var(--colorBoton),
+    var(--color-acento)
   );
   margin: 0.8rem auto 0;
   opacity: 0.9;
@@ -106,7 +106,7 @@ fieldset select {
 
 .input:focus {
   outline: none;
-  border-color: var(--colorBoton, #0077b6);
+  border-color: var(--colorBoton);
   box-shadow: 0 0 6px var(--sombra);
 }
 
@@ -134,7 +134,7 @@ app-drag-zone-multiple {
 }
 
 .btn-primario {
-  background-color: var(--colorBoton, #0077b6);
+  background-color: var(--colorBoton);
   color: var(--texto-boton-buscar);
   padding: 0.75rem 1.6rem;
   border: none;
@@ -148,7 +148,7 @@ app-drag-zone-multiple {
 }
 
 .btn-primario:not(:disabled):hover {
-  background-color: var(--colorBotonHover, #1d4ed8);
+  background-color: var(--colorBotonHover);
   transform: scale(1.03);
 }
 
