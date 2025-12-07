@@ -144,6 +144,35 @@ public class SolicitudService {
         return solicitudMapper.mapToDTO(solicitud);
     }
 
+    //DEJAR SOLICITUD
+    @Transactional
+    public SolicitudResponseDTO dejarSolicitud(HttpServletRequest request, Long solicitudId) {
+
+        Usuario admin = usuarioService.buscarUsuario(request);
+
+        Solicitud solicitud = solicitudRepository.findById(solicitudId)
+                .orElseThrow(() -> new NotFoundException("Solicitud no encontrada."));
+
+        if (solicitud.getAdminAsignado() == null) {
+            throw new SolicitudesException(HttpStatus.BAD_REQUEST,
+                    "La solicitud no está asignada a ningún administrador.");
+        }
+
+        if (!solicitud.getAdminAsignado().getId().equals(admin.getId())) {
+            throw new SolicitudesException(HttpStatus.FORBIDDEN,
+                    "No tenés permiso para soltar esta solicitud.");
+        }
+
+        if (solicitud.getEstado() == EstadoSolicitud.EN_PROCESO) {
+            solicitud.setEstado(EstadoSolicitud.PENDIENTE);
+            solicitud.setAdminAsignado(null);
+            solicitudRepository.save(solicitud);
+        }
+
+        return solicitudMapper.mapToDTO(solicitud);
+    }
+
+
     // ========== 3) RESOLVER SOLICITUD (APROBAR / RECHAZAR) ==========
     // @Transactional
     // public Solicitud resolverSolicitud(HttpServletRequest request,

@@ -6,6 +6,7 @@ import { SolicitudResolucionModel } from '../../models/solicitudModels/solicitud
 import { SolicitudResponseModel } from '../../models/solicitudModels/solicitudResponseModel';
 import { TipoSolicitudModel } from '../../models/solicitudModels/tipoSolicitudModel';
 import { environment } from '../../../environments/environment';
+import { TokenService } from '../../auth/services/tokenService/token-service';
 
 @Injectable({
   providedIn: 'root',
@@ -14,7 +15,9 @@ export class SolicitudService {
   
   private readonly SOLICITUDES_URL = `${environment.apiUrl}/solicitudes`;
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private tokenService: TokenService) {}
 
   /** ========== 1) Crear nueva solicitud (ALTA_ARQUITECTO / BAJA_ROL) ========== */
   nuevaSolicitud(dto: SolicitudNuevaModel, archivos?: File[]) {
@@ -46,6 +49,27 @@ export class SolicitudService {
       {}
     );
   }
+
+  dejarSolicitudConFetch(id: number): void {
+    if (!id) return;
+
+    const url = `${this.SOLICITUDES_URL}/${id}/dejar`;
+    const token = this.tokenService.obtenerToken();
+
+    fetch(url, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+      body: '{}',
+      keepalive: true,
+      credentials: 'include',
+    }).catch(err => {
+      console.error('Error al dejar solicitud con fetch keepalive:', err);
+    });
+  }
+
 
   /** ========== 3) Resolver solicitud (ADMIN) ========== */
   resolverSolicitud(id: number, body: SolicitudResolucionModel) {
