@@ -188,10 +188,6 @@
           </div>
       }
 
-
-
-
-
     }
 
     <!-- BAJA ROL -->
@@ -239,7 +235,7 @@
     }
 
     <!-- ====== PANEL ADMIN (TOMAR / RESOLVER) ====== -->
-    @if (esAdminActual) {
+    @if (puedeGestionar()) {
       <section class="bloque-detalle panel-admin">
         <div class="bloque-header">
           <h3>Gestión de la solicitud</h3>

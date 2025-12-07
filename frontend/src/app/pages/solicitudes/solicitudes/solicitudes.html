@@ -49,6 +49,20 @@
           </div>
 
         </form>
+
+        @if (esAdminActual) {
+          <div class="acciones-extra-solicitudes">
+            <button
+              type="button"
+              class="btn-mis-solicitudes"
+              (click)="toggleMisSolicitudes()">
+              {{ soloMias ? 'Ver todas las solicitudes' : 'Mis solicitudes' }}
+            </button>
+          </div>
+        }
+
+
+
       </section>
     </aside>
 

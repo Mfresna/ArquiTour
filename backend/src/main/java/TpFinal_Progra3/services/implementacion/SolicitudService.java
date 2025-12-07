@@ -275,8 +275,8 @@ public class SolicitudService {
 
     // }
 
-        public List<SolicitudResponseDTO> filtrarSolicitudes(HttpServletRequest request,
-                                                         SolicitudFiltroDTO filtro) {
+    public List<SolicitudResponseDTO> filtrarSolicitudes(HttpServletRequest request,
+                                                        SolicitudFiltroDTO filtro) {
 
         // 1. Usuario autenticado
         Usuario usuario = usuarioService.buscarUsuario(request);

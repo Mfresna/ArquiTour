@@ -66,13 +66,23 @@
                                   && (formulario.get('matriculaArquitecto')?.touched 
                                       || formulario.get('matriculaArquitecto')?.dirty)">
 
-              @if(formulario.get('matriculaArquitecto')?.errors?.['required'] 
+              @if (formulario.get('matriculaArquitecto')?.errors?.['required'] 
                   && formulario.get('matriculaArquitecto')?.touched) {
                 <small class="error">La matrícula es obligatoria.</small>
+
               } @else if (formulario.get('matriculaArquitecto')?.errors?.['maxlength']) {
-                <small class="error">La matrícula es demasiado larga.</small>
+                <small class="error">La matrícula es demasiado larga (máx. 50 caracteres).</small>
+
+              } @else if (formulario.get('matriculaArquitecto')?.errors?.['espacios']) {
+                <small class="error">La matrícula no puede ser solo espacios.</small>
+
+              } @else if (formulario.get('matriculaArquitecto')?.errors?.['formato']) {
+                <small class="error">
+                  Formato inválido. Permitidos: letras, números y símbolos (- . , : / ( )).
+                </small>
               }
             </fieldset>
+
 
             <!-- Universidad -->
             <fieldset class="form-group">

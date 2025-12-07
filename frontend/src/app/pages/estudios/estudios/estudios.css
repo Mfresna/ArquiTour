@@ -185,8 +185,8 @@ input.invalido {
   margin-bottom: 1rem;
   min-height: 52px;
   background: var(--boton-secundario-bg);  
-  color: var(--texto-principal);       
-  border: none;
+  color: var(--boton-secundario-texto);   
+  border: 1px solid transparent;
   border-radius: 999px;
   font-weight: 600;
   text-transform: uppercase;
@@ -194,11 +194,6 @@ input.invalido {
   transition: transform .15s, box-shadow .2s, background-color .2s;
 }
 
-#btn-mis-estudios {
-  background: var(--boton-secundario-bg);
-  color: var(--boton-secundario-texto);
-  border: 1px solid transparent;
-}
 
 #btn-mis-estudios:hover {
   background: var(--colorBoton, #0883c6);
