@@ -140,6 +140,7 @@
             class="menu-desplegable bordes-radius-inf borde-sup-izq">
 
             <div id="lista-notificaciones">
+
               <!-- Lista no tificaciones -->
                @if(notificaciones.length === 0) {
                   <p class="sin-notificaciones">No tenés notificaciones</p>
@@ -149,17 +150,20 @@
 
                     <div class="item-notificacion"
                       (click)="seleccionarNotificacion(notif)">
-                      
+
                       <div id="contenido-notificacion">
-                        <p class="mensaje">{{ notif.mensaje }}</p>
-                        <span class="fecha">{{ notif.fecha }}</span>
+
+                        @if(notif.tipo != TipoNotificacionEnum.CAMBIO_ROL){
+                          <p class="titulo-notif">{{TipoNotificacionDescripcion[notif.tipo]}}</p>
+                        }
+                        <p class="mensaje-notif">{{ notif.mensaje }}</p>
                       </div>
 
-                      <div class="contenedor-leida">
+                      @if(!notif.isLeido){
+                        <span class="estado-notif"></span>
+                      }
 
-                      </div>
-                      
-
+                    
                     </div>
                   }
 

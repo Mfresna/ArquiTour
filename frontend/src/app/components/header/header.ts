@@ -7,6 +7,7 @@ import { Observable } from 'rxjs';
 import { NotificacionService } from '../../services/notificacionService/notificacion-service';
 import { AsyncPipe } from '@angular/common';
 import { NotificacionResponseModel } from '../../models/notificacionModels/notificacionResponseModel';
+import { TipoNotificacionDescripcion, TipoNotificacionEnum } from '../../models/notificacionModels/tipoNotificacionEnum';
 
 @Component({
   selector: 'app-header',
@@ -29,6 +30,9 @@ export class Header implements OnInit{
   isBienvenida: boolean = false;
 
   notificaciones: NotificacionResponseModel[] = [];
+
+  TipoNotificacionEnum = TipoNotificacionEnum;
+  TipoNotificacionDescripcion = TipoNotificacionDescripcion;
 
   constructor(
     private authService: AuthService,
@@ -154,20 +158,15 @@ export class Header implements OnInit{
     this.marcarNotificacionLeida(notif.id);
 
     if(notif.referenciaId != null){
-      //Me lleva a ver la solicitud
+      this.router.navigate(['/solicitudes', notif.referenciaId]);
     }
 
   }
 
   private marcarNotificacionLeida(id: number){
     this.notificacionService.marcarNotificacionLeida(id.toString()).subscribe({
-    next: () => {
-      // Luego de marcarla, refrescamos la lista
-      this.notificacionService.getNotificacionesRecibidas().subscribe({
-        next: notifs => this.notificaciones = notifs
-      });
-    }
-  });
+
+    });
   }
 
   marcarTodasLeidas() {

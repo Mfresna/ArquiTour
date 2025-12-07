@@ -129,7 +129,6 @@ header {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
 }
 
   /*Badget de notificacion*/
@@ -206,14 +205,14 @@ header {
 
   /*MENU NOTIFICACIONES*/
 #menu-notificaciones{
-
   display: flex;
   flex-direction: column;
 
   right: 0;
-  min-width: 280px;
-  height: 280px;
-  max-height: 280px;
+  min-width: 380px;
+  max-width: 400px;
+  height: 320px;
+  min-height: 280px;
 } 
 
 #lista-notificaciones {
@@ -254,13 +253,92 @@ header {
   font-size: 1rem;
   color: var(--texto-principal);
 
-  margin: 2px 0px;
   padding: 4px 10px;
 
   width: 100%;
 
   user-select: none;
   cursor: pointer;
+}
+
+/* UNA NOTIFICACION INDIVIDUAL */
+
+.item-notificacion {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  width: 100%;
+  padding: 10px 12px;
+  margin-bottom: 10px;
+
+  border-radius: 8px;
+
+  box-shadow: 0 2px 6px var(--sombra);
+  
+  cursor: pointer;
+
+}
+
+.item-notificacion:hover {
+  background: var(--colorSecundario);
+}
+
+#contenido-notificacion {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.titulo-notif{
+  font-size: .92rem;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.mensaje-notif {
+  font-size: 0.85rem;
+
+  max-width: 90%;
+  padding: 0px 10px;
+
+  color: var(--texto-principal);
+  
+  /* maneja el largo del mensaje */
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+
+  overflow: hidden;
+  overflow-wrap: anywhere; /*en palabras largas las corta donde sea*/
+
+  text-overflow: ellipsis;
+  white-space: normal;  
+}
+
+.fecha-notif{
+  font-size: 0.75rem;
+  color: var(--texto-principal);
+
+}
+
+/*Punto Rojo*/
+.estado-notif{
+  display: inline-block;
+
+  width: 12px;
+  height: 12px;
+  margin: 0px 5px;
+
+  background: #e63946;
+  box-shadow: 0 0 4px rgba(230,57,70,0.4);
+
+  border-radius: 50%;
+
+  flex-shrink: 0;
+
 }
 
 
@@ -313,7 +391,7 @@ a:hover #logout{
 
   height: 1px;
   width: 80%;
-  margin: 8px auto; /*Centra la linea*/
+  margin: 8px auto 2px; /*Centra la linea*/
   background-color: var(--borde-fuerte);
 }
 
@@ -460,10 +538,3 @@ a:hover #logout{
 #modo-noche:hover #noche-toggle {
   transform: scale(1.05);
 }
-
-
-
-
-
-
-

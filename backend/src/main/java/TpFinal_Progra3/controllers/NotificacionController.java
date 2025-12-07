@@ -40,7 +40,7 @@ public class NotificacionController {
     }
 
     @PatchMapping("/leer/{id}")
-    public ResponseEntity<Void> marcarLeida(@PathVariable @Positive Long idNotificacion) {
+    public ResponseEntity<Void> marcarLeida(@PathVariable("id") @Positive Long idNotificacion) {
         notificacionService.marcarLeida(idNotificacion);
         return ResponseEntity.ok().build();
     }

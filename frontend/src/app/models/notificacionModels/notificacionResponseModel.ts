@@ -6,7 +6,7 @@ export interface NotificacionResponseModel {
   receptorId: number;
   mensaje: string;
   fecha: string;
-  leido: boolean;
+  isLeido: boolean;
   tipo: TipoNotificacionEnum;
   referenciaId?: number | null;
 }
