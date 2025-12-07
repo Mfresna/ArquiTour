@@ -169,11 +169,6 @@
   text-align: justify;
 }
 
-/* Comentario de resolución */
-.bloque-comentario {
-  border-left: 4px solid var(--colorBoton);
-}
-
 /* ===== GALERÍA DE DOCUMENTACIÓN (mismo estilo que galería de obra) ===== */
 
 .galeria {
@@ -285,7 +280,6 @@
   display: grid;
   place-items: center;
   box-shadow: 0 3px 12px var(--sombra);
-  transition: transform 0.2s, background 0.2s, box-shadow 0.2s;
 }
 
 .flecha-carrusel:hover {
@@ -385,10 +379,6 @@
 }
 
 /* ===== PANEL ADMIN ===== */
-
-.panel-admin {
-  border-left: 4px solid var(--colorBoton);
-}
 
 .admin-contenido {
   display: flex;

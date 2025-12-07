@@ -8,6 +8,9 @@ import { TipoSolicitudModel } from '../../../models/solicitudModels/tipoSolicitu
 import { RolesEnum } from '../../../models/usuarioModels/rolEnum';
 import { SolicitudService } from '../../../services/solicitudService/solicitud-service';
 import { DragZoneMultiple } from '../../../components/drag-zone-multiple/drag-zone-multiple';
+import { noBlancoEspacios } from '../../../validadores/sinEspacioValidador';
+import { obraNombreValidador } from '../../../validadores/nombresValidador';
+import { apellidoValidador, nombreValidador } from '../../../auth/validadores/textoValidador';
 
 @Component({
   selector: 'app-solicitud-form',
@@ -137,7 +140,7 @@ export class SolicitudForm {
 
     if (this.esAlta()) {
       // Alta: campos obligatorios
-      matriculaCtrl.setValidators([Validators.required, Validators.maxLength(50)]);
+      matriculaCtrl.setValidators([Validators.required, Validators.maxLength(50), noBlancoEspacios, nombreValidador]);
       universidadCtrl.setValidators([Validators.required, Validators.maxLength(120)]);
       anioCtrl.setValidators([
         Validators.required,

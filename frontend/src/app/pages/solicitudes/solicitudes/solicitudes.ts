@@ -25,6 +25,10 @@ filtro!: FormGroup;
   TipoSolicitudModel = TipoSolicitudModel;
   EstadoSolicitudModel = EstadoSolicitudModel;
 
+  esAdminActual = false;
+  soloMias = false;
+
+
   cargando = false;
 
   // id del usuario logueado (para saber qué solicitudes son “mías”)
@@ -46,6 +50,8 @@ filtro!: FormGroup;
       fechaHasta: [''],
     });
 
+    this.esAdminActual = this.tokenService.isAdmin();
+
     // Primero obtengo el usuario actual y después cargo solicitudes
     this.usuarioService.getUsuarioMe().subscribe({
       next: (u: UsuarioModel) => {
@@ -66,11 +72,17 @@ filtro!: FormGroup;
 
     this.cargando = true;
 
+    // Si es admin y está activado "soloMias", filtramos por su usuarioId
+    let usuarioIdParam: number | undefined = undefined;
+    if (this.esAdminActual && this.soloMias && this.usuarioActualId != null) {
+      usuarioIdParam = this.usuarioActualId;
+    }
+
     this.solicitudService
       .filtrarSolicitudes(
         f.tipo || undefined,
         f.estado || undefined,
-        undefined,           // usuarioId (el back lo setea si no sos admin)
+        usuarioIdParam,  
         undefined,           // adminAsignadoId
         f.fechaDesde || undefined,
         f.fechaHasta || undefined,
@@ -100,7 +112,13 @@ filtro!: FormGroup;
     });
     this.cargarSolicitudes();
   }
+    //Alternar entre "Mis solicitudes" y "Ver todas"
+  toggleMisSolicitudes(): void {
+    if (!this.esAdminActual) return;
 
+    this.soloMias = !this.soloMias;
+    this.cargarSolicitudes();
+  }
   // =================== HELPERS: ¿es mi solicitud? ===================
 
   private esMia(s: SolicitudResponseModel): boolean {

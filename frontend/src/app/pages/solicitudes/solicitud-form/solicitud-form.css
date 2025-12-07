@@ -2,11 +2,11 @@
   display: flex;
   justify-content: center;
   padding: 2rem;
-  background: var(--fondo-suave, #f8f8f8);
+  background: var(--fondo-suave);
 }
 
 #contenedor-form {
-  background: var(--fondo-superficie, #fff);
+  background: var(--fondo-superficie);
   width: 100%;
   max-width: 700px;
   padding: 2rem 3rem;
@@ -20,7 +20,7 @@
   margin-bottom: 1.2rem;
   font-size: 1.8rem;
   font-weight: 700;
-  color: var(--colorBoton, #0077b6);
+  color: var(--colorBoton);
   position: relative;
   letter-spacing: 0.5px;
   text-transform: uppercase;
@@ -34,8 +34,8 @@
   border-radius: 3px;
   background: linear-gradient(
     90deg,
-    var(--colorBoton, #0077b6),
-    var(--color-acento, #00b4d8)
+    var(--colorBoton),
+    var(--color-acento)
   );
   margin: 0.8rem auto 0;
   opacity: 0.9;
@@ -76,7 +76,7 @@
 
 .input:focus {
   outline: none;
-  border-color: var(--colorBoton, #0077b6);
+  border-color: var(--colorBoton);
   box-shadow: 0 0 6px var(--sombra);
 }
 
@@ -127,12 +127,12 @@ textarea.input {
 }
 
 .btn-primario {
-  background-color: var(--colorBoton, #0077b6);
+  background-color: var(--colorBoton);
   color: var(--texto-boton-buscar);
 }
 
 .btn-primario:not(:disabled):hover {
-  background-color: var(--colorBotonHover, #1d4ed8);
+  background-color: var(--colorBotonHover);
   transform: scale(1.03);
 }
 
@@ -158,23 +158,27 @@ textarea.input {
     padding: 1.5rem;
   }
 }
+
+/* Modo Dual */
 .tabs-tipo {
   display: flex;
   gap: 32px;
   margin: 16px 0 10px;
-  border-bottom: 1px solid #d8d8d8;
+  border-bottom: 1px solid var(--borde-suave);
   padding-bottom: 6px;
+  justify-content: center;
 }
 
 .tabs-tipo .tab {
   background: transparent;
   border: none;
-  padding: 4px 0;
+  padding: 4px 2px;
   font-weight: 600;
   font-size: 1rem;
   cursor: pointer;
   position: relative;
-  color: #333;
+  color: var(--texto-principal);
+
 }
 
 .tabs-tipo .tab::after {
@@ -189,7 +193,7 @@ textarea.input {
 }
 
 .tabs-tipo .tab.activa::after {
-  background-color: #00AEEF; /* tu color celeste */
+  background-color: var(--color-acento);
 }
 
 .tabs-tipo .tab:disabled {
@@ -197,10 +201,4 @@ textarea.input {
   cursor: not-allowed;
 }
 
-.tabs-tipo .tab small {
-  display: block;
-  font-size: 0.75rem;
-  font-weight: 400;
-  margin-top: 2px;
-  color: #666;
-}
+

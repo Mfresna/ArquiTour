@@ -114,6 +114,16 @@ export class SolicitudDetalle implements OnInit {
     return this.solicitud.estado === this.EstadoSolicitudModel.EN_PROCESO;
   }
 
+  puedeGestionar(): boolean {
+    if (!this.solicitud || !this.esAdminActual) return false;
+
+    return (
+      this.solicitud.estado === this.EstadoSolicitudModel.PENDIENTE ||
+      this.solicitud.estado === this.EstadoSolicitudModel.EN_PROCESO
+    );
+  }
+
+
   // ========= acciones =========
 
   tomar(): void {
