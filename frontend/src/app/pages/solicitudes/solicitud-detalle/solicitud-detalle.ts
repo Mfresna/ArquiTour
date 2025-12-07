@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SolicitudResponseModel } from '../../../models/solicitudModels/solicitudResponseModel';
 import { TipoSolicitudModel } from '../../../models/solicitudModels/tipoSolicitudModel';
@@ -11,6 +11,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { MensajeModal, MessageType } from '../../../components/mensaje-modal/mensaje-modal';
 import { RolesEnum } from '../../../models/usuarioModels/rolEnum';
 import { environment } from '../../../../environments/environment';
+import { finalize } from 'rxjs';
 
 @Component({
   selector: 'app-solicitud-detalle',
@@ -18,7 +19,8 @@ import { environment } from '../../../../environments/environment';
   templateUrl: './solicitud-detalle.html',
   styleUrl: './solicitud-detalle.css',
 })
-export class SolicitudDetalle implements OnInit {
+
+export class SolicitudDetalle implements OnInit, OnDestroy {
 
   solicitud!: SolicitudResponseModel;
   EstadoSolicitudModel = EstadoSolicitudModel;
@@ -59,39 +61,28 @@ export class SolicitudDetalle implements OnInit {
       comentario: ['', [Validators.maxLength(280)]],
     });
 
-    // me suscribo a los cambios del :id en la URL
     this.route.params.subscribe(params => {
       const id = Number(params['id']);
-
       if (!id) {
         this.router.navigate(['/solicitudes']);
         return;
-      }
-
-      console.log('Cargando solicitud con ID:', id);
-
-      // para cada id, traigo /me y después la solicitud
+      }      
       this.cargarUsuarioYSolicitud(id);
     });
+
   }
 
-
-  private cargarSolicitud(id: number): void {
-    this.cargando = true;
-    this.solicitudService.getSolicitud(id).subscribe({
-      next: (s) => {
-        this.solicitud = s;
-        this.cargando = false;
-      },
-      error: () => {
-        this.cargando = false;
-        this.router.navigate(['/solicitudes']);
-      }
-    });
+  ngOnDestroy(): void {
+    this.dejar();
   }
+
+  @HostListener('window:beforeunload', ['$event'])
+  onBeforeUnload(event: BeforeUnloadEvent) {
+    this.dejar();
+  }
+
 
   private cargarUsuarioYSolicitud(id: number): void {
-    // 1) usuario actual desde /me
     this.usuarioService.getUsuarioMe().subscribe({
       next: (u) => {
         this.usuarioActualId = u.id ?? null;
@@ -100,8 +91,8 @@ export class SolicitudDetalle implements OnInit {
           ? u.roles.includes(RolesEnum.ROLE_ADMINISTRADOR)
           : false;
 
-        // 2) cargo la solicitud de ese id
         this.cargarSolicitud(id);
+
       },
       error: () => {
         this.usuarioActualId = null;
@@ -111,6 +102,22 @@ export class SolicitudDetalle implements OnInit {
     });
   }
 
+  private cargarSolicitud(id: number): void {
+    this.cargando = true;
+    this.solicitudService.getSolicitud(id).subscribe({
+      next: (s) => {
+        this.solicitud = s;
+        this.cargando = false;
+
+        this.tomar();
+
+      },
+      error: () => {
+        this.cargando = false;
+        this.router.navigate(['/solicitudes']);
+      }
+    });
+  }
   // ========= reglas de visibilidad =========
 
   puedeTomar(): boolean {
@@ -139,26 +146,54 @@ export class SolicitudDetalle implements OnInit {
 
   // ========= acciones =========
 
+  // tomar(): void {
+  //   if (!this.solicitud?.id) return;
+
+  //   this.cargando = true;
+  //   this.solicitudService.tomarSolicitud(this.solicitud.id).subscribe({
+  //     next: (s) => {
+  //       this.solicitud = s;
+  //       this.cargando = false;
+  //       this.mostrarModal(
+  //         'Solicitud asignada',
+  //         'La solicitud ahora está a tu cargo.',
+  //         'success'
+  //       );
+  //     },
+  //     error: (e) => {
+  //       this.cargando = false;
+  //       const msg = e?.error?.mensaje || 'No se pudo tomar la solicitud.';
+  //       this.mostrarModal('Error', msg, 'error');
+  //     }
+  //   });
+  // }
+
+  dejar():void {
+    if(this.esAdminActual && 
+      (this.solicitud.estado === this.EstadoSolicitudModel.PENDIENTE ||
+      this.solicitud.estado === this.EstadoSolicitudModel.EN_PROCESO)){
+        this.solicitudService.dejarSolicitudConFetch(this.solicitud.id);
+      }
+  }
+
   tomar(): void {
     if (!this.solicitud?.id) return;
 
-    this.cargando = true;
-    this.solicitudService.tomarSolicitud(this.solicitud.id).subscribe({
-      next: (s) => {
-        this.solicitud = s;
-        this.cargando = false;
-        this.mostrarModal(
-          'Solicitud asignada',
-          'La solicitud ahora está a tu cargo.',
-          'success'
-        );
-      },
-      error: (e) => {
-        this.cargando = false;
-        const msg = e?.error?.mensaje || 'No se pudo tomar la solicitud.';
-        this.mostrarModal('Error', msg, 'error');
-      }
-    });
+    if(this.puedeTomar() && this.puedeGestionar()){
+      this.cargando = true;
+
+      this.solicitudService.tomarSolicitud(this.solicitud.id).subscribe({
+        next: (s) => {
+          this.solicitud = s;
+          this.cargando = false;
+        },
+        error: (e) => {
+          this.cargando = false;
+        }
+
+      });
+    }
+    
   }
 
   resolver(): void {

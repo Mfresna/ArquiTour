@@ -54,6 +54,14 @@ public class SolicitudRolController {
     }
 
     @PreAuthorize("hasRole('ADMINISTRADOR')")
+    @PostMapping("/{id}/dejar")
+    public ResponseEntity<Void> dejarSolicitud(HttpServletRequest request, @PathVariable("id") @Positive Long id) {
+        solicitudService.dejarSolicitud(request, id);
+        return ResponseEntity.accepted().build();
+    }
+
+
+    @PreAuthorize("hasRole('ADMINISTRADOR')")
     @PatchMapping("/{id}/resolver")
     public ResponseEntity<SolicitudResponseDTO> resolverSolicitud(
             HttpServletRequest request,
@@ -78,22 +86,10 @@ public class SolicitudRolController {
                         solicitudService.obtenerSolicitud(id)
                 ));
     }
-
-//     @GetMapping("/filtrar")
-//     public ResponseEntity<List<SolicitudResponseDTO>> filtrarSolicitudes(
-//             @Valid SolicitudFiltroDTO filtro
-//     ) {
-//         return ResponseEntity.ok(solicitudService.filtrarSolicitudes(filtro));
-//     }
-        @GetMapping("/filtrar")
-                public ResponseEntity<List<SolicitudResponseDTO>> filtrarSolicitudes(
-                        @Valid SolicitudFiltroDTO filtro,
-                        HttpServletRequest request
-                ) {
-                return ResponseEntity.ok(
-                        solicitudService.filtrarSolicitudes(request, filtro)
-                );
-        }
+    @GetMapping("/filtrar")
+    public ResponseEntity<List<SolicitudResponseDTO>> filtrarSolicitudes(@Valid SolicitudFiltroDTO filtro, HttpServletRequest request) {
+        return ResponseEntity.ok(solicitudService.filtrarSolicitudes(request, filtro));
+    }
 
 
 }
