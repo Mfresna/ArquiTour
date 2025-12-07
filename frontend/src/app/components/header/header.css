@@ -96,7 +96,7 @@ header {
 }
 
 #panel-central li .boton:hover {
-  color: var(--color-acento);
+  color: var(--colorBoton);
   transform: scale(1.05);
 }
 
