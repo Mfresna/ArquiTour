@@ -53,36 +53,28 @@ export class SolicitudDetalle implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    const id = Number(this.route.snapshot.params['id']);
-    if (!id) {
-      this.router.navigate(['/solicitudes']);
-      return;
-    }
-
+    // inicializo el form UNA sola vez
     this.formResolucion = this.fb.group({
       aprobada: [true, Validators.required],
       comentario: ['', [Validators.maxLength(280)]],
     });
 
-    // 1) usuario actual desde /me
-    this.usuarioService.getUsuarioMe().subscribe({
-      next: (u) => {
-        this.usuarioActualId = u.id ?? null;
+    // me suscribo a los cambios del :id en la URL
+    this.route.params.subscribe(params => {
+      const id = Number(params['id']);
 
-        this.esAdminActual = Array.isArray(u.roles)
-          ? u.roles.includes(RolesEnum.ROLE_ADMINISTRADOR)
-          : false;
-
-        // 2) cargo la solicitud
-        this.cargarSolicitud(id);
-      },
-      error: () => {
-        this.usuarioActualId = null;
-        this.esAdminActual = false;
-        this.cargarSolicitud(id);
+      if (!id) {
+        this.router.navigate(['/solicitudes']);
+        return;
       }
+
+      console.log('Cargando solicitud con ID:', id);
+
+      // para cada id, traigo /me y después la solicitud
+      this.cargarUsuarioYSolicitud(id);
     });
   }
+
 
   private cargarSolicitud(id: number): void {
     this.cargando = true;
@@ -94,6 +86,27 @@ export class SolicitudDetalle implements OnInit {
       error: () => {
         this.cargando = false;
         this.router.navigate(['/solicitudes']);
+      }
+    });
+  }
+
+  private cargarUsuarioYSolicitud(id: number): void {
+    // 1) usuario actual desde /me
+    this.usuarioService.getUsuarioMe().subscribe({
+      next: (u) => {
+        this.usuarioActualId = u.id ?? null;
+
+        this.esAdminActual = Array.isArray(u.roles)
+          ? u.roles.includes(RolesEnum.ROLE_ADMINISTRADOR)
+          : false;
+
+        // 2) cargo la solicitud de ese id
+        this.cargarSolicitud(id);
+      },
+      error: () => {
+        this.usuarioActualId = null;
+        this.esAdminActual = false;
+        this.cargarSolicitud(id);
       }
     });
   }
