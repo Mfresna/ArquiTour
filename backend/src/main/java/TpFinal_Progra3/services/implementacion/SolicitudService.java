@@ -1,6 +1,7 @@
 package TpFinal_Progra3.services.implementacion;
 
 import TpFinal_Progra3.exceptions.NotFoundException;
+import TpFinal_Progra3.exceptions.ProcesoInvalidoException;
 import TpFinal_Progra3.exceptions.SolicitudesException;
 import TpFinal_Progra3.model.DTO.filtros.SolicitudFiltroDTO;
 import TpFinal_Progra3.model.DTO.filtros.UsuarioFiltroDTO;
@@ -22,6 +23,7 @@ import TpFinal_Progra3.security.model.enums.RolUsuario;
 import TpFinal_Progra3.specifications.SolicitudSpecification;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -42,12 +44,19 @@ public class SolicitudService {
     private final ImagenService imagenService;
     private final NotificacionService notificacionService;
 
+    @Value("${default.admin.email}")
+    private String defaultAdminEmail;
+
     @Transactional
     public SolicitudResponseDTO nuevaSolicitud(HttpServletRequest request,
                                                SolicitudNuevaDTO dto,
                                                List<MultipartFile> archivos) {
 
         Usuario usuario = usuarioService.buscarUsuario(request);
+
+        if(usuario.getEmail().equals(defaultAdminEmail)){
+            throw new ProcesoInvalidoException(HttpStatus.UNPROCESSABLE_ENTITY,"El Administrador por Defecto no puede modificar sus Roles");
+        }
 
         if (dto.getTipo() == TipoSolicitud.ALTA_ARQUITECTO) {
             if (solicitudRepository.existsByUsuario_IdAndTipoAndEstado(usuario.getId(), dto.getTipo(), EstadoSolicitud.PENDIENTE)) {

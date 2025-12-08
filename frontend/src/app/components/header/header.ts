@@ -60,6 +60,8 @@ export class Header implements OnInit{
     this.router.events.subscribe(() => {
       this.isBienvenida = this.router.url === '/bienvenida';
     });
+
+    this.notificacionService.refrescarManual(); //Actualiza la campana de notificaciones ni bien inicia el header
   }
 
   cerrarSesion(){
