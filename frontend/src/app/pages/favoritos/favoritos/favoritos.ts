@@ -223,7 +223,7 @@ export class Favoritos {
 /** Modal especial de confirmación para eliminar una lista */
 private mostrarConfirmEliminar(idLista: number): void {
   this.modalTitulo = 'Eliminar lista';
-  this.modalMensaje = '¿Seguro que deseas eliminar esta lista de favoritos? Esta acción no se puede deshacer.';
+  this.modalMensaje = '¿Seguro que deseas eliminar esta lista de favoritos? <br> Esta acción no se puede deshacer.';
   this.modalTipo = 'warning';
 
   this.modalModo = 'confirmEliminar';
