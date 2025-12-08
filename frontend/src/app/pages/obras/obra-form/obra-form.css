@@ -110,6 +110,19 @@ fieldset select {
   box-shadow: 0 0 6px var(--sombra);
 }
 
+/* Sacar Flechitas */
+input[type="number"].input::-webkit-outer-spin-button,
+input[type="number"].input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type="number"].input {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
+
 textarea.input {
   resize: vertical;
   min-height: 80px;

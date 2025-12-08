@@ -17,10 +17,6 @@
               placeholder="Ej: Edificios Residenciales"
               [class.invalido]="filtro.get('nombre')?.invalid && filtro.get('nombre')?.touched"
               autocomplete="off">
-
-            @if (filtro.get('nombre')?.errors?.['minlength'] && filtro.get('nombre')?.touched) {
-              <small>Mínimo 2 caracteres.</small>
-            }
           </fieldset>
 
           <div class="botones">
@@ -87,7 +83,8 @@
                       id="nombre-{{l.id}}"
                       type="text"
                       [formControl]="controlEdicion"
-                      class="input-edicion" />
+                      class="input-edicion" 
+                      [class.invalido]="controlEdicion.invalid && (controlEdicion.touched|| controlEdicion.dirty)"/>
 
                     @if (controlEdicion.invalid && controlEdicion.touched) {
                       <small class="error">Mínimo 2 caracteres.</small>

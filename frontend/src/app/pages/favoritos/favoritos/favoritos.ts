@@ -114,7 +114,7 @@ export class Favoritos {
 
   private inicializarFormulario(): void {
     this.filtro = this.fb.group({
-      nombre: ['', [Validators.minLength(2)]]
+      nombre:''
     });
   }
 
@@ -136,7 +136,7 @@ export class Favoritos {
 
         // Filtro por nombre
         let filtradas = listas;
-        if (nombreFiltro && nombreFiltro.length >= 2) {
+        if (nombreFiltro) {
           const contenidoFiltro = nombreFiltro.toLowerCase();
           filtradas = listas.filter(l =>
             l.nombre?.toLowerCase().includes(contenidoFiltro)

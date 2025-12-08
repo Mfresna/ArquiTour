@@ -17,7 +17,7 @@
 
 #btn-mi-ubicacion {
   position: absolute;
-  right: 95%;
+  right: 93%;
   bottom: 20px;
   z-index: 999999;
 
@@ -26,8 +26,8 @@
   border-radius: 999px;
 
   border: none;
-  background: var(--colorBoton, #0077b6);
-  color: #fff;
+  background: var(--colorBoton);
+  color: var(--texto-boton-buscar);
 
   display: flex;
   align-items: center;
@@ -246,26 +246,12 @@
   height: 0;
   margin-top: 20px;
 
-
-  padding-right: 6px;
   scrollbar-width: thin;
-}
-
-#panel-scroll::-webkit-scrollbar {
-  width: 8px;
-}
-#panel-scroll::-webkit-scrollbar-thumb {
-  background: var(--color-scrollbar);
-  border-radius: 8px;
-}
-#panel-scroll::-webkit-scrollbar-thumb:hover {
-  background: var(--borde-fuerte);
 }
 
 
 /* Lista de obras */
 .listado-obras {
-  margin-top: 1rem;
   font-size: 0.9rem;
 }
 
@@ -273,17 +259,20 @@
   list-style: none;
   padding: 0;
   margin: 0;
+  padding-right: 12px;
   gap: 0.9rem;
 }
 
 .listado-obras li {
-  padding: 0.4rem 0.3rem;
+  padding: 1rem 1.2rem;
   border-radius: 0.5rem;
   margin-bottom: 5px;
+  margin-right: 6px;
   
   cursor: pointer;
   transition: background-color 0.15s, transform 0.1s;
   text-transform: capitalize;
+  border-radius: 10px;
 }
 
 .listado-obras li:hover {
