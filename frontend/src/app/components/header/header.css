@@ -141,8 +141,8 @@ header {
   height: 18px;
   padding: 0 6px;
 
-  background-color: var(--color-error, #ff3b30);
-  color: #fff;
+  background-color: var(--color-error);
+  color: var(--texto-boton-buscar);
 
   font-weight: 500;
   line-height: 1;

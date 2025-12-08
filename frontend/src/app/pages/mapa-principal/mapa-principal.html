@@ -7,7 +7,7 @@
             <!-- Distancia -->
             <fieldset class="campo">
                 <label for="distancia">
-                    Radio de búsqueda
+                    Radio de Búsqueda
                     <span class="distancia-valor">({{ distanciaKm }} km)</span>
                 </label>
 
@@ -69,12 +69,12 @@
                         <ul>
                             @for (o of obrasFiltradas; track o.id) {
                                 <li (click)="centrarEnObra(o)">
-                                    <strong>{{ o.nombre }}</strong>
+                                    <strong>{{ o.nombre }}</strong><br>
                                     @if (o.anioEstado) {
-                                        <span> · {{ o.anioEstado }}</span>
+                                        <span> Año: {{ o.anioEstado }}</span><br>
                                     }
                                     @if (o.estado) {
-                                        <span> · {{ estadoObraDescripcion[o.estado] || o.estado }}</span>
+                                        <span> Estado: {{ estadoObraDescripcion[o.estado] || o.estado }}</span>
                                     }
                                 </li>
                             }

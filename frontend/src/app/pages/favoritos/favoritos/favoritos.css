@@ -53,7 +53,7 @@
   font-size: 1.8rem;
   font-weight: 700;
   margin-top: 10px;
-  color: var(--colorBoton, #0077b6);
+  color: var(--colorBoton);
   flex-shrink: 0;
   text-align: center;
   letter-spacing: 0.5px;
@@ -95,10 +95,10 @@
   width: 100%;
   padding: 0.6rem 0.8rem;
   border-radius: 1.2rem;
-  border: 1px solid var(--borde-suave, #ccc);
+  border: 1px solid var(--borde-suave);
   font-family: var(--fuenteBase, "Segoe UI", Roboto, sans-serif);
   font-size: 1rem;
-  background-color: var(--fondo-superficie, #fff);
+  background-color: var(--fondo-superficie);
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
   height: 42px;
   box-sizing: border-box;
@@ -106,13 +106,13 @@
 
 .fila input[type="text"]:focus {
   outline: none;
-  border-color: var(--colorBoton, #0077b6);
+  border-color: var(--colorBoton);
   box-shadow: 0 0 6px var(--sombra);
 }
 
-.fila input.invalido {
-  border: 2px solid var(--colorBotonEliminar);
-  background: #ffecec;
+input.invalido {
+  border: 2px solid var(--color-error)!important;
+  background: var(--color-error-suave);
 }
 
 .fila small {
@@ -141,8 +141,8 @@
 
 /* Buscar */
 .botones button[type="submit"] {
-  background: var(--colorBoton, #0077b6);
-  color: var(--texto-boton-buscar, #fff);
+  background: var(--colorBoton);
+  color: var(--texto-boton-buscar);
 }
 .botones button[type="submit"]:hover {
   transform: translateY(-2px);
@@ -151,11 +151,11 @@
 
 /* Limpiar */
 .botones button[type="button"] {
-  background: var(--boton-secundario-bg, #e5e7eb);
-  color: var(--boton-secundario-texto, #111827);
+  background: var(--boton-secundario-bg);
+  color: var(--boton-secundario-texto);
 }
 .botones button[type="button"]:hover {
-  background: var(--boton-secundario-bg-hover, #d1d5db);
+  background: var(--boton-secundario-bg-hover);
   transform: translateY(-2px);
 }
 
@@ -181,7 +181,7 @@
 
 .card {
   display: block;
-  background: var(--fondo-superficie, #fff);
+  background: var(--fondo-superficie);
   border-radius: 12px;
   overflow: hidden;
   box-shadow: 0 2px 8px var(--sombra);
@@ -189,6 +189,7 @@
   text-decoration: none;
   color: inherit;
   text-transform: capitalize;
+  cursor: pointer;
 }
 
 .card:hover {
@@ -255,11 +256,11 @@
 }
 
 .btn-editar {
-  color: var(--colorBoton, #0077b6);
+  color: var(--colorBoton);
 }
 
 .btn-eliminar {
-  color: var(--colorBotonEliminar, #962b1f);
+  color: var(--colorBotonEliminar);
 }
 
 .btn-editar:hover,
@@ -287,19 +288,19 @@
   padding: 0.4rem 0.6rem;
   font-size: 1rem;
   border-radius: 0.6rem;
-  border: 1px solid #ccc;
+  border: 1px solid var(--borde-suave);
   box-sizing: border-box;
   margin-top: 4px;
 }
 
 .input-edicion:focus {
   outline: none;
-  border-color: var(--colorBoton, #0077b6);
-  box-shadow: 0 0 6px rgba(0, 119, 182, 0.25);
+  border-color: var(--colorBoton);
+  box-shadow: 0 0 6px var(--sombra);
 }
 
 .error {
-  color: var(--colorBotonEliminar, #e74c3c);
+  color: var(--colorBotonEliminar);
   font-size: 0.8rem;
   margin-top: 0.25rem;
   display: inline-block;
@@ -322,12 +323,12 @@
 }
 
 .btn-guardar {
-  background: var(--colorBoton, #0077b6);
-  color: var(--colorSecundario, #fff);
+  background: var(--colorBoton);
+  color: var(--colorSecundario);
 }
 
 .btn-guardar:hover {
-  background: var(--colorBotonHover, #0096c7);
+  background: var(--colorBotonHover);
 }
 
 .btn-guardar:disabled {
@@ -358,7 +359,7 @@
   #panel-filtros {
     width: 100%;
     box-shadow: none;
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid var(--borde-suave);
     border-radius: 0;
   }
 
