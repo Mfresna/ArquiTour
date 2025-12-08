@@ -28,10 +28,6 @@ export class Auth implements OnInit, OnDestroy {
     const indiceImagen = Math.floor(Math.random() * this.imagenes.length); 
     this.imagSeleccionada = this.imagenes[indiceImagen];
 
-    if(this.tokenService.get() === null){
-      this.router.navigate(['/obras']);
-    }
-
     if (this.router.url.includes('/login')) {
       this.vistaActual = 'login';
     }else if(this.router.url.includes('/registro')){

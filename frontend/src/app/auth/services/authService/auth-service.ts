@@ -40,6 +40,8 @@ export class AuthService {
       tap(res => {
         this.tokenService.set(res.accessToken);
         this.refreshTokenSubject.next(res.accessToken);
+
+        sessionStorage.setItem('logueado', 'true');
       })
     );
   }
@@ -68,23 +70,62 @@ export class AuthService {
     );
   }
 
-  logout() {
-    this.tokenService.clear();
-    this.estadoRefresh = false;
-    this.refreshTokenSubject.next(null);
+  // logout() {
+  //   //this.router.navigate(['/home']);
 
-    // Llamar al backend para invalidar el refreshToken
-    this.http.post(`${this.AUTH_URL}/logout`, {}, { withCredentials: true })
-      .pipe(
-        finalize(() => {
-          this.router.navigate(['/']);
-        })
-      )
-      .subscribe({
-        next: () => console.log('Sesión cerrada en el servidor'),
-        error: (err) => console.log('Error al cerrar sesión:', err)
-      });
-  } 
+  //   this.tokenService.clear();
+  //   this.estadoRefresh = false;
+  //   this.refreshTokenSubject.next(null);
+
+  //   sessionStorage.removeItem('logueado');
+
+  //   // Llamar al backend para invalidar el refreshToken
+  //   this.http.post(`${this.AUTH_URL}/logout`, {}, { withCredentials: true })
+  //     .subscribe({
+  //       next: () => console.log('Sesión cerrada en el servidor'),
+  //       error: (err) => console.log('Error al cerrar sesión:', err)
+  //     });
+  // } 
+
+
+
+
+  logout() {
+    // Primero intentamos navegar a algún lado (por ej. a '/obras' o '/')
+    this.router.navigate(['/']).then((sePudoNavegar) => {
+      if (!sePudoNavegar) {
+        console.log('Logout cancelado por cambios sin guardar');
+        return;
+      }
+
+      this.tokenService.clear();
+      this.estadoRefresh = false;
+      this.refreshTokenSubject.next(null);
+
+      sessionStorage.removeItem('logueado');
+
+      // Avisar al backend
+      this.http.post(`${this.AUTH_URL}/logout`, {}, { withCredentials: true })
+        .subscribe({
+          next: () => console.log('Sesión cerrada en el servidor'),
+          error: (err) => console.log('Error al cerrar sesión:', err)
+        });
+
+      // Y ahora sí lo mandás al login / inicio público
+    });
+  }
+
+
+
+
+
+
+
+
+
+
+
+
 
   enviarRecuperarPass(email: string){   
     return this.http.post(`${this.AUTH_URL}/password`,{email});
