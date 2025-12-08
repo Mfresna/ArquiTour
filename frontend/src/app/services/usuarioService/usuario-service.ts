@@ -107,6 +107,11 @@ export class UsuarioService {
     return this.http.get<UsuarioModel>(`${this.USUARIO_URL}/me`)
   }
 
+  esAdminDefault(): Observable<boolean> {
+    return this.http.get<boolean>(`${this.USUARIO_URL}/is-admin-default`, {
+      withCredentials: true
+    });
+  }
 
   cambiarPass(nuevaPassword: string){
     return this.http.patch(`${this.USUARIO_URL}/password`, {nuevaPassword})
