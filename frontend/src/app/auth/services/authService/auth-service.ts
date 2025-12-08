@@ -20,6 +20,11 @@ export class AuthService {
   //Maneja la existencia de un refresh activo
   private estadoRefresh = false;
   private refreshTokenSubject = new BehaviorSubject<string | null>(null);
+
+  private logoutEnProgreso = false;
+  get estaEnLogout(): boolean {
+    return this.logoutEnProgreso;
+  }
  
   constructor(
     private http: HttpClient, 
@@ -91,6 +96,7 @@ export class AuthService {
 
 
   logout() {
+    this.logoutEnProgreso = true;
     // Primero intentamos navegar a algún lado (por ej. a '/obras' o '/')
     this.router.navigate(['/']).then((sePudoNavegar) => {
       if (!sePudoNavegar) {
@@ -108,7 +114,11 @@ export class AuthService {
       this.http.post(`${this.AUTH_URL}/logout`, {}, { withCredentials: true })
         .subscribe({
           next: () => console.log('Sesión cerrada en el servidor'),
-          error: (err) => console.log('Error al cerrar sesión:', err)
+          error: (err) => console.log('Error al cerrar sesión:', err),
+          complete: () => {
+            // cuando ya terminó todo el flujo
+            this.logoutEnProgreso = false;
+          }
         });
 
       // Y ahora sí lo mandás al login / inicio público
