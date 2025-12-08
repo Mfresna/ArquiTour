@@ -138,7 +138,6 @@ export class Header implements OnInit{
     this.obrasMenu = false;
     this.mapaMenu=false;
     this.notificacionesMenu = false;
-
   }
 
   //================= NOTIFICACIONES

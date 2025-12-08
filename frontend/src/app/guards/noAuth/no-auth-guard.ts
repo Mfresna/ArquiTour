@@ -7,9 +7,10 @@ export const noAuthGuard: CanActivateFn = () => {
   const router = inject(Router);
 
   const token = tokenService.get();
+  const flagLogueado = sessionStorage.getItem('logueado') === 'true';
 
   // Si ya está logueado lo redirigimos obras
-  if (token) {
+  if (token || flagLogueado) {
     return router.createUrlTree(['/obras']);
   }
 
