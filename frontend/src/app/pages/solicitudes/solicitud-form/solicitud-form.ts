@@ -11,6 +11,7 @@ import { DragZoneMultiple } from '../../../components/drag-zone-multiple/drag-zo
 import { noBlancoEspacios } from '../../../validadores/sinEspacioValidador';
 import { obraNombreValidador } from '../../../validadores/nombresValidador';
 import { apellidoValidador, nombreValidador } from '../../../auth/validadores/textoValidador';
+import { matriculaValidador } from '../../../validadores/matriculaValidador';
 
 @Component({
   selector: 'app-solicitud-form',
@@ -140,8 +141,20 @@ export class SolicitudForm {
 
     if (this.esAlta()) {
       // Alta: campos obligatorios
-      matriculaCtrl.setValidators([Validators.required, Validators.maxLength(50), noBlancoEspacios, nombreValidador]);
-      universidadCtrl.setValidators([Validators.required, Validators.maxLength(120)]);
+      matriculaCtrl.setValidators([
+        Validators.required,
+        Validators.minLength(4),
+        Validators.maxLength(20),
+        matriculaValidador
+      ]);
+
+      universidadCtrl.setValidators([
+        Validators.required,
+        Validators.maxLength(120),
+        Validators.pattern(/^[A-Za-zÁÉÍÓÚÜÑáéíóúüñ0-9()'.\- ]+$/),
+        noBlancoEspacios
+      ]);
+
       anioCtrl.setValidators([
         Validators.required,
         Validators.min(1900),
@@ -157,8 +170,14 @@ export class SolicitudForm {
       universidadCtrl.clearValidators();
       anioCtrl.clearValidators();
 
-      motivoCtrl.setValidators([Validators.required, Validators.maxLength(280)]);
-      rolBajaCtrl.setValidators([Validators.required]);   // <<< obligatorio elegir
+      motivoCtrl.setValidators([
+        Validators.maxLength(280),
+        Validators.pattern(/^[A-Za-zÁÉÍÓÚáéíóúÑñ0-9\-_\!¡&\s\.,]+$/)
+      ]);
+         
+      rolBajaCtrl.setValidators([
+        Validators.required
+      ]);   // <<< obligatorio elegir
     }
 
     matriculaCtrl.updateValueAndValidity();
@@ -408,6 +427,14 @@ export class SolicitudForm {
       this.router.navigate(['/solicitudes']);
     }
 
+
+
+    //=============
+  evitarEspacios(e: KeyboardEvent) {
+    if (e.key === ' ' || e.key === 'Tab') {
+      e.preventDefault();
+    }
+  }
 }
 
   
