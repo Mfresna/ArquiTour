@@ -7,6 +7,7 @@ import { AuthRequest } from '../../models/login/authRequestModel';
 import { BehaviorSubject, catchError, finalize, tap, throwError } from 'rxjs';
 import { LoginForm } from '../../models/login/loginFormModel';
 import { Router } from '@angular/router';
+import { SolicitudDetalle } from '../../../pages/solicitudes/solicitud-detalle/solicitud-detalle';
 
 
 @Injectable({
@@ -23,7 +24,7 @@ export class AuthService {
   constructor(
     private http: HttpClient, 
     private tokenService: TokenService,
-    private router: Router ) {}
+    private router: Router) {}
 
   login(formulario: LoginForm){
 
@@ -68,8 +69,6 @@ export class AuthService {
   }
 
   logout() {
-    console.log("Sesion Cerrada");
-
     this.tokenService.clear();
     this.estadoRefresh = false;
     this.refreshTokenSubject.next(null);

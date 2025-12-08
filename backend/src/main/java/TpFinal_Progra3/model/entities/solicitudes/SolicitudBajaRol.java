@@ -20,7 +20,7 @@ public class SolicitudBajaRol extends Solicitud {
     @Column(nullable = false)
     private RolUsuario rolAEliminar;
 
-    @Column(length = 280)
+    @Column(length = 560)
     private String motivo;
 
 }

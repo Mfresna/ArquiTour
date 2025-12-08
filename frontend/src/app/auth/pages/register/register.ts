@@ -60,8 +60,7 @@ export class Register implements OnInit, AfterViewInit{
     private fb: FormBuilder,
     private router: Router,
     private usuarioService: UsuarioService,
-    private pinService: PinService,
-    private imagenService: ImagenService
+    private pinService: PinService
   ) {}
 
   

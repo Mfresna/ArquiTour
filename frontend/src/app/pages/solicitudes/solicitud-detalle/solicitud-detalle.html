@@ -238,7 +238,7 @@
     @if (puedeGestionar()) {
       <section class="bloque-detalle panel-admin">
         <div class="bloque-header">
-          <h3>Gestión de la solicitud {{puedeGestionar()}}</h3>
+          <h3>Gestión de la solicitud</h3>
         </div>
 
         <div class="admin-contenido">
@@ -275,22 +275,37 @@
                 </label>
               </div>
 
-              <div class="grupo-texto">
-                <label class="label">Comentario (opcional)</label>
+              <div class="grupo-texto textarea-wrapper">
+                <label class="label">
+                  {{ formResolucion.get('aprobada')?.value === false ? 'Comentario' : 'Comentario (opcional)' }}                </label>
                 <textarea
                   rows="4"
                   class="input"
                   formControlName="comentario"
-                  placeholder="Podés dejar una breve explicación para el usuario"
+                  [placeholder]="formResolucion.get('aprobada')?.value === true
+                    ? 'Podés dejar una breve explicación para el usuario' 
+                    : 'Dejá una breve explicación para el usuario'"
                   [class.invalido]="formResolucion.get('comentario')?.invalid
-                                    && formResolucion.get('comentario')?.touched">
+                                    && (formResolucion.get('comentario')?.touched || formResolucion.get('comentario')?.dirty)">
                 </textarea>
+                
+                <!-- Contador de Caracteres -->
+                <div id="contador">
+                  {{ formResolucion.get('comentario')?.value?.length || 0 }}/560
+                </div>
 
                 @if (formResolucion.get('comentario')?.errors?.['maxlength']) {
                   <small class="error">
                     El comentario es demasiado largo (máx. 280 caracteres).
                   </small>
+                }@else if(formResolucion.get('comentario')?.errors?.['required'] 
+                  && (formResolucion.get('comentario')?.touched || formResolucion.get('comentario')?.dirty)) {
+                  <small class="error">Al ser Rechazada, el comentario es obligatorio.</small>
+                }@else if(formResolucion.get('comentario')?.errors?.['pattern']){
+                  <small class="error">Caracteres no permitidos.</small>
                 }
+
+
               </div>
 
               <div class="acciones-resolver">

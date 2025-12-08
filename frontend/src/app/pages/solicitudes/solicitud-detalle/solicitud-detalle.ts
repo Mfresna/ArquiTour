@@ -61,6 +61,8 @@ export class SolicitudDetalle implements OnInit, OnDestroy {
       comentario: ['', [Validators.maxLength(280)]],
     });
 
+    this.validadorMotivo();
+
     this.route.params.subscribe(params => {
       const id = Number(params['id']);
       if (!id) {
@@ -304,4 +306,44 @@ docError(event: Event): void {
   volver(): void {
     this.router.navigate(['/solicitudes']);
   }
+
+  //=================== VALIDADORES
+
+  private validadorMotivo(): void {
+    const aprobadaCtrl   = this.formResolucion.get('aprobada');
+    const comentarioCtrl = this.formResolucion.get('comentario');
+
+    if (!aprobadaCtrl || !comentarioCtrl) return;
+
+    const aplicarValidadores = (valor: boolean) => {
+      if (valor === false) {
+        // RECHAZAR → comentario requerido
+        comentarioCtrl.setValidators([
+          Validators.required,
+          Validators.maxLength(560),
+          Validators.pattern(/^[A-Za-zÁÉÍÓÚáéíóúÑñ0-9\-_\!¡&\s\.,¿?]+$/),
+        ]);
+      } else {
+        // APROBAR → comentario opcional
+        comentarioCtrl.setValidators([
+          Validators.maxLength(560),
+          Validators.pattern(/^[A-Za-zÁÉÍÓÚáéíóúÑñ0-9\-_\!¡&\s\.,¿?]+$/),
+        ]);
+      }
+      comentarioCtrl.updateValueAndValidity({ emitEvent: false });
+    };
+
+    // Aplicar al valor inicial
+    aplicarValidadores(aprobadaCtrl.value);
+
+    // Escuchar cambios
+    aprobadaCtrl.valueChanges.subscribe((valor) => {
+      comentarioCtrl.markAsUntouched();
+      comentarioCtrl.markAsPristine();
+
+      aplicarValidadores(valor);
+    });
+  }
+
+  
 }

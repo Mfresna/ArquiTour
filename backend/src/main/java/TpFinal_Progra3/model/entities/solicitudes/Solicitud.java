@@ -52,7 +52,7 @@ public abstract class Solicitud {
     //private LocalDate fechaResolucion;
     private LocalDateTime fechaResolucion;
 
-    @Column(length = 280)
+    @Column(length = 560)
     private String comentarioAdmin;
 
 }
