@@ -188,9 +188,15 @@
                 formControlName="motivo"
                 placeholder="Comentanos por qué querés dejar de tener este rol en la plataforma"
                 [class.invalido]="formulario.get('motivo')?.invalid 
-                                  && (formulario.get('motivo')?.touched 
-                                      || formulario.get('motivo')?.dirty)">
+                                  && (formulario.get('motivo')?.touched || formulario.get('motivo')?.dirty)">
               </textarea>
+
+              <!-- Contador de Caracteres -->
+              <div id="contador">
+                {{ formulario.get('motivo')?.value?.length || 0 }}/560
+              </div>
+
+
 
               @if(formulario.get('motivo')?.errors?.['maxlength']) {
                 <small class="error">El motivo es demasiado largo (máx. 280 caracteres).</small>

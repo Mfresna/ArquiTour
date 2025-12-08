@@ -171,7 +171,7 @@ export class SolicitudForm {
       anioCtrl.clearValidators();
 
       motivoCtrl.setValidators([
-        Validators.maxLength(280),
+        Validators.maxLength(560),
         Validators.pattern(/^[A-Za-zÁÉÍÓÚáéíóúÑñ0-9\-_\!¡&\s\.,]+$/)
       ]);
          
