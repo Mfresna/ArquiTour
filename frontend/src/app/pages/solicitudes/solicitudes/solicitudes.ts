@@ -2,18 +2,20 @@ import { Component, OnInit } from '@angular/core';
 import { TokenService } from '../../../auth/services/tokenService/token-service';
 import { SolicitudService } from '../../../services/solicitudService/solicitud-service';
 import { FormGroup, FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
-import { EstadoSolicitudModel } from '../../../models/solicitudModels/estadoSolicitudModel';
+import { EstadoSolicitudDescripcion, EstadoSolicitudModel } from '../../../models/solicitudModels/estadoSolicitudModel';
 import { SolicitudResponseModel } from '../../../models/solicitudModels/solicitudResponseModel';
-import { TipoSolicitudModel } from '../../../models/solicitudModels/tipoSolicitudModel';
+import { TipoSolicitudDescripcion, TipoSolicitudModel } from '../../../models/solicitudModels/tipoSolicitudModel';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { RolesEnum } from '../../../models/usuarioModels/rolEnum';
 import { UsuarioService } from '../../../services/usuarioService/usuario-service';
 import { UsuarioModel } from '../../../models/usuarioModels/usuarioModel';
+import { finalize } from 'rxjs';
+import { EsperandoModal } from '../../../components/esperando-modal/esperando-modal';
 
 @Component({
   selector: 'app-solicitudes',
-  imports: [ReactiveFormsModule, CommonModule],
+  imports: [ReactiveFormsModule, CommonModule, EsperandoModal],
   templateUrl: './solicitudes.html',
   styleUrl: './solicitudes.css',
 })
@@ -23,13 +25,19 @@ filtro!: FormGroup;
 
   solicitudes: SolicitudResponseModel[] = [];
   TipoSolicitudModel = TipoSolicitudModel;
+  TipoSolicitudDescripcion = TipoSolicitudDescripcion;
+
   EstadoSolicitudModel = EstadoSolicitudModel;
+  EstadoSolicitudDescripcion = EstadoSolicitudDescripcion;
 
   esAdminActual = false;
   soloMias = false;
 
 
   cargando = false;
+  spinerVisible = false; 
+
+  mensajeSinResultados: string | null = null;
 
   // id del usuario logueado (para saber qué solicitudes son “mías”)
   private usuarioActualId: number | null = null;
@@ -71,6 +79,8 @@ filtro!: FormGroup;
     const f = this.filtro.value;
 
     this.cargando = true;
+    this.spinerVisible = true; 
+    this.mensajeSinResultados = null; 
 
     // Si es admin y está activado "soloMias", filtramos por su usuarioId
     let usuarioIdParam: number | undefined = undefined;
@@ -88,13 +98,32 @@ filtro!: FormGroup;
         f.fechaHasta || undefined,
         undefined            // asignada
       )
+      .pipe(
+        finalize(() => {
+          this.cargando = false;
+          this.spinerVisible = false;   
+        })
+      )
       .subscribe({
         next: (lista) => {
           this.solicitudes = lista;
           this.cargando = false;
+          const hayFiltrosActivos =
+            !!(f.tipo || f.estado || f.fechaDesde || f.fechaHasta || (this.esAdminActual && this.soloMias));
+
+          if (lista.length === 0) {
+            this.mensajeSinResultados = hayFiltrosActivos
+              ? 'No se encontraron solicitudes con los filtros seleccionados.'
+              : 'No hay solicitudes para mostrar.';
+          } else {
+            this.mensajeSinResultados = null;
+          }
         },
         error: () => {
           this.cargando = false;
+          this.spinerVisible = false;
+          this.solicitudes = [];
+          this.mensajeSinResultados = 'Ocurrió un error al cargar las solicitudes.';  
         }
       });
   }

@@ -2,7 +2,7 @@
   <div id="contenedor-solicitudes">
 
     <!-- ================= PANEL IZQUIERDO ================= -->
-    <aside id="panel-izq-solicitudes">
+    <div id="panel-izq-solicitudes">
       <h1 class="titulo">Solicitudes</h1>
 
       <section id="panel-filtros-solicitudes">
@@ -11,7 +11,7 @@
           <!-- ========== Tipo ========== -->
           <fieldset class="campo">
             <label>Tipo</label>
-            <select formControlName="tipo">
+            <select formControlName="tipo" (change)="aplicarFiltro()">
               <option value="">--Todos--</option>
               <option [value]="TipoSolicitudModel.ALTA_ARQUITECTO">Alta arquitecto</option>
               <option [value]="TipoSolicitudModel.BAJA_ROL">Baja rol</option>
@@ -21,7 +21,7 @@
           <!-- ========== Estado ========== -->
           <fieldset class="campo">
             <label>Estado</label>
-            <select formControlName="estado">
+            <select formControlName="estado"(change)="aplicarFiltro()">
               <option value="">--Todos--</option>
               <option [value]="EstadoSolicitudModel.PENDIENTE">Pendiente</option>
               <option [value]="EstadoSolicitudModel.EN_PROCESO">En proceso</option>
@@ -33,13 +33,13 @@
           <!-- ========== Fecha Desde ========== -->
           <fieldset class="campo">
             <label>Desde</label>
-            <input type="date" formControlName="fechaDesde">
+            <input type="date" formControlName="fechaDesde" (change)="aplicarFiltro()">
           </fieldset>
 
           <!-- ========== Fecha Hasta ========== -->
           <fieldset class="campo">
             <label>Hasta</label>
-            <input type="date" formControlName="fechaHasta">
+            <input type="date" formControlName="fechaHasta" (change)="aplicarFiltro()">
           </fieldset>
 
 
@@ -64,18 +64,16 @@
 
 
       </section>
-    </aside>
-
+    </div>
     <!-- ================= PANEL DERECHO ================= -->
     <section id="panel-der-solicitudes">
 
-      <!-- HEADER -->
-      <div class="header-solicitudes">
+      <div class="nav-solicitudes">
 
         <button class="btn-nueva-solicitud"
                 (click)="irANuevaSolicitud()"
                 [disabled]="!puedeCrearSolicitud()">
-          <span class="icono">＋</span>
+          <span class="material-symbols-rounded icono">add</span>
           Nueva solicitud
         </button>
 
@@ -84,58 +82,49 @@
       <!-- SCROLL -->
       <div id="panel-scroll-solicitudes">
 
-        <!-- Lista vacía -->
-        @if(!solicitudes){
-          <div class="vacio-solicitudes">
-            No tenés solicitudes aún.
+        <!-- ESTADO: CARGANDO -->
+        @if (cargando) {
+          <div class="estado-cargando">
+            <span class="spinner"></span>
+            <span>Cargando solicitudes...</span>
           </div>
         }
 
-        <!-- LISTA -->
-        @if(solicitudes){
+        <!-- ESTADO: SIN RESULTADOS -->
+        @else if (!cargando && solicitudes.length === 0) {
+          <div class="vacio-solicitudes">
+            {{ mensajeSinResultados || 'No tenés solicitudes aún.' }}
+          </div>
+        }
+
+        <!-- ESTADO: LISTA -->
+        @else {
+
           <ul class="lista-solicitudes">
 
-            @for(s of solicitudes; track s.id){
+            @for (s of solicitudes; track s.id) {
 
               <li class="solicitud-card" (click)="verDetalle(s)">
 
-                <!-- Header -->
-                <div class="solicitud-header">
-                  <span class="chip-tipo">{{ s.tipoSolicitud }}</span>
+                <div class="solicitud-tit">
+                  <span class="chip-tipo">{{ TipoSolicitudDescripcion[s.tipoSolicitud] }}</span>
 
                   <span class="badge-estado"
                     [class.pendiente]="s.estado === 'PENDIENTE'"
                     [class.en-proceso]="s.estado === 'EN_PROCESO'"
                     [class.aprobada]="s.estado === 'APROBADA'"
                     [class.rechazada]="s.estado === 'RECHAZADA'">
-                    {{ s.estado }}
+                    {{ EstadoSolicitudDescripcion[s.estado] }}
                   </span>
                 </div>
 
                 <!-- Fechas -->
-                <div class="solicitud-fechas">
-                  Creada: {{ s.fechaCreacion}}
-
-                  @if(s.fechaResolucion){
-                    · Resuelta: {{ s.fechaResolucion}}
-                  }
-                </div>
-
-                <!-- Motivo / info extra -->
-                @if(s.motivo){
-                  <div class="solicitud-detalle">
-                    Motivo: {{ s.motivo }}
-                  </div>
-                }
-
-                @if(s.adminAsignado){
-                  <div class="solicitud-admin">
-                    Administrador: {{ s.adminAsignado.nombre }} {{ s.adminAsignado.apellido }}
-                  </div>
-                }
-
-                <!-- Footer -->
-                <div class="solicitud-footer">
+               <div class="solicitud-fechas">
+                <span class="fecha-label">Creada: </span>
+                <span class="fecha-valor">{{ s.fechaCreacion }}</span>
+              </div>
+ 
+                <div class="solicitud-btn">
                   <button type="button" class="btn-ver-detalle">
                     Ver detalle
                   </button>
@@ -146,6 +135,7 @@
             }
 
           </ul>
+
         }
 
       </div>
@@ -154,3 +144,7 @@
   </div>
 </div>
 
+<app-esperando-modal
+  [isVisible]="spinerVisible"
+  mensaje="Cargando solicitudes..."
+></app-esperando-modal>

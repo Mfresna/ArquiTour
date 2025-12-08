@@ -42,7 +42,7 @@
 .titulo{
   margin: 0;
   font-size: 2.1rem;
-  font-weight: 800;
+  font-weight: 700;
   color: var(--colorBoton);
   text-transform: capitalize;
 }
@@ -382,7 +382,7 @@
   border: none;
   border-radius: 50%;
   background:var(--fondo-boton-flotante);
-  color: var(--colorSecundario);
+  color: var(--texto-boton-buscar);
   display: grid;
   place-items: center;
   cursor: pointer;

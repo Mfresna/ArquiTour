@@ -1,11 +1,11 @@
 import { Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SolicitudResponseModel } from '../../../models/solicitudModels/solicitudResponseModel';
-import { TipoSolicitudModel } from '../../../models/solicitudModels/tipoSolicitudModel';
+import { TipoSolicitudDescripcion, TipoSolicitudModel } from '../../../models/solicitudModels/tipoSolicitudModel';
 import { SolicitudService } from '../../../services/solicitudService/solicitud-service';
 import { CommonModule } from '@angular/common';
 import { SolicitudResolucionModel } from '../../../models/solicitudModels/solicitudResolucionModel';
-import { EstadoSolicitudModel } from '../../../models/solicitudModels/estadoSolicitudModel';
+import { EstadoSolicitudDescripcion, EstadoSolicitudModel } from '../../../models/solicitudModels/estadoSolicitudModel';
 import { UsuarioService } from '../../../services/usuarioService/usuario-service';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MensajeModal, MessageType } from '../../../components/mensaje-modal/mensaje-modal';
@@ -25,6 +25,9 @@ export class SolicitudDetalle implements OnInit, OnDestroy {
   solicitud!: SolicitudResponseModel;
   EstadoSolicitudModel = EstadoSolicitudModel;
   TipoSolicitudModel   = TipoSolicitudModel;
+  TipoSolicitudDescripcion = TipoSolicitudDescripcion;
+  EstadoSolicitudDescripcion = EstadoSolicitudDescripcion;
+  redirigirAlCerrarModal = false;
 
   cargando = false;
 
@@ -55,10 +58,9 @@ export class SolicitudDetalle implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    // inicializo el form UNA sola vez
     this.formResolucion = this.fb.group({
       aprobada: [true, Validators.required],
-      comentario: ['', [Validators.maxLength(280)]],
+      comentario: ['', [Validators.maxLength(560)]],
     });
 
     this.validadorMotivo();
@@ -121,6 +123,18 @@ export class SolicitudDetalle implements OnInit, OnDestroy {
     });
   }
   // ========= reglas de visibilidad =========
+  get esSolicitudPropia(): boolean {
+    if (!this.solicitud || this.usuarioActualId == null) return false;
+
+    // ajustá este campo si en tu modelo se llama distinto
+    const idSolicitante =
+      (this.solicitud as any).idUsuario ??
+      this.solicitud.idUsuario
+      null;
+
+    return idSolicitante === this.usuarioActualId;
+  }
+
 
   puedeTomar(): boolean {
     if (!this.solicitud || !this.esAdminActual) return false;
@@ -133,6 +147,7 @@ export class SolicitudDetalle implements OnInit, OnDestroy {
 
   puedeResolver(): boolean {
     if (!this.solicitud || !this.esAdminActual) return false;
+ 
     return this.solicitud.estado === this.EstadoSolicitudModel.EN_PROCESO;
   }
 
@@ -214,6 +229,7 @@ export class SolicitudDetalle implements OnInit, OnDestroy {
       next: (s) => {
         this.solicitud = s;
         this.cargando = false;
+        this.redirigirAlCerrarModal = true;
         this.mostrarModal(
           'Solicitud resuelta',
           'La solicitud fue resuelta correctamente.',
@@ -239,6 +255,11 @@ export class SolicitudDetalle implements OnInit, OnDestroy {
       return `${environment.apiUrl}${path}`;
     });
   }
+
+  get mostrarFlechasDocs(): boolean {
+  // mismo criterio que en ObraDetalle: ajustá el número si allá usás otro
+  return this.docSrc().length > 3;
+}
 
   scrollDocs(direccion: number): void {
   if (!this.carruselDocs) return;
@@ -297,10 +318,18 @@ docError(event: Event): void {
 
   onModalAceptar(): void {
     this.modalVisible = false;
+     if (this.redirigirAlCerrarModal) {
+      this.redirigirAlCerrarModal = false;   
+      this.router.navigate(['/solicitudes']);
+    }
   }
 
   onModalCerrado(): void {
     this.modalVisible = false;
+      if (this.redirigirAlCerrarModal) {
+        this.redirigirAlCerrarModal = false;
+        this.router.navigate(['/solicitudes']);
+      }
   }
 
   volver(): void {
