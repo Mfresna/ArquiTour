@@ -557,7 +557,7 @@ a:hover #logout{
   transition: transform 0.25s ease, color 0.25s ease;
 }
 #noche-toggle-publico:hover {
-  color: var(--color-acento);
+  color: var(--colorBoton);
 }
 
 #noche-toggle-publico.activo {

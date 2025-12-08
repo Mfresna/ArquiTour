@@ -46,11 +46,11 @@
 #panel-filtros-solicitudes {
   border-radius: 12px;
   padding: 0.9rem;
-  flex-shrink: 0;
   width: 100%;
   flex-grow: 1;     
   min-height: 0;    
   overflow-y: auto;
+  height: 0;
 }
 
 .form-filtros-solicitudes {
@@ -96,7 +96,7 @@
 #panel-filtros-solicitudes .form-filtros-solicitudes select:focus,
 #panel-filtros-solicitudes .form-filtros-solicitudes input[type="date"]:focus {
   outline: none;
-  border-color: var(--colorBoton, #0077b6);
+  border-color: var(--colorBoton);
   box-shadow: 0 0 6px var(--sombra);
 }
 
@@ -134,7 +134,7 @@
 }
 
 .acciones-filtro-solicitudes .btn-buscar {
-  background: var(--colorBoton, #0077b6);
+  background: var(--colorBoton);
   color: var(--texto-boton-buscar);
 }
 
@@ -165,8 +165,7 @@
   padding-left: 20px;
 }
 
-/* Header con botón "Nueva solicitud" */
-.header-solicitudes {
+.nav-solicitudes {
   padding: 12px 20px 0 0;
   display: flex;
   justify-content: flex-end;
@@ -175,14 +174,13 @@
   margin-bottom: 20px;
 }
 
-.header-solicitudes h2 {
+.nav-solicitudes h2 {
   margin: 0;
   font-size: 1.4rem;
   font-weight: 600;
   color: var(--texto-principal);
 }
 
-/* Botón "Nueva solicitud" */
 .btn-nueva-solicitud {
   display: inline-flex;
   align-items: center;
@@ -190,24 +188,31 @@
   border-radius: 999px;
   border: none;
   padding: 0.55rem 1.2rem;
-  background: var(--colorBoton, #0077b6);
+  background: var(--colorBoton);
   color: var(--texto-boton-buscar);
   font-weight: 600;
   cursor: pointer;
   box-shadow: 0 3px 8px var(--sombra);
   transition: transform 0.15s, box-shadow 0.2s, background-color 0.2s;
   font-size: 0.9rem;
+  text-transform: uppercase;
 }
 
 .btn-nueva-solicitud .icono {
   font-size: 1.2rem;
   line-height: 1;
 }
+.btn-nueva-solicitud .material-symbols-rounded {
+  font-size: 1.4rem;
+  font-weight: 300;
+  display: flex;
+  align-items: center;
+}
 
 .btn-nueva-solicitud:hover:not(:disabled) {
   transform: translateY(-2px);
   box-shadow: 0 7px 14px var(--sombra);
-  background: var(--colorBotonHover, #005f90);
+  background: var(--colorBotonHover);
 }
 
 .btn-nueva-solicitud:disabled {
@@ -215,6 +220,32 @@
   opacity: 0.5;
   box-shadow: none;
 }
+.acciones-extra-solicitudes {
+  margin-top: 1.5rem;
+  width: 100%;
+}
+
+.btn-mis-solicitudes {
+  width: 100%;
+  padding: 0.65rem 0.9rem;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  font-weight: 600;
+  text-transform: uppercase;
+  cursor: pointer;
+  font-size: 0.9rem;
+  background: var(--boton-secundario-bg);
+  color: var(--boton-secundario-texto);
+  transition: transform 0.15s, box-shadow 0.2s, background-color 0.2s;
+}
+
+.btn-mis-solicitudes:hover {
+  background: var(--colorBoton);
+  color: var(--texto-boton-buscar);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 16px var(--sombra);
+}
+
 
 /* Scroll de la lista (SEPARA del panel izq) */
 #panel-scroll-solicitudes {
@@ -250,7 +281,7 @@
 }
 
 /* Cabecera: tipo + estado */
-.solicitud-header {
+.solicitud-tit {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -306,6 +337,19 @@
   margin-bottom: 0.4rem;
 }
 
+.fecha-label {
+  color: var(--texto-secundario);   
+  font-weight: 600;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  margin-left: 4px;
+}
+
+.fecha-valor {
+  color: var(--texto-secundario);
+}
+
+
 /* Texto extra (motivo, comentario, admin) */
 .solicitud-detalle,
 .solicitud-admin {
@@ -314,8 +358,8 @@
   margin-top: 0.25rem;
 }
 
-/* Footer con botón "Ver detalle" */
-.solicitud-footer {
+/* Botón "Ver detalle" */
+.solicitud-btn {
   margin-top: 0.6rem;
 }
 
@@ -359,7 +403,7 @@
     width: 100%;
   }
 
-  .header-solicitudes {
+  .nav-solicitudes {
     padding: 12px 10px 0 10px;
     justify-content: space-between;
   }
@@ -367,29 +411,4 @@
   #panel-scroll-solicitudes {
     padding-right: 10px;
   }
-}
-.acciones-extra-solicitudes {
-  margin-top: 1.5rem;
-  width: 100%;
-}
-
-.btn-mis-solicitudes {
-  width: 100%;
-  padding: 0.65rem 0.9rem;
-  border-radius: 999px;
-  border: 1px solid transparent;
-  font-weight: 600;
-  text-transform: uppercase;
-  cursor: pointer;
-  font-size: 0.9rem;
-  background: var(--boton-secundario-bg);
-  color: var(--boton-secundario-texto);
-  transition: transform 0.15s, box-shadow 0.2s, background-color 0.2s;
-}
-
-.btn-mis-solicitudes:hover {
-  background: var(--colorBoton, #0883c6);
-  color: var(--texto-boton-buscar);
-  transform: translateY(-2px);
-  box-shadow: 0 8px 16px var(--sombra);
 }

@@ -38,8 +38,9 @@
 .titulo {
   margin: 0;
   font-size: 1.6rem;
-  font-weight: 800;
+  font-weight: 700;
   color: var(--colorBoton);
+  text-transform: capitalize;
 }
 
 /* Badge de estado (reutilizamos estilo de lista) */
@@ -97,13 +98,21 @@
 .valor {
   font-size: 0.95rem;
   color: var(--texto-parrafo);
+  text-transform: capitalize;
 }
 
 .vacio {
   font-size: 0.95rem;
   color: var(--texto-principal);
   opacity: 0.8;
+  text-transform: capitalize;
 }
+
+.info-col .chip-tipo {
+  justify-self: start;  
+  width: auto;
+}
+
 
 /* Chip tipo */
 .chip-tipo {
@@ -114,7 +123,7 @@
   border-radius: 999px;
   border: 1px solid var(--borde-suave);
   background: var(--boton-secundario-bg);
-  font-size: 0.78rem;
+  font-size: 0.78rem; 
   text-transform: uppercase;
 }
 
@@ -335,7 +344,7 @@
   border: none;
   border-radius: 50%;
   background: var(--fondo-boton-flotante);
-  color: var(--colorSecundario);
+  color: var(--texto-boton-buscar);
   display: grid;
   place-items: center;
   cursor: pointer;
@@ -461,6 +470,22 @@
   border-color: var(--colorBoton);
   box-shadow: 0 0 6px var(--sombra);
 }
+.textarea-wrapper {
+  position: relative;
+}
+
+.contador-flotante {
+  position: absolute;
+  bottom: 8px;
+  right: 12px;
+  font-size: 0.72rem;
+  color: var(--texto-secundario);
+  background: var(--fondo-pagina);
+  padding: 2px 6px;
+  border-radius: 8px;
+  opacity: 0.85;
+  pointer-events: none; 
+}
 
 textarea.input {
   resize: vertical;
@@ -485,30 +510,6 @@ textarea.input {
   justify-content: flex-end;
 }
 
-/* ===== BOTÓN VOLVER ===== */
-
-.acciones-final {
-  display: flex;
-  justify-content: flex-end;
-  margin-top: 4px;
-}
-
-.btn-volver {
-  padding: 0.5rem 1.2rem;
-  border-radius: 999px;
-  border: 1px solid var(--borde-suave);
-  background: var(--boton-secundario-bg);
-  color: var(--texto-principal);
-  font-weight: 500;
-  font-size: 0.9rem;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.btn-volver:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 4px 10px var(--sombra);
-}
 
 /* ===== RESPONSIVE ===== */
 

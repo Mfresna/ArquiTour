@@ -21,7 +21,7 @@
           [class.en-proceso]="solicitud.estado === EstadoSolicitudModel.EN_PROCESO"
           [class.aprobada]="solicitud.estado === EstadoSolicitudModel.APROBADA"
           [class.rechazada]="solicitud.estado === EstadoSolicitudModel.RECHAZADA">
-          {{ solicitud.estado }}
+          {{ EstadoSolicitudDescripcion[solicitud.estado] }}
         </span>
       </div>
 
@@ -43,7 +43,7 @@
         <div class="info-col">
           <span class="etiqueta">Tipo de solicitud</span>
           <span class="valor chip-tipo">
-            {{ solicitud.tipoSolicitud }}
+            {{ TipoSolicitudDescripcion[solicitud.tipoSolicitud] }}
           </span>
         </div>
 
@@ -126,13 +126,15 @@
 
       @if (docSrc().length) {
 
-          <div class="carrusel-container">
-          <button
+        <div class="carrusel-container">
+          @if (mostrarFlechasDocs) {
+            <button
               class="flecha-carrusel izq"
               type="button"
               (click)="scrollDocs(-1)">
               <span class="material-icons icon-flecha">chevron_left</span>
-          </button>
+            </button>
+          }
 
           <div class="imagenes" #carruselDocs>
               @for (doc of docSrc(); let i = $index; track i) {
@@ -149,14 +151,15 @@
               </button>
               }
           </div>
-
-          <button
+          @if (mostrarFlechasDocs) {
+            <button
               class="flecha-carrusel der"
               type="button"
               (click)="scrollDocs(1)">
               <span class="material-icons icon-flecha">chevron_right</span>
-          </button>
-          </div>
+            </button>
+          }
+        </div>
 
       } @else {
           <p class="vacio-docs">No hay documentación adjunta.</p>
@@ -235,7 +238,7 @@
     }
 
     <!-- ====== PANEL ADMIN (TOMAR / RESOLVER) ====== -->
-    @if (puedeGestionar()) {
+    @if (puedeGestionar() && !esSolicitudPropia) {
       <section class="bloque-detalle panel-admin">
         <div class="bloque-header">
           <h3>Gestión de la solicitud</h3>
@@ -290,13 +293,15 @@
                 </textarea>
                 
                 <!-- Contador de Caracteres -->
-                <div id="contador">
-                  {{ formResolucion.get('comentario')?.value?.length || 0 }}/560
-                </div>
+                  <div class="contador-flotante"
+                      [class.invalido]="formResolucion.get('comentario')?.invalid
+                                        && (formResolucion.get('comentario')?.touched || formResolucion.get('comentario')?.dirty)">
+                    {{ formResolucion.get('comentario')?.value?.length || 0 }}/560
+                  </div>
 
                 @if (formResolucion.get('comentario')?.errors?.['maxlength']) {
                   <small class="error">
-                    El comentario es demasiado largo (máx. 280 caracteres).
+                    El comentario es demasiado largo (máx. 560 caracteres).
                   </small>
                 }@else if(formResolucion.get('comentario')?.errors?.['required'] 
                   && (formResolucion.get('comentario')?.touched || formResolucion.get('comentario')?.dirty)) {
@@ -321,13 +326,6 @@
         </div>
       </section>
     }
-
-    <!-- ====== BOTÓN VOLVER ====== -->
-    <div class="acciones-final">
-      <button type="button" class="btn-volver" (click)="volver()">
-        Volver a solicitudes
-      </button>
-    </div>
 
   </div>
 
