@@ -29,13 +29,14 @@
   --fondo-suave: #f8f8f8;
   --colorSecundario: #f0f0f0;
   --colorItem: #f0f4ff;
+  --fondo-cartel:  #E8F1FB; 
 
 
   /* ================== TEXTO ================== */
   --texto-principal: #222222;
   --texto-secundario: #374151;
 
-    /* ================== BORDES ================== */
+  /* ================== BORDES ================== */
   --borde-suave: #d0d0d0;
   --borde-fuerte: #b5b5b5;
 
@@ -88,6 +89,7 @@
   --fondo-suave: #1a1d22;
   --colorSecundario: #0d0f12;
   --colorItem: #3b3b3d;
+  --fondo-cartel:  #212A36;  
 
   /* ================== TEXTO ================== */
   --texto-principal: #f1f5f9;

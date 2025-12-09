@@ -68,16 +68,19 @@
         </div>
 
         <!-- Admin asignado -->
-        <div class="info-col">
-          <span class="etiqueta">Administrador asignado</span>
-          @if (solicitud.adminAsignado) {
-            <span class="valor">
-              {{ solicitud.adminAsignado.nombre }} {{ solicitud.adminAsignado.apellido }}
-            </span>
-          } @else {
-            <span class="vacio">Sin asignar</span>
-          }
-        </div>
+        @if (esAdminActual){
+          <div class="info-col">
+            <span class="etiqueta">Administrador asignado</span>
+            @if (solicitud.adminAsignado) {
+              <span class="valor">
+                {{ solicitud.adminAsignado.nombre }} {{ solicitud.adminAsignado.apellido }}
+              </span>
+            } @else {
+              <span class="vacio">Sin asignar</span>
+            }
+          </div>
+
+        }
 
       </div>
     </section>
@@ -204,7 +207,7 @@
           <div class="detalle-col">
             <span class="etiqueta">Rol a dar de baja</span>
             @if (solicitud.rolBaja) {
-              <span class="valor">{{ solicitud.rolBaja }}</span>
+              <span class="valor">{{ RolDescripcion[solicitud.rolBaja] }}</span>
             } @else {
               <span class="vacio">—</span>
             }
@@ -278,9 +281,11 @@
                 </label>
               </div>
 
-              <div class="grupo-texto textarea-wrapper">
+              <div class="grupo-texto">
                 <label class="label">
-                  {{ formResolucion.get('aprobada')?.value === false ? 'Comentario' : 'Comentario (opcional)' }}                </label>
+                  {{ formResolucion.get('aprobada')?.value === false ? 'Comentario' : 'Comentario (opcional)' }}
+                </label>
+
                 <textarea
                   rows="4"
                   class="input"
@@ -291,27 +296,32 @@
                   [class.invalido]="formResolucion.get('comentario')?.invalid
                                     && (formResolucion.get('comentario')?.touched || formResolucion.get('comentario')?.dirty)">
                 </textarea>
-                
-                <!-- Contador de Caracteres -->
-                  <div class="contador-flotante"
-                      [class.invalido]="formResolucion.get('comentario')?.invalid
-                                        && (formResolucion.get('comentario')?.touched || formResolucion.get('comentario')?.dirty)">
-                    {{ formResolucion.get('comentario')?.value?.length || 0 }}/560
+
+                <div class="fila-contador-error">
+                  <div class="mensaje-error">
+                    @if (formResolucion.get('comentario')?.errors?.['maxlength']) {
+                      <small class="error-inline">
+                        El comentario es demasiado largo (máx. 560 caracteres).
+                      </small>
+                    } @else if (formResolucion.get('comentario')?.errors?.['required'] 
+                      && (formResolucion.get('comentario')?.touched || formResolucion.get('comentario')?.dirty)) {
+                      <small class="error-inline">
+                        Al ser Rechazada, el comentario es obligatorio.
+                      </small>
+                    } @else if (formResolucion.get('comentario')?.errors?.['pattern']) {
+                      <small class="error-inline">
+                        Caracteres no permitidos.
+                      </small>
+                    }
                   </div>
 
-                @if (formResolucion.get('comentario')?.errors?.['maxlength']) {
-                  <small class="error">
-                    El comentario es demasiado largo (máx. 560 caracteres).
-                  </small>
-                }@else if(formResolucion.get('comentario')?.errors?.['required'] 
-                  && (formResolucion.get('comentario')?.touched || formResolucion.get('comentario')?.dirty)) {
-                  <small class="error">Al ser Rechazada, el comentario es obligatorio.</small>
-                }@else if(formResolucion.get('comentario')?.errors?.['pattern']){
-                  <small class="error">Caracteres no permitidos.</small>
-                }
-
+                  <div class="contador-abajo">
+                    {{ formResolucion.get('comentario')?.value?.length || 0 }}/560
+                  </div>
+                </div>
 
               </div>
+
 
               <div class="acciones-resolver">
                 <button type="submit"

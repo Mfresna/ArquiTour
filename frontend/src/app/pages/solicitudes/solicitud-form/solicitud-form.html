@@ -171,6 +171,12 @@
                 <small class="error">Debés seleccionar un rol.</small>
               }
             </fieldset>
+            @if (formulario.get('rolBaja')?.value === 'ROLE_ARQUITECTO') {
+              <div class="alerta-baja-arq">
+                Al darte de baja como arquitecto, serás desvinculado de todas tus obras.
+              </div>
+            }
+
 
 
             <!-- Motivo -->

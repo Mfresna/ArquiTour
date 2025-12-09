@@ -316,12 +316,12 @@
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  background: var(--fondo-boton-flotante); 
+  background: rgba(255, 255, 255, 0.18);; 
   border: none;
   border-radius: 50%;
   width: 44px;
   height: 44px;
-  color: var(--colorSecundario);
+  color: rgba(255,255,255,0.95);
   cursor: pointer;
   z-index: 3;
   display: grid;
@@ -330,8 +330,7 @@
 }
 
 .flecha-carrusel:hover {
-  background: var(--fondo-boton-flotante-hover);
-  transform: translateY(-50%) scale(1.15);
+  background: rgba(255, 255, 255, 0.32);
   box-shadow: 0 4px 16px var(--sombra);
 }
 
