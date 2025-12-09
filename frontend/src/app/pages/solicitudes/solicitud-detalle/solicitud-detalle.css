@@ -43,7 +43,7 @@
   text-transform: capitalize;
 }
 
-/* Badge de estado (reutilizamos estilo de lista) */
+/* Badge de estado */
 .badge-estado {
   padding: 0.18rem 0.75rem;
   border-radius: 999px;
@@ -109,10 +109,9 @@
 }
 
 .info-col .chip-tipo {
-  justify-self: start;  
+  justify-self: start;
   width: auto;
 }
-
 
 /* Chip tipo */
 .chip-tipo {
@@ -123,7 +122,7 @@
   border-radius: 999px;
   border: 1px solid var(--borde-suave);
   background: var(--boton-secundario-bg);
-  font-size: 0.78rem; 
+  font-size: 0.78rem;
   text-transform: uppercase;
 }
 
@@ -178,7 +177,7 @@
   text-align: justify;
 }
 
-/* ===== GALERÍA DE DOCUMENTACIÓN (mismo estilo que galería de obra) ===== */
+/* ===== GALERÍA DE DOCUMENTACIÓN ===== */
 
 .galeria {
   width: 100%;
@@ -213,7 +212,7 @@
 
 .imagenes {
   display: flex;
-  gap: 10px;
+  gap: 12px;
   overflow-x: auto;
   overflow-y: hidden;
   scroll-behavior: smooth;
@@ -231,7 +230,7 @@
   min-width: 200px;
   max-width: 200px;
   height: 150px;
-  border: 2px solid transparent;
+  border: 2px solid var(--borde-suave);
   border-radius: 16px;
   overflow: hidden;
   cursor: pointer;
@@ -247,22 +246,8 @@
   display: block;
 }
 
-/* resaltado del seleccionado (opcional) */
-.imagen.activa {
-  border-color: var(--colorBoton);
-  box-shadow: 0 4px 10px var(--sombra);
-}
-
 .imagen:hover {
   border-color: var(--colorBoton);
-}
-
-/* texto debajo, si lo usás */
-.doc-titulo {
-  font-size: 0.85rem;
-  text-align: center;
-  color: var(--texto-principal);
-  margin-top: 4px;
 }
 
 /* Mensaje cuando no hay docs */
@@ -278,12 +263,12 @@
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  background: var(--fondo-boton-flotante);
+  background: rgba(0, 0, 0, 0.45);
   border: none;
   border-radius: 50%;
   width: 40px;
   height: 40px;
-  color: var(--colorSecundario);
+  color: rgba(255, 255, 255, 0.95);
   cursor: pointer;
   z-index: 3;
   display: grid;
@@ -292,17 +277,17 @@
 }
 
 .flecha-carrusel:hover {
-  background: var(--fondo-boton-flotante-hover);
+  background: rgba(0, 0, 0, 0.70);
   transform: translateY(-50%) scale(1.1);
   box-shadow: 0 4px 16px var(--sombra);
 }
 
 .flecha-carrusel.izq {
-  left: 8px;
+  left: 12px;
 }
 
 .flecha-carrusel.der {
-  right: 8px;
+  right: 12px;
 }
 
 /* ===== Ventana de imágenes ===== */
@@ -447,17 +432,57 @@
   cursor: pointer;
 }
 
+/* Grupo texto (label + textarea + fila contador/error) */
 .grupo-texto {
   display: flex;
   flex-direction: column;
   gap: 4px;
 }
 
-/* Input estado inválido (igual que en otros forms) */
+/* Textarea */
+textarea.input {
+  resize: vertical;
+  min-height: 80px;
+}
+
+/* Fila con error (izq) + contador (der) */
+.fila-contador-error {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 4px;
+  gap: 8px;
+}
+
+/* Bloque del error */
+.mensaje-error {
+  flex: 1;
+  min-height: 1rem;
+}
+
+/* Texto de error específico de esta fila */
+.error-inline {
+  color: var(--color-error);
+  font-size: 0.85rem;
+  margin-left: 10px;
+}
+
+.contador-abajo {
+  text-align: right;
+  font-size: 0.78rem;
+  padding: 2px 8px;
+  color: var(--texto-secundario);
+  border-radius: 8px;
+  border: 1px solid var(--borde-suave);
+  white-space: nowrap;
+  margin-right: 8px;
+}
+
+/* Input estado inválido */
 .input {
   width: 100%;
   padding: 0.6rem 0.8rem;
-  border-radius: 1.2rem;
+  border-radius: 1.2rem 1.2rem 0 1.2rem;
   border: 1px solid var(--borde-suave);
   font-family: var(--fuenteBase);
   font-size: 1rem;
@@ -470,33 +495,13 @@
   border-color: var(--colorBoton);
   box-shadow: 0 0 6px var(--sombra);
 }
-.textarea-wrapper {
-  position: relative;
-}
-
-.contador-flotante {
-  position: absolute;
-  bottom: 8px;
-  right: 12px;
-  font-size: 0.72rem;
-  color: var(--texto-secundario);
-  background: var(--fondo-pagina);
-  padding: 2px 6px;
-  border-radius: 8px;
-  opacity: 0.85;
-  pointer-events: none; 
-}
-
-textarea.input {
-  resize: vertical;
-  min-height: 80px;
-}
 
 .invalido {
   border: 2px solid var(--color-error) !important;
   background: var(--color-error-suave) !important;
 }
 
+/* Errores genéricos */
 .error {
   color: var(--color-error);
   font-size: 0.9rem;
@@ -509,7 +514,6 @@ textarea.input {
   display: flex;
   justify-content: flex-end;
 }
-
 
 /* ===== RESPONSIVE ===== */
 
@@ -538,6 +542,3 @@ textarea.input {
     align-items: flex-start;
   }
 }
-
-
-

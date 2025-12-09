@@ -9,7 +9,7 @@ import { EstadoSolicitudDescripcion, EstadoSolicitudModel } from '../../../model
 import { UsuarioService } from '../../../services/usuarioService/usuario-service';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MensajeModal, MessageType } from '../../../components/mensaje-modal/mensaje-modal';
-import { RolesEnum } from '../../../models/usuarioModels/rolEnum';
+import { RolDescripcion, RolesEnum } from '../../../models/usuarioModels/rolEnum';
 import { environment } from '../../../../environments/environment';
 import { finalize } from 'rxjs';
 
@@ -27,6 +27,8 @@ export class SolicitudDetalle implements OnInit, OnDestroy {
   TipoSolicitudModel   = TipoSolicitudModel;
   TipoSolicitudDescripcion = TipoSolicitudDescripcion;
   EstadoSolicitudDescripcion = EstadoSolicitudDescripcion;
+  RolDescripcion = RolDescripcion;
+
   redirigirAlCerrarModal = false;
 
   cargando = false;

@@ -56,18 +56,34 @@ export class DragZoneMultiple {
 
     this.imagenes = archivos;
     this.vistasPrevias = archivos.map(a => {
+      const nombre = a.name.toLowerCase();
+      const partes = nombre.split('.');
+      const extension = partes.length > 1 ? partes.pop()! : '';
 
-    //SI ES PDF → usar la imagen por defecto
-    if (a.name.toLowerCase().endsWith('.pdf')) {
-      return 'assets/img/por_defecto/pdf.png';  
-    }
+      // SI ES PDF → usar la imagen por defecto de PDF
+      if (extension === 'pdf') {
+        return 'assets/img/por_defecto/pdf.png';
+      }
 
-    //SI ES IMAGEN → usar el blob
-    return URL.createObjectURL(a);
-  });
+      // SI NO ES IMAGEN PERMITIDA → icono genérico
+      const esImagenPermitida =
+        extension === 'jpg' ||
+        extension === 'jpeg' ||
+        extension === 'png' ||
+        extension === 'webp';
+
+      if (!esImagenPermitida) {
+        return 'assets/img/por_defecto/archivo.png';
+      }
+
+      // SI ES IMAGEN PERMITIDA → usar blob
+      return URL.createObjectURL(a);
+    });
 
     this.archivosChange.emit(this.imagenes);
   }
+
+
 
   quitarNueva(index: number, e?: Event) {
     e?.stopPropagation();
