@@ -235,7 +235,7 @@ export class MapaPrincipal implements AfterViewInit, OnDestroy {
         })
       })
         .addTo(this.markersLayer)
-        .bindPopup('Su ArquiTour comienza acá');
+        .bindPopup('Su viaje comienza acá');
 
       bounds.extend([coordsBack.latitud, coordsBack.longitud]);
     }
