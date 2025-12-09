@@ -213,6 +213,12 @@ public class UsuarioController {
         return ResponseEntity.ok(usuarioService.obtenerMiPerfil(request));
     }
 
+    @GetMapping("/is-admin-default")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<Boolean> esAdminDefault(HttpServletRequest request) {
+        return ResponseEntity.ok(usuarioService.esAdminDefault(request));
+    }
+
     @Operation(summary = "Cambiar contraseña", description = "Permite al usuario autenticado actualizar su contraseña.")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Contraseña cambiada correctamente"),

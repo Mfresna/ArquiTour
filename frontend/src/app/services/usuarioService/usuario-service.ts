@@ -1,9 +1,9 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnInit } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { UsrRequestModel } from '../../auth/models/register/usrRequestModel';
 import { UsrFormModel } from '../../auth/models/register/usrFormModel';
-import { Observable } from 'rxjs';
+import { firstValueFrom, Observable } from 'rxjs';
 import { UsuarioModel } from '../../models/usuarioModels/usuarioModel';
 import { UsuarioBasicoModel } from '../../models/usuarioModels/usuarioBasicoModel';
 import { UsuarioFormBasicoModel } from '../../models/usuarioModels/usuarioFormBasicoModel';
@@ -13,7 +13,7 @@ import { RolesRequest } from '../../models/usuarioModels/rolModels';
 @Injectable({
   providedIn: 'root',
 })
-export class UsuarioService {
+export class UsuarioService{
 
   private readonly USUARIO_URL = `${environment.apiUrl}/usuarios`;
 
@@ -107,6 +107,9 @@ export class UsuarioService {
     return this.http.get<UsuarioModel>(`${this.USUARIO_URL}/me`)
   }
 
+  esAdminDefault(): Observable<boolean> {
+    return this.http.get<boolean>(`${this.USUARIO_URL}/is-admin-default`, { withCredentials: true })
+  }
 
   cambiarPass(nuevaPassword: string){
     return this.http.patch(`${this.USUARIO_URL}/password`, {nuevaPassword})

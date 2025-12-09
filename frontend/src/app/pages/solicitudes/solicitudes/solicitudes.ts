@@ -33,9 +33,11 @@ filtro!: FormGroup;
   esAdminActual = false;
   soloMias = false;
 
-
   cargando = false;
-  spinerVisible = false; 
+  spinerVisible = false;
+
+  //Administrador por defecto
+  esAdminDefault = false;
 
   mensajeSinResultados: string | null = null;
 
@@ -71,6 +73,9 @@ filtro!: FormGroup;
         this.cargarSolicitudes();
       }
     });
+
+    //Carga si el usuario es Admin Default
+    this.adminDefault();
   }
 
   // =================== CARGA / FILTRO ===================
@@ -196,6 +201,11 @@ filtro!: FormGroup;
   // =================== NUEVA SOLICITUD (botón +) ===================
 
   puedeCrearSolicitud(): boolean {
+
+    if(this.esAdminDefault){
+      return false;
+    }
+
     const esArq   = this.tokenService.isArquitecto();
     const esAdmin = this.tokenService.isAdmin();
 
@@ -205,6 +215,17 @@ filtro!: FormGroup;
 
     return puedeAltaArq || puedeBajaArq || puedeBajaAdmin;
   }
+
+  private adminDefault(): void{
+    this.usuarioService.esAdminDefault()
+    .subscribe({
+        next: (valor) => {this.esAdminDefault = valor},
+        error: (err) => {
+          console.error("Error al consultar el admin default", err);
+        }
+      });
+  }
+
 
   irANuevaSolicitud(): void {
     if (!this.puedeCrearSolicitud()) return;

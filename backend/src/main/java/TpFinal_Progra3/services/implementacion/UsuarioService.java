@@ -325,6 +325,11 @@ public class UsuarioService implements UsuarioServiceInterface {
         return usuarioMapper.mapResponseDTO(usuarioRepository.save(usr));
     }
 
+    public boolean esAdminDefault(HttpServletRequest request){
+        System.out.println(this.buscarUsuario(request).getEmail().equals(defaultAdminEmail));
+        return this.buscarUsuario(request).getEmail().equals(defaultAdminEmail);
+    }
+
     public String cambiarPassword(Usuario usr, PasswordDTO passwordDTO){
         usr.getCredencial().setPassword(passwordEncoder.encode(passwordDTO.getNuevaPassword()));
         usuarioRepository.save(usr);
