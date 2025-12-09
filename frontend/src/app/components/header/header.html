@@ -185,12 +185,20 @@
 
       </div>
 
-      <span 
+      <button
         id="usuario"
-        class="material-icons span-menu"
+        class="user-avatar-btn"
+        type="button"
         (click)="toggleUsuarioMenu()"
         (keydown.escape)="toggleUsuarioMenu()"
-        tabindex="0">person</span>
+        tabindex="0">
+
+        <img
+        [src]="imagenPerfilUrl"
+        alt="Usuario"
+        (error)="imagenError($event)"
+        />
+      </button>
 
       @if(usuarioMenu){
         <div id="menu-usuario" 

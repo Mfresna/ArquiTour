@@ -569,3 +569,21 @@ a:hover #logout{
 #noche-toggle-publico.activo:hover {
   transform: rotate(40deg);
 }
+.user-avatar-btn {
+  border: none;
+  background: transparent;
+  padding: 0;
+  margin-left: 8px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.user-avatar-btn img {
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  object-fit: cover;
+  border: 2px solid var(--borde-suave);
+}

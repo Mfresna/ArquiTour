@@ -4,7 +4,7 @@ import { TokenService } from '../tokenService/token-service';
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { AuthResponse } from '../../models/login/authResponseModel';
 import { AuthRequest } from '../../models/login/authRequestModel';
-import { BehaviorSubject, catchError, finalize, tap, throwError } from 'rxjs';
+import { BehaviorSubject, catchError, finalize, Subject, tap, throwError } from 'rxjs';
 import { LoginForm } from '../../models/login/loginFormModel';
 import { Router } from '@angular/router';
 import { SolicitudDetalle } from '../../../pages/solicitudes/solicitud-detalle/solicitud-detalle';
@@ -16,6 +16,10 @@ import { SolicitudDetalle } from '../../../pages/solicitudes/solicitud-detalle/s
 export class AuthService {
 
   private readonly AUTH_URL = `${environment.apiUrl}/auth`;
+
+  //Evento de logueo
+  private authChangeSubject = new Subject<void>();
+  authChange$ = this.authChangeSubject.asObservable();
 
   //Maneja la existencia de un refresh activo
   private estadoRefresh = false;
@@ -55,6 +59,8 @@ export class AuthService {
         this.refreshTokenSubject.next(res.accessToken);
 
         sessionStorage.setItem('logueado', 'true');
+
+        this.authChangeSubject.next();
       })
     );
   }
@@ -115,6 +121,8 @@ export class AuthService {
       this.refreshTokenSubject.next(null);
 
       sessionStorage.removeItem('logueado');
+
+      this.authChangeSubject.next();
 
       if (!disparadoPorOtraPestania) {
 

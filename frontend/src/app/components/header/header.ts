@@ -9,6 +9,9 @@ import { AsyncPipe } from '@angular/common';
 import { NotificacionResponseModel } from '../../models/notificacionModels/notificacionResponseModel';
 import { TipoNotificacionDescripcion, TipoNotificacionEnum } from '../../models/notificacionModels/tipoNotificacionEnum';
 import { MensajeModal } from '../mensaje-modal/mensaje-modal';
+import { UsuarioModel } from '../../models/usuarioModels/usuarioModel';
+import { environment } from '../../../environments/environment';
+import { UsuarioService } from '../../services/usuarioService/usuario-service';
 
 @Component({
   selector: 'app-header',
@@ -40,6 +43,11 @@ export class Header implements OnInit{
   modalTitulo!: string;
   modalMensaje!: string;
 
+  //IMAGEN
+  imagenDefecto = `${environment.imgUsuario}`;
+  imagenPerfilUrl: string = '';
+  usuarioActual: UsuarioModel | null = null;
+
 
 
   constructor(
@@ -48,8 +56,12 @@ export class Header implements OnInit{
     private elementRef: ElementRef,
     private temaService: TemaService,
     private notificacionService: NotificacionService,
-    private router: Router
-  ){}
+    private router: Router,
+    private usuarioService: UsuarioService
+  ){
+    //Se construye con la imagen por defecto
+    this.imagenPerfilUrl = this.buildImagenDefecto();
+  }
 
   ngOnInit(): void {
     const temaActual = document.documentElement.getAttribute('data-tema');
@@ -62,11 +74,23 @@ export class Header implements OnInit{
     });
 
     this.notificacionService.refrescarManual(); //Actualiza la campana de notificaciones ni bien inicia el header
+
+    this.authService.authChange$.subscribe(() => {
+      if (this.isLogged()) {
+        this.cargarUsuarioActual();
+      } else {
+        this.usuarioActual = null;
+        this.imagenPerfilUrl = this.buildImagenDefecto();
+      }
+    });
+
   }
 
   cerrarSesion(){
     this.cerrarTodosMenus();
     this.authService.logout();
+    this.usuarioActual = null;
+    this.imagenPerfilUrl = this.buildImagenDefecto();
   }
 
   isAdmin(): boolean{
@@ -193,6 +217,41 @@ export class Header implements OnInit{
         alert("Hay notificaciones que no pueden ser marcadas como leidas.")
       }
     });
+  }
+
+   // ========== AVATAR (NUEVO) ==========
+
+  private cargarUsuarioActual(): void {
+    this.usuarioService.getUsuarioMe().subscribe({
+      next: (u: UsuarioModel) => {
+        this.usuarioActual = u;
+
+        if (u.urlImagen) {
+          const path = u.urlImagen.startsWith('/') ? u.urlImagen : `/${u.urlImagen}`;
+          this.imagenPerfilUrl = `${environment.apiUrl}${path}`;
+        } else {
+          this.imagenPerfilUrl = this.buildImagenDefecto();
+        }
+      },
+      error: () => {
+        // Si no está logueado o hay error, usamos la default
+        this.usuarioActual = null;
+        this.imagenPerfilUrl = this.buildImagenDefecto();
+      }
+    });
+  }
+
+  private buildImagenDefecto(): string {
+    // igual que en UsuarioDetalle
+    return `${location.origin}/${this.imagenDefecto.replace(/^\/+/, '')}`;
+  }
+
+  imagenError(ev: Event): void {
+    const img = ev.target as HTMLImageElement;
+    if (img.src.includes(this.imagenDefecto)) return;
+
+    img.onerror = null;
+    //img.src = this.buildImagenDefecto();
   }
   
   //========== ESCUCHADORES
