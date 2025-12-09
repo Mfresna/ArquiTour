@@ -40,7 +40,7 @@ public class InicializadorConfig implements CommandLineRunner{
             Usuario usuarioADM = Usuario.builder()
                     .email(defaultAdminEmail)
                     .nombre("Administrador")
-                    .apellido("Administrador")
+                    .apellido("Maestro")
                     .fechaNacimiento(LocalDate.of(2000, 1, 1))
                     .descripcion("Administrador por Defecto de la App ArquiTour")
                     .build();
