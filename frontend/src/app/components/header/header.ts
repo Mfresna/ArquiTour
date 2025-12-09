@@ -59,8 +59,10 @@ export class Header implements OnInit{
     private router: Router,
     private usuarioService: UsuarioService
   ){
-    //Se construye con la imagen por defecto
+    //Se construye con la imagen por defecto y si puede (pq ya estoy logueado) carga la img perfil
     this.imagenPerfilUrl = this.buildImagenDefecto();
+    this.cargarUsuarioActual();
+
   }
 
   ngOnInit(): void {

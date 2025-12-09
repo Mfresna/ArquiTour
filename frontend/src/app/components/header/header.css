@@ -114,7 +114,7 @@ header {
 }
 
 #panel-derecha .span-menu:hover {
-  color: var(--color-acento);
+  color: var(--colorBoton);
 }
 
 
@@ -570,14 +570,15 @@ a:hover #logout{
   transform: rotate(40deg);
 }
 .user-avatar-btn {
+  position: relative;     
+  display: inline-flex;   
+  align-items: center;     
+  justify-content: center;  
   border: none;
   background: transparent;
   padding: 0;
   margin-left: 8px;
   cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
 }
 
 .user-avatar-btn img {
@@ -585,5 +586,10 @@ a:hover #logout{
   height: 32px;
   border-radius: 999px;
   object-fit: cover;
-  border: 2px solid var(--borde-suave);
+  border: 2px solid var(--nav-text);
+  display: block;
+}
+.user-avatar-btn img:hover{
+  border: 2px solid var(--colorBoton);
+
 }
