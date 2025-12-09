@@ -12,21 +12,8 @@ export const matriculaValidador: ValidatorFn = (control: AbstractControl): Valid
     return errors;
   }
 
-  const regex = /^[A-Za-zÁÉÍÓÚÜÑáéíóúüñ0-9.\-]+$/;
-  if (!regex.test(value)) {
-    errors['formato'] = true;
-    return errors;
-  }
-
-  const cantidadGuiones = (value.match(/-/g) || []).length;
-  if (cantidadGuiones > 2) {
-    errors['guiones'] = true;
-    return errors;
-  }
-
-  const cantidadPuntos = (value.match(/\./g) || []).length;
-  if (cantidadPuntos > 2) {
-    errors['puntos'] = true;
+  if (/["'\\]/.test(value)) {
+    errors['caracteresInvalidos'] = true;
     return errors;
   }
 

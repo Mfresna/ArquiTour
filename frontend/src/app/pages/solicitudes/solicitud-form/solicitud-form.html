@@ -70,16 +70,10 @@
                 <small class="error">La matrícula es obligatoria.</small>
               } @else if (formulario.get('matriculaArquitecto')?.errors?.['maxlength']) {
                 <small class="error">La matrícula es demasiado larga (máx. 20 caracteres).</small>
-              } @else if (formulario.get('matriculaArquitecto')?.errors?.['minlength']) {
-                <small class="error">La matrícula es demasiado corta (min. 4 caracteres).</small>
               } @else if (formulario.get('matriculaArquitecto')?.errors?.['espacios']) {
                 <small class="error">La matricula no admite espacios (coloque ' - ' )</small>
-              } @else if (formulario.get('matriculaArquitecto')?.errors?.['formato']) {
-                <small class="error">La matrícula solo puede contener (letras, números, puntos y guiones)</small>
-              } @else if (formulario.get('matriculaArquitecto')?.errors?.['guiones']) {
-                <small class="error">Formato Invalido</small>
-              } @else if (formulario.get('matriculaArquitecto')?.errors?.['puntos']) {
-                <small class="error">Formato Invalido</small>
+              } @else if (formulario.get('matriculaArquitecto')?.errors?.['caracteresInvalidos']) {
+                <small class="error">La matrícula no admite símbolos como " '' \</small>
               }
 
             </fieldset>
@@ -199,7 +193,7 @@
 
 
               @if(formulario.get('motivo')?.errors?.['maxlength']) {
-                <small class="error">El motivo es demasiado largo (máx. 280 caracteres).</small>
+                <small class="error">El motivo es demasiado largo (máx. 560 caracteres).</small>
               } @else if(formulario.get('motivo')?.errors?.['pattern']){
                 <small class="error">Caracteres no permitidos.</small>
               }
@@ -234,3 +228,6 @@
   (aceptar)="onModalAceptar()"
   (cerrado)="onModalCerrado()"
 ></app-mensaje-modal>
+<app-esperando-modal
+  [isVisible]="spinerVisible"
+></app-esperando-modal>

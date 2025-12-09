@@ -9,13 +9,13 @@ import { RolesEnum } from '../../../models/usuarioModels/rolEnum';
 import { SolicitudService } from '../../../services/solicitudService/solicitud-service';
 import { DragZoneMultiple } from '../../../components/drag-zone-multiple/drag-zone-multiple';
 import { noBlancoEspacios } from '../../../validadores/sinEspacioValidador';
-import { obraNombreValidador } from '../../../validadores/nombresValidador';
-import { apellidoValidador, nombreValidador } from '../../../auth/validadores/textoValidador';
 import { matriculaValidador } from '../../../validadores/matriculaValidador';
+import { escapeRegExp } from '@angular/compiler';
+import { EsperandoModal } from '../../../components/esperando-modal/esperando-modal';
 
 @Component({
   selector: 'app-solicitud-form',
-  imports: [ReactiveFormsModule, MensajeModal, DragZoneMultiple],
+  imports: [ReactiveFormsModule, MensajeModal, DragZoneMultiple, EsperandoModal],
   templateUrl: './solicitud-form.html',
   styleUrl: './solicitud-form.css',
 })
@@ -31,7 +31,7 @@ export class SolicitudForm {
 
   rolesDisponiblesBaja: { valor: RolesEnum; label: string }[] = [];
 
-  modoDual = false;              // muestra tabs alta/baja
+  modoDual = false;              
   altaHabilitada = true;
   bajaAdminHabilitada = true;
 
@@ -45,6 +45,7 @@ export class SolicitudForm {
   `;
 
   cargando = false;
+  spinerVisible = false;
 
   // ===== MODAL =====
   modalVisible = false;
@@ -68,7 +69,7 @@ export class SolicitudForm {
     this.configurarRolesBaja(); 
   }
 
-  // ==================== TIPO + ROL (desde query params) ====================
+  // ==================== TIPO + ROL ====================
 
   private detectarTipoYRol(): void {
     const qp = this.route.snapshot.queryParamMap;
@@ -76,9 +77,8 @@ export class SolicitudForm {
     const paramTipo = qp.get('tipo') as TipoSolicitudModel | null;
     const paramRol  = qp.get('rolBaja') as RolesEnum | null;
 
-    // 👉 NUEVO: modo dual y habilitados
     this.modoDual = qp.get('modoDual') === 'true';
-    this.altaHabilitada = qp.get('altaHabilitada') !== 'false';       // default true
+    this.altaHabilitada = qp.get('altaHabilitada') !== 'false';      
     this.bajaAdminHabilitada = qp.get('bajaAdminHabilitada') !== 'false';
 
     // 1) tipo
@@ -143,7 +143,6 @@ export class SolicitudForm {
       // Alta: campos obligatorios
       matriculaCtrl.setValidators([
         Validators.required,
-        Validators.minLength(4),
         Validators.maxLength(20),
         matriculaValidador
       ]);
@@ -279,6 +278,7 @@ export class SolicitudForm {
     event?.preventDefault();
 
     this.cargando = true;
+    this.spinerVisible = true; 
 
     if (this.esAlta()) {
       this.enviarAlta();
@@ -291,12 +291,14 @@ export class SolicitudForm {
     if (this.formulario.invalid) {
       this.formulario.markAllAsTouched();
       this.cargando = false;
+      this.spinerVisible = false;
       return;
     }
 
     if (!this.archivos.length) {
       this.mostrarErrorArchivos = true;
       this.cargando = false;
+      this.spinerVisible = false;
       return;
     }
 
@@ -310,6 +312,8 @@ export class SolicitudForm {
     this.solicitudService.nuevaSolicitud(dto, this.archivos).subscribe({
       next: () => {
         this.cargando = false;
+        this.spinerVisible = false;
+
         this.formulario.reset();
         this.archivos = [];
         this.mostrarErrorArchivos = false;
@@ -324,6 +328,7 @@ export class SolicitudForm {
       error: (e) => {
         console.error(e);
         this.cargando = false;
+        this.spinerVisible = false;
 
         const msg =
           e?.error?.mensaje ||
@@ -343,6 +348,7 @@ export class SolicitudForm {
       if (this.formulario.invalid) {
         this.formulario.markAllAsTouched();
         this.cargando = false;
+        this.spinerVisible = false;
         return;
       }
 
@@ -350,6 +356,7 @@ export class SolicitudForm {
 
       if (!rolSeleccionado) {
         this.cargando = false;
+        this.spinerVisible = false;
         this.mostrarModal(
           'No se puede enviar la solicitud',
           'Debés seleccionar qué rol querés dar de baja.',
@@ -369,6 +376,7 @@ export class SolicitudForm {
       this.solicitudService.nuevaSolicitud(dto).subscribe({
         next: () => {
           this.cargando = false;
+          this.spinerVisible = false;
           this.formulario.reset();
 
           const textoRol =
@@ -386,6 +394,7 @@ export class SolicitudForm {
         error: (e) => {
           console.error(e);
           this.cargando = false;
+          this.spinerVisible = false;
 
           const msg =
             e?.error?.mensaje ||

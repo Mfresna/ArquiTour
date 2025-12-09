@@ -24,6 +24,7 @@ export class DragZoneMultiple {
 
   imagenes: File[] = [];
   vistasPrevias: string[] = [];
+  private readonly pdfPlaceholder = 'assets/img/pdf.png';
 
   @ViewChild('inputArchivo') inputArchivo!: ElementRef<HTMLInputElement>;
 
@@ -54,7 +55,16 @@ export class DragZoneMultiple {
     this.vistasPrevias.forEach(url => URL.revokeObjectURL(url));
 
     this.imagenes = archivos;
-    this.vistasPrevias = archivos.map(a => URL.createObjectURL(a));
+    this.vistasPrevias = archivos.map(a => {
+
+    //SI ES PDF → usar la imagen por defecto
+    if (a.name.toLowerCase().endsWith('.pdf')) {
+      return 'assets/img/por_defecto/pdf.png';  
+    }
+
+    //SI ES IMAGEN → usar el blob
+    return URL.createObjectURL(a);
+  });
 
     this.archivosChange.emit(this.imagenes);
   }
