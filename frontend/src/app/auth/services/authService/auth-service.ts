@@ -29,7 +29,15 @@ export class AuthService {
   constructor(
     private http: HttpClient, 
     private tokenService: TokenService,
-    private router: Router) {}
+    private router: Router) {
+
+      //Escucha si otra pestaña hace logout
+      window.addEventListener('storage', (event) => {
+        if (event.key === 'logout') {
+          this.logout(true);
+        }
+      });
+    }
 
   login(formulario: LoginForm){
 
@@ -93,9 +101,7 @@ export class AuthService {
   // } 
 
 
-
-
-  logout() {
+  logout(disparadoPorOtraPestania: boolean = false) {
     this.logoutEnProgreso = true;
     // Primero intentamos navegar a algún lado (por ej. a '/obras' o '/')
     this.router.navigate(['/']).then((sePudoNavegar) => {
@@ -110,32 +116,25 @@ export class AuthService {
 
       sessionStorage.removeItem('logueado');
 
-      // Avisar al backend
-      this.http.post(`${this.AUTH_URL}/logout`, {}, { withCredentials: true })
-        .subscribe({
-          next: () => console.log('Sesión cerrada en el servidor'),
-          error: (err) => console.log('Error al cerrar sesión:', err),
-          complete: () => {
-            // cuando ya terminó todo el flujo
-            this.logoutEnProgreso = false;
-          }
-        });
+      if (!disparadoPorOtraPestania) {
+
+        localStorage.setItem('logout', Date.now().toString());
+
+        // Avisar al backend
+        this.http.post(`${this.AUTH_URL}/logout`, {}, { withCredentials: true })
+          .subscribe({
+            next: () => console.log('Sesión cerrada en el servidor'),
+            error: (err) => console.log('Error al cerrar sesión:', err),
+            complete: () => {
+              // cuando ya terminó todo el flujo
+              this.logoutEnProgreso = false;
+            }
+          });
+      }
 
       // Y ahora sí lo mandás al login / inicio público
     });
   }
-
-
-
-
-
-
-
-
-
-
-
-
 
   enviarRecuperarPass(email: string){   
     return this.http.post(`${this.AUTH_URL}/password`,{email});
