@@ -23,7 +23,7 @@
         
           @if (formulario.get('nombre')?.errors?.['required'] && formulario.get('nombre')?.touched) {
             <small class="error">El nombre del estudio es obligatorio.</small>
-          }@else if(formulario.get('nombre')?.errors?.['minlength'] && formulario.get('nombre')?.touched) {
+          }@else if(formulario.get('nombre')?.errors?.['minlength'] && formulario.get('nombre')?.dirty) {
             <small class="error">El nombre es demasiado corto (min. 2 caraceres).</small>
           }@else if(formulario.get('nombre')?.errors?.['maxlength']) {
             <small class="error">El nombre excede los limites (max. 100 caraceres).</small>

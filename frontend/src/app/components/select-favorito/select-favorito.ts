@@ -1,10 +1,11 @@
 import { Component, ElementRef, EventEmitter, HostListener, Input, OnInit, Output } from '@angular/core';
 import { FavoritoBasicoModel } from '../../models/favoritosModels/favoritoBasicoModel';
 import { FavoritosService } from '../../services/favoritosService/favoritos-service';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-select-favorito',
-  imports: [],
+  imports: [ReactiveFormsModule],
   templateUrl: './select-favorito.html',
   styleUrl: './select-favorito.css',
 })
@@ -24,15 +25,32 @@ export class SelectFavorito implements OnInit {
   mensajeErrorCreacion: string | null = null;
   estaEnErrorCreacion: boolean = false;
 
+  formLista!: FormGroup;
 
 
   constructor(
     private favoritosService: FavoritosService,
-    private elementRef: ElementRef
+    private elementRef: ElementRef,
+    private fb: FormBuilder,
   ) {}
 
   ngOnInit(): void {
     this.cargarListas();
+    this.validadorNombreLista()
+  }
+
+
+  //Formulario para crear lista
+  private validadorNombreLista(){
+    this.formLista = this.fb.group({
+    nombreDeLista: [
+        '',
+        [
+          Validators.required,
+          Validators.pattern(/^[A-Za-zÁÉÍÓÚáéíóúÑñ\-¿\?¡!()\s]+$/)
+        ]
+      ] 
+    });
   }
 
   // Cargar todas las listas
@@ -166,6 +184,10 @@ export class SelectFavorito implements OnInit {
 
   // Crear una lista nueva y agregar la obra
   crearLista(input: HTMLInputElement): void {
+    if(this.formLista.invalid){
+      return;
+    }
+    
     const limpio = input.value.trim();
 
     // limpio mensaje previo

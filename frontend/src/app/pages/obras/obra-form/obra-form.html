@@ -187,7 +187,7 @@
               [class.invalido]="formulario.get('descripcion')?.invalid && formulario.get('descripcion')?.touched" >
             </textarea>
 
-            @if (formulario.get('descripcion')?.errors?.['requerid'] && formulario.get('descripcion')?.touched) {
+            @if (formulario.get('descripcion')?.errors?.['required'] && formulario.get('descripcion')?.touched) {
               <small class = "error">La descripcion de la obra es obligatoria.</small>
             } @else if (formulario.get('descripcion')?.errors?.['minlength'] && formulario.get('descripcion')?.touched) {
               <small class = "error">Descripcion demasiado corta (min. 5 caracteres).</small>
