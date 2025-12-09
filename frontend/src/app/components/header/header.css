@@ -9,7 +9,6 @@ header {
   justify-content: space-between;
 }
 
-
 /*============ DISTRIBUCION PANELES ============*/
 #panel-izquierda{
   margin: 0;
@@ -19,13 +18,13 @@ header {
   flex: 1;
 
   align-items: center;
+  gap: 10px;
 }
 
 #panel-central{
   display: flex;
   flex: 1;
   justify-content: center;
-
 }
 
 #panel-derecha{
@@ -44,8 +43,7 @@ header {
 }
 
 /*============ PANELES ============*/
-    /*PANEL IZQUIERDO*/
-  
+/* PANEL IZQUIERDO */
 #logo-container {
   display: flex;
   align-items: center;
@@ -66,9 +64,31 @@ header {
   transition: all 0.15s ease;
 }
 
+/* Botón hamburguesa (por defecto oculto en desktop) */
+.menu-toggle-btn {
+  display: none; /* se muestra en mobile */
+  border: none;
+  background: transparent;
+  padding: 4px;
+  cursor: pointer;
+  border-radius: 999px;
+  align-items: center;
+  justify-content: center;
+}
 
-    /*PANEL CENTRAL*/
-#panel-central ul {
+.menu-toggle-btn .material-icons {
+  font-size: 28px;
+  color: var(--nav-text);
+}
+
+.menu-toggle-btn:hover {
+  background-color: rgba(255, 255, 255, 0.08);
+}
+
+/* PANEL CENTRAL */
+
+/* NAV DESKTOP (horizontal) */
+#panel-central ul.nav-desktop {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -82,6 +102,12 @@ header {
   user-select: none; /*no permite seleccionar el texto*/
 }
 
+/* NAV MOBILE (no se usa mas, menu ahora es lateral) */
+#panel-central ul.nav-mobile {
+  display: none;
+}
+
+/* Botones del nav */
 #panel-central li .boton {
   color: var(--nav-text);
 
@@ -100,8 +126,7 @@ header {
   transform: scale(1.05);
 }
 
-
-    /*PANEL DERECHO*/
+/* PANEL DERECHO */
 #panel-derecha .span-menu{
   font-size: 30px;
   height: 100%;
@@ -117,13 +142,12 @@ header {
   color: var(--color-acento);
 }
 
-
 #notificaciones{
   font-size: 28px !important;
 }
 
 /*============== CAMPANA DE NOTIFICACIONES ===============*/
-  /* Contenedor de la campana y el badge */
+/* Contenedor de la campana y el badge */
 #contenedor-notificaciones {
   position: relative;
   display: inline-flex;
@@ -131,7 +155,7 @@ header {
   justify-content: center;
 }
 
-  /*Badget de notificacion*/
+/* Badget de notificacion */
 .badge-notificaciones {
   position: absolute;
   top: -6px;
@@ -159,18 +183,16 @@ header {
   animation: none;
 }
 
-  /*Tamaño del badget*/
+/*Tamaño del badget*/
 .un-digito{
   font-size: 14px;
 }
 
 .dos-digitos{
-    font-size: 12px;
+  font-size: 12px;
 }
 
-/*============== animacion del baget ====================*/
-
-  /*Cuando Paso el mouse por encima*/
+/*============== animacion del badge ====================*/
 @keyframes badgePing { 
   0% { transform: scale(1); } 
   50% { transform: scale(1.15);} 
@@ -203,7 +225,7 @@ header {
   border-radius: 10px;
 }
 
-  /*MENU NOTIFICACIONES*/
+/* MENU NOTIFICACIONES */
 #menu-notificaciones{
   display: flex;
   flex-direction: column;
@@ -262,7 +284,6 @@ header {
 }
 
 /* UNA NOTIFICACION INDIVIDUAL */
-
 .item-notificacion {
   display: flex;
   align-items: center;
@@ -277,7 +298,6 @@ header {
   box-shadow: 0 2px 6px var(--sombra);
   
   cursor: pointer;
-
 }
 
 .item-notificacion:hover {
@@ -321,10 +341,9 @@ header {
 .fecha-notif{
   font-size: 0.75rem;
   color: var(--texto-principal);
-
 }
 
-/*Punto Rojo*/
+/* Punto Rojo */
 .estado-notif{
   display: inline-block;
 
@@ -338,11 +357,9 @@ header {
   border-radius: 50%;
 
   flex-shrink: 0;
-
 }
 
-
-  /*MENU USUARIO*/
+/* MENU USUARIO */
 #menu-usuario{
   right: 0;
   min-width: 210px;
@@ -366,7 +383,7 @@ a:hover #logout{
   color: var(--color-error);
 }
 
-  /*Modo Noche*/
+/* Modo Noche */
 #modo-noche{
   padding-top: 0px !important;
   padding-bottom: 0px !important;
@@ -385,7 +402,7 @@ a:hover #logout{
   color: #597686;
 }
 
-  /*Linea divisoria*/
+/* Linea divisoria */
 #panel-derecha hr{
   border: none;
 
@@ -395,10 +412,9 @@ a:hover #logout{
   background-color: var(--borde-fuerte);
 }
 
-        /*MENU OBRAS*/
+/* MENU OBRAS */
 #panel-obras{
-  /*Le Sirve al menu desplegable*/
-  position: relative;
+  position: relative; /*Le Sirve al menu desplegable*/
 }
 
 #menu-obras{
@@ -427,10 +443,9 @@ a:hover #logout{
   width: 100%; 
 }
 
-        /*MENU OBRAS*/
+/* MENU ESTUDIOS */
 #panel-estudios{
-  /*Le Sirve al menu desplegable*/
-  position: relative;
+  position: relative; /*Le Sirve al menu desplegable*/
 }
 
 #menu-estudios{
@@ -459,10 +474,9 @@ a:hover #logout{
   width: 100%; 
 }
 
-      /*MENU MAPA*/
+/* MENU MAPA */
 #panel-mapas{
-  /*Le Sirve al menu desplegable*/
-  position: relative;
+  position: relative; /*Le Sirve al menu desplegable*/
 }
 
 #menu-mapas{
@@ -492,7 +506,7 @@ a:hover #logout{
 }
 
 /*============ CLASES BORDES============*/
-/*TODOS LOS BORDES*/
+/* TODOS LOS BORDES */
 .borde-sup-der{
   border-top-right-radius: var(--radioMenu, 10px);
 }
@@ -538,6 +552,7 @@ a:hover #logout{
 #modo-noche:hover #noche-toggle {
   transform: scale(1.05);
 }
+
 /* Botón de modo noche SOLO en el header público (no logueado) */
 #modo-noche-publico {
   background: none;
@@ -565,10 +580,11 @@ a:hover #logout{
   transform: rotate(20deg);
 }
 
-
 #noche-toggle-publico.activo:hover {
   transform: rotate(40deg);
 }
+
+/* Avatar usuario */
 .user-avatar-btn {
   border: none;
   background: transparent;
@@ -586,4 +602,236 @@ a:hover #logout{
   border-radius: 999px;
   object-fit: cover;
   border: 2px solid var(--borde-suave);
+}
+
+/* ========== MENÚ LATERAL MOBILE ========== */
+
+#drawer-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  z-index: 2000;
+}
+
+#drawer-menu {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 260px;
+  max-width: 80vw;
+  height: 100vh;
+  background-color: var(--fondo-superficie);
+  box-shadow: 4px 0 12px var(--sombra);
+  z-index: 2001;
+
+  display: flex;
+  flex-direction: column;
+  padding: 12px 14px;
+
+  animation: drawerSlideIn 0.2s ease-out;
+}
+
+@keyframes drawerSlideIn {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+.drawer-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--borde-suave);
+  margin-bottom: 10px;
+}
+
+.drawer-titulo {
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: var(--texto-principal);
+}
+
+.drawer-close-btn {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 999px;
+}
+
+.drawer-close-btn .material-icons {
+  font-size: 22px;
+  color: var(--texto-principal);
+}
+
+.drawer-close-btn:hover {
+  background-color: rgba(255,255,255,0.08);
+}
+
+.drawer-lista {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  flex: 1;
+  overflow-y: auto;
+}
+
+.drawer-lista > li {
+  margin-bottom: 6px;
+}
+
+.drawer-lista a {
+  text-decoration: none;
+  color: var(--texto-principal);
+  display: block;
+  padding: 6px 4px;
+  border-radius: 6px;
+  font-size: 0.98rem;
+}
+
+.drawer-lista a:hover {
+  background-color: var(--colorSecundario);
+}
+
+/* Secciones con sub-opciones */
+.drawer-seccion {
+  margin-bottom: 8px;
+}
+
+.drawer-seccion-titulo {
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--texto-principal);
+  display: block;
+  margin-bottom: 3px;
+}
+
+.drawer-sublista {
+  list-style: none;
+  margin: 0;
+  padding-left: 10px;
+}
+
+.drawer-sublista li {
+  margin-bottom: 3px;
+}
+
+/* ========== RESPONSIVE ========== */
+
+/* Tablets / pantallas medianas */
+@media (max-width: 900px) {
+  header {
+    padding: 8px 16px;
+  }
+
+  #logo {
+    height: 36px;
+  }
+
+  #panel-central ul.nav-desktop {
+    gap: 1.6rem;
+  }
+
+  #panel-central li .boton {
+    font-size: 1.05rem;
+  }
+
+  #panel-derecha {
+    gap: 18px;
+  }
+
+  #menu-notificaciones {
+    min-width: 300px;
+    max-width: 340px;
+  }
+}
+
+/* Celulares: muestra botón menú, oculta logo y nav central */
+@media (max-width: 768px) {
+
+  /* header sigue en fila, pero con menos padding */
+  header {
+    padding: 8px 12px;
+    align-items: center;
+  }
+
+  /* Muestra botón hamburguesa */
+  .menu-toggle-btn {
+    display: inline-flex;
+  }
+
+  /* Oculta logo en mobile para que el botón quede a la izq */
+  #logo-container {
+    display: none;
+  }
+
+  /* Oculta completamente el panel central horizontal
+     (la navegación la maneja el menú lateral) */
+  #panel-central {
+    display: none;
+  }
+
+  /* Panel derecho ocupa lo que necesita, pegado a la derecha */
+  #panel-derecha {
+    flex: 0 0 auto;
+    gap: 12px;
+  }
+
+  .user-avatar-btn img {
+    width: 28px;
+    height: 28px;
+  }
+
+  #panel-derecha .span-menu,
+  #notificaciones,
+  #noche-toggle-publico {
+    font-size: 24px !important;
+  }
+
+  /* Badge notificaciones */
+  .badge-notificaciones {
+    top: -4px;
+    right: -4px;
+    min-width: 16px;
+    height: 16px;
+    padding: 0 4px;
+  }
+
+  .un-digito {
+    font-size: 11px;
+  }
+
+  .dos-digitos {
+    font-size: 10px;
+  }
+
+  /* Menú notificaciones y usuario algo más angostos */
+  #menu-notificaciones,
+  #menu-usuario {
+    min-width: min(320px, 95vw);
+    max-width: 95vw;
+  }
+
+  #menu-notificaciones {
+    height: 260px;
+  }
+}
+
+/* Celulares muy chicos */
+@media (max-width: 420px) {
+  header {
+    padding-inline: 8px;
+  }
+
+  .drawer-lista a {
+    font-size: 0.9rem;
+  }
+
+  .drawer-seccion-titulo {
+    font-size: 0.9rem;
+  }
 }

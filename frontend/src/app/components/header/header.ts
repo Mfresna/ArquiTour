@@ -48,6 +48,7 @@ export class Header implements OnInit{
   imagenPerfilUrl: string = '';
   usuarioActual: UsuarioModel | null = null;
 
+  menuLateralAbierto: boolean = false;
 
 
   constructor(
@@ -61,6 +62,7 @@ export class Header implements OnInit{
   ){
     //Se construye con la imagen por defecto
     this.imagenPerfilUrl = this.buildImagenDefecto();
+    this.cargarUsuarioActual();
   }
 
   ngOnInit(): void {
@@ -164,6 +166,7 @@ export class Header implements OnInit{
     this.obrasMenu = false;
     this.mapaMenu=false;
     this.notificacionesMenu = false;
+    this.menuLateralAbierto = false; // <-- agregar esto
   }
 
   //================= NOTIFICACIONES
@@ -273,6 +276,15 @@ export class Header implements OnInit{
       this.cerrarTodosMenus();
     }
   
+  }
+
+
+  toggleMenuLateral() {
+    this.menuLateralAbierto = !this.menuLateralAbierto;
+  }
+
+  cerrarMenuLateral() {
+    this.menuLateralAbierto = false;
   }
 
 
