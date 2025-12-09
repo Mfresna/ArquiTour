@@ -326,6 +326,7 @@ public class UsuarioService implements UsuarioServiceInterface {
     }
 
     public boolean esAdminDefault(HttpServletRequest request){
+        System.out.println(this.buscarUsuario(request).getEmail().equals(defaultAdminEmail));
         return this.buscarUsuario(request).getEmail().equals(defaultAdminEmail);
     }
 

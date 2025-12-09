@@ -70,12 +70,24 @@
 
       <div class="nav-solicitudes">
 
-        <button class="btn-nueva-solicitud"
+        <div class="btn-etiqueta-detalle">
+          <button class="btn-nueva-solicitud"
                 (click)="irANuevaSolicitud()"
                 [disabled]="!puedeCrearSolicitud()">
           <span class="material-symbols-rounded icono">add</span>
-          Nueva solicitud
-        </button>
+            Nueva solicitud
+          </button>
+
+          @if(!puedeCrearSolicitud() && this.esAdminDefault){
+            <div class="etiqueta-detalle">Usted no puede hacer Solicitudes</div>
+          }@else if (!puedeCrearSolicitud() && !this.esAdminDefault) {
+            <div class="etiqueta-detalle">Ya tiene una solicitud Pendiente</div>
+          }
+
+        </div>
+        
+
+                      
 
       </div>
 
