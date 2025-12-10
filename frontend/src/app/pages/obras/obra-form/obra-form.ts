@@ -46,7 +46,7 @@ export class ObraForm implements TieneCambiosPendientes{
   subiendo = false;
 
   categorias = Object.values(CategoriaObraModel);
-  estados    = Object.values(EstadoObraModel);
+  estados = Object.values(EstadoObraModel);
   CategoriaObraDescripcion = CategoriaObraDescripcion;
   EstadoObraDescripcion    = EstadoObraDescripcion;
 
@@ -81,7 +81,7 @@ export class ObraForm implements TieneCambiosPendientes{
       return false;
   }
 
-  return this.formulario?.dirty ?? false;
+  return this.formulario?.dirty || this.archivosSeleccionados.length > 0;
 }
 
   ngOnInit(): void {

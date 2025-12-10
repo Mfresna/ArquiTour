@@ -12,6 +12,7 @@ import { noBlancoEspacios } from '../../../validadores/sinEspacioValidador';
 import { matriculaValidador } from '../../../validadores/matriculaValidador';
 import { escapeRegExp } from '@angular/compiler';
 import { EsperandoModal } from '../../../components/esperando-modal/esperando-modal';
+import { TieneCambiosPendientes } from '../../../guards/salirSinGuardar/salir-sin-guardar-guard';
 
 @Component({
   selector: 'app-solicitud-form',
@@ -19,7 +20,7 @@ import { EsperandoModal } from '../../../components/esperando-modal/esperando-mo
   templateUrl: './solicitud-form.html',
   styleUrl: './solicitud-form.css',
 })
-export class SolicitudForm {
+export class SolicitudForm implements TieneCambiosPendientes{
     formulario!: FormGroup;
 
   // ALTA_ARQUITECTO o BAJA_ROL
@@ -46,6 +47,7 @@ export class SolicitudForm {
 
   cargando = false;
   spinerVisible = false;
+  omitirGuard = false;
 
   // ===== MODAL =====
   modalVisible = false;
@@ -61,6 +63,16 @@ export class SolicitudForm {
     private solicitudService: SolicitudService,
     private tokenService: TokenService
   ) {}
+
+  tieneCambiosPendientes(): boolean {
+    // Si vengo de un guardado exitoso, el guard NO debe preguntar nada
+    if (this.omitirGuard) {
+    return false;
+  }
+    
+    return this.formulario?.dirty || this.archivos.length > 0;
+  }
+
 
   ngOnInit(): void {
     this.detectarTipoYRol();
@@ -317,6 +329,7 @@ export class SolicitudForm {
         this.formulario.reset();
         this.archivos = [];
         this.mostrarErrorArchivos = false;
+        this.omitirGuard = true;
 
         this.mostrarModal(
           'Solicitud enviada',
@@ -378,6 +391,7 @@ export class SolicitudForm {
           this.cargando = false;
           this.spinerVisible = false;
           this.formulario.reset();
+          this.omitirGuard = true;
 
           const textoRol =
             rolSeleccionado === RolesEnum.ROLE_ADMINISTRADOR

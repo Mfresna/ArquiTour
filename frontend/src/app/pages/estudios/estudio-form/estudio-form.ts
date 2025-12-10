@@ -71,7 +71,7 @@ export class EstudioForm implements TieneCambiosPendientes {
     return false;
   }
     
-    return this.formulario.dirty;
+     return this.formulario?.dirty || this.archivoSeleccionado !== null;
   }
 
   ngOnInit(): void {
