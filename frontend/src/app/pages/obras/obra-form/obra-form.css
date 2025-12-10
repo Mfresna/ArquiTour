@@ -126,6 +126,7 @@ input[type="number"].input {
 textarea.input {
   resize: vertical;
   min-height: 80px;
+  border-radius: 1.2rem 1.2rem 0 1.2rem;
 }
 
 .error {
