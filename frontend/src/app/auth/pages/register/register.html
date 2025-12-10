@@ -228,7 +228,12 @@
             (input)="limitarLineas($event,8)"
             placeholder="Escribí algo sobre vos...">
           </textarea>
-          
+
+          <!-- Contador de Caracteres -->
+          <div class="contador-abajo">
+            {{ registerForm.get('descripcion')?.value?.length || 0 }}/280
+          </div>
+    
           @if (registerForm.get('descripcion')?.errors?.['maxLength'] && registerForm.get('descripcion')?.dirty) {
             <small>Caracteres maximos excedidos. (max. 280)</small>
           } @else if (registerForm.get('descripcion')?.errors?.['pattern'] && registerForm.get('descripcion')?.dirty) {
