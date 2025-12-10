@@ -226,7 +226,7 @@ public class ObraService implements ObraServiceInterface{
                 .orElseThrow(() -> new NotFoundException("Obra no encontrada con ID: " + id));
     }
 
-    private boolean puedeGestionarObra(HttpServletRequest request, Long id){
+    public boolean puedeGestionarObra(HttpServletRequest request, Long id){
         Usuario usr = usuarioService.buscarUsuario(request);
 
         return usr.getCredencial().tieneRolUsuario(RolUsuario.ROLE_ADMINISTRADOR)

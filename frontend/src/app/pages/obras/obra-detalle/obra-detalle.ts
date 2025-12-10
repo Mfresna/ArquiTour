@@ -65,6 +65,9 @@ export class ObraDetalle {
 
   redirigirAObras = false;
 
+  //Para saber si el arqui puede editar
+  puedeEditarObraValor = false;
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -82,6 +85,10 @@ export class ObraDetalle {
     }
 
     this.spinerVisible = true;
+
+    //Carga si puede gestionar la obra
+    this.puedeEditarObra();
+
 
     this.obraSrvice.getObra(id).pipe(
       finalize(() => this.spinerVisible = false)
@@ -330,7 +337,7 @@ export class ObraDetalle {
   // Roles y acciones
 
   puedeGestionar(): boolean {
-    return this.tokenSrvice.isAdmin() || this.tokenSrvice.isArquitecto();
+    return this.tokenSrvice.isAdmin() || (this.tokenSrvice.isArquitecto() && this.puedeEditarObraValor);
   }
 
   editar(): void {
@@ -413,4 +420,13 @@ export class ObraDetalle {
     });
   }
 
+  private puedeEditarObra(): void{
+    this.obraSrvice.puedeModificarObra()
+    .subscribe({
+        next: (valor) => {this.puedeEditarObraValor = valor},
+        error: (err) => {
+          console.error("Error al consultar si la obra le pertenece", err);
+        }
+      });
+  }
 }
