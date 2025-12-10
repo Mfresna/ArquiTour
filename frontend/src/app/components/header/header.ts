@@ -28,8 +28,8 @@ export class Header implements OnInit{
   estudiosMenu: boolean = false;
   mapaMenu: boolean = false;
   notificacionesMenu: boolean = false;
-  menuLateralAbierto: boolean = false;
 
+  menuLateral: boolean = false;
 
   cantNotifSinLeer$!: Observable<number>;
 
@@ -88,7 +88,6 @@ export class Header implements OnInit{
         this.usuarioActual = null;
         this.imagenPerfilUrl = this.buildImagenDefecto();
 
-        this.menuLateralAbierto = false;
       }
     });
 
@@ -167,11 +166,12 @@ export class Header implements OnInit{
   }
 
   toggleMenuLateral() {
-    this.menuLateralAbierto = !this.menuLateralAbierto;
+    this.cerrarTodosMenus();
+    this.menuLateral = !this.menuLateral;
   }
 
   cerrarMenuLateral() {
-    this.menuLateralAbierto = false;
+    this.menuLateral = false;
   }
 
   cerrarTodosMenus(){
@@ -181,7 +181,7 @@ export class Header implements OnInit{
     this.mapaMenu=false;
     this.notificacionesMenu = false;
 
-    this.menuLateralAbierto = false;
+    this.menuLateral = false;
   }
 
   //================= NOTIFICACIONES
@@ -269,7 +269,7 @@ export class Header implements OnInit{
     if (img.src.includes(this.imagenDefecto)) return;
 
     img.onerror = null;
-    //img.src = this.buildImagenDefecto();
+    img.src = this.buildImagenDefecto();
   }
   
   //========== ESCUCHADORES

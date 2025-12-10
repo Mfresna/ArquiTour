@@ -4,7 +4,7 @@
     <!-- Boton Hamburguesa -->
     <button
       type="button"
-      class="menu-toggle-btn"
+      class="menu-lateral-btn"
       (click)="toggleMenuLateral()">
       <span class="material-icons">menu</span>
     </button>
@@ -274,134 +274,107 @@
   }
 
   <!-- ========== MENÚ LATERAL MOBILE (para logueado y no logueado) ========== -->
-  @if(menuLateralAbierto) {
-    <!-- Overlay semi-transparente -->
-    <div
-      id="drawer-overlay"
+  @if(menuLateral) {
+    <!-- Area sin menu con trasnparencia -->
+    <div id="menu-lateral-overlay"
       (click)="cerrarMenuLateral()">
     </div>
 
-    <!-- Drawer lateral -->
-    <nav id="drawer-menu">
-      <div class="drawer-header">
-        <span class="drawer-titulo">Menú</span>
+    <!-- Panel visible -->
+    <nav id="menu-lateral">
+      <div class="menu-lateral-header">
+        <span class="menu-lateral-titulo">Menú</span>
         <button
           type="button"
-          class="drawer-close-btn"
+          class="menu-lateral-cerrar"
           (click)="cerrarMenuLateral()">
           <span class="material-icons">close</span>
         </button>
       </div>
 
-      <ul class="drawer-lista">
+      <!-- Lista de botones  -->
 
+      <ul class="menu-lateral-lista">
         <!-- CONTENIDO NO LOGUEADO -->
         @if(!isLogged()){
           @if(isBienvenida){
             <li>
-              <a routerLink="/"
-                 (click)="cerrarMenuLateral()">
-                INICIO
-              </a>
+              <a routerLink="/" (click)="cerrarMenuLateral()"> INICIO </a>
             </li>
           }
           @if(!isBienvenida){
             <li>
-              <a routerLink="/bienvenida"
-                 [class.activo]="isBienvenida"
-                 (click)="cerrarMenuLateral()">
-                NOSOTROS
-              </a>
+              <a routerLink="/bienvenida" [class.activo]="isBienvenida" (click)="cerrarMenuLateral()"> NOSOTROS </a>
             </li>
           }
         }
 
         <!-- CONTENIDO LOGUEADO -->
         @if(isLogged()){
+
           <!-- Obras -->
           @if(!isArq() && !isAdmin()){
             <li>
-              <a routerLink="/obras"
-                 (click)="cerrarMenuLateral()">
-                OBRAS
-              </a>
+              <a routerLink="/obras" (click)="cerrarMenuLateral()">OBRAS </a>
             </li>
           } @else {
-            <li class="drawer-seccion">
-              <span class="drawer-seccion-titulo">OBRAS</span>
-              <ul class="drawer-sublista">
-                <li>
-                  <a routerLink="/obras"
-                     (click)="cerrarMenuLateral()">
-                    Ver Obras
-                  </a>
-                </li>
-                <li>
-                  <a routerLink="/formObras"
-                     (click)="cerrarMenuLateral()">
-                    Registrar Obra
-                  </a>
-                </li>
-              </ul>
+            <li class="menu-lateral-seccion">
+              <span class="menu-lateral-seccion-titulo">OBRAS</span>
+
+                <ul class="menu-lateral-sublista">
+                  <li>
+                    <a routerLink="/obras" (click)="cerrarMenuLateral()">Ver Obras </a>
+                  </li>
+                  <li>
+                    <a routerLink="/formObras" (click)="cerrarMenuLateral()">Registrar Obra</a>
+                  </li>
+                </ul>
             </li>
           }
 
           <!-- Estudios -->
           @if(!isArq() && !isAdmin()){
             <li>
-              <a routerLink="/estudios"
-                 (click)="cerrarMenuLateral()">
-                ESTUDIOS
-              </a>
+              <a routerLink="/estudios" (click)="cerrarMenuLateral()"> ESTUDIOS </a>
             </li>
           } @else {
-            <li class="drawer-seccion">
-              <span class="drawer-seccion-titulo">ESTUDIOS</span>
-              <ul class="drawer-sublista">
+            <li class="menu-lateral-seccion">
+              <span class="menu-lateral-seccion-titulo">ESTUDIOS</span>
+
+              <ul class="menu-lateral-sublista">
                 <li>
-                  <a routerLink="/estudios"
-                     (click)="cerrarMenuLateral()">
-                    Ver Estudios
+                  <a routerLink="/estudios" (click)="cerrarMenuLateral()"> Ver Estudios
                   </a>
                 </li>
                 <li>
-                  <a routerLink="/formEstudios"
-                     (click)="cerrarMenuLateral()">
-                    Crear Estudio
-                  </a>
+                  <a routerLink="/formEstudios" (click)="cerrarMenuLateral()"> Crear Estudio </a>
                 </li>
               </ul>
             </li>
           }
 
           <!-- Mapa -->
-          <li class="drawer-seccion">
-            <span class="drawer-seccion-titulo">MAPA</span>
-            <ul class="drawer-sublista">
+          <li class="menu-lateral-seccion">
+            <span class="menu-lateral-seccion-titulo">MAPA</span>
+            <ul class="menu-lateral-sublista">
               <li>
-                <a routerLink="/mapa"
-                   (click)="cerrarMenuLateral()">
-                  Ver Mapa
-                </a>
+                <a routerLink="/mapa" (click)="cerrarMenuLateral()">Ver Mapa</a>
               </li>
               <li>
-                <a routerLink="/obras-cercanas"
-                   (click)="cerrarMenuLateral()">
-                  Obras Cercanas
-                </a>
+                <a routerLink="/obras-cercanas" (click)="cerrarMenuLateral()">Obras Cercanas</a>
               </li>
             </ul>
           </li>
 
           <!-- Favoritos -->
-          <li>
-            <a routerLink="/favoritos"
-               (click)="cerrarMenuLateral()">
-              FAVORITOS
-            </a>
+
+          <li class="menu-lateral-seccion">
+            <span 
+              routerLink="/favoritos" 
+              class="menu-lateral-seccion-titulo clickeable" 
+              (click)="cerrarMenuLateral()">FAVORITOS</span>
           </li>
         }
-
       </ul>
     </nav>
   }
