@@ -1,17 +1,27 @@
 <header>
   <div id="panel-izquierda" tabindex="-1">
+    <!-- Si es chico cambia el logo por el boton hamburguesa -->
+
+      <!-- btn hamburguesa -->
+     <button
+      type="button"
+      class="menu-toggle-btn"
+      (click)="toggleMenuLateral()">
+      <span class="material-icons">menu</span>
+    </button>
+
+      <!-- logo -->
     <a routerLink="/" id="logo-container">
       <img 
         src="assets/img/logo.png"
         alt="ArquiTour Logo"
-        id="logo"
-      >
+        id="logo">
     </a>
   </div>
 
   @if(!isLogged()){
     <div id="panel-central">
-      <ul>
+      <ul class="nav-desktop">
           @if(isBienvenida){
             <li>
               <a class="boton" routerLink="/">INICIO</a>
@@ -27,6 +37,8 @@
           }  
         </ul>
     </div>
+
+
     <div id="panel-derecha">
         <button id="modo-noche-publico" (click)="toggleModoNoche()">
           <span

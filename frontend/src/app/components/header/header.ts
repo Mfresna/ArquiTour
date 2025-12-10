@@ -48,7 +48,8 @@ export class Header implements OnInit{
   imagenPerfilUrl: string = '';
   usuarioActual: UsuarioModel | null = null;
 
-
+  //MENU HAMBURGUESA
+  menuLateralAbierto: boolean = false;
 
   constructor(
     private authService: AuthService,
@@ -160,12 +161,22 @@ export class Header implements OnInit{
     this.estudiosMenu = false;
   }
 
+  toggleMenuLateral() {
+    this.menuLateralAbierto = !this.menuLateralAbierto;
+  }
+
+  cerrarMenuLateral() {
+    this.menuLateralAbierto = false;
+  }
+
+
   cerrarTodosMenus(){
     this.estudiosMenu = false;
     this.usuarioMenu = false;
     this.obrasMenu = false;
     this.mapaMenu=false;
     this.notificacionesMenu = false;
+    this.menuLateralAbierto = false;
   }
 
   //================= NOTIFICACIONES

@@ -31,7 +31,10 @@ header {
 #panel-derecha{
   margin: 0;
   padding: 0;
-  margin: auto;
+
+
+  margin-left: auto;
+  margin-right: 0;
 
   display: flex;
   flex: 1;
@@ -39,7 +42,7 @@ header {
   height: 100%;
   align-items: center;
 
-  position: relative; /*Le sirve al panel desplegable*/
+  position: relative;
   gap: 30px;
 }
 
@@ -592,4 +595,79 @@ a:hover #logout{
 .user-avatar-btn img:hover{
   border: 2px solid var(--colorBoton);
 
+}
+/*===========BOTON HAMBURGUESA==============*/
+.menu-toggle-btn {
+  display: none;
+  border: none;
+  background: transparent;
+  padding: 4px;
+  cursor: pointer;
+  border-radius: 999px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.menu-toggle-btn .material-icons {
+  font-size: 28px;
+  color: var(--nav-text);
+}
+
+.menu-toggle-btn:hover {
+  background-color: rgba(255, 255, 255, 0.08);
+}
+
+
+
+
+
+
+/*=================================================================== RESPONSIVE*/
+/* ========== RESPONSIVE: CELULARES / TABLETS PEQUEÑAS ========== */
+@media (max-width: 768px) {
+
+  header {
+    padding: 8px 12px;
+    align-items: center;
+    justify-content: flex-start;
+  }
+
+  #panel-izquierda {
+    flex: 0 0 auto;
+  }
+
+  .menu-toggle-btn {
+    display: flex;
+  }
+
+  #logo-container {
+    display: none;
+  }
+
+  #panel-central {
+    display: none;
+  }
+
+  #panel-derecha {
+    flex: 0 0 auto;
+    margin-left: auto;
+    gap: 16px;
+  }
+
+  #panel-derecha .span-menu {
+    font-size: 24px;
+  }
+
+  .user-avatar-btn img {
+    width: 28px;
+    height: 28px;
+  }
+
+  #menu-notificaciones {
+    min-width: min(320px, 95vw);
+    max-width: 95vw;
+    height: 260px;
+  }
 }
