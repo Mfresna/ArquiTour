@@ -186,10 +186,9 @@ public class ObraController {
         return ResponseEntity.ok(obraService.agregarImagenes(request, id, urlAgregar));
     }
 
-    @GetMapping("/puede-modificar")
+    @GetMapping("/{id}/puede-modificar")
     @PreAuthorize("hasRole('ADMINISTRADOR') or hasRole('ARQUITECTO')")
-    public ResponseEntity<Boolean> puedeGestionar(HttpServletRequest request,
-                                                  @Parameter(description = "ID de la obra") @PathVariable @Positive Long id) {
+    public ResponseEntity<Boolean> puedeEditarObra(HttpServletRequest request, @PathVariable @Positive Long id) {
         return ResponseEntity.ok(obraService.puedeGestionarObra(request, id));
     }
     

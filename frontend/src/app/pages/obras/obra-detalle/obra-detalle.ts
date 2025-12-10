@@ -87,7 +87,7 @@ export class ObraDetalle {
     this.spinerVisible = true;
 
     //Carga si puede gestionar la obra
-    this.puedeEditarObra();
+    this.puedeEditarObra(id);
 
 
     this.obraSrvice.getObra(id).pipe(
@@ -420,13 +420,10 @@ export class ObraDetalle {
     });
   }
 
-  private puedeEditarObra(): void{
-    this.obraSrvice.puedeModificarObra()
-    .subscribe({
-        next: (valor) => {this.puedeEditarObraValor = valor},
-        error: (err) => {
-          console.error("Error al consultar si la obra le pertenece", err);
-        }
-      });
+  private puedeEditarObra(id: number): void{
+    this.obraSrvice.puedeModificarObra(id).subscribe({
+      next: (valor) => {this.puedeEditarObraValor = valor;},
+      error: (err) => {console.error(err);}
+    });
   }
 }

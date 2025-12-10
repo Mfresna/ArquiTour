@@ -62,7 +62,6 @@ export class Header implements OnInit{
     //Se construye con la imagen por defecto y si puede (pq ya estoy logueado) carga la img perfil
     this.imagenPerfilUrl = this.buildImagenDefecto();
     this.cargarUsuarioActual();
-
   }
 
   ngOnInit(): void {
@@ -80,6 +79,9 @@ export class Header implements OnInit{
     this.authService.authChange$.subscribe(() => {
       if (this.isLogged()) {
         this.cargarUsuarioActual();
+
+        //Cuando se loguea refrescamo las notificaciones
+        this.notificacionService.refrescarManual();
       } else {
         this.usuarioActual = null;
         this.imagenPerfilUrl = this.buildImagenDefecto();
