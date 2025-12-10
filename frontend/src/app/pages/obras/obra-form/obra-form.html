@@ -184,7 +184,7 @@
               rows="6" 
               formControlName="descripcion" 
               placeholder="Breve descripción de la obra"
-              [class.invalido]="formulario.get('descripcion')?.invalid && formulario.get('descripcion')?.touched" >
+              [class.invalido]="formulario.get('descripcion')?.invalid &&(formulario.get('descripcion')?.touched || formulario.get('descripcion')?.dirty) " >
             </textarea>
 
             @if (formulario.get('descripcion')?.errors?.['required'] && formulario.get('descripcion')?.touched) {
@@ -192,7 +192,7 @@
             } @else if (formulario.get('descripcion')?.errors?.['minlength'] && formulario.get('descripcion')?.touched) {
               <small class = "error">Descripcion demasiado corta (min. 5 caracteres).</small>
             } @else if (formulario.get('descripcion')?.errors?.['pattern'] && formulario.get('descripcion')?.dirty) {
-              <small class = "error">Caracter invalido, solo se permiten (- _ ! ¡ & ¿ ? " + =).</small>
+              <small class = "error">Caracter Inválido.</small>
             } @else if(formulario.get('descripcion')?.errors?.['espacios'] && formulario.get('descripcion')?.touched) {
               <small class="error">La descripcion de la obra es obligatoria.</small>
             }
