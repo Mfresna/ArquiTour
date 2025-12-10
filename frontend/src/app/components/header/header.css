@@ -750,27 +750,33 @@ a:hover #logout{
   }
 }
 
-/* Celulares: muestra botón menú, oculta logo y nav central */
 @media (max-width: 768px) {
 
-  /* header sigue en fila, pero con menos padding */
   header {
     padding: 8px 12px;
     align-items: center;
+    justify-content: flex-start; /* <- ya no space-between */
   }
 
-  /* Muestra botón hamburguesa */
+  /* Que cada panel mida sólo lo que necesita */
+  #panel-izquierda {
+    flex: 0 0 auto;
+  }
+
+  #panel-derecha {
+    flex: 0 0 auto;
+    margin-left: auto;  /* empuja los iconos a la derecha */
+  }
+
+  /* (lo demás que ya tenías se puede quedar igual) */
   .menu-toggle-btn {
     display: inline-flex;
   }
 
-  /* Oculta logo en mobile para que el botón quede a la izq */
   #logo-container {
     display: none;
   }
 
-  /* Oculta completamente el panel central horizontal
-     (la navegación la maneja el menú lateral) */
   #panel-central {
     display: none;
   }
