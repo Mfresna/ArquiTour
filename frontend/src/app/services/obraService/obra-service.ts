@@ -6,6 +6,7 @@ import { EstadoObraModel } from "../../models/obraModels/estadoObraModel";
 import { ObraModel } from "../../models/obraModels/obraModel";
 import { CoordenadasNavegador } from "../../models/mapaModels/coordenadasModel";
 import { ObraMapaModel } from "../../models/mapaModels/obraMapaModel";
+import { Observable } from "rxjs";
 
 
 @Injectable({
@@ -77,6 +78,10 @@ export class ObraService {
         }
       }
     );
+  }
+
+  puedeModificarObra(): Observable<boolean> {
+    return this.http.get<boolean>(`${this.OBRAS_URL}/puede-modificar`, { withCredentials: true })
   }
   
 }
