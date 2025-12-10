@@ -80,8 +80,11 @@ export class ObraService {
     );
   }
 
-  puedeModificarObra(): Observable<boolean> {
-    return this.http.get<boolean>(`${this.OBRAS_URL}/puede-modificar`, { withCredentials: true })
+  puedeModificarObra(idObra: number): Observable<boolean> {
+    return this.http.get<boolean>(`${this.OBRAS_URL}/${idObra}/puede-modificar`, {
+      // si tu interceptor ya agrega withCredentials, podés sacar esta línea
+      withCredentials: true
+    });
   }
   
 }
