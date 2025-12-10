@@ -4,7 +4,15 @@
 
     @if(obraSeleccionada){
         <div (click)="irADetalleObra(obraSeleccionada)" id="burbuja">
-            {{obraSeleccionada.nombre}}
+
+            <span class="texto">{{ obraSeleccionada.nombre }}</span>
+            
+            <button 
+                class="btn-burbuja"
+                (click)="sacarZoom($event)">
+                <span class="material-icons icon-cerrar">close</span>
+            </button>            
+
         </div>
     }
 </div>

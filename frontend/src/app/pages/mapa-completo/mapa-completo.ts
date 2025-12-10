@@ -22,7 +22,7 @@ export class MapaCompleto implements AfterViewInit, OnDestroy {
   private markerObras = new Map<number, L.Marker>();
 
   obras: ObraModel[] = [];
-  obraSeleccionada!: ObraModel
+  obraSeleccionada!: ObraModel | null
   cargando = false;
   error?: string;
 
@@ -168,4 +168,30 @@ export class MapaCompleto implements AfterViewInit, OnDestroy {
       this.map.setView([obra.latitud, obra.longitud], 18, { animate: true });
     }
   }
+
+  sacarZoom(event: MouseEvent): void {
+
+    event.stopPropagation();
+
+    this.obraSeleccionada = null;
+
+    this.map.closePopup();
+
+    const puntos: L.LatLngTuple[] = [];
+
+    this.obras
+      .filter(o => o.latitud != null && o.longitud != null)
+      .forEach(o => puntos.push([o.latitud!, o.longitud!]));
+
+    if (puntos.length) {
+      const bounds = L.latLngBounds(puntos);
+      this.map.fitBounds(bounds, {
+        padding: [40, 40],
+        maxZoom: 14
+      });
+    } else {
+      this.map.setZoom(14);
+    }
+  }
+
 }
