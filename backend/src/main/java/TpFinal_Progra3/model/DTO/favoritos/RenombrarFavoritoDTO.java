@@ -19,7 +19,7 @@ public class RenombrarFavoritoDTO {
     )
     @NotBlank(message = "El nuevo nombre no puede estar vacío.")
     @Size(max = 100, message = "El nuevo nombre no debe superar los 100 caracteres.")
-    @Pattern(regexp = "^(?!.* {2})[a-zA-Z0-9 ]+$",
+    @Pattern(regexp = "^[A-Za-zÁÉÍÓÚáéíóúÑñ\\-¿\\?¡!()\\s]+$",
             message = "El nombre de la lista solo puede contener letras y números.")
     private String nuevoNombre;
 }

@@ -18,18 +18,36 @@
 
   </div>
 
-  <div class="crear">
-    <input
-      #nombreLista
-      placeholder="Nueva lista..."
-      [class.input-error]="estaEnErrorCreacion"
-    />
-    <button (click)="crearLista(nombreLista)">Crear</button>
-  </div>
-  @if (mensajeErrorCreacion) {
-    <div class="error-msg">
-      {{ mensajeErrorCreacion }}
+  <form [formGroup]="formLista">
+    <div class="crear">
+  
+        <input
+          #nombreLista
+          formControlName="nombreDeLista"
+          placeholder="Nueva lista..."
+          [class.input-error]="estaEnErrorCreacion || (formLista.invalid && (formLista.get('nombreDeLista')?.dirty || formLista.get('nombreDeLista')?.touched))"
+          required
+        />
+        <button (click)="crearLista(nombreLista)">Crear</button>
+
     </div>
-  }
+  
+    @if (mensajeErrorCreacion) {
+      <div class="error-msg">
+        {{ mensajeErrorCreacion }}
+      </div>
+    }
+
+    @if (formLista.get('nombreDeLista')?.errors?.['required'] && formLista.get('nombreDeLista')?.touched) {
+      <div class="error-msg">
+        {{ "El nombre es obligatorio" }}
+      </div>
+    }@else if (formLista.get('nombreDeLista')?.errors?.['pattern'] && formLista.get('nombreDeLista')?.dirty) {
+      <div class="error-msg">
+        {{ "Caracteres no permitidos." }}
+      </div>
+    }
+
+  </form>
 
 </div>
