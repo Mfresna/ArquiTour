@@ -285,7 +285,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 0.4rem;
+  margin-bottom: 0.7rem;
 }
 
 /* Chip tipo (ALTA / BAJA) */
@@ -356,27 +356,6 @@
   font-size: 0.85rem;
   color: var(--texto-principal);
   margin-top: 0.25rem;
-}
-
-/* Botón "Ver detalle" */
-.solicitud-btn {
-  margin-top: 0.6rem;
-}
-
-.btn-ver-detalle {
-  padding: 0.4rem 0.8rem;
-  border-radius: 999px;
-  border: 1px solid var(--borde-suave);
-  background:var(--fondo-pagina);
-  font-size: 0.8rem;
-  cursor: pointer;
-  transition: background-color 0.15s, color 0.15s, box-shadow 0.2s;
-}
-
-.btn-ver-detalle:hover {
-  background: var(--colorBoton, #0077b6);
-  color: var(--texto-boton-buscar);
-  box-shadow: 0 2px 6px var(--sombra);
 }
 
 /* Mensaje cuando no hay solicitudes */

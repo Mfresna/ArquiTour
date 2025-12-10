@@ -92,21 +92,58 @@ input[type="number"].input {
   appearance: textfield;
 }
 
+.form-group select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  padding-right: 2.2rem; 
+  background-image:
+    linear-gradient(45deg, transparent 50%, #666 50%),
+    linear-gradient(135deg, #666 50%, transparent 50%);
+  background-position:
+    calc(100% - 18px) 52%,
+    calc(100% - 12px) 52%;
+  background-size: 6px 6px;
+  background-repeat: no-repeat;
+}
+
+
 
 textarea.input {
   resize: vertical;
   min-height: 80px;
+  border-radius: 1.2rem 1.2rem 0 1.2rem;
 }
-.alerta-baja-arq {
-  margin: 10px 0;
-  background: var(--fondo-cartel);         
-  border: 1px solid var(--colorBoton);   
-  color: var(--texto-principal);           
-  padding: 5px 14px;
+
+.contador-abajo {
+  align-self: flex-end;   
+  display: inline-flex;   
+  text-align: right;
+  font-size: 0.78rem;
+  padding: 2px 8px;
+  color: var(--texto-secundario);
   border-radius: 8px;
-  font-size: 0.95rem;
+  border: 1px solid var(--borde-suave);
+  white-space: nowrap;
+  margin-right: 8px;
+}
+
+.alerta-baja-arq {
+  margin: 12px 0 18px;
+  padding: 10px 16px;
+
+  background: rgba(0, 135, 190, 0.05); 
+  border: 1px solid var(--borde-suave);
+  border-radius: 14px;
+
+  font-size: 0.92rem;
+  color: var(--texto-principal);
+
+  line-height: 1.45;
+  letter-spacing: 0.2px;
+
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04); 
   text-align: center;
-  font-weight: 500;
 }
 
 
@@ -175,13 +212,6 @@ textarea.input {
   transform: scale(1.02);
 }
 
-/* Responsive */
-@media (max-width: 480px) {
-  #contenedor-form {
-    max-width: 95%;
-    padding: 1.5rem;
-  }
-}
 
 /* Modo Dual */
 .tabs-tipo {
@@ -226,3 +256,40 @@ textarea.input {
 }
 
 
+.fila-contador-error {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 4px;
+  gap: 8px;
+}
+
+.mensaje-error {
+  flex: 1;
+  min-height: 1rem;
+}
+
+.error-inline {
+  color: var(--color-error);
+  font-size: 0.85rem;
+  margin-left: 10px;
+}
+
+.contador-abajo {
+  text-align: right;
+  font-size: 0.78rem;
+  padding: 2px 8px;
+  color: var(--texto-secundario);
+  border-radius: 8px;
+  border: 1px solid var(--borde-suave);
+  white-space: nowrap;
+  margin-right: 8px;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  #contenedor-form {
+    max-width: 95%;
+    padding: 1.5rem;
+  }
+}

@@ -177,11 +177,10 @@
               </div>
             }
 
-
-
-            <!-- Motivo -->
             <fieldset class="form-group">
+
               <label class="label">Motivo (opcional):</label>
+
               <textarea
                 rows="5"
                 class="input"
@@ -191,20 +190,28 @@
                                   && (formulario.get('motivo')?.touched || formulario.get('motivo')?.dirty)">
               </textarea>
 
-              <!-- Contador de Caracteres -->
-              <div id="contador">
-                {{ formulario.get('motivo')?.value?.length || 0 }}/560
+              <!-- Contenedor unificado -->
+              <div class="fila-contador-error">
+                  
+                  <div class="mensaje-error">
+                    @if(formulario.get('motivo')?.errors?.['maxlength']) {
+                      <small class="error-inline">El motivo es demasiado largo (máx. 560 caracteres).</small>
+                    } 
+                    @else if(formulario.get('motivo')?.errors?.['pattern']) {
+                      <small class="error-inline">Caracteres no permitidos.</small>
+                    }
+                  </div>
+
+                  <div class="contador-abajo">
+                    {{ formulario.get('motivo')?.value?.length || 0 }}/560
+                  </div>
+
               </div>
 
-
-
-              @if(formulario.get('motivo')?.errors?.['maxlength']) {
-                <small class="error">El motivo es demasiado largo (máx. 560 caracteres).</small>
-              } @else if(formulario.get('motivo')?.errors?.['pattern']){
-                <small class="error">Caracteres no permitidos.</small>
-              }
-
             </fieldset>
+
+
+        
           }
 
           <!-- Botones -->
