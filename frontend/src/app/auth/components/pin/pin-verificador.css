@@ -8,9 +8,9 @@
   height: 56px;
   font-size: 26px;
   text-align: center;
-  border: 1px solid var(--colorBoton, #888);
+  border: 1px solid var(--colorBoton);
   border-radius: 12px;
-  background: var(--fondo-superficie, #fff);
+  background: var(--fondo-superficie);
   transition: border-color .15s ease, box-shadow .15s ease;
 }
 .pin-box:focus {

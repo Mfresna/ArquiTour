@@ -25,15 +25,15 @@ label {
   overflow: hidden;
 
   transition: border-color .2s ease, background-color .2s ease, box-shadow .2s ease;
-  box-shadow: 0 6px 16px rgba(0,0,0,.05);
-  color: var(--texto-principal, var(--texto-principal, #222222));
+  box-shadow: 0 6px 16px var(--sombra);
+  color: var(--texto-principal);
 }
 
 /* Hover */
 #dropzone:hover,
 #dropzone:focus {
-  background: var(--fondo-superficie, #f3f8ff);
-  border-color: var(--colorBoton, #0077b6);
+  background: var(--fondo-superficie);
+  border-color: var(--colorBoton);
   box-shadow: 0 10px 22px var(--sombra-fuerte);
 }
 
@@ -53,7 +53,7 @@ label {
   text-align: center;
   user-select: none;
   padding: 1rem;
-  color: var(--texto-secundario, #444444);
+  color: var(--texto-secundario);
   animation: aparecer-msg .3s ease-out;
 }
 
@@ -66,14 +66,14 @@ label {
   border: 1px solid var(--borde-suave);
   box-shadow: 0 6px 18px var(--sombra-fuerte);
   object-fit: contain;
-  background: var(--fondo-superficie, #ffffff);
+  background: var(--fondo-superficie);
   padding: 5px;
 }
 
 /* ================== BOTONERA INFERIOR ================== */
 #botonera-img{
   flex-shrink: 0;
-  background: var(--fondo-superficie, #f3f6fb);
+  background: var(--fondo-superficie);
   border-top: 1px solid var(--borde-suave);
   display: flex;
   justify-content: center;
@@ -83,8 +83,8 @@ label {
   padding: .65rem 1.4rem;
   width: 100%;
   border: 0;
-  background: var(--fondo-superficie, #f9fafb);
-  color: var(--texto-principal, #1e293b);
+  background: var(--fondo-superficie);
+  color: var(--texto-principal);
   font-weight: 700;
   text-transform: uppercase;
   cursor: pointer;
@@ -92,7 +92,7 @@ label {
 }
 
 #botonera-img .btn-outline:hover{
-  background: var(--colorSecundario, #eef2f6);
+  background: var(--colorSecundario);
   transform: translateY(-1px);
 }
 

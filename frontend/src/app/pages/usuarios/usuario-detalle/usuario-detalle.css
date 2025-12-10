@@ -6,8 +6,8 @@
 }
 
 #contenedor-tarjeta{
-    background-color: var(--fondo-superficie, #fff);
-    color: var(--texto-principal, #222);
+    background-color: var(--fondo-superficie);
+    color: var(--texto-principal);
 
     border-radius: 1rem;
     box-shadow: 0 4px 12px var(--sombra);
@@ -50,7 +50,7 @@
   margin-bottom: 0.5rem;
   font-size: 1.8rem;
   font-weight: 700;
-  color: var(--colorBoton, #0077b6);
+  color: var(--colorBoton);
   position: relative;
   letter-spacing: 0.5px;
 }
@@ -63,8 +63,8 @@
   border-radius: 3px;
   background: linear-gradient(
     90deg,
-    var(--colorBoton, #0077b6),
-    var(--color-acento, #00b4d8)
+    var(--colorBoton),
+    var(--color-acento)
   );
   margin: 0.80rem auto 0;
   opacity: 0.9;
@@ -80,8 +80,7 @@
 
 #btnVolver {
     background-color: transparent;
-    color: var(--texto-principal, #444);
-    /* border: 1px solid rgba(0, 0, 0, 0.2); */
+    color: var(--texto-principal);
     border: none;
     border-radius: 0.5rem;
     font-size: 0.95rem;
@@ -91,7 +90,7 @@
 }
 
 #btnVolver:hover {
-    background-color: var(--fondo-suave, rgba(0, 0, 0, 0.06));
+    background-color: var(--fondo-suave);
     transform: scale(1.04);
 }
 
@@ -184,7 +183,7 @@
 }
 
 #btn-editar:disabled {
-  background-color: var(--boton-primario-deshabilitado, #a0c4d9);
+  background-color: var(--boton-primario-deshabilitado);
   cursor: not-allowed;
   transform: none;
 }
@@ -202,7 +201,7 @@
 }
 
 #btn-pass:disabled {
-  background-color: var(--boton-eliminar-deshabilitado, #ce7171);
+  background-color:#ce7171;
   cursor: not-allowed;
   transform: none;
 }
@@ -380,7 +379,7 @@ textarea{
   border-radius: 1.2rem;
   border: 1px solid var(--borde-suave);
   font-family: var(--fuenteBase);
-  color: var(--texto-principal, #222);
+  color: var(--texto-principal);
   font-size: 1rem;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
   resize: none;

@@ -36,7 +36,7 @@
 
 .input-mapa:focus {
   outline: none;
-  border-color: var(--colorBoton, #0077b6);
+  border-color: var(--colorBoton);
   box-shadow: 0 0 6px var(--sombra);
 }
 

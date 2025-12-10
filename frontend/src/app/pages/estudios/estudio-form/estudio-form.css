@@ -310,11 +310,7 @@ small.error {
 
 /* HOVER — se pinta toda la punta izquierda */
 .cont-cruz:hover {
-  background: rgba(0, 0, 0, 0.12);
-}
-
-.cont-cruz:hover .material-icons {
-  color: #1e293b;
+  background:var(--borde-suave);
 }
 
 /* Clic */

@@ -1,6 +1,6 @@
 #contenedor {
-    background-color: var(--fondo-superficie, #fff);
-    color: var(--texto-principal, #222);
+    background-color: var(--fondo-superficie);
+    color: var(--texto-principal);
 
     border-radius: 1rem;
     box-shadow: 0 4px 12px var(--sombra);
@@ -44,8 +44,7 @@
 
 #btnVolver {
     background-color: transparent;
-    color: var(--texto-principal, #444);
-    /* border: 1px solid rgba(0, 0, 0, 0.2); */
+    color: var(--texto-principal);
     border: none;
     border-radius: 0.5rem;
     font-size: 0.85rem;
@@ -94,7 +93,7 @@
   margin-bottom: 1.5rem;
   font-size: 1.8rem;
   font-weight: 700;
-  color: var(--colorBoton, #0077b6);
+  color: var(--colorBoton);
   position: relative;
   letter-spacing: 0.5px;
 }
@@ -107,8 +106,8 @@
   border-radius: 3px;
     background: linear-gradient(
     90deg,
-    var(--colorBoton, #0077b6),
-    var(--color-acento, #00b4d8)
+    var(--colorBoton),
+    var(--color-acento)
   );
   margin: 0.80rem auto 0;
   opacity: 0.9;
@@ -146,7 +145,7 @@ input {
 
 input:focus {
   outline: none;
-  border-color: var(--colorBoton, #0077b6);
+  border-color: var(--colorBoton);
   box-shadow: 0 0 6px var(--sombra);
 }
 
@@ -215,7 +214,7 @@ textarea{
 
 /* ===== Botón INGRESAR ===== */
 #btnSiguiente {
-  background-color: var(--colorBoton, #0077b6);
+  background-color: var(--colorBoton);
   color: var(--texto-boton-buscar);
   padding: 0.75rem;
   border: none;
