@@ -247,6 +247,140 @@
 
   }
 
+  <!-- =================================== MENU LATERAL PARA EL RESPNSIVE ============================-->
+     <!-- MENÚ LATERAL MOBILE (para logueado y no logueado) -->
+  @if(menuLateralAbierto) {
+    <!-- Overlay semi-transparente -->
+    <div
+      id="drawer-overlay"
+      (click)="cerrarMenuLateral()">
+    </div>
+
+    <!-- Drawer lateral -->
+    <nav id="drawer-menu">
+      <div class="drawer-header">
+        <span class="drawer-titulo">Menú</span>
+        <button
+          type="button"
+          class="drawer-close-btn"
+          (click)="cerrarMenuLateral()">
+          <span class="material-icons">close</span>
+        </button>
+      </div>
+
+      <ul class="drawer-lista">
+
+        <!-- CONTENIDO NO LOGUEADO -->
+        @if(!isLogged()){
+          @if(isBienvenida){
+            <li>
+              <a routerLink="/"
+                 (click)="cerrarMenuLateral()">
+                INICIO
+              </a>
+            </li>
+          }
+          @if(!isBienvenida){
+            <li>
+              <a routerLink="/bienvenida"
+                 [class.activo]="isBienvenida"
+                 (click)="cerrarMenuLateral()">
+                NOSOTROS
+              </a>
+            </li>
+          }
+        }
+
+        <!-- CONTENIDO LOGUEADO -->
+        @if(isLogged()){
+
+          <!-- Obras -->
+          @if(!isArq() && !isAdmin()){
+            <li>
+              <a routerLink="/obras"
+                 (click)="cerrarMenuLateral()">
+                OBRAS
+              </a>
+            </li>
+          } @else {
+            <li class="drawer-seccion">
+              <span class="drawer-seccion-titulo">OBRAS</span>
+              <ul class="drawer-sublista">
+                <li>
+                  <a routerLink="/obras"
+                     (click)="cerrarMenuLateral()">
+                    Ver Obras
+                  </a>
+                </li>
+                <li>
+                  <a routerLink="/formObras"
+                     (click)="cerrarMenuLateral()">
+                    Registrar Obra
+                  </a>
+                </li>
+              </ul>
+            </li>
+          }
+
+          <!-- Estudios -->
+          @if(!isArq() && !isAdmin()){
+            <li>
+              <a routerLink="/estudios"
+                 (click)="cerrarMenuLateral()">
+                ESTUDIOS
+              </a>
+            </li>
+          } @else {
+            <li class="drawer-seccion">
+              <span class="drawer-seccion-titulo">ESTUDIOS</span>
+              <ul class="drawer-sublista">
+                <li>
+                  <a routerLink="/estudios"
+                     (click)="cerrarMenuLateral()">
+                    Ver Estudios
+                  </a>
+                </li>
+                <li>
+                  <a routerLink="/formEstudios"
+                     (click)="cerrarMenuLateral()">
+                    Crear Estudio
+                  </a>
+                </li>
+              </ul>
+            </li>
+          }
+
+          <!-- Mapa -->
+          <li class="drawer-seccion">
+            <span class="drawer-seccion-titulo">MAPA</span>
+            <ul class="drawer-sublista">
+              <li>
+                <a routerLink="/mapa"
+                   (click)="cerrarMenuLateral()">
+                  Ver Mapa
+                </a>
+              </li>
+              <li>
+                <a routerLink="/obras-cercanas"
+                   (click)="cerrarMenuLateral()">
+                  Obras Cercanas
+                </a>
+              </li>
+            </ul>
+          </li>
+
+          <!-- Favoritos -->
+          <li>
+            <a routerLink="/favoritos"
+               (click)="cerrarMenuLateral()">
+              FAVORITOS
+            </a>
+          </li>
+        }
+
+      </ul>
+    </nav>
+  }
 
 </header>
 

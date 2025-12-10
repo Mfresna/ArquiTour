@@ -1,3 +1,5 @@
+/* ================== HEADER BASE ================== */
+
 header {
   width: 100%;
   background-color: var(--nav-bg);
@@ -9,58 +11,50 @@ header {
   justify-content: space-between;
 }
 
+/*============ DISTRIBUCIÓN PANELES ============*/
 
-/*============ DISTRIBUCION PANELES ============*/
-#panel-izquierda{
+#panel-izquierda {
   margin: 0;
   padding: 0;
-
   display: flex;
-  flex: 1;
-
+  flex: 0 0 auto;      /* solo lo que mide su contenido */
   align-items: center;
 }
 
-#panel-central{
+#panel-central {
   display: flex;
-  flex: 1;
+  flex: 1 1 auto;      /* este se estira */
   justify-content: center;
-
 }
 
-#panel-derecha{
+#panel-derecha {
   margin: 0;
   padding: 0;
-
-
   margin-left: auto;
   margin-right: 0;
-
   display: flex;
-  flex: 1;
+  flex: 0 0 auto;      /* solo su contenido */
   justify-content: flex-end;
-  height: 100%;
   align-items: center;
-
+  height: 100%;
   position: relative;
   gap: 30px;
 }
 
-/*============ PANELES ============*/
-    /*PANEL IZQUIERDO*/
-  
+/*============ PANEL IZQUIERDO (LOGO) ============*/
+
 #logo-container {
   display: flex;
   align-items: center;
   cursor: pointer;
-  height: 100%;       
+  height: 100%;
 }
 
 #logo {
-  height: 42px;       
+  height: 42px;
   width: auto;
-  user-select: none;   
-  -webkit-user-drag: none; 
+  user-select: none;
+  -webkit-user-drag: none;
 }
 
 #logo-container:hover #logo {
@@ -69,31 +63,47 @@ header {
   transition: all 0.15s ease;
 }
 
+/*=========== BOTÓN HAMBURGUESA ===========*/
 
-    /*PANEL CENTRAL*/
+.menu-toggle-btn {
+  display: none;            /* oculto en desktop */
+  border: none;
+  background: transparent;
+  padding: 4px;
+  cursor: pointer;
+  border-radius: 999px;
+  align-items: center;
+  justify-content: center;
+}
+
+.menu-toggle-btn .material-icons {
+  font-size: 28px;
+  color: var(--nav-text);
+}
+
+.menu-toggle-btn:hover {
+  background-color: rgba(255, 255, 255, 0.08);
+}
+
+/*============ PANEL CENTRAL (NAV DESKTOP) ============*/
+
 #panel-central ul {
   display: flex;
   justify-content: center;
   align-items: center;
-
   list-style: none;
-
   margin: 0;
   padding: 0;
   gap: 2.5rem;
-
-  user-select: none; /*no permite seleccionar el texto*/
+  user-select: none;
 }
 
 #panel-central li .boton {
   color: var(--nav-text);
-
   text-decoration: none;
-
   font-weight: bold;
   font-size: 1.25rem;
   letter-spacing: 0.5px;
-
   transition: color 0.3s ease, transform 0.2s ease;
   cursor: pointer;
 }
@@ -103,16 +113,14 @@ header {
   transform: scale(1.05);
 }
 
+/*============ PANEL DERECHO (NOTIF + AVATAR + MODO NOCHE) ============*/
 
-    /*PANEL DERECHO*/
-#panel-derecha .span-menu{
+#panel-derecha .span-menu {
   font-size: 30px;
   height: 100%;
   user-select: none;
   cursor: pointer;
-
   color: var(--nav-icon);
-
   transition: color 0.2s ease, transform 0.4s ease;
 }
 
@@ -120,13 +128,98 @@ header {
   color: var(--colorBoton);
 }
 
-
-#notificaciones{
+#notificaciones {
   font-size: 28px !important;
 }
 
-/*============== CAMPANA DE NOTIFICACIONES ===============*/
-  /* Contenedor de la campana y el badge */
+/* Avatar usuario */
+
+.user-avatar-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: transparent;
+  padding: 0;
+  margin-left: 8px;
+  cursor: pointer;
+}
+
+.user-avatar-btn img {
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  object-fit: cover;
+  border: 2px solid var(--nav-text);
+  display: block;
+}
+
+.user-avatar-btn img:hover {
+  border: 2px solid var(--colorBoton);
+}
+
+/* Botón de modo noche SOLO en el header público (no logueado) */
+
+#modo-noche-publico {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: inherit;
+}
+
+#noche-toggle-publico {
+  font-size: 28px;
+  color: var(--nav-text);
+  transform: rotate(150deg);
+  transition: transform 0.25s ease, color 0.25s ease;
+}
+
+#noche-toggle-publico:hover {
+  color: var(--colorBoton);
+}
+
+#noche-toggle-publico.activo {
+  color: rgba(214, 192, 91, 0.822);
+  transform: rotate(20deg);
+}
+
+#noche-toggle-publico.activo:hover {
+  transform: rotate(40deg);
+}
+
+/* Modo noche en menú usuario */
+
+#modo-noche {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--nav-text);
+  gap: .3rem;
+  display: flex;
+  align-items: center;
+}
+
+#modo-noche:hover #noche-toggle {
+  transform: scale(1.05);
+}
+
+#noche-toggle {
+  font-size: 38px;
+  color: #3EA3D9;
+  transition: color .5s ease;
+}
+
+#noche-toggle.activo {
+  color: #597686;
+}
+
+/*============ CAMPANA DE NOTIFICACIONES ============*/
+
 #contenedor-notificaciones {
   position: relative;
   display: inline-flex;
@@ -134,70 +227,57 @@ header {
   justify-content: center;
 }
 
-  /*Badget de notificacion*/
+/* Badge de notificación */
 .badge-notificaciones {
   position: absolute;
   top: -6px;
   right: -6px;
-
   min-width: 18px;
   height: 18px;
   padding: 0 6px;
-
   background-color: var(--color-error);
   color: var(--texto-boton-buscar);
-
   font-weight: 500;
   line-height: 1;
-
-  border-radius: 999px; 
-
+  border-radius: 999px;
   display: flex;
   align-items: center;
   justify-content: center;
-
-  white-space: nowrap;  
+  white-space: nowrap;
   pointer-events: none;
-
   animation: none;
 }
 
-  /*Tamaño del badget*/
-.un-digito{
+.un-digito {
   font-size: 14px;
 }
 
-.dos-digitos{
-    font-size: 12px;
+.dos-digitos {
+  font-size: 12px;
 }
 
-/*============== animacion del baget ====================*/
+/* Animación badge */
 
-  /*Cuando Paso el mouse por encima*/
-@keyframes badgePing { 
-  0% { transform: scale(1); } 
-  50% { transform: scale(1.15);} 
-  100% { transform: scale(1); } 
-} 
-
-#contenedor-notificaciones:hover .badge-notificaciones { 
-  animation: badgePing 0.3s ease-out; 
+@keyframes badgePing {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.15); }
+  100% { transform: scale(1); }
 }
 
-/*============ MENUES DESPLEGABLE ============*/
+#contenedor-notificaciones:hover .badge-notificaciones {
+  animation: badgePing 0.3s ease-out;
+}
+
+/*============ MENÚS DESPLEGABLES ============*/
+
 .menu-desplegable {
-  /*Posicion del menu*/
   position: absolute;
-  top:100%;
+  top: 100%;
   margin-top: 20px;
-
   z-index: 1000;
-  
-  /*Diseño estetico*/
   background-color: var(--fondo-superficie);
   border: 1px solid var(--borde-suave);
   box-shadow: 0 4px 10px var(--sombra);
-
   padding: 10px;
 }
 
@@ -206,43 +286,37 @@ header {
   border-radius: 10px;
 }
 
-  /*MENU NOTIFICACIONES*/
-#menu-notificaciones{
+/* Menú notificaciones */
+
+#menu-notificaciones {
   display: flex;
   flex-direction: column;
-
   right: 0;
   min-width: 380px;
   max-width: 400px;
   height: 320px;
   min-height: 280px;
-} 
+}
 
 #lista-notificaciones {
   flex: 1;
   overflow-y: auto;
-
   padding: 0.35rem;
   gap: 0.4rem;
-
-  /*configuracion del scroll*/
-  overscroll-behavior: contain;   
+  overscroll-behavior: contain;
   scrollbar-width: none;
   -ms-overflow-style: none;
   scrollbar-color: transparent;
 }
 
-#menu-notificaciones a{
+#menu-notificaciones a {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-
   text-decoration: none;
   color: var(--texto-principal);
-
   margin: 2px 0px;
   padding: 8px 15px;
-
   user-select: none;
 }
 
@@ -251,36 +325,27 @@ header {
   justify-content: center;
   align-items: center;
   text-align: center;
-
   text-decoration: none;
   font-size: 1rem;
   color: var(--texto-principal);
-
   padding: 4px 10px;
-
   width: 100%;
-
   user-select: none;
   cursor: pointer;
 }
 
-/* UNA NOTIFICACION INDIVIDUAL */
+/* Notificación individual */
 
 .item-notificacion {
   display: flex;
   align-items: center;
   justify-content: space-between;
-
   width: 100%;
   padding: 10px 12px;
   margin-bottom: 10px;
-
   border-radius: 8px;
-
   box-shadow: 0 2px 6px var(--sombra);
-  
   cursor: pointer;
-
 }
 
 .item-notificacion:hover {
@@ -294,7 +359,7 @@ header {
   min-width: 0;
 }
 
-.titulo-notif{
+.titulo-notif {
   font-size: .92rem;
   font-weight: 700;
   margin-bottom: 4px;
@@ -302,200 +367,105 @@ header {
 
 .mensaje-notif {
   font-size: 0.85rem;
-
   max-width: 90%;
   padding: 0px 10px;
-
   color: var(--texto-principal);
-  
-  /* maneja el largo del mensaje */
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
   line-clamp: 2;
-
   overflow: hidden;
-  overflow-wrap: anywhere; /*en palabras largas las corta donde sea*/
-
+  overflow-wrap: anywhere;
   text-overflow: ellipsis;
-  white-space: normal;  
+  white-space: normal;
 }
 
-.fecha-notif{
+.fecha-notif {
   font-size: 0.75rem;
   color: var(--texto-principal);
-
 }
 
-/*Punto Rojo*/
-.estado-notif{
-  display: inline-block;
+/* Punto rojo */
 
+.estado-notif {
+  display: inline-block;
   width: 12px;
   height: 12px;
   margin: 0px 5px;
-
   background: #e63946;
   box-shadow: 0 0 4px rgba(230,57,70,0.4);
-
   border-radius: 50%;
-
   flex-shrink: 0;
-
 }
 
+/* Menú usuario */
 
-  /*MENU USUARIO*/
-#menu-usuario{
+#menu-usuario {
   right: 0;
   min-width: 210px;
 }
 
-#menu-usuario a{
+#menu-usuario a {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-
   text-decoration: none;
   color: var(--texto-principal);
-
   margin: 2px 0px;
   padding: 8px 15px;
-
   user-select: none;
 }
 
-a:hover #logout{
+a:hover #logout {
   color: var(--color-error);
 }
 
-  /*Modo Noche*/
-#modo-noche{
-  padding-top: 0px !important;
-  padding-bottom: 0px !important;
-  
-  display: flex;
-  align-items: center;
-}
+/* Línea divisoria panel derecho */
 
-#noche-toggle{
-  font-size: 38px;
-  color: #3EA3D9;
-  transition: color .5s ease;
-}
-
-#noche-toggle.activo {
-  color: #597686;
-}
-
-  /*Linea divisoria*/
-#panel-derecha hr{
+#panel-derecha hr {
   border: none;
-
   height: 1px;
   width: 80%;
-  margin: 8px auto 2px; /*Centra la linea*/
+  margin: 8px auto 2px;
   background-color: var(--borde-fuerte);
 }
 
-        /*MENU OBRAS*/
-#panel-obras{
-  /*Le Sirve al menu desplegable*/
+/* Menús OBRAS / ESTUDIOS / MAPA */
+
+#panel-obras,
+#panel-estudios,
+#panel-mapas {
   position: relative;
 }
 
-#menu-obras{
+#menu-obras,
+#menu-estudios,
+#menu-mapas {
   right: 0;
   min-width: 190px;
   z-index: 10000;
-
   left: 50%;
   transform: translateX(-50%);
 }
 
-#menu-obras a {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-
-  text-decoration: none;
-  text-align: center;
-  color: var(--texto-principal);
-
-  margin: 2px 0px;
-  padding: 8px 15px;
-  
-  cursor: pointer;
-  user-select: none;
-  width: 100%; 
-}
-
-        /*MENU OBRAS*/
-#panel-estudios{
-  /*Le Sirve al menu desplegable*/
-  position: relative;
-}
-
-#menu-estudios{
-  right: 0;
-  min-width: 190px;
-  z-index: 10000;
-
-  left: 50%;
-  transform: translateX(-50%);
-}
- 
-#menu-estudios a {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-
-  text-decoration: none;
-  text-align: center;
-  color: var(--texto-principal);
-
-  margin: 2px 0px;
-  padding: 8px 15px;
-  
-  cursor: pointer;
-  user-select: none;
-  width: 100%; 
-}
-
-      /*MENU MAPA*/
-#panel-mapas{
-  /*Le Sirve al menu desplegable*/
-  position: relative;
-}
-
-#menu-mapas{
-  right: 0;
-  min-width: 190px;
-  z-index: 10000;
-
-  left: 50%;
-  transform: translateX(-50%);
-}
- 
+#menu-obras a,
+#menu-estudios a,
 #menu-mapas a {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-
   text-decoration: none;
   text-align: center;
   color: var(--texto-principal);
-
   margin: 2px 0px;
   padding: 8px 15px;
-  
   cursor: pointer;
   user-select: none;
-  width: 100%; 
+  width: 100%;
 }
 
-/*============ CLASES BORDES============*/
-/*TODOS LOS BORDES*/
+/*============ CLASES BORDES GENERALES ============*/
+
 .borde-sup-der{
   border-top-right-radius: var(--radioMenu, 10px);
 }
@@ -526,106 +496,148 @@ a:hover #logout{
 }
 
 .deshabilitado{
-  color:  var(--texto-principal)  !important;
+  color:  var(--texto-principal) !important;
   cursor: default !important;
 }
 
-#modo-noche {
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: var(--nav-text);
-  gap: .3rem;
+/* ========== MENÚ LATERAL RESPONSIVE  ========== */
+
+#drawer-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  z-index: 2000;
 }
 
-#modo-noche:hover #noche-toggle {
-  transform: scale(1.05);
+#drawer-menu {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 260px;
+  max-width: 80vw;
+  height: 100vh;
+  background-color: var(--fondo-superficie);
+  box-shadow: 4px 0 12px var(--sombra);
+  z-index: 2001;
+  display: flex;
+  flex-direction: column;
+  padding: 12px 14px;
+  animation: drawerSlideIn 0.2s ease-out;
 }
-/* Botón de modo noche SOLO en el header público (no logueado) */
-#modo-noche-publico {
-  background: none;
-  border: none;
-  padding: 0;                 
-  cursor: pointer;
+
+@keyframes drawerSlideIn {
+  from { transform: translateX(-100%); }
+  to   { transform: translateX(0); }
+}
+
+.drawer-header {
   display: flex;
   align-items: center;
-  justify-content: center;
-  color: inherit;           
+  justify-content: space-between;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--borde-suave);
+  margin-bottom: 10px;
 }
 
-#noche-toggle-publico {
-  font-size: 28px;
-  color: var(--nav-text);
-  transform: rotate(150deg);
-  transition: transform 0.25s ease, color 0.25s ease;
-}
-#noche-toggle-publico:hover {
-  color: var(--colorBoton);
+.drawer-titulo {
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: var(--texto-principal);
 }
 
-#noche-toggle-publico.activo {
-  color: rgba(214, 192, 91, 0.822);
-  transform: rotate(20deg);
-}
-
-
-#noche-toggle-publico.activo:hover {
-  transform: rotate(40deg);
-}
-.user-avatar-btn {
-  position: relative;     
-  display: inline-flex;   
-  align-items: center;     
-  justify-content: center;  
+.drawer-close-btn {
   border: none;
   background: transparent;
-  padding: 0;
-  margin-left: 8px;
   cursor: pointer;
-}
-
-.user-avatar-btn img {
-  width: 32px;
-  height: 32px;
-  border-radius: 999px;
-  object-fit: cover;
-  border: 2px solid var(--nav-text);
-  display: block;
-}
-.user-avatar-btn img:hover{
-  border: 2px solid var(--colorBoton);
-
-}
-/*===========BOTON HAMBURGUESA==============*/
-.menu-toggle-btn {
-  display: none;
-  border: none;
-  background: transparent;
   padding: 4px;
-  cursor: pointer;
   border-radius: 999px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
-.menu-toggle-btn .material-icons {
-  font-size: 28px;
-  color: var(--nav-text);
+.drawer-close-btn .material-icons {
+  font-size: 22px;
+  color: var(--texto-principal);
 }
 
-.menu-toggle-btn:hover {
-  background-color: rgba(255, 255, 255, 0.08);
+.drawer-close-btn:hover {
+  background-color: rgba(255,255,255,0.08);
 }
 
+.drawer-lista {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  flex: 1;
+  overflow-y: auto;
+}
 
+.drawer-lista > li {
+  margin-bottom: 6px;
+}
 
+.drawer-lista a {
+  text-decoration: none;
+  color: var(--texto-principal);
+  display: block;
+  padding: 6px 4px;
+  border-radius: 6px;
+  font-size: 0.98rem;
+}
 
+.drawer-lista a:hover {
+  background-color: var(--colorSecundario);
+}
 
+/* Secciones con sub-opciones */
 
-/*=================================================================== RESPONSIVE*/
-/* ========== RESPONSIVE: CELULARES / TABLETS PEQUEÑAS ========== */
+.drawer-seccion {
+  margin-bottom: 8px;
+}
+
+.drawer-seccion-titulo {
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--texto-principal);
+  display: block;
+  margin-bottom: 3px;
+}
+
+.drawer-sublista {
+  list-style: none;
+  margin: 0;
+  padding-left: 10px;
+}
+
+.drawer-sublista li {
+  margin-bottom: 3px;
+}
+
+/* ================== RESPONSIVE ================== */
+
+/* Tablets / pantallas medianas */
+@media (max-width: 900px) {
+  header {
+    padding: 8px 20px;
+  }
+
+  #panel-central ul {
+    gap: 1.8rem;
+  }
+
+  #panel-central li .boton {
+    font-size: 1.1rem;
+  }
+
+  #panel-derecha {
+    gap: 20px;
+  }
+
+  #menu-notificaciones {
+    min-width: 320px;
+    max-width: 360px;
+  }
+}
+
+/* Celulares / tablets pequeñas */
 @media (max-width: 768px) {
 
   header {
@@ -636,22 +648,28 @@ a:hover #logout{
 
   #panel-izquierda {
     flex: 0 0 auto;
+    align-items: center;
+    gap: 6px;
   }
 
+  /* Mostrar botón hamburguesa */
   .menu-toggle-btn {
     display: flex;
   }
 
+  /* Ocultar logo en mobile */
   #logo-container {
     display: none;
   }
 
+  /* Ocultar menú horizontal central (se usa el lateral) */
   #panel-central {
     display: none;
   }
 
+  /* Panel derecho pegado a la derecha */
   #panel-derecha {
-    flex: 0 0 auto;
+    flex: 0 1 auto;
     margin-left: auto;
     gap: 16px;
   }
@@ -665,9 +683,46 @@ a:hover #logout{
     height: 28px;
   }
 
+  /* Menú notificaciones amigable en móvil */
   #menu-notificaciones {
     min-width: min(320px, 95vw);
     max-width: 95vw;
     height: 260px;
+  }
+}
+
+/* Celulares MUY chicos (ej: iPhone 11 ancho ~414px) */
+@media (max-width: 555px) {
+
+  header {
+    padding: 6px 8px;
+  }
+
+  #panel-derecha {
+    gap: 8px;
+  }
+
+  #panel-derecha .span-menu,
+  #notificaciones,
+  #noche-toggle-publico {
+    font-size: 20px !important;
+  }
+
+  .user-avatar-btn img {
+    width: 24px;
+    height: 24px;
+  }
+
+  #menu-notificaciones {
+    min-width: min(280px, 95vw);
+    max-width: 95vw;
+  }
+
+  .drawer-lista a {
+    font-size: 0.9rem;
+  }
+
+  .drawer-seccion-titulo {
+    font-size: 0.9rem;
   }
 }
