@@ -2,7 +2,7 @@ import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 
 export const obraNombreValidador: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
 
-    const OBRA_NOMBRE_PATTERN = /^(?=.*[A-Za-zÁÉÍÓÚáéíóúÑñ])[A-Za-zÁÉÍÓÚáéíóúÑñ0-9\s\-\:\.,¡!¿\?@()\/]+$/;
+    const OBRA_NOMBRE_PATTERN = /^(?=.*[A-Za-zÁÉÍÓÚáéíóúÑñ])[A-Za-zÁÉÍÓÚáéíóúÑñ0-9\s\-\:\.,¡\?()\/]+$/;
 
     const value = control.value ?? '';
     
@@ -27,7 +27,7 @@ export const obraNombreValidador: ValidatorFn = (control: AbstractControl): Vali
 
 export const estudioNombreValidador: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
 
-    const ESTUDIO_NOMBRE_PATTERN = /^(?=.*[A-Za-zÁÉÍÓÚáéíóúÑñ])[A-Za-zÁÉÍÓÚáéíóúÑñ0-9\s\-\:\.,¡¿\?()\/_+\$]+$/;
+    const ESTUDIO_NOMBRE_PATTERN = /^(?=.*[A-Za-zÁÉÍÓÚáéíóúÑñ])[A-Za-zÁÉÍÓÚáéíóúÑñ0-9\s\-\:\.,¡\?()\/]+$/;
 
     const value = control.value ?? '';
     
