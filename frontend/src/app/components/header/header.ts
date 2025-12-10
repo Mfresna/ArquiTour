@@ -28,6 +28,8 @@ export class Header implements OnInit{
   estudiosMenu: boolean = false;
   mapaMenu: boolean = false;
   notificacionesMenu: boolean = false;
+  menuLateralAbierto: boolean = false;
+
 
   cantNotifSinLeer$!: Observable<number>;
 
@@ -47,8 +49,6 @@ export class Header implements OnInit{
   imagenDefecto = `${environment.imgUsuario}`;
   imagenPerfilUrl: string = '';
   usuarioActual: UsuarioModel | null = null;
-
-
 
   constructor(
     private authService: AuthService,
@@ -72,6 +72,8 @@ export class Header implements OnInit{
 
     this.router.events.subscribe(() => {
       this.isBienvenida = this.router.url === '/bienvenida';
+
+      this.cerrarTodosMenus();
     });
 
     this.notificacionService.refrescarManual(); //Actualiza la campana de notificaciones ni bien inicia el header
@@ -85,6 +87,8 @@ export class Header implements OnInit{
       } else {
         this.usuarioActual = null;
         this.imagenPerfilUrl = this.buildImagenDefecto();
+
+        this.menuLateralAbierto = false;
       }
     });
 
@@ -162,12 +166,22 @@ export class Header implements OnInit{
     this.estudiosMenu = false;
   }
 
+  toggleMenuLateral() {
+    this.menuLateralAbierto = !this.menuLateralAbierto;
+  }
+
+  cerrarMenuLateral() {
+    this.menuLateralAbierto = false;
+  }
+
   cerrarTodosMenus(){
     this.estudiosMenu = false;
     this.usuarioMenu = false;
     this.obrasMenu = false;
     this.mapaMenu=false;
     this.notificacionesMenu = false;
+
+    this.menuLateralAbierto = false;
   }
 
   //================= NOTIFICACIONES
