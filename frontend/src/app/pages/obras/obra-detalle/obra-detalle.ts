@@ -427,6 +427,3 @@ export class ObraDetalle {
     });
   }
 }
-
-
-
