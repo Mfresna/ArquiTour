@@ -361,6 +361,10 @@ export class ObraForm implements TieneCambiosPendientes{
     const archivos = this.archivosSeleccionados;
 
     // ==================== EDICIÓN ====================
+
+    this.spinerVisible= true;
+    this.spinerMensaje = "Actualizando Obra";
+
     if (this.editar && this.id != null) {
       const modificarObra: ObraModel = {
         id: this.id,
@@ -388,6 +392,8 @@ export class ObraForm implements TieneCambiosPendientes{
             'La obra debe tener al menos una imagen.',
             'warning'
           );
+          
+          this.spinerVisible= false;
           return;
         }
     
@@ -443,6 +449,8 @@ export class ObraForm implements TieneCambiosPendientes{
 
             }
           });
+
+        this.spinerVisible= false;
         return;
       }
 
@@ -468,7 +476,10 @@ export class ObraForm implements TieneCambiosPendientes{
             urlsImagenes: todas
           });
         }),
-        finalize(() => this.subiendo = false)
+        finalize(() => {
+          this.subiendo = false
+          this.spinerVisible= false;
+        })
       ).subscribe({
         next: () => {
           this.archivosSeleccionados = [];
@@ -494,10 +505,14 @@ export class ObraForm implements TieneCambiosPendientes{
         }
       });
 
+      this.spinerVisible= false;
       return;
     }
 
     // ==================== CREACIÓN ====================
+    this.spinerVisible= true;
+    this.spinerMensaje = "Creando Obra";
+
     const crearObra: ObraModel = {
       nombre,
       categoria,
@@ -516,6 +531,7 @@ export class ObraForm implements TieneCambiosPendientes{
         'Debe cargar al menos una imagen para la obra.',
         'warning'
       );
+      this.spinerVisible= false;
       return;
     }
 
@@ -539,6 +555,7 @@ export class ObraForm implements TieneCambiosPendientes{
             'No se pudieron obtener las URLs de las imágenes.',
             'error'
           );
+          this.spinerVisible= false;
           return;
         }
 
@@ -613,7 +630,7 @@ export class ObraForm implements TieneCambiosPendientes{
         );
       }
     });
-    
+
     this.spinerVisible = false;
   }
 

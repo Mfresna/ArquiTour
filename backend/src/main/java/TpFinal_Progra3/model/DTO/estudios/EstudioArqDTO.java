@@ -26,7 +26,7 @@ import java.util.List;
         )
         @NotBlank(message = "El nombre del estudio no puede estar vacío.")
         @Size(min = 2, max = 100, message = "El nombre debe tener entre 2 y 100 caracteres.")
-        @Pattern(regexp = "^(?=.*[A-Za-zÁÉÍÓÚáéíóúÑñ])[A-Za-zÁÉÍÓÚáéíóúÑñ0-9\\s\\-\\:\\.,¡\\?()\\/]+$",
+        @Pattern(regexp = "^(?=.*[A-Za-zÁÉÍÓÚáéíóúÑñ])[A-Za-zÁÉÍÓÚáéíóúÑñ0-9\\s\\-\\:\\.,¡\\?()\\/\\+]+$",
                 message = "El nombre del estudio solo puede contener letras, números, la ñ y un solo espacio entre palabras.")
         private String nombre;
 
