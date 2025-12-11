@@ -113,7 +113,8 @@ export class ObraForm implements TieneCambiosPendientes{
         descripcion: ['', [
           Validators.required,
           Validators.minLength(5),
-          Validators.pattern(/^[A-Za-zÁÉÍÓÚáéíóúÑñ0-9\-_\!¡¿&=\+\"\?\s\.,()@#\$%\/\*\{\}\[\]<>\;\:\\\|´\^°²]+$/),
+          Validators.pattern(/^[A-Za-zÁÉÍÓÚáéíóúÑñ0-9\s\.,;:()\-!¡¿&=@#\$%\/\*\{\}\[\]<>\+\"\'´’\^°²\u2013\u2014“”]+$/),
+
           noBlancoEspacios
         ]],
       }
