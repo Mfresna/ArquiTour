@@ -351,9 +351,27 @@ input.invalido {
 
 /* ===== RESPONSIVE ===== */
 
+/* Tablets y pantallas medianas */
+@media (max-width: 1024px) {
+  #panel-filtros {
+    width: 280px;
+    padding: 1.2rem;
+  }
+
+  #panel-izq .titulo {
+    font-size: 1.6rem;
+  }
+
+  .grid {
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1.2rem;
+    padding: 15px 15px 15px 10px;
+  }
+}
+
 @media (max-width: 900px) {
   #contenedor-favoritos {
-    grid-template-columns: 1fr;
+    display: block;
   }
 
   #panel-filtros {
@@ -365,5 +383,71 @@ input.invalido {
 
   #panel-scroll {
     padding-top: 0.5rem;
+  }
+}
+
+@media (max-width: 600px) {
+  #panel-filtros {
+    padding: 0.8rem;
+  }
+
+  #panel-izq .titulo {
+    font-size: 1.3rem;
+  }
+
+  .fila label {
+    font-size: 0.85rem;
+  }
+
+  .fila input[type="text"] {
+    font-size: 0.95rem;
+    height: 40px;
+  }
+
+  .botones {
+    grid-template-columns: 1fr;
+    gap: 0.6rem;
+  }
+
+  .botones button {
+    padding: 0.6rem 0.8rem;
+    font-size: 0.9rem;
+  }
+
+  .grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    padding: 12px 8px;
+  }
+
+  .card-body h2 {
+    font-size: 1rem;
+  }
+
+  .contador {
+    font-size: 0.85rem;
+  }
+
+  .btn-editar,
+  .btn-eliminar {
+    visibility: visible;
+  }
+}
+
+@media (max-width: 400px) {
+  #panel-filtros {
+    padding: 0.6rem;
+  }
+
+  #panel-izq .titulo {
+    font-size: 1.2rem;
+  }
+
+  .grid {
+    padding: 10px 6px;
+  }
+
+  .card-body {
+    padding: 0.8rem;
   }
 }
