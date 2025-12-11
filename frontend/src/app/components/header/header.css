@@ -7,6 +7,7 @@ header {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  align-items: center;
 }
 
 /*============ DISTRIBUCION PANELES ============*/
@@ -537,7 +538,8 @@ a:hover #logout{
   display: flex;
   align-items: center;
   justify-content: center;
-  color: inherit;           
+  color: inherit;          
+  align-self: center; 
 }
 
 #noche-toggle-publico {
@@ -545,7 +547,10 @@ a:hover #logout{
   color: var(--nav-text);
   transform: rotate(150deg);
   transition: transform 0.25s ease, color 0.25s ease;
+  display: flex;
+  align-items: center;
 }
+
 #noche-toggle-publico:hover {
   color: var(--colorBoton);
 }
