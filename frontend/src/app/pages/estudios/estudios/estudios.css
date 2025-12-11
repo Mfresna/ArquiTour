@@ -270,7 +270,6 @@ input.invalido {
   #panel-filtros {
     width: 100%;
     box-shadow: none;
-    border-bottom: 1px solid var(--borde-suave);
     border-radius: 0;
   }
 
@@ -289,4 +288,176 @@ input.invalido {
 }
 #panel-scroll::-webkit-scrollbar-thumb:hover {
   background: rgba(0, 0, 0, 0.3);
+}
+
+
+/* Tablets grandes y pantallas medianas */
+@media (max-width: 1024px) {
+  #panel-izq {
+    min-width: 320px;
+    padding: 0.8rem 1.5rem;
+  }
+
+  .grid {
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 1.2rem;
+  }
+}
+
+/* Tablets */
+@media (max-width: 900px) {
+  #contenedor-estudios {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr;
+    gap: 0;
+  }
+
+  #panel-izq {
+    min-width: unset;
+    width: 100%;
+    height: auto;
+    padding: 1rem 1.5rem;
+    justify-content: flex-start;
+  }
+
+  #panel-izq .titulo {
+    font-size: 1.5rem;
+    margin-top: 0;
+    margin-bottom: 1rem;
+  }
+
+  #panel-filtros {
+    width: 100%;
+    box-shadow: none;
+    border-radius: 0;
+    margin-bottom: 1rem;
+  }
+
+  #btn-mis-estudios {
+    margin-bottom: 0.5rem;
+  }
+
+  #panel-der {
+    height: auto;
+    min-height: 0;
+  }
+
+  #panel-scroll {
+    padding-top: 0.5rem;
+    padding-right: 1rem;
+    padding-left: 0.5rem;
+  }
+
+  .grid {
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    padding: 1rem;
+  }
+}
+
+/* Móviles grandes */
+@media (max-width: 640px) {
+  #panel-izq {
+    padding: 1rem;
+  }
+
+  #panel-izq .titulo {
+    font-size: 1.3rem;
+  }
+
+  #botonera {
+    grid-template-columns: 1fr;
+    gap: 0.6rem;
+    margin-top: 1rem;
+  }
+
+  #botonera button {
+    width: 100%;
+  }
+
+  #btn-mis-estudios {
+    width: 100%;
+  }
+
+  .grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    padding: 1rem 0.5rem;
+  }
+
+  .card img {
+    height: 180px;
+  }
+
+  #panel-filtros input {
+    height: 44px;
+    font-size: 16px;
+  }
+
+  fieldset.campo > label {
+    font-size: 0.85rem;
+  }
+}
+
+/* Móviles pequeños */
+@media (max-width: 480px) {
+  #panel-izq {
+    padding: 0.8rem;
+  }
+
+  #panel-izq .titulo {
+    font-size: 1.2rem;
+    margin-bottom: 0.8rem;
+  }
+
+  .form-filtros {
+    gap: 1rem;
+  }
+
+  #botonera button,
+  #btn-mis-estudios {
+    padding: 0.7rem 0.8rem;
+    font-size: 0.9rem;
+  }
+
+  .grid {
+    padding: 0.8rem 0.3rem;
+  }
+
+  .card-body {
+    padding: 0.8rem;
+  }
+
+  .card-body h2 {
+    font-size: 1rem;
+  }
+
+  .vacio {
+    padding: 3rem 1rem;
+    font-size: 1rem;
+  }
+}
+
+/* ===== Scrollbar fino opcional ===== */
+#panel-scroll::-webkit-scrollbar {
+  width: 8px;
+}
+#panel-scroll::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+}
+#panel-scroll::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.3);
+}
+
+/* En móvil, scrollbar más fino */
+@media (max-width: 640px) {
+  #panel-scroll::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  #botonera {
+    grid-template-columns: 1fr;
+    gap: 0.6rem;
+    margin-top: 1rem;
+  }
 }

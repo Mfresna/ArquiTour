@@ -155,5 +155,62 @@
   margin-left: 2px;
 }
 
+/* Mobile pequeño */
+@media (max-width: 350px) {
+  /* Reducir ancho del popup */
+  .corazon-favoritos {
+    min-width: 220px;
+    max-width: 280px;
+    padding: 0.75rem 0.85rem;
+    gap: 0.5rem;
+  }
 
+  .corazon-favoritos h3 {
+    font-size: 0.95rem;
+  }
+
+  /* Ajustar items de lista */
+  .item-lista {
+    padding: 0.3rem 0.5rem;
+  }
+
+  .item-lista .nombre {
+    font-size: 0.85rem;
+  }
+
+  .icon-check {
+    font-size: 18px;
+  }
+
+  /* Scroll más pequeño */
+  .scroll {
+    max-height: 180px;
+    padding-right: 6px;
+  }
+
+  /* Crear en modo columna */
+  .crear {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.5rem;
+    padding-top: 0.6rem;
+  }
+
+  .crear input {
+    width: 100%;
+    padding: 0.45rem 0.6rem;
+    font-size: 0.85rem;
+  }
+
+  .crear button {
+    width: 100%;
+    padding: 0.45rem 0.7rem;
+    font-size: 0.8rem;
+  }
+
+  .error-msg {
+    font-size: 0.78rem;
+    margin-left: 4px;
+  }
+}
 
