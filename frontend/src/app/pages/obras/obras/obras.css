@@ -224,6 +224,7 @@
 
   /*====================== RESPONSIVE ================================*/
 
+
 /* Tablets */
 @media (max-width: 1024px) {
   #panel-filtros {
@@ -248,8 +249,26 @@
 
 /* Mobile - Desactivar grid */
 @media (max-width: 900px) {
+  #global {
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+
   #contenedor-obras {
     display: block;
+    height: auto;
+    min-height: auto;
+  }
+
+  #panel-der {
+    height: auto;
+    min-height: auto;
+  }
+
+  #panel-scroll {
+    overflow-y: visible;
+    height: auto;
+    padding-top: 0.5rem;
   }
 
   #panel-izq .titulo {
@@ -264,10 +283,6 @@
     border-bottom: 1px solid var(--borde-suave);
     border-radius: 0;
     padding: 1rem;
-  }
-
-  #panel-scroll {
-    padding-top: 0.5rem;
   }
 
   .lista-obras {
@@ -336,13 +351,6 @@
   .vacio {
     padding: 3rem 1.5rem;
     font-size: 1rem;
-  }
-}
-
-/* Responsive acciones */
-@media (max-width: 480px) {
-  .acciones {
-    grid-template-columns: 1fr;
   }
 }
 
