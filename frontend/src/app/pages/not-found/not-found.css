@@ -267,3 +267,171 @@
   box-shadow: 0 10px 22px var(--sombra);
   background: var(--colorBotonHover, #0883c6);
 }
+
+
+
+/* Tablets */
+@media (max-width: 768px) {
+  .nf-contenedor {
+    padding: 1.5rem 1rem;
+  }
+
+  .nf-card {
+    flex-direction: column;
+    gap: 2rem;
+    padding: 2rem 1.8rem;
+    max-height: none;
+  }
+
+  .nf-illustration {
+    order: 1;
+  }
+
+  .nf-text {
+    order: 2;
+    text-align: center;
+    align-items: center;
+  }
+
+  .nf-text h1 {
+    font-size: 2.8rem;
+  }
+
+  .nf-text h2 {
+    font-size: 1.4rem;
+  }
+
+  .nf-actions {
+    justify-content: center;
+  }
+
+  .nf-map {
+    width: 200px;
+    height: 165px;
+  }
+
+  .nf-pin-head {
+    width: 30px;
+    height: 30px;
+  }
+
+  .nf-pin-body {
+    border-left-width: 8px;
+    border-right-width: 8px;
+    border-top-width: 14px;
+  }
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+  .nf-contenedor {
+    padding: 1rem 0.8rem;
+  }
+
+  .nf-card {
+    padding: 1.5rem 1.2rem;
+    gap: 1.5rem;
+    border-radius: 1.2rem;
+  }
+
+  .nf-text h1 {
+    font-size: 2.4rem;
+    letter-spacing: 1px;
+  }
+
+  .nf-text h2 {
+    font-size: 1.2rem;
+  }
+
+  .nf-text p {
+    font-size: 0.95rem;
+  }
+
+  .nf-actions {
+    margin-top: 0.5rem;
+    width: 100%;
+  }
+
+  .nf-actions a {
+    font-size: 0.85rem;
+  }
+
+  .btn-primario {
+    padding: 0.6rem 1.2rem;
+    width: 100%;
+  }
+
+  .nf-map {
+    width: 180px;
+    height: 150px;
+  }
+
+  .nf-pin-head {
+    width: 28px;
+    height: 28px;
+  }
+
+  .nf-pin-body {
+    border-left-width: 7px;
+    border-right-width: 7px;
+    border-top-width: 12px;
+  }
+
+  .nf-pin-shadow {
+    width: 28px;
+    height: 6px;
+  }
+}
+
+/* Mobile pequeño */
+@media (max-width: 400px) {
+  .nf-card {
+    padding: 1.2rem 1rem;
+    gap: 1.2rem;
+  }
+
+  .nf-text h1 {
+    font-size: 2rem;
+  }
+
+  .nf-text h2 {
+    font-size: 1.1rem;
+  }
+
+  .nf-text p {
+    font-size: 0.9rem;
+  }
+
+  .nf-text {
+    gap: 0.7rem;
+  }
+
+  .nf-actions a {
+    font-size: 0.8rem;
+  }
+
+  .btn-primario {
+    padding: 0.55rem 1rem;
+  }
+
+  .nf-map {
+    width: 160px;
+    height: 135px;
+  }
+
+  .nf-pin-head {
+    width: 26px;
+    height: 26px;
+  }
+
+  .nf-pin-body {
+    border-left-width: 6px;
+    border-right-width: 6px;
+    border-top-width: 11px;
+  }
+
+  .nf-pin-shadow {
+    width: 24px;
+    height: 5px;
+  }
+}
