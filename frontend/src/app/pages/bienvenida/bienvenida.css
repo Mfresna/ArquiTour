@@ -279,35 +279,295 @@
   border-bottom: 2px solid var(--color-acento);
 }
 
-/* RESPONSIVE */
-@media (max-width: 900px) {
-
-  .bw-section,
-  .bw-section.reverse {
-    flex-direction: column;
-    padding: 3rem 1.5rem;
-  }
-
-  .bw-section .text-block,
-  .bw-section .image-block {
-    max-width: 100%;
+@media (max-width: 1024px) {
+  .bw-section {
+    gap: 2rem;
+    padding: 1.2rem 1.2rem;
   }
 
   .bw-section h2 {
     font-size: 1.6rem;
   }
+
+  .bw-section p {
+    font-size: 1.1rem;
+  }
+
+  /* NOSOTROS - Tablet */
+  #nosotros.bw-section {
+    gap: 2.5rem;
+  }
+
+  #nosotros .text-block {
+    flex: 0 0 48%;
+  }
+
+  #nosotros .image-block.mapa-bg {
+    flex: 0 0 52%;
+    min-height: 320px;
+  }
+
+  #nosotros .mapa-bg > img:first-child {
+    width: 80%;
+  }
+
+  #nosotros .mapa-bg .obras-img {
+    width: 42%;
+    right: 22%;
+  }
+
+  /* OBRAS - Tablet */
+  #obras .image-block.obras-bg {
+    min-height: 300px;
+  }
+
+  #obras .obras-bg > img:first-child {
+    width: 85%;
+    right: 15%;
+  }
+
+  #obras .obras-bg .galeria-img {
+    width: 50%;
+    left: -4%;
+  }
+
+  /* FAVORITOS - Tablet */
+  #favoritos .image-block.favoritos-bg {
+    min-height: 260px;
+  }
+
+  #favoritos .favoritos-bg > img:first-child {
+    width: 65%;
+  }
+
+  #favoritos .favoritos-bg .obras-img {
+    width: 58%;
+    left: 42%;
+  }
+
+  /* MENU - Tablet */
+  .nosotros-menu {
+    gap: 2rem;
+    padding: 1.2rem 1.5rem 0.5rem;
+  }
+
+  .nosotros-menu button {
+    font-size: 0.95rem;
+  }
 }
 
-@media (max-width: 600px) {
+/* MOBILE LANDSCAPE & SMALL TABLETS (481px - 767px) */
+@media (max-width: 767px) {
   .bw-section {
-    padding: 2.5rem 1.25rem;
+    flex-direction: column;
+    gap: 2rem;
+    padding: 2rem 1rem;
+  }
+
+  .bw-section .text-block {
+    max-width: 100%;
   }
 
   .bw-section h2 {
-    font-size: 1.45rem;
+    font-size: 1.5rem;
+    text-align: center;
+  }
+
+  .bw-section p {
+    font-size: 1rem;
+    text-align: left;
+  }
+
+  .bw-section .tag {
+    font-size: 0.8rem;
+  }
+
+  /* NOSOTROS - Mobile Landscape */
+  #nosotros.bw-section {
+    flex-direction: column;
+  }
+
+  #nosotros .text-block {
+    flex: auto;
+    order: 1;
+  }
+
+  #nosotros .image-block.mapa-bg {
+    flex: auto;
+    order: 2;
+    width: 100%;
+    min-height: auto;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  #nosotros .mapa-bg > img:first-child {
+    width: 100%;
+    max-width: 100%;
+    position: static;
+    transform: none;
+    animation: none;
+    opacity: 1;
+  }
+
+  #nosotros .mapa-bg .obras-img {
+    position: static;
+    width: 100%;
+    max-width: 100%;
+    transform: none;
+    animation: none;
+    opacity: 1;
+  }
+
+  /* OBRAS - Mobile Landscape */
+  #obras.bw-section {
+    flex-direction: column;
+  }
+
+  #obras .text-block {
+    order: 1;
+  }
+
+  #obras .image-block.obras-bg {
+    order: 2;
+    width: 100%;
+    min-height: auto;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  #obras .obras-bg > img:first-child {
+    width: 100%;
+    max-width: 100%;
+    position: static;
+    right: 0;
+    transform: none;
+    animation: none;
+    opacity: 1;
+  }
+
+  #obras .obras-bg .galeria-img {
+    position: static;
+    width: 100%;
+    max-width: 100%;
+    left: 0;
+    bottom: 0;
+    transform: none;
+    animation: none;
+    opacity: 1;
+  }
+
+  /* FAVORITOS - Mobile Landscape */
+  #favoritos.bw-section {
+    flex-direction: column;
+  }
+
+  #favoritos .text-block {
+    order: 1;
+  }
+
+  #favoritos .image-block.favoritos-bg {
+    order: 2;
+    width: 100%;
+    min-height: auto;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  #favoritos .favoritos-bg > img:first-child {
+    width: 100%;
+    max-width: 100%;
+    position: static;
+    right: 0;
+    transform: none;
+    animation: none;
+    opacity: 1;
+  }
+
+  #favoritos .favoritos-bg .obras-img {
+    position: static;
+    width: 100%;
+    max-width: 100%;
+    left: 0;
+    bottom: 0;
+    transform: none;
+    animation: none;
+    opacity: 1;
+  }
+
+  /* MENU - Mobile Landscape */
+  .nosotros-menu {
+    gap: 1.5rem;
+    padding: 1rem 1rem 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .nosotros-menu button {
+    font-size: 0.9rem;
+  }
+}
+
+/* MOBILE PORTRAIT (320px - 480px) */
+@media (max-width: 480px) {
+  .bw-section {
+    padding: 1.5rem 0.8rem;
+    gap: 1.5rem;
+  }
+
+  .bw-section h2 {
+    font-size: 1.3rem;
+    margin-bottom: 0.6rem;
   }
 
   .bw-section p {
     font-size: 0.95rem;
+    line-height: 1.5;
+  }
+
+  .bw-section .tag {
+    font-size: 0.75rem;
+    padding: 0.15rem 0.6rem;
+  }
+
+  .bw-section .image-block img {
+    border-radius: 16px;
+  }
+
+  /* Las imágenes ya están configuradas en el breakpoint 767px */
+  /* Solo ajustamos tamaños de texto aquí */
+
+  /* MENU - Mobile Portrait */
+  .nosotros-menu {
+    gap: 1rem;
+    padding: 0.8rem 0.5rem 0.4rem;
+  }
+
+  .nosotros-menu button {
+    font-size: 0.8rem;
+    padding-bottom: 0.3rem;
+  }
+}
+
+/* EXTRA SMALL MOBILE (max 360px) */
+@media (max-width: 360px) {
+  .bw-section {
+    padding: 1.2rem 0.6rem;
+  }
+
+  .bw-section h2 {
+    font-size: 1.2rem;
+  }
+
+  .bw-section p {
+    font-size: 0.9rem;
+  }
+
+  .nosotros-menu {
+    gap: 0.8rem;
+    padding: 0.6rem 0.4rem 0.3rem;
+  }
+
+  .nosotros-menu button {
+    font-size: 0.75rem;
   }
 }
