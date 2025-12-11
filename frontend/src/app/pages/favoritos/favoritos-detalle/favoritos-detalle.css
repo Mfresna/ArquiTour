@@ -135,3 +135,124 @@
   padding: 4rem 2rem;
   font-size: 1.1rem;
 }
+
+
+/* ===== RESPONSIVE: TABLETS ===== */
+@media (max-width: 768px) {
+  .detalle-favorito {
+    padding: 15px;
+    gap: 1.25rem;
+  }
+
+  .titulo {
+    font-size: 1.5rem;
+  }
+
+  .obras-lista {
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 1.25rem;
+    padding: 5px;
+  }
+
+  .obras-lista .card img {
+    height: 180px;
+  }
+
+  .btn-quitar {
+    width: 36px;
+    height: 36px;
+    top: 10px;
+    right: 10px;
+    opacity: 1;
+    visibility: visible;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  }
+
+
+  .btn-quitar .material-icons {
+    font-size: 22px;
+  }
+}
+
+/* ===== RESPONSIVE: MÓVILES ===== */
+@media (max-width: 480px) {
+  .detalle-favorito {
+    padding: 10px;
+    gap: 1rem;
+  }
+
+  .titulo {
+    font-size: 1.3rem;
+    margin-top: 5px;
+  }
+
+  .obras-lista {
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 1rem;
+    padding: 0;
+  }
+
+  .obras-lista .card {
+    border-radius: 10px;
+  }
+
+  .obras-lista .card img {
+    height: 140px;
+  }
+
+  .obras-lista .card-body {
+    padding: 0.75rem;
+  }
+
+  .obras-lista .card-body h2 {
+    font-size: 0.95rem;
+  }
+
+  /* Botón siempre visible en móviles para facilitar el toque */
+  .btn-quitar {
+    width: 40px;
+    height: 40px;
+    top: 8px;
+    right: 8px;
+    opacity: 1;
+    visibility: visible;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  }
+
+  .btn-quitar .material-icons {
+    font-size: 24px;
+  }
+
+  .btn-quitar:active {
+    transform: scale(0.95);
+  }
+
+  .vacio {
+    padding: 3rem 1rem;
+    font-size: 1rem;
+  }
+}
+
+/* ===== HOVER SOLO EN DISPOSITIVOS CON PUNTERO PRECISO ===== */
+@media (hover: hover) and (pointer: fine) {
+  .btn-quitar {
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  .obras-lista .card:hover .btn-quitar {
+    visibility: visible;
+    opacity: 1;
+  }
+}
+
+/* ===== AJUSTE PARA PANTALLAS MUY PEQUEÑAS ===== */
+@media (max-width: 360px) {
+  .obras-lista {
+    grid-template-columns: 1fr;
+  }
+
+  .obras-lista .card img {
+    height: 160px;
+  }
+}
