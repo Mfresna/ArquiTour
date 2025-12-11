@@ -50,16 +50,40 @@ export class DragZoneSimple {
   }
 
   private setImagenes(archivos: File[]): void {
-    this.vistasPrevias.forEach(url => {
-      if (!this.imgExistente || url !== this.imgExistente) URL.revokeObjectURL(url);
-    });
+  // Revocar blobs anteriores (excepto si es una imagen existente cargada del backend)
+  this.vistasPrevias.forEach(url => {
+    if (!this.imgExistente || url !== this.imgExistente) {
+      URL.revokeObjectURL(url);
+    }
+  });
 
-    this.imagenes = archivos;
-    this.vistasPrevias = archivos.map(a => URL.createObjectURL(a));
+  this.imagenes = archivos;
 
-    this.archivoChange.emit(this.imagenes[0] ?? null);
-    this.quitadoImg.emit(false);
-  }
+  this.vistasPrevias = archivos.map(a => {
+    const nombre = a.name.toLowerCase();
+    const extension = nombre.split('.').pop() || '';
+
+    // Lista de extensiones válidas para imagen
+    const esImagenPermitida =
+      extension === 'jpg' ||
+      extension === 'jpeg' ||
+      extension === 'png' ||
+      extension === 'webp';
+
+    // SI NO ES IMAGEN PERMITIDA → mostrar icono genérico
+    if (!esImagenPermitida) {
+      return 'assets/img/por_defecto/archivo.png';
+    }
+
+    // SI ES IMAGEN PERMITIDA → usar blob
+    return URL.createObjectURL(a);
+  });
+
+  // Emitir solo el primer archivo como imagen seleccionada
+  this.archivoChange.emit(this.imagenes[0] ?? null);
+  this.quitadoImg.emit(false);
+}
+
 
   limpiarImagen(e?: Event): void {
     e?.stopPropagation();

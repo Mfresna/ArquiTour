@@ -161,6 +161,14 @@ public class ObraService implements ObraServiceInterface{
             throw new ProcesoInvalidoException(HttpStatus.UNAUTHORIZED, "El Arquitecto no puede modificar obras para un estudio que no forma parte.");
         }
 
+        // 2) Tiene permiso sobre el NUEVO estudio al que quiere mover la obra
+        if (!estudioArqService.puedeGestionarEstudio(request, obraDTO.getEstudioId())) {
+            throw new ProcesoInvalidoException(
+                    HttpStatus.UNPROCESSABLE_ENTITY,
+                    "El Arquitecto no puede asignar la obra a un estudio del que no forma parte."
+            );
+        }
+
         obra.setNombre(obraDTO.getNombre());
         obra.setLatitud(obraDTO.getLatitud());
         obra.setLongitud(obraDTO.getLongitud());
