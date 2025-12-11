@@ -444,7 +444,7 @@
 /* ===== Desktop / pantallas grandes ===== */
 @media (min-width: 801px) {
   /* Ocultar flechas si hay 1, 2 o 3 imágenes */
-  .carrusel-container:has(.imagen:nth-child(-n+3):last-child) .flecha-carrusel {
+  .carrusel-container:has(.imagen:nth-child(-n+4):last-child) .flecha-carrusel {
     display: none;
   }
 }
@@ -598,7 +598,7 @@
   }
 
   #encabezado-tarjeta {
-    flex-direction: column;
+    flex-direction: column-reverse;
     align-items: flex-start;
     gap: 8px;
   }
@@ -606,6 +606,7 @@
   #encabezado-tarjeta h3 {
     font-size: 0.75rem;
     width: 100%;
+    margin-top: 0.75rem;
   }
 
   .acciones {
