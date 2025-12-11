@@ -151,3 +151,34 @@ label {
   #dropzone{ min-height: 200px; }
 }
 
+
+@media (max-width: 600px) {
+  /* Mostrar botón de quitar siempre en mobile */
+  .btn-quitar {
+    visibility: visible;
+  }
+  
+  /* Ajustar tamaño del botón quitar para mejor toque */
+  .btn-quitar {
+    width: 32px;
+    height: 32px;
+  }
+  
+  .btn-quitar .material-icons {
+    font-size: 20px;
+  }
+}
+
+@media (max-width: 800px) {
+  .btn-quitar {
+    visibility: visible;
+  }
+
+  /* Ajustar tamaño del botón quitar para mejor toque */
+  .btn-quitar {
+    width: 32px;
+    height: 32px;
+  }
+  
+}
+

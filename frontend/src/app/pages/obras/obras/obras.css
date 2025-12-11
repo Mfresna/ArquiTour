@@ -221,9 +221,150 @@
   color: var(--color-error);
 }
 
+
+  /*====================== RESPONSIVE ================================*/
+
+/* Tablets */
+@media (max-width: 1024px) {
+  #panel-filtros {
+    width: 280px;
+    padding: 1.2rem;
+  }
+
+  #panel-izq .titulo {
+    font-size: 1.6rem;
+  }
+
+  .lista-obras {
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1.2rem;
+    padding: 15px 15px 15px 10px;
+  }
+
+  .obra-card img {
+    height: 180px;
+  }
+}
+
+/* Mobile - Desactivar grid */
+@media (max-width: 900px) {
+  #contenedor-obras {
+    display: block;
+  }
+
+  #panel-izq .titulo {
+    font-size: 1.5rem;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  #panel-filtros {
+    width: 100%;
+    box-shadow: none;
+    border-bottom: 1px solid var(--borde-suave);
+    border-radius: 0;
+    padding: 1rem;
+  }
+
+  #panel-scroll {
+    padding-top: 0.5rem;
+  }
+
+  .lista-obras {
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 1rem;
+    padding: 15px 10px;
+  }
+
+  .obra-card img {
+    height: 170px;
+  }
+
+  .form-filtros {
+    gap: 1rem;
+  }
+}
+
+/* Mobile pequeño */
+@media (max-width: 600px) {
+  #panel-filtros {
+    padding: 0.8rem;
+  }
+
+  #panel-izq .titulo {
+    font-size: 1.3rem;
+  }
+
+  .form-filtros fieldset.campo > label {
+    font-size: 0.85rem;
+  }
+
+  #panel-filtros .form-filtros select,
+  #panel-filtros .form-filtros input[type="text"] {
+    font-size: 0.95rem;
+    height: 40px;
+  }
+
+  .acciones {
+    grid-template-columns: 1fr;
+    gap: 0.6rem;
+  }
+
+  .acciones button {
+    padding: 0.6rem 0.8rem;
+    font-size: 0.9rem;
+  }
+
+  .lista-obras {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    padding: 12px 8px;
+  }
+
+  .obra-card img {
+    height: 200px;
+  }
+
+  .obra-nombre {
+    font-size: 1rem;
+  }
+
+  .obra-estudio {
+    font-size: 0.8rem;
+  }
+
+  .vacio {
+    padding: 3rem 1.5rem;
+    font-size: 1rem;
+  }
+}
+
 /* Responsive acciones */
 @media (max-width: 480px) {
   .acciones {
     grid-template-columns: 1fr;
+  }
+}
+
+/* Mobile extra pequeño */
+@media (max-width: 400px) {
+  #panel-filtros {
+    padding: 0.6rem;
+  }
+
+  #panel-izq .titulo {
+    font-size: 1.2rem;
+  }
+
+  .lista-obras {
+    padding: 10px 6px;
+  }
+
+  .obra-card .info {
+    padding: 0.8rem;
+  }
+
+  .obra-card img {
+    height: 180px;
   }
 }
