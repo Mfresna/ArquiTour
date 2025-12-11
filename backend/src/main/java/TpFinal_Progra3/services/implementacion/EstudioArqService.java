@@ -60,7 +60,15 @@ public class EstudioArqService implements EstudioArqServiceInterface {
                 .orElseThrow(() -> new NotFoundException("Estudio no encontrado con ID: " + id));
 
         if (estudio.getObras() != null && !estudio.getObras().isEmpty()) {
-            throw new ProcesoInvalidoException("No se puede eliminar el estudio porque tiene obras asignadas.");
+            throw new ProcesoInvalidoException(HttpStatus.CONFLICT, "No se puede eliminar el estudio porque tiene obras asignadas.");
+        }
+
+        if (estudio.getArquitectos() != null && !estudio.getArquitectos().isEmpty()) {
+            throw new ProcesoInvalidoException(
+                    HttpStatus.UNPROCESSABLE_ENTITY,
+                    "No se puede eliminar el estudio porque tiene arquitectos asignados. " +
+                            "Desvincúlalos antes de eliminar el estudio."
+            );
         }
 
         estudioArqRepository.delete(estudio);
@@ -123,7 +131,7 @@ public class EstudioArqService implements EstudioArqServiceInterface {
                 .orElseThrow(() -> new NotFoundException("Estudio no encontrado con ID: " + estudioId));
 
         if(!puedeGestionarEstudio(request,estudioId)){
-            throw new ProcesoInvalidoException(HttpStatus.UNAUTHORIZED,"El Arquitecto no puede agregar a otros Arquitectos a un estudio del que no forma parte");
+            throw new ProcesoInvalidoException(HttpStatus.UNAUTHORIZED,"El Arquitecto no puede eliminar a otros Arquitectos a un estudio del que no forma parte");
         }
 
         Usuario arquitecto = usuarioService.buscarUsuario(arquitectoId);

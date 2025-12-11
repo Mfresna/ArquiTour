@@ -360,10 +360,17 @@ export class EstudioDetalle {
             'El estudio tiene obras asociadas. Debe eliminarlas primero.',
             'warning'
           );
-        } else if (e.status === 404) {
+        } 
+        else if (e.status === 404) {
           this.mostrarModal(
             'Estudio no encontrado',
             'El estudio ya no existe.',
+            'warning'
+          );
+        }else if (e.status === 422) {
+          this.mostrarModal(
+            'No se puede eliminar',
+            'El estudio tiene arquitectos asociadas. Debe eliminarlos primero.',
             'warning'
           );
         } else if (e.status >= 500) {
