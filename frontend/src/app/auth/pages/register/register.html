@@ -40,7 +40,7 @@
           </app-pin-verificador>
 
           @if (pinInvalido) {
-            <small>El PIN ingresado es invalido.</small>
+            <small>El PIN ingresado es inválido.</small>
           }
         </div>
       }
@@ -149,20 +149,22 @@
             id="nombre" 
             formControlName="nombre" 
             placeholder="nombre"
-            [class.invalido]="registerForm.get('nombre')?.invalid && registerForm.get('nombre')?.touched"
+            [class.invalido]="registerForm.get('nombre')?.invalid && (registerForm.get('nombre')?.touched || registerForm.get('nombre')?.dirty)"
             autocomplete="name">
 
 
           @if (registerForm.get('nombre')?.errors?.['required'] && registerForm.get('nombre')?.touched) {
             <small>El nombre es obligatorio.</small>
           }@else if(registerForm.get('nombre')?.errors?.['minlength'] && registerForm.get('nombre')?.touched) {
-            <small>Su nombre no parece ser verdadero (min. 2 caraceres)</small>
+            <small>Nombre demasiado corto (mín. 2 caracteres)</small>
           }@else if(registerForm.get('nombre')?.errors?.['maxlength']) {
-            <small>Su nombre no parece ser verdadero (max. 50 caraceres)</small>
-          }@else if (registerForm.get('nombre')?.errors?.['espacios'] && registerForm.get('nombre')?.touched) {
-            <small>Complete su nombre... (No se haga el vivo)</small>
-          }@else if (registerForm.get('nombre')?.errors?.['formato'] && registerForm.get('nombre')?.touched) {
-            <small>Formato de nombre invalido (revise espacios)</small>
+            <small>Nombre demasiado largo (máx. 50 caracteres)</small>
+          }@else if (registerForm.get('nombre')?.errors?.['espacios'] && (registerForm.get('nombre')?.dirty || registerForm.get('nombre')?.touched)) {
+            <small>Complete su nombre... (el nombre es obligatorio)</small>
+          }@else if (registerForm.get('nombre')?.errors?.['formato'] && (registerForm.get('nombre')?.dirty || registerForm.get('nombre')?.touched)) {
+            <small>Formato de nombre inválido</small>
+          }@else if (registerForm.get('nombre')?.errors?.['largo'] && (registerForm.get('nombre')?.dirty || registerForm.get('nombre')?.touched)) {
+            <small>Nombre demasiado corto (mín. 2 caracteres)</small>
           }
         </fieldset>
 
@@ -174,19 +176,21 @@
             id="apellido" 
             formControlName="apellido" 
             placeholder="apellido"
-            [class.invalido]="registerForm.get('apellido')?.invalid && registerForm.get('apellido')?.touched"
+            [class.invalido]="registerForm.get('apellido')?.invalid && (registerForm.get('apellido')?.touched || registerForm.get('apellido')?.dirty)"
             autocomplete="family-name">
 
           @if (registerForm.get('apellido')?.errors?.['required'] && registerForm.get('apellido')?.touched) {
             <small>El apellido es obligatorio.</small>
           }@else if(registerForm.get('apellido')?.errors?.['minlength'] && registerForm.get('apellido')?.touched) {
-            <small>Su apellido no parece ser verdadero (min. 2 caraceres)</small>
+            <small>Apellido demasiado corto</small>
           }@else if(registerForm.get('apellido')?.errors?.['maxlength']) {
-            <small>Su apellido no parece ser verdadero (max. 50 caraceres)</small>
-          }@else if (registerForm.get('apellido')?.errors?.['espacios'] && registerForm.get('apellido')?.touched) {
-            <small>Complete su apellido... (No se haga el vivo)</small>
-          }@else if (registerForm.get('apellido')?.errors?.['formato'] && registerForm.get('apellido')?.touched) {
-            <small>Formato de apellido invalido (revise espacios)</small>
+            <small>El apellido es demasiado largo (máx. 50 caracteres)</small>
+          }@else if (registerForm.get('apellido')?.errors?.['espacios'] && (registerForm.get('apellido')?.touched || registerForm.get('apellido')?.dirty)) {
+            <small>Complete su apellido... (el apellido es obligatorio)</small>
+          }@else if (registerForm.get('apellido')?.errors?.['formato'] && (registerForm.get('apellido')?.touched || registerForm.get('apellido')?.dirty)) {
+            <small>Formato de apellido inválido</small>
+          }@else if (registerForm.get('apellido')?.errors?.['largo'] && (registerForm.get('apellido')?.touched || registerForm.get('apellido')?.dirty)) {
+            <small>Apellido demasiado corto</small>
           }
         </fieldset>
 
@@ -203,11 +207,11 @@
           @if (registerForm.get('fechaNacimiento')?.errors?.['required'] && registerForm.get('fechaNacimiento')?.touched) {
             <small>La fecha de nacimiento es obligatoria.</small>
           } @else if (registerForm.get('fechaNacimiento')?.errors?.['formato'] && registerForm.get('fechaNacimiento')?.dirty) {
-            <small>El formato de la fecha no es correcto, recuerde (dia/mes/año).</small>
+            <small>El formato de la fecha no es correcto, recuerde (día/mes/año).</small>
           } @else if (registerForm.get('fechaNacimiento')?.errors?.['fechaFutura'] && registerForm.get('fechaNacimiento')?.dirty) {
             <small>La fecha es inválida, no puede ser fecha futura.</small>
           } @else if (registerForm.get('fechaNacimiento')?.errors?.['edadMinima'] && registerForm.get('fechaNacimiento')?.dirty) {
-            <small>La fecha es muy proxima a hoy.</small>
+            <small>La edad mínma es 13 años.</small>
           } @else if (registerForm.get('fechaNacimiento')?.errors?.['fechaLimite'] && registerForm.get('fechaNacimiento')?.dirty) {
             <small>La fecha parece ser inválida.</small>
           }
@@ -235,7 +239,7 @@
           </div>
     
           @if (registerForm.get('descripcion')?.errors?.['maxLength'] && registerForm.get('descripcion')?.dirty) {
-            <small>Caracteres maximos excedidos. (max. 280)</small>
+            <small>Caracteres máximos excedidos. (max. 280)</small>
           } @else if (registerForm.get('descripcion')?.errors?.['pattern'] && registerForm.get('descripcion')?.dirty) {
             <small>Caracter inválido, solo se permiten (- _ ! ¡ &).</small>
           }

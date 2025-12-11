@@ -413,6 +413,12 @@ export class ObraForm implements TieneCambiosPendientes{
                   'No se pudo actualizar la obra.',
                   'error'
                   );
+              }else if(e.status ===  422){
+                this.mostrarModal(
+                'Sin permisos',
+                'No puede asignar obras a estudios a los que no pertenece',
+                'error'
+                );
               }else{
                   this.mostrarModal(
                     'Error al actualizar',

@@ -93,7 +93,7 @@ export class Register implements OnInit, AfterViewInit{
         ]],
         fechaNacimiento: ['', [
           Validators.required,
-          fechaNacValidador(5)
+          fechaNacValidador(13)
         ]],
         descripcion: ['', [
           Validators.maxLength(280),
@@ -186,7 +186,7 @@ export class Register implements OnInit, AfterViewInit{
         if (e.status === 409) {
           this.mostrarModal(
             "Email registrado",
-            "El mail ya se encuentra registrado en la base de datos.",
+            "El email ya se encuentra registrado en la base de datos.",
             "login",
             "warning"
           );

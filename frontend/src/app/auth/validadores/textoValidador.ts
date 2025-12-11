@@ -14,6 +14,10 @@ export const nombreValidador: ValidatorFn = (control: AbstractControl): Validati
         errors['espacios'] = true;
     }
 
+     if(value.trim().length < 2){
+        errors['largo'] = true;
+    }
+
     if(!NOMBRE_PATTERN.test(value.toString().trim())){
         errors['formato'] = true;
     }
@@ -33,6 +37,10 @@ export const apellidoValidador: ValidatorFn = (control: AbstractControl): Valida
 
     if(value.trim().length === 0){
         errors['espacios'] = true;
+    }
+
+    if(value.trim().length < 2){
+        errors['largo'] = true;
     }
 
     if(!APELLIDO_PATTERN.test(value.toString().trim())){
