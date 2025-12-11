@@ -17,10 +17,11 @@ import { noBlancoEspacios } from '../../../validadores/sinEspacioValidador';
 import { anioEstadoObra } from '../../../auth/validadores/fechaValidador';
 import { MensajeModal, MessageType } from '../../../components/mensaje-modal/mensaje-modal';
 import { MapaSelector } from "../../../components/mapa-selector/mapa-selector";
+import { EsperandoModal } from '../../../components/esperando-modal/esperando-modal';
 
 @Component({
   selector: 'app-obra-form',
-  imports: [ReactiveFormsModule, DragZoneMultiple, MensajeModal, MapaSelector],
+  imports: [ReactiveFormsModule, DragZoneMultiple, MensajeModal, MapaSelector, EsperandoModal],
   templateUrl: './obra-form.html',
   styleUrl: './obra-form.css',
 })
@@ -66,6 +67,11 @@ export class ObraForm implements TieneCambiosPendientes{
   textoBotonAceptar = 'Aceptar';
   textoBotonCancelar = 'Cancelar';
   cerrarAlClickFuera = true;
+
+
+  spinerVisible= false;
+  spinerMensaje = "Esperando";
+
 
   constructor(
     private fb: FormBuilder,
@@ -113,7 +119,8 @@ export class ObraForm implements TieneCambiosPendientes{
         descripcion: ['', [
           Validators.required,
           Validators.minLength(5),
-          Validators.pattern(/^[A-Za-zÁÉÍÓÚáéíóúÑñ0-9\-_\!¡¿&=\+\"\?\s\.,()@#\$%\/\*\{\}\[\]<>\;\:\\\|´\^°²]+$/),
+          Validators.pattern(/^[A-Za-zÁÉÍÓÚáéíóúÑñ0-9\s\.,;:()\-!¡¿&=@#\$%\/\*\{\}\[\]<>\+\"\'´’\^°²\u2013\u2014“”]+$/),
+
           noBlancoEspacios
         ]],
       }
@@ -384,11 +391,18 @@ export class ObraForm implements TieneCambiosPendientes{
           return;
         }
     
+
+        this.spinerVisible= true;
+        this.spinerMensaje = "Actualizando Obra";
+
         this.obraService.updateObra({
           ...modificarObra,
           urlsImagenes: urlsExistentesRel,
         })
-          .pipe(finalize(() => this.subiendo = false))
+          .pipe(finalize(() => {
+            this.subiendo = false
+            this.spinerVisible = false;
+          }))
           .subscribe({
             next: () => {
               this.omitirGuard = true;   
@@ -505,6 +519,9 @@ export class ObraForm implements TieneCambiosPendientes{
       return;
     }
 
+    this.spinerVisible= true;
+    this.spinerMensaje = "Creando Obra";
+
     const archivosSubir = archivos.map(file =>
       this.imagenService.subirUna(file).pipe(take(1))
     );
@@ -526,7 +543,10 @@ export class ObraForm implements TieneCambiosPendientes{
         }
 
         this.obraService.postObra({ ...crearObra, urlsImagenes: urls })
-          .pipe(finalize(() => this.subiendo = false))
+          .pipe(finalize(() => {
+            this.subiendo = false
+            this.spinerVisible = false;
+          }))
           .subscribe({
             next: () => {
               this.omitirGuard = true;
@@ -593,6 +613,8 @@ export class ObraForm implements TieneCambiosPendientes{
         );
       }
     });
+    
+    this.spinerVisible = false;
   }
 
 

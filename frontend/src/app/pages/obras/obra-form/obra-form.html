@@ -238,3 +238,8 @@
   (cancelar)="onModalCancelar()"
   (cerrado)="onModalCerrado()"
 ></app-mensaje-modal>
+
+<app-esperando-modal 
+  [isVisible]="spinerVisible" 
+  [mensaje]="spinerMensaje"
+/>
