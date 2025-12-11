@@ -279,3 +279,191 @@
   background-color: var(--fondo-suave);
   transform: translateX(2px);
 }
+
+
+/*============================== RESPONSIVE ==============================================*/
+
+/* Tablets grandes */
+@media (max-width: 1024px) {
+  #contenedor-mapa-obras {
+    grid-template-columns: 350px 1fr;
+    gap: 8px;
+    padding: 12px;
+  }
+
+  #panel-filtros {
+    padding: 0.8rem 1.5rem;
+  }
+
+  #panel-filtros .titulo {
+    font-size: 1.6rem;
+  }
+}
+
+/* Tablets y móviles - Panel arriba, mapa abajo */
+@media (max-width: 900px) {
+  #contenedor-mapa-obras {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr;
+    gap: 10px;
+    padding: 10px;
+  }
+
+  #panel-filtros {
+    height: auto;
+    max-height: 40vh;
+    padding: 1rem 1.5rem;
+  }
+
+  #panel-filtros .titulo {
+    font-size: 1.5rem;
+    margin-top: 0;
+    margin-bottom: 1rem;
+  }
+
+  .form-filtros {
+    gap: 1rem;
+  }
+
+  #panel-scroll {
+    margin-top: 15px;
+    max-height: 200px;
+  }
+
+  #mapa-obras-wrapper {
+    min-height: 400px;
+  }
+
+  #mapa-obras {
+    border-radius: 0.8rem;
+  }
+
+  /* Botón de ubicación más accesible */
+  #btn-mi-ubicacion {
+    right: auto;
+    left: 20px;
+    bottom: 20px;
+    width: 45px;
+    height: 45px;
+  }
+
+  #btn-mi-ubicacion .material-icons {
+    font-size: 24px;
+  }
+}
+
+/* Móviles grandes */
+@media (max-width: 640px) {
+  #contenedor-mapa-obras {
+    padding: 8px;
+    gap: 8px;
+  }
+
+  #panel-filtros {
+    padding: 0.8rem 1rem;
+    max-height: 45vh;
+  }
+
+  #panel-filtros .titulo {
+    font-size: 1.3rem;
+    margin-bottom: 0.8rem;
+  }
+
+  .form-filtros {
+    gap: 0.8rem;
+  }
+
+  fieldset.campo > label {
+    font-size: 0.85rem;
+  }
+
+  #panel-filtros .form-filtros select,
+  #panel-filtros .form-filtros input[type="text"],
+  #panel-filtros input {
+    height: 44px;
+    font-size: 16px; /* Evita zoom en iOS */
+  }
+
+  #panel-scroll {
+    margin-top: 10px;
+    max-height: 150px;
+  }
+
+  .listado-obras {
+    font-size: 0.85rem;
+  }
+
+  .listado-obras li {
+    padding: 0.8rem 1rem;
+  }
+
+  #mapa-obras-wrapper {
+    min-height: 350px;
+  }
+
+  #btn-mi-ubicacion {
+    width: 42px;
+    height: 42px;
+    left: 15px;
+    bottom: 15px;
+  }
+}
+
+/* Móviles pequeños */
+@media (max-width: 480px) {
+  #contenedor-mapa-obras {
+    padding: 5px;
+  }
+
+  #panel-filtros {
+    padding: 0.6rem 0.8rem;
+    border-radius: 8px;
+  }
+
+  #panel-filtros .titulo {
+    font-size: 1.2rem;
+  }
+
+  .form-filtros {
+    gap: 0.7rem;
+  }
+
+  #panel-scroll {
+    max-height: 120px;
+  }
+
+  .listado-obras {
+    font-size: 0.8rem;
+  }
+
+  .listado-obras li {
+    padding: 0.7rem 0.8rem;
+    margin-bottom: 4px;
+  }
+
+  #mapa-obras {
+    border-radius: 0.5rem;
+  }
+
+  #mapa-obras-wrapper {
+    min-height: 300px;
+  }
+
+  #btn-mi-ubicacion {
+    width: 38px;
+    height: 38px;
+    left: 10px;
+    bottom: 10px;
+  }
+
+  #btn-mi-ubicacion .material-icons {
+    font-size: 20px;
+  }
+}
+
+/* Scrollbar más fino en móvil */
+@media (max-width: 640px) {
+  #panel-scroll::-webkit-scrollbar {
+    width: 4px;
+  }
+}
