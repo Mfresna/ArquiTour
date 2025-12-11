@@ -29,6 +29,8 @@ export class Header implements OnInit{
   mapaMenu: boolean = false;
   notificacionesMenu: boolean = false;
 
+  menuLateral: boolean = false;
+
   cantNotifSinLeer$!: Observable<number>;
 
   isBienvenida: boolean = false;
@@ -47,8 +49,6 @@ export class Header implements OnInit{
   imagenDefecto = `${environment.imgUsuario}`;
   imagenPerfilUrl: string = '';
   usuarioActual: UsuarioModel | null = null;
-
-
 
   constructor(
     private authService: AuthService,
@@ -72,6 +72,8 @@ export class Header implements OnInit{
 
     this.router.events.subscribe(() => {
       this.isBienvenida = this.router.url === '/bienvenida';
+
+      this.cerrarTodosMenus();
     });
 
     this.notificacionService.refrescarManual(); //Actualiza la campana de notificaciones ni bien inicia el header
@@ -85,6 +87,7 @@ export class Header implements OnInit{
       } else {
         this.usuarioActual = null;
         this.imagenPerfilUrl = this.buildImagenDefecto();
+
       }
     });
 
@@ -162,12 +165,23 @@ export class Header implements OnInit{
     this.estudiosMenu = false;
   }
 
+  toggleMenuLateral() {
+    this.cerrarTodosMenus();
+    this.menuLateral = !this.menuLateral;
+  }
+
+  cerrarMenuLateral() {
+    this.menuLateral = false;
+  }
+
   cerrarTodosMenus(){
     this.estudiosMenu = false;
     this.usuarioMenu = false;
     this.obrasMenu = false;
     this.mapaMenu=false;
     this.notificacionesMenu = false;
+
+    this.menuLateral = false;
   }
 
   //================= NOTIFICACIONES
@@ -255,7 +269,7 @@ export class Header implements OnInit{
     if (img.src.includes(this.imagenDefecto)) return;
 
     img.onerror = null;
-    //img.src = this.buildImagenDefecto();
+    img.src = this.buildImagenDefecto();
   }
   
   //========== ESCUCHADORES
@@ -278,6 +292,5 @@ export class Header implements OnInit{
     }
   
   }
-
 
 }

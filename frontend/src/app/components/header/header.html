@@ -1,5 +1,15 @@
 <header>
+  <!-- ============================ PANEL IZQUIERDA ====================== -->
   <div id="panel-izquierda" tabindex="-1">
+    <!-- Boton Hamburguesa -->
+    <button
+      type="button"
+      class="menu-lateral-btn"
+      (click)="toggleMenuLateral()">
+      <span class="material-icons">menu</span>
+    </button>
+
+    <!-- Logo de Arquitour -->
     <a routerLink="/" id="logo-container">
       <img 
         src="assets/img/logo.png"
@@ -9,106 +19,130 @@
     </a>
   </div>
 
+  <!-- ================= HEADER NO LOGUEADO ================= -->
   @if(!isLogged()){
     <div id="panel-central">
-      <ul>
-          @if(isBienvenida){
-            <li>
-              <a class="boton" routerLink="/">INICIO</a>
-            </li>
-          }
-          @if(!isBienvenida){
-            <li>
-              <div id="panel-nosotros">
-                <a class="boton" routerLink="/bienvenida"
-                [class.activo]="isBienvenida">NOSOTROS</a>
-              </div>
-            </li>
-          }  
-        </ul>
+
+      <!-- NAV FULL FRAME -->
+      <ul class="nav-desktop">
+        @if(isBienvenida){
+          <li>
+            <a class="boton" routerLink="/">INICIO</a>
+          </li>
+        }
+        @if(!isBienvenida){
+          <li>
+            <div id="panel-nosotros">
+              <a class="boton"
+                 routerLink="/bienvenida"
+                 [class.activo]="isBienvenida">
+                NOSOTROS
+              </a>
+            </div>
+          </li>
+        }  
+      </ul>
     </div>
+
     <div id="panel-derecha">
-        <button id="modo-noche-publico" (click)="toggleModoNoche()">
-          <span
+      <button id="modo-noche-publico" (click)="toggleModoNoche()">
+        <span
           id="noche-toggle-publico"
           class="material-icons icon-modo-publico"
           [class.activo]="modoNoche">
           {{ modoNoche ? 'light_mode' : 'brightness_3' }}
-          </span>
-        </button>
+        </span>
+      </button>
     </div>
   }
 
+  <!-- ================= HEADER LOGUEADO ================= -->
   @if(isLogged()){
 
     <div id="panel-central">
-    <ul>
-      <li>
-        <div id="panel-obras">
-          @if(!isArq() && !isAdmin()){
-            <a routerLink="/obras" class="boton">OBRAS</a>
-          }@else{
-            <a class="boton" (click)="toggleObrasMenu()">OBRAS</a>
 
-            @if(obrasMenu){
-              <div id="menu-obras" 
-                class="menu-desplegable bordes-radius">
+      <!-- NAV DESKTOP -->
+      <ul class="nav-desktop">
+        <!-- OBRAS -->
+        <li>
+          <div id="panel-obras">
+            @if(!isArq() && !isAdmin()){
+              <a routerLink="/obras"
+                 class="boton"
+                 (click)="cerrarTodosMenus()">
+                OBRAS
+              </a>
+            } @else {
+              <a class="boton" (click)="toggleObrasMenu()">OBRAS</a>
 
-                <a (click)="cerrarTodosMenus()" routerLink="/obras">Ver Obras</a>
-                <a (click)="cerrarTodosMenus()" routerLink="/formObras">Registrar Obra</a>
-    
+              @if(obrasMenu){
+                <div id="menu-obras" 
+                     class="menu-desplegable bordes-radius">
 
-              </div>
+                  <a (click)="cerrarTodosMenus()" routerLink="/obras">Ver Obras</a>
+                  <a (click)="cerrarTodosMenus()" routerLink="/formObras">Registrar Obra</a>
+                </div>
+              }
             }
+          </div>
+        </li>
 
-          }
-            
-        </div>
-      </li>
+        <!-- ESTUDIOS -->
+        <li>
+          <div id="panel-estudios">
+            @if(!isArq() && !isAdmin()){
+              <a (click)="cerrarTodosMenus()"
+                 routerLink="/estudios"
+                 class="boton">
+                ESTUDIOS
+              </a>
+            } @else {
+              <a class="boton" (click)="toggleEstudiosMenu()">ESTUDIOS</a>
 
-      <li>
-        <div id="panel-estudios">
-          @if(!isArq() && !isAdmin()){
-            <a (click)="cerrarTodosMenus()" routerLink="/estudios" class="boton">ESTUDIOS</a>
-          }@else{
-            <a class="boton" (click)="toggleEstudiosMenu()">ESTUDIOS</a>
+              @if(estudiosMenu){
+                <div id="menu-estudios" 
+                     class="menu-desplegable bordes-radius">
 
-            @if(estudiosMenu){
-              <div id="menu-estudios" 
-                class="menu-desplegable bordes-radius">
-
-                <a (click)="cerrarTodosMenus()" routerLink="/estudios">Ver Estudios</a>
-                <a (click)="cerrarTodosMenus()" routerLink="/formEstudios">Crear Estudio</a>
-                
-              </div>
+                  <a (click)="cerrarTodosMenus()" routerLink="/estudios">Ver Estudios</a>
+                  <a (click)="cerrarTodosMenus()" routerLink="/formEstudios">Crear Estudio</a>
+                </div>
+              }
             }
+          </div>
+        </li> 
 
-          }
-            
-        </div>
-      </li> 
-      <li>
-        <div id="panel-mapas">
+        <!-- MAPA -->
+        <li>
+          <div id="panel-mapas">
             <a class="boton" (click)="toggleMapaMenu()">MAPA</a>
 
             @if(mapaMenu){
               <div id="menu-mapas" 
-                class="menu-desplegable bordes-radius">
+                   class="menu-desplegable bordes-radius">
 
                 <a (click)="cerrarTodosMenus()" routerLink="/mapa">Ver Mapa</a>
                 <a (click)="cerrarTodosMenus()" routerLink="/obras-cercanas">Ver Obras Cercanas</a>
-                
               </div>
             }            
-        </div>      
-      </li>
-      <li><a (click)="cerrarTodosMenus()" class="boton" routerLink="/favoritos">FAVORITOS</a></li>
-    </ul>
+          </div>      
+        </li>
 
+        <!-- FAVORITOS -->
+        <li>
+          <a (click)="cerrarTodosMenus()"
+             class="boton"
+             routerLink="/favoritos">
+            FAVORITOS
+          </a>
+        </li>
+      </ul>
+
+      <!-- En mobile ocultamos este nav central horizontal y usamos el menú lateral -->
     </div>
   
     <div id="panel-derecha">
 
+      <!-- NOTIFICACIONES -->
       <div id="contenedor-notificaciones"
           (click)="abrirNotificaciones()"
           tabindex="0"
@@ -118,7 +152,7 @@
           id="notificaciones"
           class="material-icons span-menu"
           tabindex="-1">
-            notifications
+          notifications
         </span>
 
         <!-- Badge solo si hay notificaciones sin leer -->
@@ -129,7 +163,7 @@
               [class.un-digito]="count < 10"
               [class.dos-digitos]="count >= 10">
 
-                {{ count > 99 ? '99+' : count }}
+              {{ count > 99 ? '99+' : count }}
 
             </span>
           }
@@ -138,45 +172,43 @@
         <!-- Menu de Notificaciones -->
         @if(notificacionesMenu){
           <div id="menu-notificaciones" 
-            class="menu-desplegable bordes-radius-inf borde-sup-izq">
+               class="menu-desplegable bordes-radius-inf borde-sup-izq">
 
             <div id="lista-notificaciones">
 
-              <!-- Lista no tificaciones -->
-               @if(notificaciones.length === 0) {
-                  <p class="sin-notificaciones">No tenés notificaciones</p>
-                } @else {
+              @if(notificaciones.length === 0) {
+                <p class="sin-notificaciones">No tenés notificaciones</p>
+              } @else {
 
-                  @for (notif of notificaciones; track notif.id) {
+                @for (notif of notificaciones; track notif.id) {
 
-                    <div class="item-notificacion"
-                      (click)="seleccionarNotificacion(notif)">
+                  <div class="item-notificacion"
+                       (click)="seleccionarNotificacion(notif)">
 
-                      <div id="contenido-notificacion">
+                    <div id="contenido-notificacion">
 
-                        @if(notif.tipo != TipoNotificacionEnum.CAMBIO_ROL){
-                          <p class="titulo-notif">{{TipoNotificacionDescripcion[notif.tipo]}}</p>
-                        }
-                        <p class="mensaje-notif">{{ notif.mensaje }}</p>
-                      </div>
-
-                      @if(!notif.isLeido){
-                        <span class="estado-notif"></span>
+                      @if(notif.tipo != TipoNotificacionEnum.CAMBIO_ROL){
+                        <p class="titulo-notif">
+                          {{TipoNotificacionDescripcion[notif.tipo]}}
+                        </p>
                       }
-
-                    
+                      <p class="mensaje-notif">{{ notif.mensaje }}</p>
                     </div>
-                  }
 
+                    @if(!notif.isLeido){
+                      <span class="estado-notif"></span>
+                    }
+
+                  </div>
                 }
-              
+
+              }
             </div>
             
-            <hr>  <!--MENU INFERIOR -->
+            <hr>
 
             <a id="btn-leer-todas"
-              (click)="marcarTodasLeidas()"
-              >
+               (click)="marcarTodasLeidas()">
               Marcar Todas Leídas
             </a>
 
@@ -185,6 +217,7 @@
 
       </div>
 
+      <!-- AVATAR USUARIO -->
       <button
         id="usuario"
         class="user-avatar-btn"
@@ -194,28 +227,35 @@
         tabindex="0">
 
         <img
-        [src]="imagenPerfilUrl"
-        alt="Usuario"
-        (error)="imagenError($event)"
+          [src]="imagenPerfilUrl"
+          alt="Usuario"
+          (error)="imagenError($event)"
         />
       </button>
 
       @if(usuarioMenu){
         <div id="menu-usuario" 
-          class="menu-desplegable bordes-radius-inf borde-sup-izq">
+             class="menu-desplegable bordes-radius-inf borde-sup-izq">
 
-          <a (click)="cerrarSesion()">Cerrar Sesion
-            <span id="logout" class="material-icons user-icon-trigger">logout</span>
+          <a (click)="cerrarSesion()">
+            Cerrar Sesion
+            <span id="logout"
+                  class="material-icons user-icon-trigger">
+              logout
+            </span>
           </a>
           <a (click)="cerrarTodosMenus()" routerLink="/me">Ver mi Perfil</a>
 
           <a (click)="cerrarTodosMenus()" routerLink="/solicitudes">Solicitudes</a>
 
           @if(isAdmin()){
-            <a (click)="cerrarTodosMenus()" routerLink="/gestionar-usuarios">Gestionar Usuarios</a>
+            <a (click)="cerrarTodosMenus()" routerLink="/gestionar-usuarios">
+              Gestionar Usuarios
+            </a>
           }
 
           <hr>
+
           <a id="modo-noche" (click)="toggleModoNoche()">
             Modo Noche
             <span
@@ -226,15 +266,118 @@
             </span>
           </a>
 
-
         </div>
       }
-      
 
     </div>
 
   }
 
+  <!-- ========== MENÚ LATERAL MOBILE (para logueado y no logueado) ========== -->
+  @if(menuLateral) {
+    <!-- Area sin menu con trasnparencia -->
+    <div id="menu-lateral-overlay"
+      (click)="cerrarMenuLateral()">
+    </div>
+
+    <!-- Panel visible -->
+    <nav id="menu-lateral">
+      <div class="menu-lateral-header">
+        <span class="menu-lateral-titulo">Menú</span>
+        <button
+          type="button"
+          class="menu-lateral-cerrar"
+          (click)="cerrarMenuLateral()">
+          <span class="material-icons">close</span>
+        </button>
+      </div>
+
+      <!-- Lista de botones  -->
+
+      <ul class="menu-lateral-lista">
+        <!-- CONTENIDO NO LOGUEADO -->
+        @if(!isLogged()){
+          @if(isBienvenida){
+            <li>
+              <a routerLink="/" (click)="cerrarMenuLateral()"> INICIO </a>
+            </li>
+          }
+          @if(!isBienvenida){
+            <li>
+              <a routerLink="/bienvenida" [class.activo]="isBienvenida" (click)="cerrarMenuLateral()"> NOSOTROS </a>
+            </li>
+          }
+        }
+
+        <!-- CONTENIDO LOGUEADO -->
+        @if(isLogged()){
+
+          <!-- Obras -->
+          @if(!isArq() && !isAdmin()){
+            <li>
+              <a routerLink="/obras" (click)="cerrarMenuLateral()">OBRAS </a>
+            </li>
+          } @else {
+            <li class="menu-lateral-seccion">
+              <span class="menu-lateral-seccion-titulo">OBRAS</span>
+
+                <ul class="menu-lateral-sublista">
+                  <li>
+                    <a routerLink="/obras" (click)="cerrarMenuLateral()">Ver Obras </a>
+                  </li>
+                  <li>
+                    <a routerLink="/formObras" (click)="cerrarMenuLateral()">Registrar Obra</a>
+                  </li>
+                </ul>
+            </li>
+          }
+
+          <!-- Estudios -->
+          @if(!isArq() && !isAdmin()){
+            <li>
+              <a routerLink="/estudios" (click)="cerrarMenuLateral()"> ESTUDIOS </a>
+            </li>
+          } @else {
+            <li class="menu-lateral-seccion">
+              <span class="menu-lateral-seccion-titulo">ESTUDIOS</span>
+
+              <ul class="menu-lateral-sublista">
+                <li>
+                  <a routerLink="/estudios" (click)="cerrarMenuLateral()"> Ver Estudios
+                  </a>
+                </li>
+                <li>
+                  <a routerLink="/formEstudios" (click)="cerrarMenuLateral()"> Crear Estudio </a>
+                </li>
+              </ul>
+            </li>
+          }
+
+          <!-- Mapa -->
+          <li class="menu-lateral-seccion">
+            <span class="menu-lateral-seccion-titulo">MAPA</span>
+            <ul class="menu-lateral-sublista">
+              <li>
+                <a routerLink="/mapa" (click)="cerrarMenuLateral()">Ver Mapa</a>
+              </li>
+              <li>
+                <a routerLink="/obras-cercanas" (click)="cerrarMenuLateral()">Obras Cercanas</a>
+              </li>
+            </ul>
+          </li>
+
+          <!-- Favoritos -->
+
+          <li class="menu-lateral-seccion">
+            <span 
+              routerLink="/favoritos" 
+              class="menu-lateral-seccion-titulo clickeable" 
+              (click)="cerrarMenuLateral()">FAVORITOS</span>
+          </li>
+        }
+      </ul>
+    </nav>
+  }
 
 </header>
 
@@ -244,10 +387,7 @@
   [mensaje]="modalMensaje"
   [conIcon]="false"
   [tipoContenido]="'texto'"
-
   [mostrarCerrar]="false"
   [mostrarBotonCancelar]="false"
-
   (cerrado)="modalVisible=false"
-
 ></app-mensaje-modal>
